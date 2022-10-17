@@ -24,8 +24,8 @@ int IsCircleClicked(float circle_center_x, float circle_center_y, float diameter
 */
 CP_Vector AngleToVector(float radian_angle)
 {	// for movement of sprites ?
-	float x = cos(CP_Math_Radians(radian_angle)); // finding the x value of a vector by calculating the cosine of the radian angle
-	float y = sin(CP_Math_Radians(radian_angle)); // finding the y value of a vector by calculating the sine of the radian angle
+	float x = (float)cos(CP_Math_Radians(radian_angle)); // finding the x value of a vector by calculating the cosine of the radian angle
+	float y = (float)sin(CP_Math_Radians(radian_angle)); // finding the y value of a vector by calculating the sine of the radian angle
 	return (CP_Vector_Scale(CP_Vector_Set(x, y), 9.f)); // return the vector with a scalar
 }
 

@@ -100,11 +100,21 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Inc\basegame.h" />
+    <ClInclude Include="..\Inc\credits.h" />
+    <ClInclude Include="..\Inc\defines.h" />
+    <ClInclude Include="..\Inc\game_test.h" />
+    <ClInclude Include="..\Inc\game_test_utils.h" />
     <ClInclude Include="..\Inc\mainmenu.h" />
     <ClInclude Include="..\Inc\splashscreen.h" />
+    <ClInclude Include="..\Inc\structs.h" />
     <ClInclude Include="..\Inc\utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Src\basegame.c" />
+    <ClCompile Include="..\Src\credits.c" />
+    <ClCompile Include="..\Src\game_test.c" />
+    <ClCompile Include="..\Src\game_test_utils.c" />
     <ClCompile Include="..\Src\main.c" />
     <ClCompile Include="..\Src\mainmenu.c" />
     <ClCompile Include="..\Src\splashscreen.c" />
