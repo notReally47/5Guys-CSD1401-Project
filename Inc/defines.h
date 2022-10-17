@@ -1,0 +1,8 @@
+#pragma once
+#define SOKOBAN_GRID_COLS 50
+#define SOKOBAN_GRID_ROWS 50
+#define SOKOBAN_IDLE 0
+#define SOKOBAN_UP 1
+#define SOKOBAN_LEFT 2
+#define SOKOBAN_DOWN 3
+#define SOKOBAN_RIGHT 4
