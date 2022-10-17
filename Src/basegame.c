@@ -7,8 +7,6 @@ Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellWidth, cellHeight;
 
-CP_Color black, white, red, green, blue, grey;
-
 int totalObjs;
 
 void base_Init(void) {
@@ -39,7 +37,7 @@ void base_Init(void) {
 	grid[10][10].box = 1;
 
 	grid[20][20].key = 1;
-	grid[30][30].key = 1;
+	grid[25][25].key = 1;
 
 	totalObjs = 2;
 
@@ -51,13 +49,6 @@ void base_Init(void) {
 	/*Initializations*/
 	cellWidth = CP_System_GetWindowWidth() / (float)SOKOBAN_GRID_COLS;
 	cellHeight = CP_System_GetWindowHeight() / (float)SOKOBAN_GRID_ROWS;
-
-	red = CP_Color_Create(255, 0, 0, 255);
-	green = CP_Color_Create(0, 255, 0, 255);
-	blue = CP_Color_Create(0, 0, 255, 255);
-	white = CP_Color_Create(255, 255, 255, 255);
-	black = CP_Color_Create(0, 0, 0, 255);
-	grey = CP_Color_Create(190, 190, 190, 255);
 }
 
 void base_Update(void) {
@@ -92,7 +83,7 @@ void base_Update(void) {
 	}
 
 	/*Rendering*/
-	CP_Graphics_ClearBackground(white);
+	CP_Graphics_ClearBackground(WHITE);
 
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -103,19 +94,19 @@ void base_Update(void) {
 
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player) {
 				if (currCell.boarder) 
-					CP_Settings_Fill(black);
+					CP_Settings_Fill(BLACK);
 
 				else if (currCell.player)
-					CP_Settings_Fill(red);
+					CP_Settings_Fill(RED);
 
 				else if (currCell.key && currCell.box)
-					CP_Settings_Fill(grey);
+					CP_Settings_Fill(VIOLET);
 					
 				else if (currCell.box)
-					CP_Settings_Fill(blue);
+					CP_Settings_Fill(BLUEGRAY);
 
 				else if (currCell.key)
-					CP_Settings_Fill(green);
+					CP_Settings_Fill(YELLOW);
 
 				CP_Graphics_DrawRect(cellX, cellY, cellWidth, cellHeight);
 			}

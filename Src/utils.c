@@ -54,7 +54,7 @@ int getDirection(void) {
 * int nextPosX, nextPosY: The following cell after the next cell.
 * int prevPosX, prevPosY: The previous cell that the player was previously at.
 */
-void gameLogic(int posX, int posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[50][50]) {
+void gameLogic(int posX, int posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	/*Push box (No boarder or another box blocking the box being pushed)*/
 	if (grid[posX][posY].box && !grid[nextPosX][nextPosY].box && !grid[posX][posY].boarder && !grid[nextPosX][nextPosY].boarder) {
 		grid[prevPosX][prevPosY].player = 0;
@@ -70,7 +70,7 @@ void gameLogic(int posX, int posY, int nextPosX, int nextPosY, int prevPosX, int
 	}
 }
 
-void getCell(int posX, int posY, int direction, Cell grid[50][50]) {
+void getCell(int posX, int posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	switch (direction) {
 	/* Move up */
 	case 1:
