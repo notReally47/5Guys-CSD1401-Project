@@ -101,3 +101,20 @@ void getCell(int posX, int posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOK
 		break;
 	}
 }
+
+/*
+* timer - timer takes in the duration given (seconds) and returns the duration left.
+* duration - Seconds given to complete the level
+* startTime - Current time when loaded into the game state (declare startTime during the Init of level)
+*/
+int timer(int duration, float startTime) {
+	int diffTime = (int)CP_System_GetSeconds() - (int)startTime;
+	int remaindingTime = duration - diffTime;
+
+	if (!(remaindingTime < 0)) {
+		return remaindingTime;
+	}
+	else {
+		return 0;
+	}
+}
