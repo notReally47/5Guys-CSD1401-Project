@@ -5,11 +5,14 @@
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
-float cellWidth, cellHeight;
+float cellSize,cellAlign;
 
 int totalObjs;
 
 void base_Init(void) {
+	// already declared in splash_screen. used for main.c -> basegame.c
+	CP_System_SetWindowSize(CP_System_GetDisplayWidth()>>1,CP_System_GetDisplayHeight()>>1);
+
 	/*Create empty grid*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -42,13 +45,12 @@ void base_Init(void) {
 	totalObjs = 2;
 
 	/*Settings*/
-	CP_System_SetWindowSize(500, 500);
 	CP_Settings_RectMode(CP_POSITION_CORNER);
 	CP_Settings_StrokeWeight(0.5f);
 
 	/*Initializations*/
-	cellWidth = CP_System_GetWindowWidth() / (float)SOKOBAN_GRID_COLS;
-	cellHeight = CP_System_GetWindowHeight() / (float)SOKOBAN_GRID_ROWS;
+	cellSize = (float)CP_System_GetWindowHeight()*1/(float)SOKOBAN_GRID_ROWS;
+	cellAlign = cellSize*0.3f*SOKOBAN_GRID_ROWS; // 0.3f roughly aligns in the middle
 }
 
 void base_Update(void) {
@@ -74,7 +76,8 @@ void base_Update(void) {
 
 	/*If all objectives reached, do something here*/
 	if (isCompleted == totalObjs) {
-		//CP_Engine_Terminate();
+		// return to main menu probably
+		// CP_Engine_SetNextGameState(Main_Menu_Init,Main_Menu_Update,Main_Menu_Exit);
 	}
 
 	/*Game logic*/
@@ -83,14 +86,14 @@ void base_Update(void) {
 	}
 
 	/*Rendering*/
-	CP_Graphics_ClearBackground(WHITE);
+	CP_Graphics_ClearBackground(BLUEGRAY);
 
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			Cell currCell = grid[row][col];
 
-			float cellX = cellWidth * col;
-			float cellY = cellHeight * row;
+			float cellX = cellSize*col+cellAlign; 
+			float cellY = cellSize*row;
 
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player) {
 				if (currCell.boarder) 
@@ -103,12 +106,12 @@ void base_Update(void) {
 					CP_Settings_Fill(VIOLET);
 					
 				else if (currCell.box)
-					CP_Settings_Fill(BLUEGRAY);
+					CP_Settings_Fill(WHITE);
 
 				else if (currCell.key)
 					CP_Settings_Fill(YELLOW);
 
-				CP_Graphics_DrawRect(cellX, cellY, cellWidth, cellHeight);
+				CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 			}
 		}
 	}
