@@ -12,8 +12,8 @@ void splash_screen_init(void)
     fade = 0;
     x = CP_System_GetWindowWidth()>>1;
     y = CP_System_GetWindowHeight()>>1;
-    width = CP_Image_GetWidth(img);
-    height = CP_Image_GetHeight(img);
+    width = (float)CP_System_GetWindowWidth()*0.8f;
+    height = (float)CP_System_GetWindowHeight()*0.4f;
 }
 
 void splash_screen_update(void)
@@ -26,7 +26,6 @@ void splash_screen_update(void)
     (timer >= 480) ? // transition to main menu after fading out
     CP_Engine_SetNextGameState(Main_Menu_Init,Main_Menu_Update,Main_Menu_Exit):0;
     CP_Graphics_ClearBackground(CP_Color_Create(0,0,0,255));
-    // todo: introduce audio ? smoke graphic on the logo ?
 }
 
 void splash_screen_exit(void)
