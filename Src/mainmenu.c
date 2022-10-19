@@ -45,7 +45,7 @@ void Main_Menu_Update()
 	
 	if (CP_Input_MouseClicked()) { // check for mouse input if pressed down, then check if the mouse is within any of the rectangles
 		if (IsAreaClicked(buttons.center_x,buttons.center_y,buttons.width,buttons.height,CP_Input_GetMouseX(),CP_Input_GetMouseY())) {
-			CP_Engine_SetNextGameState(base_Init,base_Update,base_Exit); // load level state
+			CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Temparary set to launch game_test
 		}
 		else if (IsAreaClicked(buttons.center_x,buttons.center_y+buttons.height*1.5f,buttons.width,buttons.height,CP_Input_GetMouseX(),CP_Input_GetMouseY())) {
 			//CP_Engine_SetNextGameState(Level_Init,Level_Update,Leve_Exit); // load options state

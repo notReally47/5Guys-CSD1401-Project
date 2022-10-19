@@ -4,4 +4,6 @@ typedef struct Cell {
 	int key;
 	int box;
 	int boarder;
+	int customer;
+	int shelf;
 } Cell;

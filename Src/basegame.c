@@ -2,10 +2,13 @@
 #include "structs.h"
 #include "utils.h"
 #include "defines.h"
+#include "customer.h"
+#include <stdio.h>
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
-float cellSize,cellAlign;
+float cellSize,cellAlign, sec;
 
 int totalObjs;
 
@@ -20,6 +23,7 @@ void base_Init(void) {
 			grid[row][col].key = 0;
 			grid[row][col].player = 0;
 			grid[row][col].box = 0;
+			path[row][col] = 0;
 		}
 	}
 
@@ -42,6 +46,30 @@ void base_Init(void) {
 	grid[20][20].key = 1;
 	grid[25][25].key = 1;
 
+	grid[20][10].customer = 1;
+
+	path[20][10] = 1;
+	path[19][10] = 1;
+	path[18][10] = 1;
+	path[17][10] = 1;
+	path[16][10] = 1;
+	path[15][10] = 2;
+	path[15][9] = 2;
+	path[15][8] = 2;
+	path[15][7] = 2;
+	path[15][6] = 2;
+	path[15][5] = 3;
+	path[16][5] = 3;
+	path[17][5] = 3;
+	path[18][5] = 3;
+	path[19][5] = 3;
+	path[20][5] = 4;
+	path[20][6] = 4;
+	path[20][7] = 4;
+	path[20][8] = 4;
+	path[20][9] = 4;
+	
+
 	totalObjs = 2;
 
 	/*Settings*/
@@ -49,15 +77,18 @@ void base_Init(void) {
 	CP_Settings_StrokeWeight(0.5f);
 
 	/*Initializations*/
-	cellSize = (float)CP_System_GetWindowHeight()*1/(float)SOKOBAN_GRID_ROWS;
-	cellAlign = cellSize*0.3f*SOKOBAN_GRID_ROWS; // 0.3f roughly aligns in the middle
+	cellSize = (float)CP_System_GetWindowHeight() * 1 / (float)SOKOBAN_GRID_ROWS;
+	cellAlign = cellSize * 0.3f * SOKOBAN_GRID_ROWS; // 0.3f roughly aligns in the middle
+
+	sec = CP_System_GetSeconds();
+	CP_System_SetFrameRate(60.0f);
 }
 
 void base_Update(void) {
 	/*Check for input and get the direction of the input*/
 	int dir = getDirection();
 
-	int playerPosX, playerPosY, isCompleted = 0;
+	int playerPosX, playerPosY, customerPosX, customerPosY, isCompleted = 0;
 
 	/*Read grid*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -70,6 +101,11 @@ void base_Update(void) {
 			if (grid[row][col].player) {
 				playerPosX = row;
 				playerPosY = col;
+			}
+
+			if (grid[row][col].customer) {
+				customerPosX = row;
+				customerPosY = col;
 			}
 		}
 	}
@@ -84,6 +120,8 @@ void base_Update(void) {
 	if (dir > 0) {
 		getCell(playerPosX, playerPosY, dir, grid);
 	}
+	
+	customerMovement(customerPosX, customerPosY, grid, path);
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
@@ -95,8 +133,8 @@ void base_Update(void) {
 			float cellX = cellSize*col+cellAlign; 
 			float cellY = cellSize*row;
 
-			if (currCell.boarder || currCell.box || currCell.key || currCell.player) {
-				if (currCell.boarder) 
+			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.customer) {
+				if (currCell.boarder)
 					CP_Settings_Fill(BLACK);
 
 				else if (currCell.player)
@@ -104,12 +142,15 @@ void base_Update(void) {
 
 				else if (currCell.key && currCell.box)
 					CP_Settings_Fill(VIOLET);
-					
+
 				else if (currCell.box)
 					CP_Settings_Fill(WHITE);
 
 				else if (currCell.key)
 					CP_Settings_Fill(YELLOW);
+
+				else if (currCell.customer)
+					CP_Settings_Fill(PINK);
 
 				CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 			}
