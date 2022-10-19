@@ -9,8 +9,13 @@
 
 //Colours
 #define WHITE		CP_Color_Create(255, 255, 255, 255)
+#define GRAY		CP_Color_Create(150, 150, 150, 255)
 #define BLACK		CP_Color_Create(0, 0, 0, 255)
 #define RED			CP_Color_Create(255, 0, 0, 255)
-#define VIOLET		CP_Color_Create(155, 38, 182, 255)
-#define BLUEGRAY	CP_Color_Create(83, 104, 114, 255)
-#define YELLOW		CP_Color_Create(254, 221, 0, 255)
+#define GREEN		CP_Color_Create(0, 255, 0, 255)
+#define YELLOW		CP_Color_Create(255, 255, 0, 255)
+#define BLUEGRAY	CP_Color_Create(136, 176, 215, 255)
+#define BROWN		CP_Color_Create(165, 42, 42, 255)
+#define VIOLET		CP_Color_Create(144, 70, 132, 255)
+#define PINK		CP_Color_Create(255, 166, 201, 255)
+#define ORANGE		CP_Color_Create(226, 82, 47, 255)
