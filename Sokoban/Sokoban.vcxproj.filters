@@ -30,6 +30,7 @@
     <ClInclude Include="..\Inc\defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="..\Inc\game_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,6 +43,11 @@
     <ClInclude Include="..\Inc\credits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+=======
+    <ClInclude Include="..\Inc\structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\main.c">
@@ -59,6 +65,7 @@
     <ClCompile Include="..\Src\basegame.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="..\Src\credits.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -68,5 +75,7 @@
     <ClCompile Include="..\Src\game_test_utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+=======
+>>>>>>> Stashed changes
   </ItemGroup>
 </Project>

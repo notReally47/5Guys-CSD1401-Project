@@ -1,4 +1,5 @@
 #include "cprocessing.h"
+#include "basegame.h"
 #include "utils.h"
 #include "credits.h"
 #include "defines.h"
