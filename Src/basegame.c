@@ -3,16 +3,13 @@
 #include "utils.h"
 #include "defines.h"
 
-
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
-Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]; //Move counting array for undo and reset
 
 float cellSize,cellAlign;
 
-int totalObjs, boarder, key, player, box, move;
+int totalObjs;
 
 void base_Init(void) {
-<<<<<<< Updated upstream
 	// already declared in splash_screen. used for main.c -> basegame.c
 	CP_System_SetWindowSize(CP_System_GetDisplayWidth()>>1,CP_System_GetDisplayHeight()>>1);
 
@@ -46,11 +43,6 @@ void base_Init(void) {
 	grid[25][25].key = 1;
 
 	totalObjs = 2;
-=======
-	move = 0; //Initialise move with 0
-	setMap(grid); //Initialise map
-	totalObjs = getObjective(grid); //Counts number of key objective to meet
->>>>>>> Stashed changes
 
 	/*Settings*/
 	CP_Settings_RectMode(CP_POSITION_CORNER);
@@ -84,25 +76,13 @@ void base_Update(void) {
 
 	/*If all objectives reached, do something here*/
 	if (isCompleted == totalObjs) {
-<<<<<<< Updated upstream
 		// return to main menu probably
 		// CP_Engine_SetNextGameState(Main_Menu_Init,Main_Menu_Update,Main_Menu_Exit);
-=======
-		CP_Engine_Terminate();
->>>>>>> Stashed changes
 	}
 
 	/*Game logic*/
 	if (dir > 0) {
-		move = moveCount(move, moves, grid); //Counts move and save current state of grid to a different array 'moves'
 		getCell(playerPosX, playerPosY, dir, grid);
-	}
-
-	if (CP_Input_KeyTriggered(KEY_U)) {
-		move = undoMove(move, moves, grid); //Undo a move and set grid to the previous move based on 'moves' array
-	}
-	else if (CP_Input_KeyTriggered(KEY_R)) {
-		move = resetMap(move, moves, grid); //Resets grid to the initial values based on the CSV file
 	}
 
 	/*Rendering*/
@@ -117,27 +97,16 @@ void base_Update(void) {
 
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player) {
 				if (currCell.boarder) 
-<<<<<<< Updated upstream
 					CP_Settings_Fill(BLACK);
 
 				else if (currCell.player)
 					CP_Settings_Fill(RED);
-=======
-					CP_Settings_Fill(BROWN);
-
-				else if (currCell.player)
-					CP_Settings_Fill(GREEN);
->>>>>>> Stashed changes
 
 				else if (currCell.key && currCell.box)
 					CP_Settings_Fill(VIOLET);
 					
 				else if (currCell.box)
-<<<<<<< Updated upstream
 					CP_Settings_Fill(WHITE);
-=======
-					CP_Settings_Fill(BLUEGRAY);
->>>>>>> Stashed changes
 
 				else if (currCell.key)
 					CP_Settings_Fill(YELLOW);
