@@ -11,8 +11,16 @@ void customerLogic(int posX, int posY, int prevPosX, int prevPosY, Cell grid[SOK
 }
 
 void customerMovement(int posX, int posY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+	static int moveState;
 	int curr = path[posX][posY];
 	int count = CP_System_GetFrameCount();
+
+	if (!curr) {
+		curr = moveState;
+	}
+	else {
+		moveState = curr;
+	}
 	
 	if (!(count % 10)) {
 		switch (curr) {
@@ -31,6 +39,8 @@ void customerMovement(int posX, int posY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_G
 		case 4:
 			posY++;
 			customerLogic(posX, posY, posX, posY - 1, grid);
+			break;
+		default:
 			break;
 		}
 	}

@@ -48,27 +48,10 @@ void base_Init(void) {
 
 	grid[20][10].customer = 1;
 
-	path[20][10] = 1;
-	path[19][10] = 1;
-	path[18][10] = 1;
-	path[17][10] = 1;
-	path[16][10] = 1;
-	path[15][10] = 2;
-	path[15][9] = 2;
-	path[15][8] = 2;
-	path[15][7] = 2;
-	path[15][6] = 2;
-	path[15][5] = 3;
-	path[16][5] = 3;
-	path[17][5] = 3;
-	path[18][5] = 3;
-	path[19][5] = 3;
-	path[20][5] = 4;
-	path[20][6] = 4;
-	path[20][7] = 4;
-	path[20][8] = 4;
-	path[20][9] = 4;
-	
+	path[20][10] = 1;	// Customer waypoint to go Up
+	path[15][10] = 2;	// Customer waypoint to go Left
+	path[15][5] = 3;	// Customer waypoint to go Down
+	path[20][5] = 4;	// Customer waypoint to go Right
 
 	totalObjs = 2;
 
