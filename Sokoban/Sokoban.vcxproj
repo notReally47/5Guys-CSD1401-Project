@@ -63,7 +63,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);CProcessingd.lib</AdditionalDependencies>
@@ -85,7 +85,7 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -101,10 +101,14 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Inc\basegame.h" />
+<<<<<<< Updated upstream
     <ClInclude Include="..\Inc\credits.h" />
     <ClInclude Include="..\Inc\defines.h" />
     <ClInclude Include="..\Inc\game_test.h" />
     <ClInclude Include="..\Inc\game_test_utils.h" />
+=======
+    <ClInclude Include="..\Inc\defines.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="..\Inc\mainmenu.h" />
     <ClInclude Include="..\Inc\splashscreen.h" />
     <ClInclude Include="..\Inc\structs.h" />
@@ -112,9 +116,12 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\basegame.c" />
+<<<<<<< Updated upstream
     <ClCompile Include="..\Src\credits.c" />
     <ClCompile Include="..\Src\game_test.c" />
     <ClCompile Include="..\Src\game_test_utils.c" />
+=======
+>>>>>>> Stashed changes
     <ClCompile Include="..\Src\main.c" />
     <ClCompile Include="..\Src\mainmenu.c" />
     <ClCompile Include="..\Src\splashscreen.c" />
