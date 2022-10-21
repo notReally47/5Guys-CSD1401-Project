@@ -46,7 +46,7 @@ void base_Init(void) {
 	grid[20][20].key = 1;
 	grid[25][25].key = 1;
 
-	grid[20][10].customer = 1;
+	grid[20][10].customer.isCustomer = 1;
 
 	path[20][10] = 1;	// Customer waypoint to go Up
 	path[15][10] = 2;	// Customer waypoint to go Left
@@ -86,7 +86,7 @@ void base_Update(void) {
 				playerPosY = col;
 			}
 
-			if (grid[row][col].customer) {
+			if (grid[row][col].customer.isCustomer) {
 				customerPosX = row;
 				customerPosY = col;
 			}
@@ -116,7 +116,7 @@ void base_Update(void) {
 			float cellX = cellSize*col+cellAlign; 
 			float cellY = cellSize*row;
 
-			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.customer) {
+			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.customer.isCustomer) {
 				if (currCell.boarder)
 					CP_Settings_Fill(BLACK);
 
@@ -132,7 +132,7 @@ void base_Update(void) {
 				else if (currCell.key)
 					CP_Settings_Fill(YELLOW);
 
-				else if (currCell.customer)
+				else if (currCell.customer.isCustomer)
 					CP_Settings_Fill(PINK);
 
 				CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);

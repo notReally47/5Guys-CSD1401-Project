@@ -14,6 +14,6 @@ typedef struct Cell {
 	int key;
 	int box;
 	int boarder;
-	int customer;
+	Customer customer;
 	int shelf;
 } Cell;

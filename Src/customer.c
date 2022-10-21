@@ -4,9 +4,9 @@
 #include <stdio.h>
 
 void customerLogic(int posX, int posY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
-	if (!grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer && !grid[posX][posY].key && !grid[posX][posY].player) {
-		grid[prevPosX][prevPosY].customer = 0;
-		grid[posX][posY].customer = 1;
+	if (!grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer.isCustomer && !grid[posX][posY].key && !grid[posX][posY].player) {
+		grid[prevPosX][prevPosY].customer.isCustomer = 0;
+		grid[posX][posY].customer.isCustomer = 1;
 	}
 }
 

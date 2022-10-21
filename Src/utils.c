@@ -49,7 +49,7 @@ int getDirection(void) {
 */
 void gameLogic(int posX, int posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	/*Push box (No boarder or another box blocking the box being pushed)*/
-	if (grid[posX][posY].box && !grid[nextPosX][nextPosY].box && !grid[posX][posY].boarder && !grid[nextPosX][nextPosY].boarder && !grid[posX][posY].customer && !grid[nextPosX][nextPosY].customer) {
+	if (grid[posX][posY].box && !grid[nextPosX][nextPosY].box && !grid[posX][posY].boarder && !grid[nextPosX][nextPosY].boarder && !grid[posX][posY].customer.isCustomer && !grid[nextPosX][nextPosY].customer.isCustomer) {
 		grid[prevPosX][prevPosY].player = 0;
 		grid[posX][posY].player = 1;
 		grid[posX][posY].box = 0;
@@ -57,7 +57,7 @@ void gameLogic(int posX, int posY, int nextPosX, int nextPosY, int prevPosX, int
 	}
 
 	/*Player movement without obstruction*/
-	else if (!grid[posX][posY].box && !grid[posX][posY].boarder && !grid[posX][posY].customer) {
+	else if (!grid[posX][posY].box && !grid[posX][posY].boarder && !grid[posX][posY].customer.isCustomer) {
 		grid[prevPosX][prevPosY].player = 0;
 		grid[posX][posY].player = 1;
 	}
