@@ -6,6 +6,7 @@
 #define SOKOBAN_LEFT 2
 #define SOKOBAN_DOWN 3
 #define SOKOBAN_RIGHT 4
+#define MOVE 2000
 
 //Colours
 #define WHITE		CP_Color_Create(255, 255, 255, 255)

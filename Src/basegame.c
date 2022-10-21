@@ -3,14 +3,17 @@
 #include "utils.h"
 #include "defines.h"
 #include "customer.h"
+#include "movement.h"
 #include <stdio.h>
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellSize,cellAlign, sec, elapsedLock;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY;
+int totalObjs, isLocked, activatedCusX, activatedCusY, move;
 
 void base_Init(void) {
 	// already declared in splash_screen. used for main.c -> basegame.c
@@ -72,6 +75,7 @@ void base_Init(void) {
 	CP_System_SetFrameRate(60.0f);
 	isLocked = 0;
 	elapsedLock = 0;
+	move = 0;
 }
 
 void base_Update(void) {
@@ -131,8 +135,15 @@ void base_Update(void) {
 
 	else {
 		if (dir > 0) {
+			move = moveCount(move, moves, grid);
 			getCell(playerPosX, playerPosY, dir, grid);
 		}
+		if (CP_Input_KeyTriggered(KEY_U)) {
+			move = undoMove(move, moves, grid);
+		}
+		//else if (CP_Input_KeyTriggered(KEY_R)) {
+		//	move = resetMap(move, moves, grid);
+		//}
 	}
 
 	customerMovement(customerPosX, customerPosY, grid, path);
