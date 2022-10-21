@@ -8,9 +8,9 @@
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
-float cellSize,cellAlign, sec;
+float cellSize,cellAlign, sec, elapsedLock;
 
-int totalObjs;
+int totalObjs, isLocked, activatedCusX, activatedCusY;
 
 void base_Init(void) {
 	// already declared in splash_screen. used for main.c -> basegame.c
@@ -46,7 +46,12 @@ void base_Init(void) {
 	grid[20][20].key = 1;
 	grid[25][25].key = 1;
 
+	grid[20][10].customer.posX = 20;
+	grid[20][10].customer.posY = 10;
+	grid[20][10].customer.direction = 2;
+	grid[20][10].customer.range = 2;
 	grid[20][10].customer.isCustomer = 1;
+	grid[20][10].customer.isActive = 1;
 
 	path[20][10] = 1;	// Customer waypoint to go Up
 	path[15][10] = 2;	// Customer waypoint to go Left
@@ -65,6 +70,8 @@ void base_Init(void) {
 
 	sec = CP_System_GetSeconds();
 	CP_System_SetFrameRate(60.0f);
+	isLocked = 0;
+	elapsedLock = 0;
 }
 
 void base_Update(void) {
@@ -86,9 +93,18 @@ void base_Update(void) {
 				playerPosY = col;
 			}
 
+
 			if (grid[row][col].customer.isCustomer) {
 				customerPosX = row;
 				customerPosY = col;
+			}
+
+			if (customerLock(row, col, grid)) {
+				isLocked = 1;
+				activatedCusX = row;
+				activatedCusY = col;
+				grid[activatedCusX][activatedCusY].customer.isActive = 0;
+
 			}
 		}
 	}
@@ -100,10 +116,25 @@ void base_Update(void) {
 	}
 
 	/*Game logic*/
-	if (dir > 0) {
-		getCell(playerPosX, playerPosY, dir, grid);
+	/*If player is stunlocked by customer*/
+	if (isLocked) {
+		/*Check if 3 seconds has passed*/
+		if (elapsedLock < 3) {
+			elapsedLock += CP_System_GetDt();
+		}
+		else {
+			/*Reset timer and turn customer inactive*/
+			elapsedLock = 0;
+			isLocked = 0;
+		}
 	}
-	
+
+	else {
+		if (dir > 0) {
+			getCell(playerPosX, playerPosY, dir, grid);
+		}
+	}
+
 	customerMovement(customerPosX, customerPosY, grid, path);
 
 	/*Rendering*/
