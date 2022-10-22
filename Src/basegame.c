@@ -55,11 +55,15 @@ void base_Init(void) {
 	grid[20][10].customer.range = 2;
 	grid[20][10].customer.isCustomer = 1;
 	grid[20][10].customer.isActive = 1;
+	//grid[30][23].customer.isCustomer = 1;
 
 	path[20][10] = 1;	// Customer waypoint to go Up
 	path[15][10] = 2;	// Customer waypoint to go Left
 	path[15][5] = 3;	// Customer waypoint to go Down
 	path[20][5] = 4;	// Customer waypoint to go Right
+
+	//path[30][23] = 1;
+	//path[19][23] = 3;
 
 	totalObjs = 2;
 
@@ -96,7 +100,6 @@ void base_Update(void) {
 				playerPosX = row;
 				playerPosY = col;
 			}
-
 
 			if (grid[row][col].customer.isCustomer) {
 				customerPosX = row;
@@ -159,24 +162,39 @@ void base_Update(void) {
 			float cellY = cellSize*row;
 
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.customer.isCustomer) {
-				if (currCell.boarder)
+				if (currCell.boarder) {
 					CP_Settings_Fill(BLACK);
-
-				else if (currCell.player)
+				}
+				else if (currCell.player) {
 					CP_Settings_Fill(RED);
-
-				else if (currCell.key && currCell.box)
+				}
+				else if (currCell.key && currCell.box) {
 					CP_Settings_Fill(VIOLET);
-
-				else if (currCell.box)
+				}
+				else if (currCell.box) {
 					CP_Settings_Fill(WHITE);
-
-				else if (currCell.key)
+				}
+				else if (currCell.key) {
 					CP_Settings_Fill(YELLOW);
-
-				else if (currCell.customer.isCustomer)
-					CP_Settings_Fill(PINK);
-
+				}
+				else if (currCell.customer.isCustomer) {
+					switch (currCell.customer.direction) {
+					case 1:
+						CP_Settings_Fill(NEON_PINK);
+						break;
+					case 2:
+						CP_Settings_Fill(CARNATION);
+						break;
+					case 3:
+						CP_Settings_Fill(SALMON);
+						break;
+					case 4:
+						CP_Settings_Fill(COTTON);
+						break;
+					default:
+						break;
+					}
+				}
 				CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 			}
 		}

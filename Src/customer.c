@@ -3,7 +3,7 @@
 #include "structs.h"
 #include <stdio.h>
 
-void customerLogic(int posX, int posY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+void customerLogic(int posX, int posY, int prevPosX, int prevPosY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	if (!grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer.isCustomer && !grid[posX][posY].key && !grid[posX][posY].player) {
 		Customer nullCus;
 		nullCus.posX = 0;
@@ -14,6 +14,10 @@ void customerLogic(int posX, int posY, int prevPosX, int prevPosY, Cell grid[SOK
 		nullCus.isActive = 0;
 		grid[posX][posY].customer = grid[prevPosX][prevPosY].customer;
 		grid[prevPosX][prevPosY].customer = nullCus;
+		grid[prevPosX][prevPosY].customer.isCustomer = 0;
+		grid[prevPosX][prevPosY].customer.direction = 0;
+		grid[posX][posY].customer.isCustomer = 1;
+		grid[posX][posY].customer.direction = direction;
 	}
 }
 
@@ -35,19 +39,19 @@ void customerMovement(int posX, int posY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_G
 			//todo change direction when fella moves
 			case 1:
 				posX--;
-				customerLogic(posX, posY, posX + 1, posY, grid);
+				customerLogic(posX, posY, posX + 1, posY, curr, grid);
 				break;
 			case 2:
 				posY--;
-				customerLogic(posX, posY, posX, posY + 1, grid);
+				customerLogic(posX, posY, posX, posY + 1, curr, grid);
 				break;
 			case 3:
 				posX++;
-				customerLogic(posX, posY, posX - 1, posY, grid);
+				customerLogic(posX, posY, posX - 1, posY, curr, grid);
 				break;
 			case 4:
 				posY++;
-				customerLogic(posX, posY, posX, posY - 1, grid);
+				customerLogic(posX, posY, posX, posY - 1, curr, grid);
 				break;
 			default:
 				break;

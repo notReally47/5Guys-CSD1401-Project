@@ -18,5 +18,10 @@
 #define BLUEGRAY	CP_Color_Create(136, 176, 215, 255)
 #define BROWN		CP_Color_Create(165, 42, 42, 255)
 #define VIOLET		CP_Color_Create(144, 70, 132, 255)
-#define PINK		CP_Color_Create(255, 166, 201, 255)
 #define ORANGE		CP_Color_Create(226, 82, 47, 255)
+
+// Customer Colours
+#define NEON_PINK		CP_Color_Create(255, 0, 127, 255)	// Moving Up
+#define CARNATION		CP_Color_Create(255, 166, 201, 255)	// Moving Left
+#define SALMON		CP_Color_Create(255, 134, 116, 255)	// Moving Down
+#define COTTON		CP_Color_Create(255, 188, 217, 255)	// Moving Right
