@@ -8,6 +8,7 @@
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+Customer customer[CUSTOMER];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
@@ -49,21 +50,33 @@ void base_Init(void) {
 	grid[20][20].key = 1;
 	grid[25][25].key = 1;
 
-	grid[20][10].customer.posX = 20;
-	grid[20][10].customer.posY = 10;
-	grid[20][10].customer.direction = 2;
-	grid[20][10].customer.range = 2;
-	grid[20][10].customer.isCustomer = 1;
-	grid[20][10].customer.isActive = 1;
-	//grid[30][23].customer.isCustomer = 1;
+	// Customer 1
+	grid[20][10].customer = 1;
+	customer[0].posX = 20;
+	customer[0].posY = 10;
+	customer[0].direction = 1;
+	customer[0].range = 2;
+	customer[0].isCustomer = 1;
+	customer[0].isActive = 1;
+	
+	// Customer 2
+	grid[30][23].customer = 1;
+	customer[1].posX = 30;
+	customer[1].posY = 23;
+	customer[1].direction = 1;
+	customer[1].range = 2;
+	customer[1].isCustomer = 1;
+	customer[1].isActive = 1;
 
+	// Pathing for Customer 1
 	path[20][10] = 1;	// Customer waypoint to go Up
 	path[15][10] = 2;	// Customer waypoint to go Left
 	path[15][5] = 3;	// Customer waypoint to go Down
 	path[20][5] = 4;	// Customer waypoint to go Right
 
-	//path[30][23] = 1;
-	//path[19][23] = 3;
+	// Pathing for Customer 2
+	path[30][23] = 1;	// Customer waypoint to go Up
+	path[19][23] = 3;	// Customer waypoint to go Down
 
 	totalObjs = 2;
 
@@ -86,7 +99,7 @@ void base_Update(void) {
 	/*Check for input and get the direction of the input*/
 	int dir = getDirection();
 
-	int playerPosX, playerPosY, customerPosX, customerPosY, isCompleted = 0;
+	int playerPosX, playerPosY, isCompleted = 0;
 
 	/*Read grid*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -101,17 +114,8 @@ void base_Update(void) {
 				playerPosY = col;
 			}
 
-			if (grid[row][col].customer.isCustomer) {
-				customerPosX = row;
-				customerPosY = col;
-			}
-
-			if (customerLock(row, col, grid)) {
+			if (customerLock(grid, customer)) {
 				isLocked = 1;
-				activatedCusX = row;
-				activatedCusY = col;
-				grid[activatedCusX][activatedCusY].customer.isActive = 0;
-
 			}
 		}
 	}
@@ -128,11 +132,13 @@ void base_Update(void) {
 		/*Check if 3 seconds has passed*/
 		if (elapsedLock < 3) {
 			elapsedLock += CP_System_GetDt();
+			printf("LOCKED\n");
 		}
 		else {
 			/*Reset timer and turn customer inactive*/
 			elapsedLock = 0;
 			isLocked = 0;
+			printf("UNLOCKED\n");
 		}
 	}
 
@@ -149,7 +155,7 @@ void base_Update(void) {
 		//}
 	}
 
-	customerMovement(customerPosX, customerPosY, grid, path);
+	customerMovement(grid, path, customer);
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
@@ -158,10 +164,10 @@ void base_Update(void) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			Cell currCell = grid[row][col];
 
-			float cellX = cellSize*col+cellAlign; 
-			float cellY = cellSize*row;
+			float cellX = cellSize * col + cellAlign;
+			float cellY = cellSize * row;
 
-			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.customer.isCustomer) {
+			if (currCell.boarder || currCell.box || currCell.key || currCell.player) {
 				if (currCell.boarder) {
 					CP_Settings_Fill(BLACK);
 				}
@@ -177,25 +183,29 @@ void base_Update(void) {
 				else if (currCell.key) {
 					CP_Settings_Fill(YELLOW);
 				}
-				else if (currCell.customer.isCustomer) {
-					switch (currCell.customer.direction) {
-					case 1:
+				CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
+			}
+
+			for (int i = 0; i < CUSTOMER; i++) {
+				if (currCell.customer && row == customer[i].posX && col == customer[i].posY) {
+					switch (customer[i].direction) {
+					case SOKOBAN_UP:
 						CP_Settings_Fill(NEON_PINK);
 						break;
-					case 2:
+					case SOKOBAN_LEFT:
 						CP_Settings_Fill(CARNATION);
 						break;
-					case 3:
+					case SOKOBAN_DOWN:
 						CP_Settings_Fill(SALMON);
 						break;
-					case 4:
+					case SOKOBAN_RIGHT:
 						CP_Settings_Fill(COTTON);
 						break;
 					default:
 						break;
 					}
+					CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 				}
-				CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 			}
 		}
 	}
