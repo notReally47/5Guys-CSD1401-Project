@@ -5,7 +5,6 @@ typedef struct Customer {
 	int posY;
 	int direction;
 	int range;
-	int isCustomer;
 	int isActive;
 } Customer;
 

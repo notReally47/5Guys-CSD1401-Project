@@ -56,7 +56,6 @@ void base_Init(void) {
 	customer[0].posY = 10;
 	customer[0].direction = 1;
 	customer[0].range = 2;
-	customer[0].isCustomer = 1;
 	customer[0].isActive = 1;
 	
 	// Customer 2
@@ -65,7 +64,6 @@ void base_Init(void) {
 	customer[1].posY = 23;
 	customer[1].direction = 1;
 	customer[1].range = 2;
-	customer[1].isCustomer = 1;
 	customer[1].isActive = 1;
 
 	// Pathing for Customer 1
