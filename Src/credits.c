@@ -24,7 +24,7 @@ void Credits_Init() {
 	CP_Font_DrawText("Shafiq Mirza Bin Mohamed Zahid", windowsWidth / 2, 140);
 	CP_Font_DrawText("Ian Chua Rong Bin", windowsWidth / 2, 160);
 	CP_Font_DrawText("Jerell Tan Jian Yu", windowsWidth / 2, 180);
-	CP_Font_DrawText("Guo Yi Ming", windowsWidth / 2, 200);
+	CP_Font_DrawText("Guo Yiming", windowsWidth / 2, 200);
 	CP_Font_DrawText("-------------------------------", windowsWidth / 2, 220);
 	CP_Font_DrawText("Instructors:", windowsWidth / 2, 240);
 	CP_Font_DrawText("Ding Xiang Cheng", windowsWidth / 2, 260);

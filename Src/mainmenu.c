@@ -3,6 +3,7 @@
 #include "credits.h"
 #include "defines.h"
 #include "basegame.h"
+#include "options.h"
 
 struct rect { // declare struct variable rect for x/y coords of a rectangle, width and height
 	float center_x,center_y,width,height;
@@ -48,7 +49,7 @@ void Main_Menu_Update()
 			CP_Engine_SetNextGameState(base_Init,base_Update,base_Exit); // load level state
 		}
 		else if (IsAreaClicked(buttons.center_x,buttons.center_y+buttons.height*1.5f,buttons.width,buttons.height,CP_Input_GetMouseX(),CP_Input_GetMouseY())) {
-			//CP_Engine_SetNextGameState(Level_Init,Level_Update,Leve_Exit); // load options state
+			CP_Engine_SetNextGameState(Options_Init, Options_Update, Options_Exit); // load options state
 		}
 		else if (IsAreaClicked(buttons.center_x,buttons.center_y+buttons.height*3.f,buttons.width,buttons.height,CP_Input_GetMouseX(),CP_Input_GetMouseY())) {
 			CP_Engine_SetNextGameState(Credits_Init, Credits_Update, Credits_Exit); // Load Credit page

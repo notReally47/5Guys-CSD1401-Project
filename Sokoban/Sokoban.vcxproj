@@ -106,6 +106,7 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
     <ClInclude Include="..\Inc\game_test.h" />
     <ClInclude Include="..\Inc\game_test_utils.h" />
     <ClInclude Include="..\Inc\mainmenu.h" />
+    <ClInclude Include="..\Inc\options.h" />
     <ClInclude Include="..\Inc\splashscreen.h" />
     <ClInclude Include="..\Inc\structs.h" />
     <ClInclude Include="..\Inc\utils.h" />
@@ -117,6 +118,7 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
     <ClCompile Include="..\Src\game_test_utils.c" />
     <ClCompile Include="..\Src\main.c" />
     <ClCompile Include="..\Src\mainmenu.c" />
+    <ClCompile Include="..\Src\options.c" />
     <ClCompile Include="..\Src\splashscreen.c" />
     <ClCompile Include="..\Src\utils.c" />
   </ItemGroup>
