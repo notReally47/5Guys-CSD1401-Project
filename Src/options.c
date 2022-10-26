@@ -13,21 +13,26 @@ typedef struct Button {
 } Button;
 
 Button back, resolution, volumeDown, volumeUp;
-float textSize, volume, u0, u1, imgWidth, imgHeight, numFrames;
+float textSize, volume, imgWidth, imgHeight, numCols, numRows;
+static float timeElapsed;
+static const float DISPLAY_DURATION = .5f;
+static int imageIndex;
+static const float FRAME_DIMENSION = 600.0f;
+
 CP_Vector window;
 CP_Image gameplay;
 
 void Options_Init() {
 	CP_System_SetWindowSize(CP_System_GetDisplayWidth() / 2, CP_System_GetDisplayHeight() / 2);
-	CP_System_SetFrameRate(10.0f);
+	//CP_System_SetFrameRate(1.0f);
 	//CP_Graphics_ClearBackground(CP_Color_Create(80, 80, 80, 255));
 	textSize = (float)CP_System_GetWindowHeight() * 0.05f;
 	CP_Settings_TextSize(textSize);
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
-	
+
 	window = CP_Vector_Set(CP_System_GetWindowWidth(), CP_System_GetWindowHeight());
-	gameplay = CP_Image_Load("./Assets/gameplay_demo_spritesheet.png");
+	gameplay = CP_Image_Load("./Assets/Gameplay.png");
 
 	// Back button
 	back.text = "<-"; // to be replaced with an image
@@ -42,18 +47,21 @@ void Options_Init() {
 	volumeUp.text = "+";
 	volumeUp.width = back.width, volumeUp.height = back.width;
 
-	numFrames = 38.0f;
 	imgWidth = (float)CP_Image_GetWidth(gameplay), imgHeight = (float)CP_Image_GetHeight(gameplay);
-	u0 = 0.f, u1 = imgWidth / numFrames;
+	imageIndex = 0;
+	timeElapsed = 0.0f;
 }
 
 void Options_Update() {
-	CP_Graphics_ClearBackground(CP_Color_Create(80, 80, 80, 255));
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
 
 	// Draw gameplay gif logic
-	u0 = (u0 < (37 * imgWidth / 38)) ? (u0 + imgWidth / 38) : 0;
-	u1 = (u1 < imgWidth) ? (u1 + imgWidth / 38) : (imgWidth / 38);
+	timeElapsed += CP_System_GetDt();
+	if (timeElapsed >= DISPLAY_DURATION) {
+		imageIndex = (imageIndex + 1) % 14;
+		timeElapsed = 0.0f;
+	}
+	CP_Graphics_ClearBackground(CP_Color_Create(80, 80, 80, 255));
 
 	// Highlight button when mouse over
 	if (IsAreaClicked(back.position.x, back.position.y, back.width, back.height, mouse.x, mouse.y)) {
@@ -96,7 +104,12 @@ void Options_Update() {
 	// Draw tutorial
 	CP_Settings_NoTint();
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
-	CP_Image_DrawSubImage(gameplay, window.x - PADDING - (window.y - (back.height + 5 * PADDING + 2 * textSize)), back.height + 4 * PADDING + 2 * textSize, window.y - (back.height + 5 * PADDING + 2 * textSize), window.y - (back.height + 5 * PADDING + 2 * textSize), u0, 0, u1, imgHeight, 255);
+	CP_Image_DrawSubImage(gameplay, 
+		window.x - PADDING - (window.y - (back.height + 5 * PADDING + 2 * textSize)), back.height + 4 * PADDING + 2 * textSize, 
+		window.y - (back.height + 5 * PADDING + 2 * textSize), window.y - (back.height + 5 * PADDING + 2 * textSize),
+		(imageIndex % 7) * FRAME_DIMENSION, (imageIndex < 7) ? 0 : FRAME_DIMENSION,
+		((imageIndex % 7) + 1) * FRAME_DIMENSION, (imageIndex < 7) ? FRAME_DIMENSION : FRAME_DIMENSION * 2,
+		255);
 	CP_Settings_Fill(CP_Color_Create(255, 0, 0, 255));
 	CP_Graphics_DrawRect(2 * PADDING + 75, window.y - 2 * PADDING - 75, 50, 50);
 	CP_Graphics_DrawRect(PADDING + 25, window.y - PADDING - 25, 50, 50);
