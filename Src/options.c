@@ -13,7 +13,9 @@ typedef struct Button {
 } Button;
 
 Button back, resolution, volumeDown, volumeUp;
-float textSize, volume, imgWidth, imgHeight, numCols, numRows;
+float textSize, volume, numCols, numRows;
+
+// Gif
 static float timeElapsed;
 static const float DISPLAY_DURATION = .5f;
 static int imageIndex;
@@ -24,8 +26,6 @@ CP_Image gameplay;
 
 void Options_Init() {
 	CP_System_SetWindowSize(CP_System_GetDisplayWidth() / 2, CP_System_GetDisplayHeight() / 2);
-	//CP_System_SetFrameRate(1.0f);
-	//CP_Graphics_ClearBackground(CP_Color_Create(80, 80, 80, 255));
 	textSize = (float)CP_System_GetWindowHeight() * 0.05f;
 	CP_Settings_TextSize(textSize);
 	CP_Settings_RectMode(CP_POSITION_CENTER);
@@ -47,7 +47,7 @@ void Options_Init() {
 	volumeUp.text = "+";
 	volumeUp.width = back.width, volumeUp.height = back.width;
 
-	imgWidth = (float)CP_Image_GetWidth(gameplay), imgHeight = (float)CP_Image_GetHeight(gameplay);
+	// Gif
 	imageIndex = 0;
 	timeElapsed = 0.0f;
 }
@@ -106,7 +106,7 @@ void Options_Update() {
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
 	CP_Image_DrawSubImage(gameplay, 
 		window.x - PADDING - (window.y - (back.height + 5 * PADDING + 2 * textSize)), back.height + 4 * PADDING + 2 * textSize, 
-		window.y - (back.height + 5 * PADDING + 2 * textSize), window.y - (back.height + 5 * PADDING + 2 * textSize),
+		window.y * 0.76f, window.y * 0.76f,
 		(imageIndex % 7) * FRAME_DIMENSION, (imageIndex < 7) ? 0 : FRAME_DIMENSION,
 		((imageIndex % 7) + 1) * FRAME_DIMENSION, (imageIndex < 7) ? FRAME_DIMENSION : FRAME_DIMENSION * 2,
 		255);
@@ -124,5 +124,5 @@ void Options_Update() {
 }
 
 void Options_Exit() {
-	CP_System_SetFrameRate(30.0f);
+	CP_Image_Free(&gameplay);
 }
