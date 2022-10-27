@@ -46,18 +46,22 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 
 			if (!(count % CUSTOMER_SPEED)) {
 				switch (curr) {
+				// Move Up
 				case SOKOBAN_UP:
 					posX--;
 					customerLogic(i, posX, posY, posX + 1, posY, curr, grid, customer);
 					break;
+				// Move Left
 				case SOKOBAN_LEFT:
 					posY--;
 					customerLogic(i, posX, posY, posX, posY + 1, curr, grid, customer);
 					break;
+				// Move Down
 				case SOKOBAN_DOWN:
 					posX++;
 					customerLogic(i, posX, posY, posX - 1, posY, curr, grid, customer);
 					break;
+				// Move Right
 				case SOKOBAN_RIGHT:
 					posY++;
 					customerLogic(i, posX, posY, posX, posY - 1, curr, grid, customer);
@@ -77,6 +81,8 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 */
 void customerIdle(int cusNum, Customer customer[CUSTOMER]) {
 	int count = CP_System_GetFrameCount();
+
+	// Rotates the customer anti-clockwise
 	if (customer[cusNum].isActive && !(count % CUSTOMER_SPEED)) {
 		int temp = customer[cusNum].direction;
 		customer[cusNum].direction = (temp % 4) + 1;

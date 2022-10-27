@@ -27,5 +27,5 @@
 #define COTTON		CP_Color_Create(255, 188, 217, 255)	// Moving Right
 
 // Customer
-#define CUSTOMER		10
-#define CUSTOMER_SPEED	10
+#define CUSTOMER		10	// Maximum Number of Customers
+#define CUSTOMER_SPEED	10	// The number of frames before the customer updates
