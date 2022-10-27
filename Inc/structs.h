@@ -7,6 +7,7 @@ typedef struct Customer {
 	int range;
 	int isActive;
 	int isIdle;
+	int isRandom;
 } Customer;
 
 typedef struct Cell {

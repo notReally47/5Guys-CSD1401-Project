@@ -58,6 +58,7 @@ void base_Init(void) {
 	customer[0].range = 2;
 	customer[0].isActive = 1;
 	customer[0].isIdle = 0;
+	customer[0].isRandom = 0;
 	
 	// Customer 2
 	grid[30][23].customer = 1;
@@ -67,6 +68,7 @@ void base_Init(void) {
 	customer[1].range = 2;
 	customer[1].isActive = 1;
 	customer[1].isIdle = 0;
+	customer[1].isRandom = 0;
 
 	// Customer 3
 	grid[43][20].customer = 1;
@@ -76,6 +78,17 @@ void base_Init(void) {
 	customer[2].range = 2;
 	customer[2].isActive = 1;
 	customer[2].isIdle = 1;
+	customer[2].isRandom = 0;
+
+	// Csutomer 4 (random movement)
+	grid[10][40].customer = 1;
+	customer[3].posX = 10;
+	customer[3].posY = 40;
+	customer[3].range = 2;
+	customer[3].isActive = 1;
+	customer[3].isIdle = 0;
+	customer[3].isRandom = 1;
+
 
 	// Pathing for Customer 1
 	path[20][10] = 1;	// Customer waypoint to go Up
@@ -169,6 +182,9 @@ void base_Update(void) {
 	for (int i = 0; i < CUSTOMER; i++) {
 		if (customer[i].isIdle) {
 			customerIdle(i, customer);
+		}
+		else if (customer[i].isRandom) {
+			randomCustomerMovement(grid, customer);
 		}
 	}
 
