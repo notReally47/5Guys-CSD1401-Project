@@ -57,6 +57,7 @@ void base_Init(void) {
 	customer[0].direction = 1;
 	customer[0].range = 2;
 	customer[0].isActive = 1;
+	customer[0].isIdle = 0;
 	
 	// Customer 2
 	grid[30][23].customer = 1;
@@ -65,6 +66,16 @@ void base_Init(void) {
 	customer[1].direction = 1;
 	customer[1].range = 2;
 	customer[1].isActive = 1;
+	customer[1].isIdle = 0;
+
+	// Customer 3
+	grid[43][20].customer = 1;
+	customer[2].posX = 43;
+	customer[2].posY = 20;
+	customer[2].direction = 2;
+	customer[2].range = 2;
+	customer[2].isActive = 1;
+	customer[2].isIdle = 1;
 
 	// Pathing for Customer 1
 	path[20][10] = 1;	// Customer waypoint to go Up
@@ -154,6 +165,12 @@ void base_Update(void) {
 	}
 
 	customerMovement(grid, path, customer);
+
+	for (int i = 0; i < CUSTOMER; i++) {
+		if (customer[i].isIdle) {
+			customerIdle(i, customer);
+		}
+	}
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);

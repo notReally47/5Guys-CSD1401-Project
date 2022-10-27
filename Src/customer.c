@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "structs.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /*
 * customerLogic - Checks if the cell where the customer is about to move to is valid.
@@ -30,7 +31,7 @@ void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, i
 */
 void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
 	for (int i = 0; i < CUSTOMER; i++) {
-		if (customer[i].isActive) {
+		if (customer[i].isActive && !customer[i].isIdle) {
 			int posX = customer[i].posX;
 			int posY = customer[i].posY;
 			int curr = path[posX][posY];
@@ -70,13 +71,26 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 }
 
 /*
+* customerIdle - Idle AI for customer.
+* int cusNum: Array Number for customer.
+* Customer customer: customer stats.
+*/
+void customerIdle(int cusNum, Customer customer[CUSTOMER]) {
+	int count = CP_System_GetFrameCount();
+	if (customer[cusNum].isActive && !(count % CUSTOMER_SPEED)) {
+		int temp = customer[cusNum].direction;
+		customer[cusNum].direction = (temp % 4) + 1;
+	}
+}
+
+/*
 * customerLock - Checks if a player is within the range of a customer.
 * Cell grid: Grid that the customer exists in.
 * Customer customer: customer stats.
 */
 int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
 	int isLocked = 0;
-	for (int i = 0; i < CUSTOMER; i++) {
+	for (int i = 0; i < CUSTOMER; i++){
 		if (customer[i].isActive) {
 			switch (customer[i].direction) {
 				/* Face up */

@@ -6,6 +6,7 @@ typedef struct Customer {
 	int direction;
 	int range;
 	int isActive;
+	int isIdle;
 } Customer;
 
 typedef struct Cell {
