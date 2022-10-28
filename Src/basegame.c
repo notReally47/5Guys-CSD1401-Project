@@ -74,7 +74,7 @@ void base_Init(void) {
 	customer[1].isIdle = 0;
 	customer[1].isRandom = 0;
 
-	// Customer 3
+	// Customer 3 (Idle Rotation)
 	grid[43][20].customer = 1;
 	customer[2].posX = 43;
 	customer[2].posY = 20;
