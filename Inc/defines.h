@@ -28,5 +28,5 @@
 
 // Customer
 #define CUSTOMER		10	// Maximum Number of Customers
-#define CUSTOMER_SPEED	10	// The number of frames before the customer updates movement
-#define CUSTOMER_TURN	20	// The number of frames before the customer updates rotation
+#define CUSTOMER_SPEED	10	// The number of frames before the customer updates movement (Bigger Numer = Slower)
+#define CUSTOMER_TURN	20	// The number of frames before the customer updates rotation (Bigger Numer = Slower)

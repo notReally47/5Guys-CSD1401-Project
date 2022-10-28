@@ -9,6 +9,7 @@
 * int cusNum: Subscript of the customer array.
 * int posX, posY: The next cell that the customer is moving towards.
 * int prevPosX, prevPosY: The previous cell that the customer was previously at.
+* int direction: The direction where the customer moves and is looking at.
 * Cell grid: Grid where the customer exists.
 * Customer customer: Customer stats.
 */
@@ -67,6 +68,7 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 					posY++;
 					customerLogic(i, posX, posY, posX, posY - 1, curr, grid, customer);
 					break;
+				// Default case (if any)
 				default:
 					break;
 				}
