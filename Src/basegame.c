@@ -131,10 +131,13 @@ void base_Update(void) {
 				else if (currCell.key && currCell.box)
 					draw_key_in_box(cellX,cellY,cellSize);
 
-				else if (currCell.key) 
+				else if (currCell.key) {
 					draw_key(cellX,cellY,cellSize);
+					if (currCell.player)
+						goto player;
+					}
 						
-				else if (currCell.player)
+				else if (currCell.player) player:
 					draw_player(cellX,cellY,face);
 				
 				else if (currCell.box)
