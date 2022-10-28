@@ -2,16 +2,21 @@
 #include "structs.h"
 #include "utils.h"
 #include "defines.h"
+#include "spritesheet.h"
+
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellSize,cellAlign;
-
-int totalObjs;
+int totalObjs, face;
 
 void base_Init(void) {
-	// already declared in splash_screen. used for main.c -> basegame.c
-	CP_System_SetWindowSize(CP_System_GetDisplayWidth()>>1,CP_System_GetDisplayHeight()>>1);
+	// initialisation  || IN BASEGAME TEMPORARILY
+	CP_System_SetWindowSize(CP_System_GetDisplayWidth(), CP_System_GetDisplayHeight()); // >>1
+	//if (CP_System_GetWindowWidth() == CP_System_GetDisplayWidth())
+		//CP_System_Fullscreen();  // set fullscreen if max
+	CP_System_SetWindowTitle("SevenTwee");
+
 
 	/*Create empty grid*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -22,7 +27,6 @@ void base_Init(void) {
 			grid[row][col].box = 0;
 		}
 	}
-
 	/*Set grid characteristics here*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		grid[row][0].boarder = 1;
@@ -39,18 +43,19 @@ void base_Init(void) {
 	grid[5][5].box = 1;
 	grid[10][10].box = 1;
 
-	grid[20][20].key = 1;
-	grid[25][25].key = 1;
+	grid[16][12].key = 1;
+	grid[3][15].key = 1;
 
 	totalObjs = 2;
 
 	/*Settings*/
-	CP_Settings_RectMode(CP_POSITION_CORNER);
 	CP_Settings_StrokeWeight(0.5f);
 
 	/*Initializations*/
-	cellSize = (float)CP_System_GetWindowHeight()*1/(float)SOKOBAN_GRID_ROWS;
-	cellAlign = cellSize*0.3f*SOKOBAN_GRID_ROWS; // 0.3f roughly aligns in the middle
+	cellSize = (float)(CP_System_GetWindowHeight()/SOKOBAN_GRID_ROWS);
+	cellAlign = (float)((CP_System_GetWindowWidth()-(int)cellSize*SOKOBAN_GRID_COLS)/2);
+	face = 0;
+	load_spritesheet(cellSize);
 }
 
 void base_Update(void) {
@@ -71,6 +76,25 @@ void base_Update(void) {
 				playerPosX = row;
 				playerPosY = col;
 			}
+
+			switch (dir) {
+			case 1: // up
+				face = 1;
+				
+				break;
+			case 2: // left
+				face = 2;
+
+				break;
+			case 3: // down
+				face = 3;
+				
+				break;
+			case 4: // right
+				face = 4;
+				break;
+
+			}
 		}
 	}
 
@@ -83,7 +107,9 @@ void base_Update(void) {
 	/*Game logic*/
 	if (dir > 0) {
 		getCell(playerPosX, playerPosY, dir, grid);
+		
 	}
+
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
@@ -92,31 +118,34 @@ void base_Update(void) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			Cell currCell = grid[row][col];
 
-			float cellX = cellSize*col+cellAlign; 
-			float cellY = cellSize*row;
-
+			float cellX = cellSize*(float)col+cellAlign; 
+			float cellY = cellSize*(float)row;
+			
+			
+			draw_floor(cellX,cellY,cellSize);
+			
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player) {
-				if (currCell.boarder) 
-					CP_Settings_Fill(BLACK);
-
-				else if (currCell.player)
-					CP_Settings_Fill(RED);
+				if (currCell.boarder)
+					draw_boarder(cellX,cellY,cellSize);
 
 				else if (currCell.key && currCell.box)
-					CP_Settings_Fill(VIOLET);
-					
+					draw_key_in_box(cellX,cellY,cellSize);
+
+				else if (currCell.key) 
+					draw_key(cellX,cellY,cellSize);
+						
+				else if (currCell.player)
+					draw_player(cellX,cellY,face);
+				
 				else if (currCell.box)
-					CP_Settings_Fill(WHITE);
+					draw_box(cellX,cellY,cellSize);
 
-				else if (currCell.key)
-					CP_Settings_Fill(YELLOW);
-
-				CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 			}
+			
 		}
 	}
 }
 
 void base_Exit(void) {
-
+	free_sprite();
 }
