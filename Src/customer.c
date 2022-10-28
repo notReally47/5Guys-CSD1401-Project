@@ -181,14 +181,13 @@ void customerIdle(int cusNum, Customer customer[CUSTOMER]) {
 	int count = CP_System_GetFrameCount();
 
 	// Rotates the customer anti-clockwise
-	if (customer[cusNum].isActive && !(count % CUSTOMER_SPEED)) {
-		int temp = customer[cusNum].direction;
-		customer[cusNum].direction = (temp % 4) + 1;
+	if (customer[cusNum].isActive && !(count % CUSTOMER_TURN)) {
+		customer[cusNum].direction = (customer[cusNum].direction % 4) + 1;
 	}
 }
 
 /*
-* customerLock - Checks if a player is within the range of a customer.
+* customerLock - Checks if a player is within the range of a customer).
 * Cell grid: Grid that the customer exists in.
 * Customer customer: customer stats.
 */
