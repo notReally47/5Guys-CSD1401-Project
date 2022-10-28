@@ -2,19 +2,19 @@
 #include "structs.h"
 #include "utils.h"
 #include "defines.h"
-#include "spritesheet.h"
-#include "mainmenu.h"
-#include "generateLevel.h"
+#include "customer.h"
 #include "movement.h"
-
+#include <stdio.h>
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
-Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]; //Move counting array for undo and reset
+Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Customer customer[CUSTOMER];
 
-float cellSize,cellAlign;
-int totalObjs, face, move, time;
-int level; //Added global variable to determine level. 0 being Tutorial.
+int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+
+float cellSize,cellAlign, sec, elapsedLock;
+
+int totalObjs, isLocked, activatedCusX, activatedCusY, move, face, time, level;
 
 void base_Init(void) {
 	// initialisation  || IN BASEGAME TEMPORARILY
@@ -74,6 +74,8 @@ void base_Update(void) {
 				face = 4;
 				break;
 
+			if (customerLock(grid, customer)) {
+				isLocked = 1;
 			}
 		}
 	}
@@ -85,10 +87,43 @@ void base_Update(void) {
 	}
 
 	/*Game logic*/
-	if (dir > 0) {
-		move = moveCount(move, moves, grid); //Counts move and save current state of grid to a different array 'moves'
-		getCell(playerPosX, playerPosY, dir, grid);
-		
+	/*If player is stunlocked by customer*/
+	if (isLocked) {
+		/*Check if 3 seconds has passed*/
+		if (elapsedLock < 3) {
+			elapsedLock += CP_System_GetDt();
+			printf("LOCKED\n");
+		}
+		else {
+			/*Reset timer and turn customer inactive*/
+			elapsedLock = 0;
+			isLocked = 0;
+			printf("UNLOCKED\n");
+		}
+	}
+
+	else {
+		if (dir > 0) {
+			move = moveCount(move, moves, grid);
+			getCell(playerPosX, playerPosY, dir, grid);
+		}
+		if (CP_Input_KeyTriggered(KEY_U)) {
+			move = undoMove(move, moves, grid);
+		}
+		//else if (CP_Input_KeyTriggered(KEY_R)) {
+		//	move = resetMap(move, moves, grid);
+		//}
+	}
+
+	customerMovement(grid, path, customer);
+
+	for (int i = 0; i < CUSTOMER; i++) {
+		if (customer[i].isIdle) {
+			customerIdle(i, customer);
+		}
+		else if (customer[i].isRandom) {
+			randomCustomerMovement(grid, customer);
+		}
 	}
 
 	if (CP_Input_KeyDown(KEY_U)) {
@@ -130,8 +165,8 @@ void base_Update(void) {
 				
 				else if (currCell.box)
 					draw_box(cellX,cellY,cellSize);
-				//else if draw shelf
-
+				else if (currCell.shelf)
+					draw_boarder(cellX,cellY,cellSize);
 			}
 			for (int i = 0; i < CUSTOMER; i++) {
 				if (currCell.customer && row == customer[i].posY && col == customer[i].posX) {
@@ -154,7 +189,6 @@ void base_Update(void) {
 					CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 				}
 			}
-			
 		}
 	}
 }

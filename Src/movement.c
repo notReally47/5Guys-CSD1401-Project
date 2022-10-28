@@ -10,7 +10,8 @@ int moveCount(int move, Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], 
 			moves[move][row][col] = grid[row][col];
 		}
 	}
-	printf("Current Moves: %d\n", ++move);
+	//printf("Current Moves: %d\n", ++move);
+	++move;
 	return move;
 }
 
@@ -26,7 +27,8 @@ int undoMove(int move, Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], C
 				moves[move - 1][row][col].box = 0;
 			}
 		}
-		printf("Current Moves: %d\n", --move);
+		//printf("Current Moves: %d\n", --move);
+		--move;
 	}
 	return move;
 }

@@ -24,7 +24,12 @@
 #define ORANGE		CP_Color_Create(226, 82, 47, 255)
 
 // Customer Colours
-#define NEON_PINK		CP_Color_Create(255, 0, 127, 255)	// Moving Up
-#define CARNATION		CP_Color_Create(255, 166, 201, 255)	// Moving Left
+#define NEON_PINK	CP_Color_Create(255, 0, 127, 255)	// Moving Up
+#define CARNATION	CP_Color_Create(255, 166, 201, 255)	// Moving Left
 #define SALMON		CP_Color_Create(255, 134, 116, 255)	// Moving Down
 #define COTTON		CP_Color_Create(255, 188, 217, 255)	// Moving Right
+
+// Customer
+#define CUSTOMER		10	// Maximum Number of Customers
+#define CUSTOMER_SPEED	10	// The number of frames before the customer updates movement (Bigger Numer = Slower)
+#define CUSTOMER_TURN	20	// The number of frames before the customer updates rotation (Bigger Numer = Slower)
