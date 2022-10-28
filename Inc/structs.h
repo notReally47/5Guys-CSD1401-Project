@@ -33,11 +33,15 @@ typedef struct Config
 } Config;
 
 typedef struct Customer {
-	int posX;
-	int posY;
+	int posX; //posRow
+	int posY; //posCol
+	int ogPosX; //row
+	int ogPosY; //col
 	int direction;
 	int range;
 	int isActive;
+	int isIdle;
+	int isRandom;
 } Customer;
 
 typedef struct Cell {

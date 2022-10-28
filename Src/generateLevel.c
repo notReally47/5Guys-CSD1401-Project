@@ -30,9 +30,13 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 			customerNumber--;
 			customer[customerNumber].posX = customerPosX;
 			customer[customerNumber].posY = customerPosY;
+			customer[customerNumber].ogPosX = customerPosX;
+			customer[customerNumber].ogPosY = customerPosY;
 			customer[customerNumber].direction = customerDir;
 			customer[customerNumber].range = customerRange;
 			customer[customerNumber].isActive = customerActive;
+			customer[customerNumber].isIdle = 0;
+			customer[customerNumber].isRandom = 0;
 
 			printf("Customer Number: %d, PosX: %d, PosY: %d, Direction: %d, Range: %d, Active: %d \n", customerNumber, customer[customerNumber].posX, customer[customerNumber].posY, customer[customerNumber].direction, customer[customerNumber].range, customer[customerNumber].isActive);
 		}
