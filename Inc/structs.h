@@ -52,3 +52,10 @@ typedef struct Cell {
 	int customer;
 	int shelf;
 } Cell;
+
+typedef struct erect {
+	float center_x;
+	float center_y;
+	float width;
+	float height;
+} rect;
