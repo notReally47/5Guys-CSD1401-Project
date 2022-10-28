@@ -3,6 +3,8 @@
 typedef struct Customer {
 	int posX;
 	int posY;
+	int ogPosX;
+	int ogPosY;
 	int direction;
 	int range;
 	int isActive;

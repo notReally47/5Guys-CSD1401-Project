@@ -54,6 +54,8 @@ void base_Init(void) {
 	grid[20][10].customer = 1;
 	customer[0].posX = 20;
 	customer[0].posY = 10;
+	customer[0].ogPosX = 20;
+	customer[0].ogPosY = 10;
 	customer[0].direction = 1;
 	customer[0].range = 2;
 	customer[0].isActive = 1;
@@ -64,6 +66,8 @@ void base_Init(void) {
 	grid[30][23].customer = 1;
 	customer[1].posX = 30;
 	customer[1].posY = 23;
+	customer[1].ogPosX = 30;
+	customer[1].ogPosY = 23;
 	customer[1].direction = 1;
 	customer[1].range = 2;
 	customer[1].isActive = 1;
@@ -74,6 +78,8 @@ void base_Init(void) {
 	grid[43][20].customer = 1;
 	customer[2].posX = 43;
 	customer[2].posY = 20;
+	customer[2].ogPosX = 43;
+	customer[2].ogPosY = 20;
 	customer[2].direction = 2;
 	customer[2].range = 2;
 	customer[2].isActive = 1;
@@ -84,6 +90,8 @@ void base_Init(void) {
 	grid[10][40].customer = 1;
 	customer[3].posX = 10;
 	customer[3].posY = 40;
+	customer[3].ogPosX = 10;
+	customer[3].ogPosY = 40;
 	customer[3].range = 2;
 	customer[3].isActive = 1;
 	customer[3].isIdle = 0;
@@ -104,7 +112,7 @@ void base_Init(void) {
 
 	/*Settings*/
 	CP_Settings_RectMode(CP_POSITION_CORNER);
-	CP_Settings_StrokeWeight(0.5f);
+	CP_Settings_StrokeWeight(0.f);
 
 	/*Initializations*/
 	cellSize = (float)CP_System_GetWindowHeight() * 1 / (float)SOKOBAN_GRID_ROWS;
