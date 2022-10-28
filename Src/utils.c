@@ -122,3 +122,14 @@ int timer(int duration, float startTime) {
 		return 0;
 	}
 }
+
+/*Counts the number of key objective points in the grid and returns it*/
+int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+	int objective = 0;
+	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
+		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
+			if (grid[row][col].key) objective++;
+		}
+	}
+	return objective;
+}

@@ -3,12 +3,18 @@
 #include "utils.h"
 #include "defines.h"
 #include "spritesheet.h"
+#include "mainmenu.h"
+#include "generateLevel.h"
+#include "movement.h"
 
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]; //Move counting array for undo and reset
+Customer customer[CUSTOMER];
 
 float cellSize,cellAlign;
-int totalObjs, face;
+int totalObjs, face, move, time;
+int level; //Added global variable to determine level. 0 being Tutorial.
 
 void base_Init(void) {
 	// initialisation  || IN BASEGAME TEMPORARILY
@@ -18,35 +24,9 @@ void base_Init(void) {
 	CP_System_SetWindowTitle("SevenTwee");
 
 
-	/*Create empty grid*/
-	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
-		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
-			grid[row][col].boarder = 0;
-			grid[row][col].key = 0;
-			grid[row][col].player = 0;
-			grid[row][col].box = 0;
-		}
-	}
-	/*Set grid characteristics here*/
-	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
-		grid[row][0].boarder = 1;
-		grid[row][SOKOBAN_GRID_COLS - 1].boarder = 1;
-	}
-
-	for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
-		grid[0][col].boarder = 1;
-		grid[SOKOBAN_GRID_ROWS - 1][col].boarder = 1;
-	}
-
-	grid[1][1].player = 1;
-
-	grid[5][5].box = 1;
-	grid[10][10].box = 1;
-
-	grid[16][12].key = 1;
-	grid[3][15].key = 1;
-
-	totalObjs = 2;
+	move = 0; //Initialise move with 0
+	setMap(grid, customer); //Initialise map
+	totalObjs = getObjective(grid); //Counts number of key objective to meet
 
 	/*Settings*/
 	CP_Settings_StrokeWeight(0.5f);
@@ -106,8 +86,16 @@ void base_Update(void) {
 
 	/*Game logic*/
 	if (dir > 0) {
+		move = moveCount(move, moves, grid); //Counts move and save current state of grid to a different array 'moves'
 		getCell(playerPosX, playerPosY, dir, grid);
 		
+	}
+
+	if (CP_Input_KeyDown(KEY_U)) {
+		move = undoMove(move, moves, grid); //Undo a move and set grid to the previous move based on 'moves' array
+	}
+	else if (CP_Input_KeyTriggered(KEY_R)) {
+		move = resetMap(move, moves, grid, customer); //Resets grid to the initial values based on the CSV file
 	}
 
 
@@ -124,7 +112,7 @@ void base_Update(void) {
 			
 			draw_floor(cellX,cellY,cellSize);
 			
-			if (currCell.boarder || currCell.box || currCell.key || currCell.player) {
+			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf) {
 				if (currCell.boarder)
 					draw_boarder(cellX,cellY,cellSize);
 
@@ -142,7 +130,29 @@ void base_Update(void) {
 				
 				else if (currCell.box)
 					draw_box(cellX,cellY,cellSize);
+				//else if draw shelf
 
+			}
+			for (int i = 0; i < CUSTOMER; i++) {
+				if (currCell.customer && row == customer[i].posY && col == customer[i].posX) {
+					switch (customer[i].direction) {
+					case SOKOBAN_UP:
+						CP_Settings_Fill(NEON_PINK);
+						break;
+					case SOKOBAN_LEFT:
+						CP_Settings_Fill(CARNATION);
+						break;
+					case SOKOBAN_DOWN:
+						CP_Settings_Fill(SALMON);
+						break;
+					case SOKOBAN_RIGHT:
+						CP_Settings_Fill(COTTON);
+						break;
+					default:
+						break;
+					}
+					CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
+				}
 			}
 			
 		}
