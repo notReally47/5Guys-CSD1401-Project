@@ -4,11 +4,11 @@
 #include "defines.h"
 
 CP_Image spritesheet;
-CP_Vector anim,dimen,trans;
+CP_Vector anim,dimen,trans,camera;
 
 static float elapsed,move;
 static const float frame = 64.0f;
-static int index,box;
+static int index,box,x,y;
 
 void load_spritesheet(float cellSize) {
 	spritesheet = CP_Image_Load("./Assets/Spritesheet/spritesheet.png");
@@ -19,10 +19,13 @@ void load_spritesheet(float cellSize) {
 	}
 	dimen = CP_Vector_Scale(CP_Vector_Set(frame,frame),cellSize/frame);
 	trans = CP_Vector_Scale(CP_Vector_Set((cellSize-dimen.x),(cellSize-dimen.y)),0.5f);
+	camera = CP_Vector_Set(0.f, 0.f);
 	move = (float)((int)cellSize/10);
 	index = 0;
 	box = 0;
 	elapsed = 0.0f;
+	x = 1;
+	y = 1;
 	// i have no idea what these do
 	CP_Settings_AntiAlias(TRUE);
 	CP_Settings_ImageFilterMode(CP_IMAGE_FILTER_LINEAR);
@@ -33,7 +36,7 @@ void load_spritesheet(float cellSize) {
 }
 
 
-void draw_player(float cellX,float cellY,int face) {
+void draw_player(float cellx,float celly,int face) {
 	elapsed += CP_System_GetDt();
 	if (elapsed >= 0.2f) {
 		index = (index+1)%3;
@@ -43,9 +46,9 @@ void draw_player(float cellX,float cellY,int face) {
 	CP_Settings_Translate(trans.x,trans.y);
 	switch (face) {
 	case 0: // starting position
-		anim = CP_Vector_Set(cellX,cellY);
+		anim = CP_Vector_Set(cellx,celly);
 	case 3: // face down
-		if (anim.y < cellY) {
+		if (anim.y < celly) {
 			anim.y += move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,index*frame,0.f,(index+1)*frame,frame,255);
 		} 
@@ -53,7 +56,7 @@ void draw_player(float cellX,float cellY,int face) {
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,frame,0.f,frame*2.f,frame,255);
 		break;
 	case 1: // face up
-		if (anim.y > cellY) {
+		if (anim.y > celly) {
 			anim.y -= move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,(index+3)*frame,0.f,(index+4)*frame,frame,255);
 		}
@@ -61,7 +64,7 @@ void draw_player(float cellX,float cellY,int face) {
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,frame*4.f,0.f,frame*5.f,frame,255); 
 		break;
 	case 2: // face left
-		if (anim.x > cellX) {
+		if (anim.x > cellx) {
 			anim.x -= move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
 		}
@@ -69,7 +72,7 @@ void draw_player(float cellX,float cellY,int face) {
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,frame*4.f,frame,frame*5.f,frame*2.f,255); 
 		break;
 	case 4: // face right
-		if (anim.x < cellX) {
+		if (anim.x < cellx) {
 			anim.x += move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,index*frame,frame,(index+1)*frame,frame*2.f,255);
 		}
@@ -96,6 +99,31 @@ void draw_key_in_box(float cellX,float cellY,float cellSize){
 }
 void draw_floor(float cellX,float cellY,float cellSize){
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,0.f,128.f,64.f,192.f,250);
+}
+void world_camera(float cellSize, int face, int dir) {
+	switch (face) {
+	case 1: // up
+		y = (dir==1) ? y+1:y;
+		if (camera.y < cellSize*y)
+			camera.y += move;
+		break;
+	case 2: // left
+		x = (dir==2) ? x+1:x;
+		if (camera.x < cellSize*x)
+			camera.x += move;
+		break;
+	case 3: // down
+		y = (dir==3) ? y-1:y;
+		if (camera.y > cellSize*y)
+			camera.y -= move;
+		break;
+	case 4: //right
+		x = (dir==4) ? x-1:x;
+		if (camera.x > cellSize*x)
+			camera.x -= move;
+		break;
+	}
+	CP_Settings_Translate(camera.x,camera.y);
 }
 
 void free_sprite(void) {
