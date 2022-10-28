@@ -3,19 +3,17 @@
 #include "structs.h"
 
 typedef struct Save {
-	unsigned int isNewState;
-	unsigned int lastLevelPlayed;
+	int isNewState;
+	int lastLevelPlayed;
 } Save;
 
-typedef struct Settings
-{
-	unsigned int audio;
-	float resWidth;
-	float resHeight;
+typedef struct Settings {
+	int audio;
+	unsigned int resolutionWidth;
+	unsigned int resolutionHeight;
 } Settings;
 
-typedef struct Keybinds
-{
+typedef struct Keybinds {
 	CP_KEY moveUp;
 	CP_KEY moveLeft;
 	CP_KEY moveDown;
@@ -25,21 +23,23 @@ typedef struct Keybinds
 	CP_KEY exitGame;
 } Keybinds;
 
-typedef struct Config
-{
+typedef struct Config {
 	Save save;
 	Settings settings;
 	Keybinds keybinds;
 } Config;
 
 typedef struct Customer {
-	int posX; //posRow
-	int posY; //posCol
-	int ogPosX; //row
-	int ogPosY; //col
+	/*Current position*/
+	int cusRow;
+	int cusCol;
+	/*Original position*/
+	int ogCusRow;
+	int ogCusCol;
+
 	int direction;
-	int range;
-	int isActive;
+	int range; /*Detection range*/
+	int isActive; /*Ability to stun player.*/
 	int isIdle;
 	int isRandom;
 } Customer;
