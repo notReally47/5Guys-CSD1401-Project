@@ -4,6 +4,8 @@
 #include "defines.h"
 #include "customer.h"
 #include "movement.h"
+#include "generateLevel.h"
+#include "spritesheet.h"
 #include <stdio.h>
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
@@ -12,13 +14,13 @@ Customer customer[CUSTOMER];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
-float cellSize,cellAlign, sec, elapsedLock;
+float cellSize, cellAlign, sec, elapsedLock;
 
 int totalObjs, isLocked, activatedCusX, activatedCusY, move, face, time, level;
 
 void base_Init(void) {
 	// initialisation  || IN BASEGAME TEMPORARILY
-	CP_System_SetWindowSize(CP_System_GetDisplayWidth(), CP_System_GetDisplayHeight()); // >>1
+	CP_System_SetWindowSize(CP_System_GetDisplayWidth() / 2, CP_System_GetDisplayHeight() / 2); // >>1
 	//if (CP_System_GetWindowWidth() == CP_System_GetDisplayWidth())
 		//CP_System_Fullscreen();  // set fullscreen if max
 	CP_System_SetWindowTitle("SevenTwee");
@@ -30,10 +32,11 @@ void base_Init(void) {
 
 	/*Settings*/
 	CP_Settings_StrokeWeight(0.5f);
+	CP_Settings_RectMode(CP_POSITION_CORNER);
 
 	/*Initializations*/
-	cellSize = (float)(CP_System_GetWindowHeight()/SOKOBAN_GRID_ROWS);
-	cellAlign = (float)((CP_System_GetWindowWidth()-(int)cellSize*SOKOBAN_GRID_COLS)/2);
+	cellSize = (float)(CP_System_GetWindowHeight() / SOKOBAN_GRID_ROWS);
+	cellAlign = (float)((CP_System_GetWindowWidth() - (int)cellSize * SOKOBAN_GRID_COLS) / 2);
 	face = 0;
 	load_spritesheet(cellSize);
 }
@@ -56,11 +59,14 @@ void base_Update(void) {
 				playerPosX = row;
 				playerPosY = col;
 			}
+			if (customerLock(grid, customer)) {
+				isLocked = 1;
+			}
 
 			switch (dir) {
 			case 1: // up
 				face = 1;
-				
+
 				break;
 			case 2: // left
 				face = 2;
@@ -68,14 +74,11 @@ void base_Update(void) {
 				break;
 			case 3: // down
 				face = 3;
-				
+
 				break;
 			case 4: // right
 				face = 4;
 				break;
-
-			if (customerLock(grid, customer)) {
-				isLocked = 1;
 			}
 		}
 	}
@@ -115,7 +118,7 @@ void base_Update(void) {
 		//}
 	}
 
-	customerMovement(grid, path, customer);
+	//customerMovement(grid, path, customer);
 
 	for (int i = 0; i < CUSTOMER; i++) {
 		if (customer[i].isIdle) {
@@ -133,7 +136,6 @@ void base_Update(void) {
 		move = resetMap(move, moves, grid, customer); //Resets grid to the initial values based on the CSV file
 	}
 
-
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
 
@@ -141,55 +143,60 @@ void base_Update(void) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			Cell currCell = grid[row][col];
 
-			float cellX = cellSize*(float)col+cellAlign; 
-			float cellY = cellSize*(float)row;
-			
-			
-			draw_floor(cellX,cellY,cellSize);
-			
+			float cellX = cellSize * (float)col + cellAlign;
+			float cellY = cellSize * (float)row;
+
+
+			draw_floor(cellX, cellY, cellSize);
+
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf) {
 				if (currCell.boarder)
-					draw_boarder(cellX,cellY,cellSize);
+					draw_boarder(cellX, cellY, cellSize);
 
 				else if (currCell.key && currCell.box)
-					draw_key_in_box(cellX,cellY,cellSize);
+					draw_key_in_box(cellX, cellY, cellSize);
 
 				else if (currCell.key) {
-					draw_key(cellX,cellY,cellSize);
+					draw_key(cellX, cellY, cellSize);
 					if (currCell.player)
 						goto player;
-					}
-						
+				}
+
 				else if (currCell.player) player:
-					draw_player(cellX,cellY,face);
-				
+				draw_player(cellX, cellY, face);
+
 				else if (currCell.box)
-					draw_box(cellX,cellY,cellSize);
+					draw_box(cellX, cellY, cellSize);
 				else if (currCell.shelf)
-					draw_boarder(cellX,cellY,cellSize);
+					draw_boarder(cellX, cellY, cellSize);
 			}
-			for (int i = 0; i < CUSTOMER; i++) {
-				if (currCell.customer && row == customer[i].posY && col == customer[i].posX) {
-					switch (customer[i].direction) {
-					case SOKOBAN_UP:
-						CP_Settings_Fill(NEON_PINK);
-						break;
-					case SOKOBAN_LEFT:
-						CP_Settings_Fill(CARNATION);
-						break;
-					case SOKOBAN_DOWN:
-						CP_Settings_Fill(SALMON);
-						break;
-					case SOKOBAN_RIGHT:
-						CP_Settings_Fill(COTTON);
-						break;
-					default:
-						break;
+
+			if (currCell.customer) {
+				for (int i = 0; i < CUSTOMER; i++) {
+
+					if (row == customer[i].posX && col == customer[i].posY) {
+						switch (customer[i].direction) {
+						case SOKOBAN_UP:
+							CP_Settings_Fill(NEON_PINK);
+							break;
+						case SOKOBAN_LEFT:
+							CP_Settings_Fill(CARNATION);
+							break;
+						case SOKOBAN_DOWN:
+							CP_Settings_Fill(SALMON);
+							break;
+						case SOKOBAN_RIGHT:
+							CP_Settings_Fill(COTTON);
+							break;
+						default:
+							break;
+						}
+						CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 					}
-					CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
 				}
 			}
 		}
+
 	}
 }
 

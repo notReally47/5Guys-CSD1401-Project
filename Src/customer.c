@@ -14,7 +14,7 @@
 * Customer customer: Customer stats.
 */
 void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
-	if (!grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer && !grid[posX][posY].key && !grid[posX][posY].player) {
+	if (!grid[posX][posY].shelf && !grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer && !grid[posX][posY].key && !grid[posX][posY].player) {
 		if (customer[cusNum].isRandom) {
 			if ((posY <= customer[cusNum].ogPosY + 2 && posY >= customer[cusNum].ogPosY - 2) &&
 				(posX <= customer[cusNum].ogPosX + 2 && posX >= customer[cusNum].ogPosX - 2)) {
@@ -50,6 +50,7 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 			int posX = customer[i].posX;
 			int posY = customer[i].posY;
 			int curr = path[posX][posY];
+			
 			int count = CP_System_GetFrameCount();
 
 			if (!curr) {
@@ -172,7 +173,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face up */
 			case SOKOBAN_UP:
 				for (int x = 1; x <= customer[i].range; x++) {
-					if (grid[customer[i].posX - x][customer[i].posY].player) {
+					if (grid[customer[i].posY - x][customer[i].posX].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
 						break;
@@ -184,7 +185,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face left */
 			case SOKOBAN_LEFT:
 				for (int x = 1; x <= customer[i].range; x++) {
-					if (grid[customer[i].posX][customer[i].posY - x].player) {
+					if (grid[customer[i].posY][customer[i].posX - x].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
 						break;
@@ -195,7 +196,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face down */
 			case SOKOBAN_DOWN:
 				for (int x = 1; x <= customer[i].range; x++) {
-					if (grid[customer[i].posX + x][customer[i].posY].player) {
+					if (grid[customer[i].posY + x][customer[i].posX].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;;
 						break;
@@ -206,7 +207,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face right */
 			case SOKOBAN_RIGHT:
 				for (int x = 1; x <= customer[i].range; x++) {
-					if (grid[customer[i].posX][customer[i].posY + x].player) {
+					if (grid[customer[i].posY][customer[i].posX + x].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
 						break;
