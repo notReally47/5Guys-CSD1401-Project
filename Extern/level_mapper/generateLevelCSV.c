@@ -175,19 +175,22 @@ void setShelves(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
 
 int main(void) {
     Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS];
-    int read = 0;
-    char fileName[20] = "Seven11_Level_", level, csvExt[5] = ".csv";
+    int read = 0, isPlayer = 0, isBox = 0, isKey = 0, isCustomer = 0, isBoarder = 0, isShelf = 0;
+    char csvfileName[20] = "Seven11_Level_", arrayfileName[26] = "Seven11_Notes_Level_", level, csvExt[5] = ".csv", txtExt[5] = ".txt";
 
     printf("Please indicate the Level for this map:\n");
     read = scanf(" %c", &level);
     if(read == 1) {
-        strncat(fileName, &level, 1);
-        strcat(fileName, csvExt);
+        strncat(csvfileName, &level, 1);
+        strcat(csvfileName, csvExt);
+
+        strncat(arrayfileName, &level, 1);
+        strcat(arrayfileName, txtExt);
 
         FILE* csv_file;
         FILE* array_reference;
-        csv_file = fopen(fileName, "w");
-        array_reference = fopen("level_csv_notes_array_reference.txt", "w");
+        csv_file = fopen(csvfileName, "w");
+        array_reference = fopen(arrayfileName, "w");
 
         emptyGrid(grid);
         setPlayer(grid);
@@ -199,9 +202,23 @@ int main(void) {
 
         for (int row = 0; row < SOKOBAN_ROWS; row++) {
             for (int col = 0; col < SOKOBAN_COLS; col++) {
+                isPlayer = (grid[row][col].player) ? 1 : 0;
+                isBox = (grid[row][col].box) ? 1 : 0;
+                isKey = (grid[row][col].key) ? 1 : 0;
+                isBoarder = (grid[row][col].boarder) ? 1 : 0;
+                isCustomer = (grid[row][col].isCustomer) ? 1 : 0;
+                isShelf = (grid[row][col].shelf) ? 1 : 0;
+
                 fprintf(csv_file,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].boarder, grid[row][col].isCustomer,
                     grid[row][col].CustomerNo, grid[row][col].CustomerPosX, grid[row][col].CustomerPosY, grid[row][col].CustomerDirection, grid[row][col].CustomerRange, grid[row][col].isActive, grid[row][col].shelf);
-                fprintf(array_reference, "[%d][%d]\n", row, col);
+                
+                if(isPlayer) fprintf(array_reference, "[%d][%d] is Player\n", row, col);
+                else if(isBox) fprintf(array_reference, "[%d][%d] is a Box\n", row, col);
+                else if(isKey) fprintf(array_reference, "[%d][%d] is a Key\n", row, col);
+                else if(isBoarder) fprintf(array_reference, "[%d][%d] is a Boarder\n", row, col);
+                else if(isCustomer) fprintf(array_reference, "[%d][%d] is a Customer\n", row, col);
+                else if(isShelf) fprintf(array_reference, "[%d][%d] is a Shelf\n", row, col);
+                else fprintf(array_reference, "[%d][%d] is blank\n", row, col);
             }
         }
 
