@@ -1,8 +1,8 @@
 #define SOKOBAN_ROWS 31
 #define SOKOBAN_COLS 41
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct Cell {
 	int player;
@@ -19,8 +19,8 @@ typedef struct Cell {
 	int shelf;
 } Cell;
 
+/* Initialise all values in all elements to 0 */
 void emptyGrid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
-    /*Create empty grid*/
 	for (int row = 0; row < SOKOBAN_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_COLS; col++) {
 			if(col == 0 || col == (SOKOBAN_COLS - 1) || row == 0 || row == (SOKOBAN_ROWS -1)) {
@@ -52,6 +52,7 @@ void emptyGrid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
 	}
 }
 
+/* Set position of Player (row, column) */
 void setPlayer(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     int setRow = 0, setCol = 0, read = 0;
     printf("Please indicate the Player's position (row,col):\n");
@@ -65,6 +66,7 @@ void setPlayer(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     }
 }
 
+/* Set Position of Boxes & Keys */
 void setBoxKey(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     int setRow = 0, setCol = 0, counter = 0, addBox = 0, read = 0;
     printf("Please indicate the number of Boxes in this level:\n");
@@ -105,6 +107,7 @@ void setBoxKey(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     }
 }
 
+/* Sets Position of Customers (row)*/
 void setCustomer(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     int setRow = 0, setCol = 0, counter = 0, addCustomer = 0, setDirection = 0, read = 0, read1 = 0;
     printf("Please indicate the number of Customers in this level:\n");

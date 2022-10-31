@@ -142,13 +142,6 @@ void base_Update(void) {
 		}
 	}
 
-	if (CP_Input_KeyTriggered(KEY_U)) {
-		move = undoMove(move, moves, grid); //Undo a move and set grid to the previous move based on 'moves' array
-	}
-	else if (CP_Input_KeyTriggered(KEY_R)) {
-		move = resetMap(move, moves, grid, customer); //Resets grid to the initial values based on the CSV file
-	}
-
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
 

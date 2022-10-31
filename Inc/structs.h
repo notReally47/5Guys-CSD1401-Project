@@ -53,7 +53,7 @@ typedef struct Cell {
 	int shelf;
 } Cell;
 
-typedef struct erect {
+typedef struct rect {
 	float center_x;
 	float center_y;
 	float width;

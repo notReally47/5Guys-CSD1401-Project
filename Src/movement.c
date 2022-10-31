@@ -1,7 +1,7 @@
 #pragma once
-#include "structs.h"
-#include "defines.h"
-#include "generateLevel.h"
+#include "structs.h"			// Needed for Grid and Customer Structs
+#include "defines.h"			// Needed for define Values
+#include "generateLevel.h"		// Needed for setMap() function
 
 /*Counts the number of moves and saves the previous state of the grid to a new array 'moves'*/
 int moveCount(int move, Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
@@ -17,7 +17,7 @@ int moveCount(int move, Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], 
 
 /*Sets current 'grid' array to the previous 'moves' array to undo a move, decrement number of moves*/
 int undoMove(int move, Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
-	if (move > 0) {
+	if (move > 1) {
 		for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 			for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 				grid[row][col] = moves[move - 1][row][col];
@@ -46,6 +46,9 @@ int resetMap(int move, Cell moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], C
 		}
 	}
 
+	/*Call setMap() to reset the map to original state*/
 	setMap(grid, customer);
-	return move = 0;
+
+	/*Reset Move Count to 0*/
+	return move = 1;
 }
