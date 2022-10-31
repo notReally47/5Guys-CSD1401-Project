@@ -4,12 +4,13 @@
 #include "defines.h"				// Needed for define values
 #include "levellogic.h"				// Needed to use Global Extern Variable 'level'
 #include <stdio.h>					// Needed for parsing CSV file
+#include <stdlib.h>					// Needed for exit() function
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
 
 /* Parse CSV file to initialise grid array at the start of every stage/level */
 void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
 	printf("In setMap! \n");
-
+	//errno_t err;
 	/* Initialise variables to 0 */
 	int row = 0, col = 0, read = 0;
 
@@ -20,7 +21,8 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	FILE* csv_file;
 
 	// CSV File name & CSV Extension
-	char csv_file_name[63] = "..\\..\\Extern\\level_mapper\\level_files\\Seven11_Level_", level_char, csv_ext[5] = ".csv";
+	char csv_file_name[63] = "..\\..\\Extern\\level_mapper\\level_files\\Seven11_Level_";
+	char level_char, csv_ext[5] = ".csv";
 
 	// Convert Level Number to char to be used to append to csvfileName
 	level_char = level + '0';
@@ -31,23 +33,24 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 
 	// Open 'csv_file_name' in read mode
 	csv_file = fopen(csv_file_name, "r");
+	//err = fopen_s(&csv_file, csv_file_name, "r");
 
-	/* If file dows not exist & fails to open, print error and Exit program */
+	/* If file does not exist & fails to open, print error and Exit program */
 	if (NULL == csv_file) {
 		printf("%s \n", &csv_file_name);
 		printf("Error : errno='%s'.\n", strerror(errno));
 		printf("File Opening Failed!\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	do {
 
-		/* Goes to Next Row of the Grid once Column reaches the end*/
+		/* Goes to Next Row of the Grid once Column reaches the end */
 		if (col == SOKOBAN_GRID_COLS) {
 			row++;
 			col = 0;
 		}
 
-		/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties*/ //To Move shelf to after boarder & add Customer Idle & Customer Random
+		/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties */
 		read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", 
 			&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].boarder, &grid[row][col].shelf, &grid[row][col].customer,
 			&customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range, &customer_active, &customer_idle, &customer_random);
@@ -74,7 +77,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 		
 		// Increments 'col' when the correct number of values were scanned
 		if (read == 14) col++;
-	} while (!feof(csv_file)); // While nbot End of File
+	} while (!feof(csv_file)); // While not End of File
 
 	// Close CSV File
 	fclose(csv_file);

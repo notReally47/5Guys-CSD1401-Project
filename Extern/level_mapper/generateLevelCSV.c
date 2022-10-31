@@ -1,15 +1,18 @@
 #define SOKOBAN_ROWS 31
 #define SOKOBAN_COLS 41
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h>          // Needed for file I/O, r/w and printf/scanf
+#include <stdlib.h>         // Needed for exit() function
+#include <string.h>         // Needed for string concatenation
 
 typedef struct Cell {
+    // For Grid Struct in the Project
 	int player;
 	int key;
 	int box;
 	int boarder;
     int shelf;
+
+    // For Customer Struct in the Project
     int is_customer;
     int customer_no;
     int customer_posX;
