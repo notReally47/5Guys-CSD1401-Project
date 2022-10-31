@@ -14,7 +14,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	int row = 0, col = 0, read = 0;
 
 	/* Declare & initialise Local Customer Properties to 0 */
-	int customerNumber = 0, customerPosX = 0, customerPosY = 0, customerDir = 0, customerRange = 0, customerActive = 0, customerIdle = 0, customerRandom = 0;
+	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0;
 
 	// File Pointer of CSV File
 	FILE* csv_file;
@@ -47,31 +47,33 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 			col = 0;
 		}
 
-		/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties*/
-		read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", 
-			&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].boarder, &grid[row][col].customer, 
-			&customerNumber, &customerPosX, &customerPosY, &customerDir, &customerRange, &customerActive, &grid[row][col].shelf);
+		/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties*/ //To Move shelf to after boarder & add Customer Idle & Customer Random
+		read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", 
+			&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].boarder, &grid[row][col].shelf, &grid[row][col].customer,
+			&customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range, &customer_active, &customer_idle, &customer_random);
 		
 		/* If Customer Exists */
-		if (customerNumber != 0 && grid[row][col].customer) {
-			customerNumber--; // Decrement Customer Number value as element starts from 0
+		if (customer_number != 0 && grid[row][col].customer) {
+			customer_number--; // Decrement Customer Number value as element starts from 0
 
 			/* Initialise values of properties of Customer Struct with values from CSV File that was first stored in Local Customer Properties*/
-			customer[customerNumber].cusCol = customerPosX;
-			customer[customerNumber].cusRow = customerPosY;
-			customer[customerNumber].ogCusCol = customerPosX;
-			customer[customerNumber].ogCusRow = customerPosY;
-			customer[customerNumber].direction = customerDir;
-			customer[customerNumber].range = customerRange;
-			customer[customerNumber].isActive = customerActive;
-			customer[customerNumber].isIdle = customerIdle;
-			customer[customerNumber].isRandom = customerRandom;
+			customer[customer_number].cusCol = customer_posX;
+			customer[customer_number].cusRow = customer_posY;
+			customer[customer_number].ogCusCol = customer_posX;
+			customer[customer_number].ogCusRow = customer_posY;
+			customer[customer_number].direction = customer_direction;
+			customer[customer_number].range = customer_range;
+			customer[customer_number].isActive = customer_active;
+			customer[customer_number].isIdle = customer_idle;
+			customer[customer_number].isRandom = customer_random;
 
-			printf("Customer Number: %d, PosX: %d, PosY: %d, Direction: %d, Range: %d, Active: %d \n", customerNumber, customer[customerNumber].cusRow, customer[customerNumber].cusCol, customer[customerNumber].direction, customer[customerNumber].range, customer[customerNumber].isActive);
+			printf("Customer Number: %d, PosX: %d, PosY: %d, Direction: %d, Range: %d, Active: %d \n", 
+				customer_number, customer[customer_number].cusRow, customer[customer_number].cusCol,
+				customer[customer_number].direction, customer[customer_number].range, customer[customer_number].isActive);
 		}
 		
 		// Increments 'col' when the correct number of values were scanned
-		if (read == 12) col++;
+		if (read == 14) col++;
 	} while (!feof(csv_file)); // While nbot End of File
 
 	// Close CSV File
