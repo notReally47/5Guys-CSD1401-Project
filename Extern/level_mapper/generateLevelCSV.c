@@ -190,7 +190,7 @@ int main(void) {
     int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_boarder = 0, is_shelf = 0;
 
     /* Initialise file name without the level number and extension name */
-    char csv_file_name[20] = "Seven11_Level_", reference_file_name[26] = "Seven11_Notes_Level_", level, csv_ext[5] = ".csv", txt_ext[5] = ".txt";
+    char csv_file_name[32] = "level_files/Seven11_Level_", reference_file_name[38] = "level_files/Seven11_Notes_Level_", level, csv_ext[5] = ".csv", txt_ext[5] = ".txt";
 
     // Get level number
     printf("Please indicate the Level for this map:\n");

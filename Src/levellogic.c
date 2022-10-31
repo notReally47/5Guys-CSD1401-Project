@@ -1,6 +1,6 @@
 
 /* Global Variable 'level' initialised to 0 whenever New Game */
-int level = 1;
+int level = 3;
 
 /* Local File Variable 'temp_level' initialised to 0. 
 To be used when Selecting Level from Level Select Screen*/
