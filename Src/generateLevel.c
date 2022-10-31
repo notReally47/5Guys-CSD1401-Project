@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "defines.h"
 #include "utils.h"
+#include "levellogic.h"
 #include <stdio.h> //Added for parsing CSV file
 #include <errno.h> //Added for error handling/checking of parsing CSV file
 
@@ -11,11 +12,15 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	printf("In setMap! \n");
 	int row = 0, col = 0, read = 0, records = 0, customerNumber = 0, customerPosX = 0, customerPosY = 0, customerDir = 0, customerRange = 0, customerActive = 0;
 	FILE* csvFile;
-	char file[] = "..\\..\\Extern\\level_mapper\\Seven11_Level_1.csv";
-	csvFile = fopen(file, "r");
+	char csvfileName[50] = "..\\..\\Extern\\level_mapper\\Seven11_Level_", level_char, csvExt[5] = ".csv";
+	level_char = level + '0';
+	strncat(csvfileName, &level_char, 1);
+	strcat(csvfileName, csvExt);
+	//char file[] = "..\\..\\Extern\\level_mapper\\Seven11_Level_1.csv";
+	csvFile = fopen(csvfileName, "r");
 
 	if (NULL == csvFile) {
-		printf("%s \n", &file);
+		printf("%s \n", &csvfileName);
 		printf("Error : errno='%s'.\n", strerror(errno));
 		printf("File Opening Failed!\n");
 		exit(1);

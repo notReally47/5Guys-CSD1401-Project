@@ -7,6 +7,8 @@
 #include "defines.h"
 #include "settings.h"
 #include "spritesheet.h"
+#include "levellogic.h"
+#include "levelTransition.h"
 #include <stdio.h>
 
 extern Config config;
@@ -19,7 +21,7 @@ int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellSize, cellAlign, sec, elapsedLock;
 
-int totalObjs, isLocked, move, face, time, level;
+int totalObjs, isLocked, activatedCusX, activatedCusY, move, face, time;
 
 void base_Init(void) {
 	
@@ -51,7 +53,7 @@ void base_Update(void) {
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			/*Check if all objectives has been reached*/
-			if (grid[col][row].key && grid[col][row].box)
+			if (grid[row][col].key && grid[row][col].box)
 				isCompleted++;
 
 			/*Get position of player*/
@@ -68,7 +70,8 @@ void base_Update(void) {
 	
 	/*If all objectives reached, do something here*/
 	if (isCompleted == totalObjs) {
-		//CP_Engine_Terminate();
+		next_level();
+		CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit); // load transition state
 	}
 
 	/*If player is stunlocked by customer, all inputs should be ignored.*/
@@ -138,6 +141,16 @@ void base_Update(void) {
 			randomCustomerMovement(grid, customer);
 		}
 	}
+
+	if (CP_Input_KeyTriggered(KEY_U)) {
+		move = undoMove(move, moves, grid); //Undo a move and set grid to the previous move based on 'moves' array
+	}
+	else if (CP_Input_KeyTriggered(KEY_R)) {
+		move = resetMap(move, moves, grid, customer); //Resets grid to the initial values based on the CSV file
+	}
+
+	/*Rendering*/
+	CP_Graphics_ClearBackground(BLUEGRAY);
 
 	/*Rendering grid*/
 	CP_Graphics_ClearBackground(WHITE);

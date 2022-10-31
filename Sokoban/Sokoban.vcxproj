@@ -105,6 +105,9 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
     <ClInclude Include="..\Inc\customer.h" />
     <ClInclude Include="..\Inc\defines.h" />
     <ClInclude Include="..\Inc\generateLevel.h" />
+    <ClInclude Include="..\Inc\levellogic.h" />
+    <ClInclude Include="..\Inc\levelSelect.h" />
+    <ClInclude Include="..\Inc\levelTransition.h" />
     <ClInclude Include="..\Inc\mainmenu.h" />
     <ClInclude Include="..\Inc\movement.h" />
     <ClInclude Include="..\Inc\options.h" />
@@ -118,6 +121,9 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
     <ClCompile Include="..\Src\basegame.c" />
     <ClCompile Include="..\Src\credits.c" />
     <ClCompile Include="..\Src\generateLevel.c" />
+    <ClCompile Include="..\Src\levellogic.c" />
+    <ClCompile Include="..\Src\levelSelect.c" />
+    <ClCompile Include="..\Src\levelTransition.c" />
     <ClCompile Include="..\Src\options.c" />
     <ClCompile Include="..\Src\customer.c" />
     <ClCompile Include="..\Src\main.c" />

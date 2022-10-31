@@ -2,6 +2,7 @@
 #include "structs.h"
 #include "defines.h"
 #include "utils.h"
+#include<stdio.h>
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
@@ -128,5 +129,6 @@ int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 			if (grid[row][col].key) objective++;
 		}
 	}
+	printf("Objectives: %d\n", objective);
 	return objective;
 }

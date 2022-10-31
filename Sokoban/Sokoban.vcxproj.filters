@@ -1,88 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="..\Src\basegame.c" />
+    <ClCompile Include="..\Src\credits.c" />
+    <ClCompile Include="..\Src\generateLevel.c" />
+    <ClCompile Include="..\Src\options.c" />
+    <ClCompile Include="..\Src\customer.c" />
+    <ClCompile Include="..\Src\main.c" />
+    <ClCompile Include="..\Src\mainmenu.c" />
+    <ClCompile Include="..\Src\movement.c" />
+    <ClCompile Include="..\Src\splashscreen.c" />
+    <ClCompile Include="..\Src\spritesheet.c" />
+    <ClCompile Include="..\Src\utils.c" />
+    <ClCompile Include="..\Src\levellogic.c" />
+    <ClCompile Include="..\Src\levelTransition.c" />
+    <ClCompile Include="..\Src\levelSelect.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Inc\splashscreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\mainmenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\basegame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\defines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\structs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\credits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\options.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\spritesheet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\generateLevel.h">
-    <ClInclude Include="..\Inc\customer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\movement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Src\main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\splashscreen.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\mainmenu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\utils.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\basegame.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\credits.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\options.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\spritesheet.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\generateLevel.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\customer.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\movement.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="..\Inc\basegame.h" />
+    <ClInclude Include="..\Inc\credits.h" />
+    <ClInclude Include="..\Inc\customer.h" />
+    <ClInclude Include="..\Inc\defines.h" />
+    <ClInclude Include="..\Inc\generateLevel.h" />
+    <ClInclude Include="..\Inc\mainmenu.h" />
+    <ClInclude Include="..\Inc\movement.h" />
+    <ClInclude Include="..\Inc\options.h" />
+    <ClInclude Include="..\Inc\splashscreen.h" />
+    <ClInclude Include="..\Inc\spritesheet.h" />
+    <ClInclude Include="..\Inc\structs.h" />
+    <ClInclude Include="..\Inc\utils.h" />
+    <ClInclude Include="..\Inc\levellogic.h" />
+    <ClInclude Include="..\Inc\levelTransition.h" />
+    <ClInclude Include="..\Inc\levelSelect.h" />
   </ItemGroup>
 </Project>
