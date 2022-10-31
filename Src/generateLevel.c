@@ -21,7 +21,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	FILE* csv_file;
 
 	// CSV File name & CSV Extension
-	char csv_file_name[63] = "..\\..\\Extern\\level_mapper\\level_files\\Seven11_Level_";
+	char csv_file_name[63] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";
 	char level_char, csv_ext[5] = ".csv";
 
 	// Convert Level Number to char to be used to append to csvfileName
