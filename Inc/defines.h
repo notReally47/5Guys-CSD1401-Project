@@ -15,6 +15,7 @@
 //Colours
 #define WHITE		CP_Color_Create(255, 255, 255, 255)
 #define GRAY		CP_Color_Create(150, 150, 150, 255)
+#define DARKGRAY	CP_Color_Create(80, 80, 80, 100) // Tint
 #define BLACK		CP_Color_Create(0, 0, 0, 255)
 #define RED			CP_Color_Create(255, 0, 0, 255)
 #define GREEN		CP_Color_Create(0, 255, 0, 255)
@@ -34,3 +35,6 @@
 #define CUSTOMER		10	// Maximum Number of Customers
 #define CUSTOMER_SPEED	10	// The number of frames before the customer updates movement (Bigger Numer = Slower)
 #define CUSTOMER_TURN	20	// The number of frames before the customer updates rotation (Bigger Numer = Slower)
+
+// Options
+#define PADDING 10.0f

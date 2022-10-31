@@ -59,3 +59,9 @@ typedef struct rect {
 	float width;
 	float height;
 } rect;
+
+typedef struct Button {
+	char* text;
+	float width, height;
+	CP_Vector position;
+} Button;
