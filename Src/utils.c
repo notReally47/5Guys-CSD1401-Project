@@ -19,8 +19,8 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 */
 int getDirection(void) {
 	static int key;
-	static float holdelay = 0.f,delay=0.f;
-	delay += holdelay += CP_System_GetDt();
+	static float delay=0.f;
+	delay += CP_System_GetDt();
 	switch (CP_Input_KeyDown(KEY_ANY)) {
 	case 3: 
 	case 4: // limits key input to 2
@@ -32,21 +32,18 @@ int getDirection(void) {
 		key = (CP_Input_KeyTriggered(KEY_D) || CP_Input_KeyDown(KEY_D) && CP_Input_KeyReleased(KEY_ANY)) ? KEY_D : key; // D
 		break;
 	}
-	if (holdelay >= 0.5f || (CP_Input_KeyTriggered(KEY_ANY) && delay>2.f)) {
-		holdelay = 0.f;
-		if (CP_Input_KeyDown(key) || CP_Input_KeyTriggered(key)) {
-			if (CP_Input_KeyTriggered(key))
-				delay = 0.f;
-			switch (key) {
-			case KEY_W:
-				return SOKOBAN_UP;
-			case KEY_A:
-				return SOKOBAN_LEFT;
-			case KEY_S:
-				return SOKOBAN_DOWN;
-			case KEY_D:
-				return SOKOBAN_RIGHT;
-			}
+	if ((CP_Input_KeyDown(key) && delay>0.55f) || (CP_Input_KeyTriggered(key) && delay>0.6f)) {
+		delay = 0.f;
+		if (CP_Input_KeyDown(key))
+		switch (key) {
+		case KEY_W:
+			return SOKOBAN_UP;
+		case KEY_A:
+			return SOKOBAN_LEFT;
+		case KEY_S:
+			return SOKOBAN_DOWN;
+		case KEY_D:
+			return SOKOBAN_RIGHT;
 		}
 	}
 	return SOKOBAN_IDLE;

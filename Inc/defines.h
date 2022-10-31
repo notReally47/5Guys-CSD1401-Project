@@ -10,6 +10,7 @@
 #define SOKOBAN_RIGHT 4
 #define MOVE 2000
 #define CUSTOMER 10
+#define TEXT_BUFFER 255
 
 //Colours
 #define WHITE		CP_Color_Create(255, 255, 255, 255)
