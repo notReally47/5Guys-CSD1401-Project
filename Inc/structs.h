@@ -8,9 +8,10 @@ typedef struct Save {
 } Save;
 
 typedef struct Settings {
-	int audio;
-	unsigned int resolutionWidth;
-	unsigned int resolutionHeight;
+	int audio; /*0 - 100*/
+	int windowed; /*windowed: 1, fullscreen: 0*/
+	unsigned int resolutionWidth; /*960, 1920*/
+	unsigned int resolutionHeight; /*540, 1080*/
 } Settings;
 
 typedef struct Keybinds {
@@ -62,6 +63,8 @@ typedef struct rect {
 
 typedef struct Button {
 	char* text;
-	float width, height;
+	float btnWidth, btnHeight;
 	CP_Vector position;
+	int windowed;
+	float actWidth, actHeight;
 } Button;

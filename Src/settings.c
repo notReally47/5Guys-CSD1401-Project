@@ -11,6 +11,7 @@ Config readFile() {
 	Config gameConfig = {
 	.save.isNewState = 1,
 	.save.lastLevelPlayed = 1,
+	.settings.windowed = 1,
 	.settings.audio = 50,
 	.settings.resolutionHeight = 540,
 	.settings.resolutionWidth = 960,
