@@ -74,11 +74,14 @@ void Options_Init() {
 	// Gif
 	imageIndex = 0;
 	timeElapsed = 0.0f;
+
+	// Dropdown-list
 	ddlClicked = 0;
 	isWindowed = 1;
 }
 
 void Options_Update() {
+	CP_Settings_NoTint();
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
 
 	char halfscreenWRes[25] = { 0 };
@@ -112,69 +115,6 @@ void Options_Update() {
 	CP_Settings_Fill(RED);
 	CP_Graphics_DrawRect(back.position.x, back.position.y, back.btnWidth, back.btnHeight);
 
-	// Draw Resolution dropdown-list
-	if (IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
-		CP_Settings_Tint(DARKGRAY);
-		CP_Settings_Fill(DARKGRAY);
-		CP_Settings_StrokeWeight(0.0f);
-		CP_Graphics_DrawRect(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight);
-	}
-
-	if (CP_Input_MouseClicked() && IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
-		CP_Settings_NoTint();
-		CP_Settings_Fill(DARKGRAY);
-		CP_Settings_StrokeWeight(0.0f);
-		CP_Graphics_DrawRect(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight);
-		for (int i = 0; i < 3; i++) {
-			CP_Graphics_DrawRect(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight);
-		}
-		CP_Settings_Fill(BLACK);
-		CP_Settings_StrokeWeight(3.0f);
-		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
-		CP_Font_DrawText(halfscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + currentRes.btnHeight);
-		CP_Font_DrawText(fullscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 2 * currentRes.btnHeight);
-		CP_Font_DrawText(fullscreenRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 3 * currentRes.btnHeight);
-		ddlClicked = 1;
-	}
-
-	if (ddlClicked) {
-		CP_Settings_NoTint();
-		CP_Settings_Fill(DARKGRAY);
-		CP_Settings_StrokeWeight(0.0f);
-		CP_Graphics_DrawRect(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight);
-		for (int i = 0; i < 3; i++)
-		{
-			if (IsAreaClicked(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y)) {
-				CP_Settings_Tint(DARKGRAY);
-				CP_Graphics_DrawRect(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight);
-			}
-			else {
-				CP_Settings_NoTint();
-				CP_Graphics_DrawRect(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight);
-			}
-		}
-		CP_Settings_Fill(BLACK);
-		CP_Settings_StrokeWeight(3.0f);
-		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
-		CP_Font_DrawText(halfscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + currentRes.btnHeight);
-		CP_Font_DrawText(fullscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 2 * currentRes.btnHeight);
-		CP_Font_DrawText(fullscreenRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 3 * currentRes.btnHeight);
-
-		for (int i = 0; i < 3; i++) {
-			if (CP_Input_MouseClicked() && IsAreaClicked(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y)) {
-				// replace current resolution
-				newConfig.settings.windowed = resolution[i].windowed;
-				newConfig.settings.resolutionHeight = resolution[i].actHeight;
-				newConfig.settings.resolutionWidth = resolution[i].actWidth;
-				printf("%d\n", ddlClicked);
-			}
-		}
-	}
-
-	if (CP_Input_MouseClicked() && !IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
-		ddlClicked = 0;
-	}
-
 	CP_Settings_Fill(BLACK);
 	CP_Settings_StrokeWeight(3.0f);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
@@ -187,28 +127,28 @@ void Options_Update() {
 	CP_Font_DrawText("Tutorial", PADDING, back.btnHeight + 4 * PADDING + 2 * textSize);
 
 	// Draw current resolution and resolution selection
-	char currentRes[25] = { 0 };
-	newConfig.settings.windowed ? sprintf_s(currentRes, _countof(currentRes), "%d x %d (windowed)", newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight) :
-		sprintf_s(currentRes, _countof(currentRes), "%d x %d (fullscreen)", newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight);
+	char displayRes[25] = { 0 };
+	newConfig.settings.windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight) :
+		sprintf_s(displayRes, _countof(displayRes), "%d x %d (fullscreen)", newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
-	CP_Font_DrawText(currentRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+	CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 
 	// Draw current volume and the volume up and down buttons
-	//char currentVol[16] = { 0 };
-	//int vol = 0; // CP_Sound_GetGroupVolume() when we import sound
-	//sprintf_s(currentVol, _countof(currentVol), "%d", vol);
-	//CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
-	//CP_Font_DrawText(currentVol, window.x - PADDING, back.height + 3 * PADDING + textSize);
+	char currentVol[16] = { 0 };
+	int vol = 0; // CP_Sound_GetGroupVolume() when we import sound
+	sprintf_s(currentVol, _countof(currentVol), "%d", vol);
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
+	CP_Font_DrawText(currentVol, window.x - PADDING, back.btnHeight + 3 * PADDING + textSize);
 
 	// Draw tutorial
 	CP_Settings_NoTint();
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
-	/*CP_Image_DrawSubImage(gameplay,
-		window.x - PADDING - (window.y - (back.height + 5 * PADDING + 2 * textSize)), back.height + 4 * PADDING + 2 * textSize,
+	CP_Image_DrawSubImage(gameplay,
+		window.x - PADDING - (window.y - (back.btnHeight + 5 * PADDING + 2 * textSize)), back.btnHeight + 4 * PADDING + 2 * textSize,
 		window.y * 0.76f, window.y * 0.76f,
 		(imageIndex % 7) * FRAME_DIMENSION, (imageIndex < 7) ? 0 : FRAME_DIMENSION,
 		((imageIndex % 7) + 1) * FRAME_DIMENSION, (imageIndex < 7) ? FRAME_DIMENSION : FRAME_DIMENSION * 2,
-		255);*/
+		255);
 	CP_Settings_Fill(CP_Color_Create(255, 0, 0, 255));
 	CP_Graphics_DrawRect(2 * PADDING + 75, window.y - 2 * PADDING - 75, 50, 50);
 	CP_Graphics_DrawRect(PADDING + 25, window.y - PADDING - 25, 50, 50);
@@ -221,6 +161,75 @@ void Options_Update() {
 	CP_Font_DrawText("A", PADDING + 25, window.y - PADDING - 25);
 	CP_Font_DrawText("S", 2 * PADDING + 75, window.y - PADDING - 25);
 	CP_Font_DrawText("D", 3 * PADDING + 125, window.y - PADDING - 25);
+
+	// Draw Resolution dropdown-list
+	if (IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
+		CP_Settings_Tint(DARKGRAY);
+		CP_Settings_Fill(GRAY);
+		CP_Settings_StrokeWeight(0.0f);
+		CP_Graphics_DrawRect(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight);
+		CP_Settings_Fill(BLACK);
+		CP_Settings_StrokeWeight(3.0f);
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
+		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+	}
+
+	if (CP_Input_MouseClicked() && IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
+		CP_Settings_NoTint();
+		CP_Settings_Fill(GRAY);
+		CP_Settings_StrokeWeight(0.0f);
+		for (int i = 0; i < 3; i++) {
+			CP_Graphics_DrawRect(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight);
+		}
+		CP_Settings_Fill(BLACK);
+		CP_Settings_StrokeWeight(3.0f);
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
+		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+		CP_Font_DrawText(halfscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + currentRes.btnHeight);
+		CP_Font_DrawText(fullscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 2 * currentRes.btnHeight);
+		CP_Font_DrawText(fullscreenRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 3 * currentRes.btnHeight);
+		ddlClicked = 1;
+	}
+
+	if (ddlClicked) {
+		CP_Settings_NoTint();
+		CP_Settings_StrokeWeight(0.0f);
+		CP_Settings_Fill(GRAY);
+		for (int i = 0; i < 3; i++)
+		{
+			if (IsAreaClicked(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y)) {
+				CP_Settings_Tint(DARKGRAY);
+				CP_Graphics_DrawRect(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight);
+			}
+			else {
+				CP_Settings_NoTint();
+				CP_Settings_Fill(DARKGRAY);
+				CP_Graphics_DrawRect(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight);
+				CP_Settings_Fill(GRAY);
+				CP_Graphics_DrawRect(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight);
+			}
+		}
+		CP_Settings_Fill(BLACK);
+		CP_Settings_StrokeWeight(3.0f);
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
+		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+		CP_Font_DrawText(halfscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + currentRes.btnHeight);
+		CP_Font_DrawText(fullscreenWRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 2 * currentRes.btnHeight);
+		CP_Font_DrawText(fullscreenRes, window.x - PADDING, back.btnHeight + 2 * PADDING + 3 * currentRes.btnHeight);
+
+		for (int i = 0; i < 3; i++) {
+			if (CP_Input_MouseClicked() && IsAreaClicked(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y)) {
+				// replace current resolution
+				newConfig.settings.windowed = resolution[i].windowed;
+				newConfig.settings.resolutionHeight = resolution[i].actHeight;
+				newConfig.settings.resolutionWidth = resolution[i].actWidth;
+			}
+		}
+	}
+
+	if (CP_Input_MouseClicked() && !IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
+		ddlClicked = 0;
+	}
 }
 
 void Options_Exit() {
