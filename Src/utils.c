@@ -2,6 +2,7 @@
 #include "structs.h"
 #include "defines.h"
 #include "utils.h"
+#include "movement.h"
 #include<stdio.h>
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
@@ -63,12 +64,16 @@ void gameLogic(int posX, int posY, int nextPosX, int nextPosY, int prevPosX, int
 		grid[posX][posY].player = 1;
 		grid[posX][posY].box = 0;
 		grid[nextPosX][nextPosY].box = 1;
+		move++;
+		printf("Current Moves: %d\n", move-1);
 	}
 
 	/*Player movement without obstruction*/
 	else if (!grid[posX][posY].box && !grid[posX][posY].boarder && !grid[posX][posY].customer && !grid[posX][posY].shelf) {
 		grid[prevPosX][prevPosY].player = 0;
 		grid[posX][posY].player = 1;
+		move++;
+		printf("Current Moves: %d\n", move-1);
 	}
 }
 

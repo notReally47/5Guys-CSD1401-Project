@@ -54,6 +54,12 @@ typedef struct Cell {
 	int shelf;
 } Cell;
 
+typedef struct Move {
+	int player;
+	int box;
+	int customer;
+} Move;
+
 typedef struct rect {
 	float center_x;
 	float center_y;
