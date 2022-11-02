@@ -6,7 +6,9 @@
 #include <stdlib.h> //_countof()
 #include <stdio.h> // sprintf_s()
 
-Button back, resolution[3], currentRes, halfscreenWindowed, fullscreenWindowed, fullscreen, volumeDown, volumeUp;
+Button back, volumeDown, volumeUp, 
+resolution[3], currentRes, halfscreenWindowed, fullscreenWindowed, fullscreen, 
+changes[2], apply, discard;
 float textSize, volume, numCols, numRows;
 
 // Gif
@@ -17,7 +19,7 @@ static const float FRAME_DIMENSION = 600.0f;
 
 CP_Vector window;
 CP_Image gameplay;
-int ddlClicked, isWindowed;
+int ddlClicked, isWindowed, resChanged;
 
 extern Config config;
 Config newConfig;
@@ -47,20 +49,20 @@ void Options_Init() {
 	halfscreenWindowed.btnWidth = currentRes.btnWidth, halfscreenWindowed.btnHeight = currentRes.btnHeight;
 	halfscreenWindowed.position = CP_Vector_Set(currentRes.position.x, currentRes.position.y + halfscreenWindowed.btnHeight);
 	halfscreenWindowed.windowed = 1;
-	halfscreenWindowed.actHeight = CP_System_GetDisplayHeight() / 2;
-	halfscreenWindowed.actWidth = CP_System_GetDisplayWidth() / 2;
+	halfscreenWindowed.actHeight = (unsigned int)(CP_System_GetDisplayHeight() / 2);
+	halfscreenWindowed.actWidth = (unsigned int)(CP_System_GetDisplayWidth() / 2);
 
 	fullscreenWindowed.btnWidth = currentRes.btnWidth, fullscreenWindowed.btnHeight = currentRes.btnHeight;
 	fullscreenWindowed.position = CP_Vector_Set(halfscreenWindowed.position.x, halfscreenWindowed.position.y + fullscreenWindowed.btnHeight);
 	fullscreenWindowed.windowed = 1;
-	fullscreenWindowed.actHeight = CP_System_GetDisplayHeight();
-	fullscreenWindowed.actWidth = CP_System_GetDisplayWidth();
+	fullscreenWindowed.actHeight = (unsigned int)(CP_System_GetDisplayHeight());
+	fullscreenWindowed.actWidth = (unsigned int)(CP_System_GetDisplayWidth());
 
 	fullscreen.btnWidth = currentRes.btnWidth, fullscreen.btnHeight = currentRes.btnHeight;
 	fullscreen.position = CP_Vector_Set(fullscreenWindowed.position.x, fullscreenWindowed.position.y + fullscreen.btnHeight);
 	fullscreen.windowed = 0;
-	fullscreen.actHeight = CP_System_GetDisplayHeight();
-	fullscreen.actWidth = CP_System_GetDisplayWidth();
+	fullscreen.actHeight = (unsigned int)(CP_System_GetDisplayHeight());
+	fullscreen.actWidth = (unsigned int)(CP_System_GetDisplayWidth());
 
 	resolution[0] = halfscreenWindowed, resolution[1] = fullscreenWindowed, resolution[2] = fullscreen;
 
@@ -71,6 +73,17 @@ void Options_Init() {
 	volumeUp.text = "+";
 	volumeUp.btnWidth = back.btnWidth, volumeUp.btnHeight = back.btnWidth;
 
+	// Apply and discard changes
+	apply.text = "Apply";
+	apply.btnWidth = 5 * textSize, apply.btnHeight = back.btnHeight + PADDING;
+	apply.position = CP_Vector_Set(window.x / 2 - 5 * PADDING - apply.btnWidth / 2, window.y - PADDING - apply.btnHeight / 2);
+
+	discard.text = "Discard";
+	discard.btnWidth = 5 * textSize, discard.btnHeight = back.btnHeight + PADDING;
+	discard.position = CP_Vector_Set(window.x / 2 + 5 * PADDING + discard.btnWidth / 2, window.y - PADDING - discard.btnHeight / 2);
+
+	changes[0] = apply, changes[1] = discard;
+
 	// Gif
 	imageIndex = 0;
 	timeElapsed = 0.0f;
@@ -78,6 +91,7 @@ void Options_Init() {
 	// Dropdown-list
 	ddlClicked = 0;
 	isWindowed = 1;
+	resChanged = 0;
 }
 
 void Options_Update() {
@@ -85,11 +99,11 @@ void Options_Update() {
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
 
 	char halfscreenWRes[25] = { 0 };
-	sprintf_s(halfscreenWRes, _countof(halfscreenWRes), "%d x %d (windowed)", CP_System_GetDisplayWidth() / 2, CP_System_GetDisplayHeight() / 2);
+	sprintf_s(halfscreenWRes, _countof(halfscreenWRes), "%u x %u (windowed)", halfscreenWindowed.actWidth, halfscreenWindowed.actHeight);
 	char fullscreenWRes[25] = { 0 };
-	sprintf_s(fullscreenWRes, _countof(fullscreenWRes), "%d x %d (windowed)", CP_System_GetDisplayWidth(), CP_System_GetDisplayHeight());
+	sprintf_s(fullscreenWRes, _countof(fullscreenWRes), "%u x %u (windowed)", fullscreenWindowed.actWidth, fullscreenWindowed.actHeight);
 	char fullscreenRes[25] = { 0 };
-	sprintf_s(fullscreenRes, _countof(fullscreenRes), "%d x %d (fullscreen)", CP_System_GetDisplayWidth(), CP_System_GetDisplayHeight());
+	sprintf_s(fullscreenRes, _countof(fullscreenRes), "%u x %u (fullscreen)", fullscreen.actWidth, fullscreen.actHeight);
 
 	// Draw gameplay gif logic
 	timeElapsed += CP_System_GetDt();
@@ -149,18 +163,40 @@ void Options_Update() {
 		(imageIndex % 7) * FRAME_DIMENSION, (imageIndex < 7) ? 0 : FRAME_DIMENSION,
 		((imageIndex % 7) + 1) * FRAME_DIMENSION, (imageIndex < 7) ? FRAME_DIMENSION : FRAME_DIMENSION * 2,
 		255);
-	CP_Settings_Fill(CP_Color_Create(255, 0, 0, 255));
+	CP_Settings_Fill(RED);
 	CP_Graphics_DrawRect(2 * PADDING + 75, window.y - 2 * PADDING - 75, 50, 50);
 	CP_Graphics_DrawRect(PADDING + 25, window.y - PADDING - 25, 50, 50);
 	CP_Graphics_DrawRect(2 * PADDING + 75, window.y - PADDING - 25, 50, 50);
 	CP_Graphics_DrawRect(3 * PADDING + 125, window.y - PADDING - 25, 50, 50);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-	CP_Settings_Fill(CP_Color_Create(0, 0, 0, 255));
+	CP_Settings_Fill(BLACK);
 
 	CP_Font_DrawText("W", 2 * PADDING + 75, window.y - 2 * PADDING - 75);
 	CP_Font_DrawText("A", PADDING + 25, window.y - PADDING - 25);
 	CP_Font_DrawText("S", 2 * PADDING + 75, window.y - PADDING - 25);
 	CP_Font_DrawText("D", 3 * PADDING + 125, window.y - PADDING - 25);
+
+	if (resChanged)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			if (IsAreaClicked(changes[i].position.x, changes[i].position.y, changes[i].btnWidth, changes[i].btnHeight, mouse.x, mouse.y))
+			{
+				CP_Settings_Tint(DARKGRAY);
+				CP_Settings_Fill(RED);
+				CP_Graphics_DrawRect(changes[i].position.x, changes[i].position.y, changes[i].btnWidth, changes[i].btnHeight);
+			}
+			else {
+				CP_Settings_NoTint();
+				CP_Settings_Fill(RED);
+				CP_Graphics_DrawRect(changes[i].position.x, changes[i].position.y, changes[i].btnWidth, changes[i].btnHeight);
+			}
+			CP_Settings_Fill(BLACK);
+			CP_Settings_StrokeWeight(3.0f);
+			CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+			CP_Font_DrawText(changes[i].text, changes[i].position.x, changes[i].position.y);
+		}
+	}
 
 	// Draw Resolution dropdown-list
 	if (IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
@@ -223,6 +259,7 @@ void Options_Update() {
 				newConfig.settings.windowed = resolution[i].windowed;
 				newConfig.settings.resolutionHeight = resolution[i].actHeight;
 				newConfig.settings.resolutionWidth = resolution[i].actWidth;
+				resChanged = 1;
 			}
 		}
 	}

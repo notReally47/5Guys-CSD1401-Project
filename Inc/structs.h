@@ -66,5 +66,5 @@ typedef struct Button {
 	float btnWidth, btnHeight;
 	CP_Vector position;
 	int windowed;
-	float actWidth, actHeight;
+	unsigned int actWidth, actHeight;
 } Button;
