@@ -23,7 +23,7 @@ static float gifDimension;
 
 CP_Vector window;
 CP_Image gameplay;
-int ddlClicked, isWindowed, configChanged;
+int ddlClicked, configChanged;
 
 extern Config config;
 Config newConfig;
@@ -47,15 +47,15 @@ void Options_Init() {
 
 	halfscreenWindowed.actHeight = (unsigned int)(CP_System_GetDisplayHeight() / 2);
 	halfscreenWindowed.actWidth = (unsigned int)(CP_System_GetDisplayWidth() / 2);
-	halfscreenWindowed.windowed = 1, halfscreenWindowed.selected = 0;
+	halfscreenWindowed.windowed = YES, halfscreenWindowed.selected = NO;
 
 	fullscreenWindowed.actHeight = (unsigned int)(CP_System_GetDisplayHeight());
 	fullscreenWindowed.actWidth = (unsigned int)(CP_System_GetDisplayWidth());
-	fullscreenWindowed.windowed = 1, fullscreenWindowed.selected = 0;
+	fullscreenWindowed.windowed = YES, fullscreenWindowed.selected = NO;
 
 	fullscreen.actHeight = (unsigned int)(CP_System_GetDisplayHeight());
 	fullscreen.actWidth = (unsigned int)(CP_System_GetDisplayWidth());
-	fullscreen.windowed = 0, fullscreen.selected = 0;
+	fullscreen.windowed = NO, fullscreen.selected = NO;
 
 	volumeDown.name = "-";
 	volumeUp.name = "+";
@@ -97,9 +97,8 @@ void Options_Init() {
 	timeElapsed = 0.0f;
 
 	// Dropdown-list
-	ddlClicked = 0;
-	isWindowed = 1;
-	configChanged = 0;
+	ddlClicked = NO;
+	configChanged = NO;
 	
 	for (int i = 0; i < 3; i++) {
 		if (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed)
@@ -149,13 +148,13 @@ void Options_Update() {
 	gifDimension = window.y * .6f;
 
 	/*Draw back button*/
-	drawTintedButton(RED, back.position.x, back.position.y, back.btnWidth, back.btnHeight, mouse.x, mouse.y, 0);
-	drawCenterAlignedText(BLACK, back.name, back.position.x, back.position.y);
+	drawTintedButton(RED, back.position.x, back.position.y, back.btnWidth, back.btnHeight, mouse.x, mouse.y, NO);
+	drawAlignedText(BLACK, CENTER, back.name, back.position.x, back.position.y);
 
 	/*Draw headers: Resolution, Volume, Tutorial*/
-	drawLeftAlignedText(BLACK, "Resolution", PADDING, back.btnHeight + 2 * PADDING);
-	drawLeftAlignedText(BLACK, "Volume", PADDING, back.btnHeight + 3 * PADDING + textSize);
-	drawLeftAlignedText(BLACK, "Tutorial", PADDING, back.btnHeight + 4 * PADDING + 2 * textSize);
+	drawAlignedText(BLACK, LEFT, "Resolution", PADDING, back.btnHeight + 2 * PADDING);
+	drawAlignedText(BLACK, LEFT, "Volume", PADDING, back.btnHeight + 3 * PADDING + textSize);
+	drawAlignedText(BLACK, LEFT, "Tutorial", PADDING, back.btnHeight + 4 * PADDING + 2 * textSize);
 
 	char displayRes[25] = { 0 };
 	resSelected->windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", resSelected->actWidth, resSelected->actHeight) :
@@ -165,7 +164,7 @@ void Options_Update() {
 	char currentVol[16] = { 0 };
 	int vol = 0; // CP_Sound_GetGroupVolume() when we import sound
 	sprintf_s(currentVol, _countof(currentVol), "%d", vol);
-	drawRightAlignedText(BLACK, currentVol, window.x - PADDING, back.btnHeight + 3 * PADDING + textSize);
+	drawAlignedText(BLACK, RIGHT, currentVol, window.x - PADDING, back.btnHeight + 3 * PADDING + textSize);
 
 	/*Draw tutorial*/
 	drawGIF(gameplay,
@@ -176,37 +175,37 @@ void Options_Update() {
 	drawNonTintedButton(RED, PADDING + 25, window.y - PADDING - 25, 50, 50);
 	drawNonTintedButton(RED, 2 * PADDING + 75, window.y - PADDING - 25, 50, 50);
 	drawNonTintedButton(RED, 3 * PADDING + 125, window.y - PADDING - 25, 50, 50);
-	drawCenterAlignedText(BLACK, "W", 2 * PADDING + 75, window.y - 2 * PADDING - 75);
-	drawCenterAlignedText(BLACK, "A", PADDING + 25, window.y - PADDING - 25);
-	drawCenterAlignedText(BLACK, "S", 2 * PADDING + 75, window.y - PADDING - 25);
-	drawCenterAlignedText(BLACK, "D", 3 * PADDING + 125, window.y - PADDING - 25);
+	drawAlignedText(BLACK, CENTER, "W", 2 * PADDING + 75, window.y - 2 * PADDING - 75);
+	drawAlignedText(BLACK, CENTER, "A", PADDING + 25, window.y - PADDING - 25);
+	drawAlignedText(BLACK, CENTER, "S", 2 * PADDING + 75, window.y - PADDING - 25);
+	drawAlignedText(BLACK, CENTER, "D", 3 * PADDING + 125, window.y - PADDING - 25);
 
 	/*Draw Resolution dropdown-list*/
-	drawTintedButton(currentResColor, currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y, 1);
-	drawRightAlignedText(BLACK, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+	drawTintedButton(currentResColor, currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y, YES);
+	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 	float textX = window.x - PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.btnHeight;
 	if (CP_Input_MouseClicked() && IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
 		for (int i = 0; i < 3; i++, textY += currentRes.btnHeight) {
-			drawTintedButton(GRAY, resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y, 1);
-			drawRightAlignedText(BLACK, resolution[i].name, textX, textY);
+			drawTintedButton(GRAY, resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y, YES);
+			drawAlignedText(BLACK, RIGHT, resolution[i].name, textX, textY);
 		}
 		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
-		ddlClicked = 1;
+		ddlClicked = YES;
 	}
 	if (ddlClicked) {
 		for (int i = 0; i < 3; i++, textY += currentRes.btnHeight)
 		{
-			drawTintedButton(GRAY, resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y, 1);
-			drawRightAlignedText(BLACK, resolution[i].name, textX, textY);
+			drawTintedButton(GRAY, resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y, YES);
+			drawAlignedText(BLACK, RIGHT, resolution[i].name, textX, textY);
 		}
 
 		for (int i = 0; i < 3; i++) {
 			if (CP_Input_MouseClicked()) {
 				if (IsAreaClicked(resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y)) {
-					resolution[i].selected = 1;
-					configChanged = (resolution[i].actWidth == currentRes.actWidth && resolution[i].actHeight == currentRes.actHeight && resolution[i].windowed == currentRes.windowed) ? 0 : 1;
+					resolution[i].selected = YES;
+					configChanged = (resolution[i].actWidth == currentRes.actWidth && resolution[i].actHeight == currentRes.actHeight && resolution[i].windowed == currentRes.windowed) ? NO : YES;
 				}
-				else resolution[i].selected = 0;
+				else resolution[i].selected = NO;
 			}
 		}
 	}
@@ -224,19 +223,19 @@ void Options_Update() {
 					if (!newConfig.settings.windowed) {
 						CP_System_Fullscreen();
 					}
-					configChanged = 0;
+					configChanged = NO;
 				}
 				if (IsAreaClicked(changes[1].position.x, changes[1].position.y, changes[1].btnWidth, changes[1].btnHeight, mouse.x, mouse.y)) {
 					CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight);
-					configChanged = 0;
+					configChanged = NO;
 				}
 			}
-			drawTintedButton(RED, changes[i].position.x, changes[i].position.y, changes[i].btnWidth, changes[i].btnHeight, mouse.x, mouse.y, 0);
-			drawCenterAlignedText(BLACK, changes[i].name, changes[i].position.x, changes[i].position.y);
+			drawTintedButton(RED, changes[i].position.x, changes[i].position.y, changes[i].btnWidth, changes[i].btnHeight, mouse.x, mouse.y, NO);
+			drawAlignedText(BLACK, CENTER, changes[i].name, changes[i].position.x, changes[i].position.y);
 		}
 	}
 	if (CP_Input_MouseClicked() && !IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
-		ddlClicked = 0;
+		ddlClicked = NO;
 	}
 
 	/*Return to main menu when click on back button*/

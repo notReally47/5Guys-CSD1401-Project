@@ -18,24 +18,22 @@ void drawNonTintedButton(CP_Color color, float x, float y, float w, float h) {
 	CP_Graphics_DrawRect(x, y, w, h);
 }
 
-void drawCenterAlignedText(CP_Color color, const char *text, float x, float y) {
+void drawAlignedText(CP_Color color, int alignment, const char *text, float x, float y) {
 	CP_Settings_Fill(color);
 	CP_Settings_StrokeWeight(3.0f);
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-	CP_Font_DrawText(text, x, y);
-}
-
-void drawLeftAlignedText(CP_Color color, const char* text, float x, float y) {
-	CP_Settings_Fill(color);
-	CP_Settings_StrokeWeight(3.0f);
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
-	CP_Font_DrawText(text, x, y);
-}
-
-void drawRightAlignedText(CP_Color color, const char* text, float x, float y) {
-	CP_Settings_Fill(color);
-	CP_Settings_StrokeWeight(3.0f);
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
+	switch (alignment) {
+	case CENTER:
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+		break;
+	case LEFT:
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
+		break;
+	case RIGHT:
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);
+		break;
+	default:
+		break;
+	}
 	CP_Font_DrawText(text, x, y);
 }
 

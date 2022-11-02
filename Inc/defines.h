@@ -38,3 +38,8 @@
 
 // Options
 #define PADDING 10.0f
+#define NO 0
+#define YES	1
+#define CENTER 0
+#define LEFT 1
+#define RIGHT 2
