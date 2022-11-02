@@ -21,7 +21,7 @@ int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellSize, cellAlign, sec, elapsedLock;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, move, face, time;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, time;
 
 void base_Init(void) {
 	
@@ -114,18 +114,18 @@ void base_Update(void) {
 
 		/*If there is movement.*/
 		if (dir > 0) {
-			move = moveCount(move, moves, grid);
+			saveMove(moves, grid);
 			getCell(playerPosX, playerPosY, dir, grid);
 		}
 
 		/*Undo move.*/
 		if (CP_Input_KeyTriggered(KEY_U) && move > 1) {
-			move = undoMove(move, moves, grid);
+			undoMove(moves, grid);
 			face = 0;
 		}
 
 		else if (CP_Input_KeyTriggered(KEY_R)) {
-			move = resetMap(move, moves, grid, customer); //Resets grid to the initial values based on the CSV file
+			resetMap(moves, grid, customer); //Resets grid to the initial values based on the CSV file
 			face = 0;
 		}
 	}
