@@ -3,74 +3,84 @@
 #include "structs.h"
 
 typedef struct Save {
-	int isNewState;
-	int lastLevelPlayed;
+	int				isNewState;
+	int				lastLevelPlayed;
 } Save;
 
 typedef struct Settings {
-	int audio; /*0 - 100*/
-	int windowed; /*windowed: 1, fullscreen: 0*/
-	unsigned int resolutionWidth; /*960, 1920*/
-	unsigned int resolutionHeight; /*540, 1080*/
+	int				audio; /*0 - 100*/
+	int				windowed; /*windowed: 1, fullscreen: 0*/
+	unsigned int	resolutionWidth; /*960, 1920*/
+	unsigned int	resolutionHeight; /*540, 1080*/
 } Settings;
 
 typedef struct Keybinds {
-	CP_KEY moveUp;
-	CP_KEY moveLeft;
-	CP_KEY moveDown;
-	CP_KEY moveRight;
-	CP_KEY undoMove;
-	CP_KEY resetMap;
-	CP_KEY exitGame;
+	CP_KEY			moveUp;
+	CP_KEY			moveLeft;
+	CP_KEY			moveDown;
+	CP_KEY			moveRight;
+	CP_KEY			undoMove;
+	CP_KEY			resetMap;
+	CP_KEY			exitGame;
 } Keybinds;
 
 typedef struct Config {
-	Save save;
-	Settings settings;
-	Keybinds keybinds;
+	Save			save;
+	Settings		settings;
+	Keybinds		keybinds;
 } Config;
 
 typedef struct Customer {
 	/*Current position*/
-	int cusRow;
-	int cusCol;
+	int				cusRow;
+	int				cusCol;
 	/*Original position*/
-	int ogCusRow;
-	int ogCusCol;
+	int				ogCusRow;
+	int				ogCusCol;
 
-	int direction;
-	int range; /*Detection range*/
-	int isActive; /*Ability to stun player.*/
-	int isIdle;
-	int isRandom;
+	int				direction;
+	int				range; /*Detection range*/
+	int				isActive; /*Ability to stun player.*/
+	int				isIdle;
+	int				isRandom;
 } Customer;
 
 typedef struct Cell {
-	int player;
-	int key;
-	int box;
-	int boarder;
-	int customer;
-	int shelf;
+	int				player;
+	int				key;
+	int				box;
+	int				boarder;
+	int				customer;
+	int				shelf;
 } Cell;
 
 typedef struct Move {
-	int player;
-	int box;
-	int customer;
+	int				player;
+	int				box;
+	int				customer;
 } Move;
 
 typedef struct rect {
-	float center_x;
-	float center_y;
-	float width;
-	float height;
+	float			center_x;
+	float			center_y;
+	float			width;
+	float			height;
 } rect;
 
 typedef struct Button {
-	char* text;
-	float btnWidth, btnHeight;
-	CP_Vector position;
-	int windowed;
-	unsigned int actWidth, actHeight;
+	char*			name;
+	CP_Vector		position;
+	float			btnWidth;
+	float			btnHeight;
 } Button;
+
+typedef struct DropDownList {
+	char			name[25];
+	CP_Vector		position;
+	float			btnWidth;
+	float			btnHeight;
+	unsigned int	actWidth;
+	unsigned int	actHeight;
+	int				windowed;
+	int				selected;
+} DropDownList;
