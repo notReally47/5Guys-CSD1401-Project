@@ -9,7 +9,7 @@ Class: CSD1401 Section A 2022
 
 Team Member Information:
 
-Muhammad Faliq Bin Al-Hakim     |   muhammadfaliq.b@digipen.edu
+Muhammad Faliq Bin Al-Hakim 		|   muhammadfaliq.b@digipen.edu
 
 Shafiq Mirza Bin Mohamed Zahid  |   shafiqmirza.b@digipen.edu
 
