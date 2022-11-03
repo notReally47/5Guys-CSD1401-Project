@@ -101,11 +101,7 @@ void Options_Init() {
 	configChanged = NO;
 	
 	for (int i = 0; i < 3; i++) {
-		if (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed)
-		{
-			resolution[i].selected = 1;
-			resSelected = &resolution[i];
-		}
+		resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 	}
 }
 
@@ -184,14 +180,17 @@ void Options_Update() {
 	drawTintedButton(currentResColor, currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y, YES);
 	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 	float textX = window.x - PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.btnHeight;
-	if (CP_Input_MouseClicked() && IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
-		for (int i = 0; i < 3; i++, textY += currentRes.btnHeight) {
-			drawTintedButton(GRAY, resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y, YES);
-			drawAlignedText(BLACK, RIGHT, resolution[i].name, textX, textY);
+	if (CP_Input_MouseClicked()) {
+		if (IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
+				for (int i = 0; i < 3; i++, textY += currentRes.btnHeight) {
+				drawTintedButton(GRAY, resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y, YES);
+				drawAlignedText(BLACK, RIGHT, resolution[i].name, textX, textY);
+			}
+			CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+			ddlClicked = YES;
 		}
-		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
-		ddlClicked = YES;
 	}
+	textX = window.x - PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.btnHeight;
 	if (ddlClicked) {
 		for (int i = 0; i < 3; i++, textY += currentRes.btnHeight)
 		{
@@ -215,7 +214,7 @@ void Options_Update() {
 		for (int i = 0; i < 2; i++)
 		{
 			if (CP_Input_MouseClicked()) {
-				if (IsAreaClicked(changes[0].position.x, changes[0].position.y, changes[0].btnWidth, changes[0].btnHeight, mouse.x, mouse.y)) {
+				if (IsAreaClicked(changes[APPLY].position.x, changes[APPLY].position.y, changes[APPLY].btnWidth, changes[APPLY].btnHeight, mouse.x, mouse.y)) {
 					newConfig.settings.resolutionWidth = resSelected->actWidth;
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
 					newConfig.settings.windowed = resSelected->windowed;
@@ -225,8 +224,10 @@ void Options_Update() {
 					}
 					configChanged = NO;
 				}
-				if (IsAreaClicked(changes[1].position.x, changes[1].position.y, changes[1].btnWidth, changes[1].btnHeight, mouse.x, mouse.y)) {
-					CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight);
+				if (IsAreaClicked(changes[DISCARD].position.x, changes[DISCARD].position.y, changes[DISCARD].btnWidth, changes[DISCARD].btnHeight, mouse.x, mouse.y)) {
+					for (int i = 0; i < 3; i++) {
+						resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
+					}
 					configChanged = NO;
 				}
 			}

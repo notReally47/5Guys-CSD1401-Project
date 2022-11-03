@@ -1,16 +1,16 @@
 #pragma once
-#define SOKOBAN_GRID_COLS 41
-#define SOKOBAN_GRID_ROWS 31
-#define TUTORIAL_GRID_COLS 5  //Added separate col definition for Tutorial
-#define TUTORIAL_GRID_ROWS 5 //Added separate row definition for Tutorial
-#define SOKOBAN_IDLE 0
-#define SOKOBAN_UP 1
-#define SOKOBAN_LEFT 2
-#define SOKOBAN_DOWN 3
-#define SOKOBAN_RIGHT 4
-#define MOVE 2000
-#define CUSTOMER 10
-#define TEXT_BUFFER 255
+#define SOKOBAN_GRID_COLS	41
+#define SOKOBAN_GRID_ROWS	31
+#define TUTORIAL_GRID_COLS	5  //Added separate col definition for Tutorial
+#define TUTORIAL_GRID_ROWS	5 //Added separate row definition for Tutorial
+#define SOKOBAN_IDLE		0
+#define SOKOBAN_UP			1
+#define SOKOBAN_LEFT		2
+#define SOKOBAN_DOWN		3
+#define SOKOBAN_RIGHT		4
+#define MOVE				2000
+#define CUSTOMER			10
+#define TEXT_BUFFER			255
 
 //Colours
 #define WHITE		CP_Color_Create(255, 255, 255, 255)
@@ -37,9 +37,28 @@
 #define CUSTOMER_TURN	20	// The number of frames before the customer updates rotation (Bigger Numer = Slower)
 
 // Options
-#define PADDING 10.0f
-#define NO 0
-#define YES	1
-#define CENTER 0
-#define LEFT 1
-#define RIGHT 2
+#define PADDING	10
+#define NO		0
+#define YES		1
+#define CENTER	0
+#define LEFT	1
+#define RIGHT	2
+#define APPLY	0
+#define	DISCARD	1
+
+//enum Padding {
+//	PADDING = 10
+//};
+//enum Boolean {
+//	NO,
+//	YES
+//};
+//enum Alignment {
+//	CENTER,
+//	LEFT,
+//	RIGHT
+//};
+//enum Changes {
+//	APPLY,
+//	DISCARD
+//};
