@@ -45,6 +45,7 @@
 #define RIGHT	2
 #define APPLY	0
 #define	DISCARD	1
+#define MAX_LENGTH	20
 
 //enum Padding {
 //	PADDING = 10

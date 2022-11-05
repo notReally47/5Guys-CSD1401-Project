@@ -7,6 +7,7 @@
 #include <stdio.h> // sprintf_s()
 #include <stdlib.h> //_countof()
 #include <string.h> // strlen() & strcpy_s()
+#include "options.h"
 
 Button back, volumeDown, volumeUp, changes[2], apply, discard;
 DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, *resSelected;
@@ -67,8 +68,8 @@ void Options_Init() {
 	back.btnWidth = strlen(back.name) * textSize / 2, back.btnHeight = back.btnWidth;
 	back.position = CP_Vector_Set(back.btnWidth / 2.0f + PADDING, back.btnHeight / 2.0f + PADDING);
 
-	currentRes.position = CP_Vector_Set(window.x - back.btnWidth * 2.5 - 1.5 * PADDING, back.btnHeight + 3.5 * PADDING);
-	currentRes.btnWidth = 15 * textSize, currentRes.btnHeight = back.btnHeight;
+	currentRes.btnWidth = MAX_LENGTH * textSize / 2 + PADDING, currentRes.btnHeight = back.btnHeight;
+	currentRes.position = CP_Vector_Set(window.x - currentRes.btnWidth / 2 - PADDING, 2 * PADDING + back.btnHeight + textSize / 2);
 
 	halfscreenWindowed.btnWidth = currentRes.btnWidth, halfscreenWindowed.btnHeight = currentRes.btnHeight;
 	halfscreenWindowed.position = CP_Vector_Set(currentRes.position.x, currentRes.position.y + halfscreenWindowed.btnHeight);
@@ -118,7 +119,7 @@ void Options_Update() {
 	{
 		if (resolution[i].selected) {
 			resSelected = &resolution[i];
-			printf("Res no. : %d\n", i);
+			//printf("Res no. : %d\n", i);
 		}
 	}
 
@@ -178,19 +179,19 @@ void Options_Update() {
 
 	/*Draw Resolution dropdown-list*/
 	drawTintedButton(currentResColor, currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y, YES);
-	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
-	float textX = window.x - PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.btnHeight;
+	drawAlignedText(BLACK, RIGHT, displayRes, window.x - 2 * PADDING, back.btnHeight + 2 * PADDING);
+	float textX = window.x - 2 * PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.btnHeight;
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(currentRes.position.x, currentRes.position.y, currentRes.btnWidth, currentRes.btnHeight, mouse.x, mouse.y)) {
 				for (int i = 0; i < 3; i++, textY += currentRes.btnHeight) {
 				drawTintedButton(GRAY, resolution[i].position.x, resolution[i].position.y, resolution[i].btnWidth, resolution[i].btnHeight, mouse.x, mouse.y, YES);
 				drawAlignedText(BLACK, RIGHT, resolution[i].name, textX, textY);
 			}
-			CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+			CP_Font_DrawText(displayRes, window.x - 2 * PADDING, back.btnHeight + 2 * PADDING);
 			ddlClicked = YES;
 		}
 	}
-	textX = window.x - PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.btnHeight;
+	textX = window.x - 2 * PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.btnHeight;
 	if (ddlClicked) {
 		for (int i = 0; i < 3; i++, textY += currentRes.btnHeight)
 		{
@@ -223,6 +224,7 @@ void Options_Update() {
 						CP_System_Fullscreen();
 					}
 					configChanged = NO;
+					CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit);
 				}
 				if (IsAreaClicked(changes[DISCARD].position.x, changes[DISCARD].position.y, changes[DISCARD].btnWidth, changes[DISCARD].btnHeight, mouse.x, mouse.y)) {
 					for (int i = 0; i < 3; i++) {
