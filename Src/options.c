@@ -24,7 +24,9 @@ static float gifDimension;
 
 CP_Vector window;
 CP_Image gameplay;
-int ddlClicked, configChanged;
+CP_Sound gameSFX = NULL;
+CP_Sound gameMusic = NULL;
+int ddlClicked, configChanged, displayVol;
 
 extern Config config;
 Config newConfig;
@@ -36,6 +38,8 @@ void Options_Init() {
 	window = CP_Vector_Set(CP_System_GetWindowWidth(), CP_System_GetWindowHeight());
 	textSize = (float)window.y * 0.05f;
 	gameplay = CP_Image_Load("./Assets/Gameplay.png");
+	/*gameMusic = CP_Sound_Load("./Assets/Sound/music.mp3");
+	gameSFX = CP_Sound_Load("./Assets/Sound/sfx.wav");*/
 	CP_Settings_TextSize(textSize);
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 	CP_Settings_Stroke(BLACK);
@@ -82,8 +86,10 @@ void Options_Init() {
 
 	resolution[0] = halfscreenWindowed, resolution[1] = fullscreenWindowed, resolution[2] = fullscreen;
 
-	volumeDown.btnWidth = back.btnWidth, volumeDown.btnHeight = back.btnWidth;
-	volumeUp.btnWidth = back.btnWidth, volumeUp.btnHeight = back.btnWidth;
+	volumeDown.btnWidth = textSize / 2, volumeDown.btnHeight = textSize / 2;
+	volumeDown.position = CP_Vector_Set(window.x - 3 * PADDING - 2.5 * textSize, back.btnHeight + 3 * PADDING + 1.5 * textSize);
+	volumeUp.btnWidth = textSize / 2, volumeUp.btnHeight = textSize / 2;
+	volumeUp.position = CP_Vector_Set(window.x - PADDING - textSize / 2, back.btnHeight + 3 * PADDING + 1.5 * textSize);
 
 	apply.btnWidth = strlen(discard.name) * textSize / 2, apply.btnHeight = back.btnHeight + PADDING;
 	apply.position = CP_Vector_Set(window.x / 2 - 5 * PADDING - apply.btnWidth / 2, window.y - PADDING - apply.btnHeight / 2);
@@ -104,6 +110,8 @@ void Options_Init() {
 	for (int i = 0; i < 3; i++) {
 		resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 	}
+
+	displayVol = newConfig.settings.audio;
 }
 
 void Options_Update() {
@@ -111,7 +119,8 @@ void Options_Update() {
 	CP_Color currentResColor = ddlClicked ? DARKGRAY : GRAY;
 	CP_Settings_NoTint();
 	CP_Graphics_ClearBackground(GRAY);
-	CP_Settings_TextSize(textSize);
+	/*CP_Sound_PlayAdvanced(gameMusic, displayVol, 1, YES, CP_SOUND_GROUP_MUSIC);
+	CP_Sound_PlayAdvanced(gameSFX, displayVol, 1, YES, CP_SOUND_GROUP_SFX);*/
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -157,9 +166,12 @@ void Options_Update() {
 
 	/*Draw current volume and the volume up and down buttons*/
 	char currentVol[16] = { 0 };
-	int vol = 0; // CP_Sound_GetGroupVolume() when we import sound
-	sprintf_s(currentVol, _countof(currentVol), "%d", vol);
-	drawAlignedText(BLACK, RIGHT, currentVol, window.x - PADDING, back.btnHeight + 3 * PADDING + textSize);
+	sprintf_s(currentVol, _countof(currentVol), "%d", displayVol);
+	drawTintedButton(RED, volumeDown.position.x, volumeDown.position.y, volumeDown.btnWidth, volumeDown.btnHeight, mouse.x, mouse.y, NO);
+	drawTintedButton(RED, volumeUp.position.x, volumeUp.position.y, volumeUp.btnWidth, volumeUp.btnHeight, mouse.x, mouse.y, NO);
+	drawAlignedText(BLACK, RIGHT, currentVol, window.x - PADDING - 1.5 * textSize, back.btnHeight + 3 * PADDING + textSize);
+	drawAlignedText(BLACK, CENTER, volumeDown.name, volumeDown.position.x, volumeDown.position.y);
+	drawAlignedText(BLACK, CENTER, volumeUp.name, volumeUp.position.x, volumeUp.position.y);
 
 	/*Draw tutorial*/
 	drawGIF(gameplay,
@@ -208,6 +220,18 @@ void Options_Update() {
 		}
 	}
 
+	/*Adjusting Volume*/
+	if (CP_Input_MouseClicked()) {
+		if (IsAreaClicked(volumeDown.position.x, volumeDown.position.y, volumeDown.btnWidth, volumeDown.btnHeight, mouse.x, mouse.y)) {
+			displayVol--;
+			configChanged = displayVol == newConfig.settings.audio ? 0 : 1;
+		}
+		if (IsAreaClicked(volumeUp.position.x, volumeUp.position.y, volumeUp.btnWidth, volumeUp.btnHeight, mouse.x, mouse.y)) {
+			displayVol++;
+			configChanged = displayVol == newConfig.settings.audio ? 0 : 1;
+		}
+	}
+
 	/*Apply and Discard Changes (does not include audio yet)*/
 	if (configChanged) {
 		for (int i = 0; i < 2; i++)
@@ -217,14 +241,18 @@ void Options_Update() {
 					newConfig.settings.resolutionWidth = resSelected->actWidth;
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
 					newConfig.settings.windowed = resSelected->windowed;
+					newConfig.settings.audio = displayVol;
 					CP_System_SetWindowSize(newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight);
 					if (!newConfig.settings.windowed) {
 						CP_System_Fullscreen();
 					}
+					/*CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, displayVol);
+					CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, displayVol);*/
 					configChanged = NO;
-					CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit);
+					CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit); // Reload game state to rescale
 				}
 				if (IsAreaClicked(changes[DISCARD].position.x, changes[DISCARD].position.y, changes[DISCARD].btnWidth, changes[DISCARD].btnHeight, mouse.x, mouse.y)) {
+					displayVol = newConfig.settings.audio;
 					for (int i = 0; i < 3; i++) {
 						resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 					}
@@ -252,4 +280,6 @@ void Options_Update() {
 
 void Options_Exit() {
 	CP_Image_Free(&gameplay);
+	/*CP_Sound_Free(&gameMusic);
+	CP_Sound_Free(&gameSFX);*/
 }

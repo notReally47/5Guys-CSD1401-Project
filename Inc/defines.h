@@ -47,19 +47,48 @@
 #define	DISCARD	1
 #define MAX_LENGTH	20
 
+//enum SOKOBAN {
+//	SOKOBAN_GRID_COLS = 41,
+//	SOKOBAN_GRID_ROWS = 31,
+//	TUTORIAL_GRID_COLS = 5,
+//	TUTORIAL_GRID_ROWS = 5,
+//	SOKOBAN_IDLE,
+//	SOKOBAN_UP,
+//	SOKOBAN_LEFT,
+//	SOKOBAN_DOWN,
+//	SOKOBAN_RIGHT,
+//	MOVE = 2000,
+//	CUSTOMER = 10,
+//	TEXT_BUFFER = 255
+//};
+//
+//enum CustomerStats {
+//	CUSTOMER = 10,
+//	CUSTOMER_SPEED = 10,
+//	CUSTOMER_TURN = 20
+//};
+//
+//
 //enum Padding {
 //	PADDING = 10
 //};
+//
 //enum Boolean {
 //	NO,
 //	YES
 //};
+//
 //enum Alignment {
 //	CENTER,
 //	LEFT,
 //	RIGHT
 //};
+//
 //enum Changes {
 //	APPLY,
 //	DISCARD
+//};
+//
+//enum MaxLength {
+//	MAX_LENGTH = 20
 //};
