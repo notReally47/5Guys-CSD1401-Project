@@ -26,6 +26,7 @@ CP_Vector window;
 CP_Image gameplay;
 CP_Sound gameSFX = NULL;
 CP_Sound gameMusic = NULL;
+CP_Font gameFont = NULL;
 int ddlClicked, configChanged, displayVol;
 
 extern Config config;
@@ -40,6 +41,8 @@ void Options_Init() {
 	gameplay = CP_Image_Load("./Assets/Gameplay.png");
 	/*gameMusic = CP_Sound_Load("./Assets/Sound/music.mp3");
 	gameSFX = CP_Sound_Load("./Assets/Sound/sfx.wav");*/
+	/*gameFont = CP_Font_Load("./Assets/Fonts/VT323-Regular.ttf");
+	CP_Font_Set(gameFont);*/
 	CP_Settings_TextSize(textSize);
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 	CP_Settings_Stroke(BLACK);
@@ -68,7 +71,7 @@ void Options_Init() {
 	apply.name = "Apply";
 	discard.name = "Discard";
 
-	// Dynamic struct fields
+	// Dynamic struct fields (change due to resolution change)
 	back.btnWidth = strlen(back.name) * textSize / 2, back.btnHeight = textSize;
 	back.position = CP_Vector_Set(back.btnWidth / 2.0f + PADDING, back.btnHeight / 2.0f + PADDING);
 
@@ -221,9 +224,11 @@ void Options_Update() {
 	}
 
 	/*Adjusting Volume*/
-	if (CP_Input_MouseClicked()) {
+	if (CP_Input_MouseDown(MOUSE_BUTTON_LEFT)) {
 		if (IsAreaClicked(volumeDown.position.x, volumeDown.position.y, volumeDown.btnWidth, volumeDown.btnHeight, mouse.x, mouse.y)) {
-			displayVol--;
+			if (displayVol > 0) {
+				displayVol--;
+			}
 			configChanged = displayVol == newConfig.settings.audio ? 0 : 1;
 		}
 		if (IsAreaClicked(volumeUp.position.x, volumeUp.position.y, volumeUp.btnWidth, volumeUp.btnHeight, mouse.x, mouse.y)) {
@@ -232,7 +237,7 @@ void Options_Update() {
 		}
 	}
 
-	/*Apply and Discard Changes (does not include audio yet)*/
+	/*Apply and Discard Changes*/
 	if (configChanged) {
 		for (int i = 0; i < 2; i++)
 		{
@@ -242,10 +247,7 @@ void Options_Update() {
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
 					newConfig.settings.windowed = resSelected->windowed;
 					newConfig.settings.audio = displayVol;
-					CP_System_SetWindowSize(newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight);
-					if (!newConfig.settings.windowed) {
-						CP_System_Fullscreen();
-					}
+					newConfig.settings.windowed ? CP_System_SetWindowSize(newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight) : CP_System_Fullscreen();
 					/*CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, displayVol);
 					CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, displayVol);*/
 					configChanged = NO;
@@ -273,13 +275,13 @@ void Options_Update() {
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 		}
 	}
-
-	/*Update config to newConfig*/
-	config = newConfig;
 }
 
 void Options_Exit() {
 	CP_Image_Free(&gameplay);
 	/*CP_Sound_Free(&gameMusic);
 	CP_Sound_Free(&gameSFX);*/
+
+	/*Update config to newConfig*/
+	config = newConfig;
 }
