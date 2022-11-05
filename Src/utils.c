@@ -3,7 +3,10 @@
 #include "defines.h"
 #include "utils.h"
 #include "movement.h"
-#include<stdio.h>
+#include <stdio.h>
+
+int duration = 60;
+float lockTimer = 3.f;
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
@@ -116,14 +119,8 @@ void getCell(int posX, int posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOK
 */
 int timer(int duration, float startTime) {
 	int diffTime = (int)CP_System_GetSeconds() - (int)startTime;
-	int remaindingTime = duration - diffTime;
-
-	if (!(remaindingTime < 0)) {
-		return remaindingTime;
-	}
-	else {
-		return 0;
-	}
+	int remainingTime = duration - diffTime;
+	return (!(remainingTime < 0)) ? remainingTime : 0;
 }
 
 /*Counts the number of key objective points in the grid and returns it*/
