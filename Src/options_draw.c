@@ -45,3 +45,10 @@ void drawGIF(CP_Image img, float x, float y, float w, float h, static const floa
 		((imageIndex % (totalFrames / numRows)) + 1)* frame_dimension, (imageIndex < (totalFrames / numRows)) ? frame_dimension : frame_dimension * numRows,
 		255);
 }
+
+void drawBtn(Button btn) {
+	//float strokeWeight = isDDL ? 0.0f : 3.0f;
+	CP_Settings_ImageMode(CP_POSITION_CENTER);
+	IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
+	CP_Image_Draw(btn.img, btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, 255);
+}

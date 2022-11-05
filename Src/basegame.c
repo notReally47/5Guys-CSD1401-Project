@@ -9,6 +9,7 @@
 #include "spritesheet.h"
 #include "levellogic.h"
 #include "levelTransition.h"
+#include "mainmenu.h"
 #include <stdio.h>
 
 extern Config config;
@@ -48,6 +49,9 @@ void base_Init(void) {
 void base_Update(void) {
 	int playerPosX, playerPosY, isCompleted = 0;
 	
+	if (CP_Input_KeyTriggered(KEY_ESCAPE)) {
+		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
+	}
 
 	/*Read grid*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {

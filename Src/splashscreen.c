@@ -1,12 +1,17 @@
 #include "cprocessing.h"
 #include "mainmenu.h"
+#include "structs.h"
+#include "defines.h"
 // declare global variables: img,fade,x,y,width,height
 CP_Image img;
 int fade;
 float x,y,width,height;
+extern Config config;
+CP_Sound gameMusic;
 
 void splash_screen_init(void)
 {
+    gameMusic = CP_Sound_Load("./Assets/Sound/music.mp3");
     img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
     //CP_System_SetWindowSize(CP_System_GetDisplayWidth()>>1,CP_System_GetDisplayHeight()>>1); // set window size to half of display height/width
     fade = 0;
@@ -30,5 +35,6 @@ void splash_screen_update(void)
 
 void splash_screen_exit(void)
 {   
+    CP_Sound_PlayAdvanced(gameMusic, config.settings.audio / 100.f, 1, YES, CP_SOUND_GROUP_MUSIC);
     CP_Image_Free(&img); // unload the img
 }
