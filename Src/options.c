@@ -41,7 +41,7 @@ void Options_Init() {
 	CP_Settings_Stroke(BLACK);
 
 	// Initialize constant struct fields
-	back.name = "<-"; // to be replaced with an image
+	back.name = "back"; // to be replaced with an image
 
 	currentRes.actWidth = config.settings.resolutionWidth, currentRes.actHeight = config.settings.resolutionHeight;
 	currentRes.windowed = config.settings.windowed;
@@ -65,11 +65,11 @@ void Options_Init() {
 	discard.name = "Discard";
 
 	// Dynamic struct fields
-	back.btnWidth = strlen(back.name) * textSize / 2, back.btnHeight = back.btnWidth;
+	back.btnWidth = strlen(back.name) * textSize / 2, back.btnHeight = textSize;
 	back.position = CP_Vector_Set(back.btnWidth / 2.0f + PADDING, back.btnHeight / 2.0f + PADDING);
 
-	currentRes.btnWidth = MAX_LENGTH * textSize / 2 + PADDING, currentRes.btnHeight = back.btnHeight;
-	currentRes.position = CP_Vector_Set(window.x - currentRes.btnWidth / 2 - PADDING, 2 * PADDING + back.btnHeight + textSize / 2);
+	currentRes.btnWidth = MAX_LENGTH * textSize / 2 + PADDING, currentRes.btnHeight = textSize;
+	currentRes.position = CP_Vector_Set(window.x - currentRes.btnWidth / 2 - PADDING, 2 * PADDING + textSize + textSize / 2);
 
 	halfscreenWindowed.btnWidth = currentRes.btnWidth, halfscreenWindowed.btnHeight = currentRes.btnHeight;
 	halfscreenWindowed.position = CP_Vector_Set(currentRes.position.x, currentRes.position.y + halfscreenWindowed.btnHeight);
@@ -85,7 +85,7 @@ void Options_Init() {
 	volumeDown.btnWidth = back.btnWidth, volumeDown.btnHeight = back.btnWidth;
 	volumeUp.btnWidth = back.btnWidth, volumeUp.btnHeight = back.btnWidth;
 
-	apply.btnWidth = strlen(apply.name) * textSize / 2, apply.btnHeight = back.btnHeight + PADDING;
+	apply.btnWidth = strlen(discard.name) * textSize / 2, apply.btnHeight = back.btnHeight + PADDING;
 	apply.position = CP_Vector_Set(window.x / 2 - 5 * PADDING - apply.btnWidth / 2, window.y - PADDING - apply.btnHeight / 2);
 
 	discard.btnWidth = strlen(discard.name) * textSize / 2, discard.btnHeight = back.btnHeight + PADDING;
@@ -109,8 +109,6 @@ void Options_Init() {
 void Options_Update() {
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
 	CP_Color currentResColor = ddlClicked ? DARKGRAY : GRAY;
-	window = CP_Vector_Set(CP_System_GetWindowWidth(), CP_System_GetWindowHeight());
-	textSize = (float)window.y * 0.05f;
 	CP_Settings_NoTint();
 	CP_Graphics_ClearBackground(GRAY);
 	CP_Settings_TextSize(textSize);
