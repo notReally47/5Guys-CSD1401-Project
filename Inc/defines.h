@@ -1,16 +1,16 @@
 #pragma once
-#define SOKOBAN_GRID_COLS	41
-#define SOKOBAN_GRID_ROWS	31
-#define TUTORIAL_GRID_COLS	5  //Added separate col definition for Tutorial
-#define TUTORIAL_GRID_ROWS	5 //Added separate row definition for Tutorial
-#define SOKOBAN_IDLE		0
-#define SOKOBAN_UP			1
-#define SOKOBAN_LEFT		2
-#define SOKOBAN_DOWN		3
-#define SOKOBAN_RIGHT		4
-#define MOVE				2000
-#define CUSTOMER			10
-#define TEXT_BUFFER			255
+//#define SOKOBAN_GRID_COLS	41
+//#define SOKOBAN_GRID_ROWS	31
+//#define TUTORIAL_GRID_COLS	5  //Added separate col definition for Tutorial
+//#define TUTORIAL_GRID_ROWS	5 //Added separate row definition for Tutorial
+//#define SOKOBAN_IDLE		0
+//#define SOKOBAN_UP			1
+//#define SOKOBAN_LEFT		2
+//#define SOKOBAN_DOWN		3
+//#define SOKOBAN_RIGHT		4
+//#define MOVE				2000
+//#define CUSTOMER			10
+//#define TEXT_BUFFER			255
 
 //Colours
 #define WHITE		CP_Color_Create(255, 255, 255, 255)
@@ -31,64 +31,64 @@
 #define SALMON		CP_Color_Create(255, 134, 116, 255)	// Moving Down
 #define COTTON		CP_Color_Create(255, 188, 217, 255)	// Moving Right
 
-// Customer
-#define CUSTOMER		10	// Maximum Number of Customers
-#define CUSTOMER_SPEED	10	// The number of frames before the customer updates movement (Bigger Numer = Slower)
-#define CUSTOMER_TURN	20	// The number of frames before the customer updates rotation (Bigger Numer = Slower)
+//// Customer
+//#define CUSTOMER		10	// Maximum Number of Customers
+//#define CUSTOMER_SPEED	10	// The number of frames before the customer updates movement (Bigger Numer = Slower)
+//#define CUSTOMER_TURN	20	// The number of frames before the customer updates rotation (Bigger Numer = Slower)
+//
+//// Options
+//#define PADDING	10
+//#define NO		0
+//#define YES		1
+//#define CENTER	0
+//#define LEFT	1
+//#define RIGHT	2
+//#define APPLY	0
+//#define	DISCARD	1
+//#define MAX_LENGTH	20
 
-// Options
-#define PADDING	10
-#define NO		0
-#define YES		1
-#define CENTER	0
-#define LEFT	1
-#define RIGHT	2
-#define APPLY	0
-#define	DISCARD	1
-#define MAX_LENGTH	20
+enum SOKOBAN {	
+	SOKOBAN_IDLE,
+	SOKOBAN_UP,
+	SOKOBAN_LEFT,
+	SOKOBAN_DOWN,
+	SOKOBAN_RIGHT,
+	SOKOBAN_GRID_COLS = 41,
+	SOKOBAN_GRID_ROWS = 31,
+	TUTORIAL_GRID_COLS = 5,
+	TUTORIAL_GRID_ROWS = 5,
 
-//enum SOKOBAN {
-//	SOKOBAN_GRID_COLS = 41,
-//	SOKOBAN_GRID_ROWS = 31,
-//	TUTORIAL_GRID_COLS = 5,
-//	TUTORIAL_GRID_ROWS = 5,
-//	SOKOBAN_IDLE,
-//	SOKOBAN_UP,
-//	SOKOBAN_LEFT,
-//	SOKOBAN_DOWN,
-//	SOKOBAN_RIGHT,
-//	MOVE = 2000,
-//	CUSTOMER = 10,
-//	TEXT_BUFFER = 255
-//};
-//
-//enum CustomerStats {
-//	CUSTOMER = 10,
-//	CUSTOMER_SPEED = 10,
-//	CUSTOMER_TURN = 20
-//};
-//
-//
-//enum Padding {
-//	PADDING = 10
-//};
-//
-//enum Boolean {
-//	NO,
-//	YES
-//};
-//
-//enum Alignment {
-//	CENTER,
-//	LEFT,
-//	RIGHT
-//};
-//
-//enum Changes {
-//	APPLY,
-//	DISCARD
-//};
-//
-//enum MaxLength {
-//	MAX_LENGTH = 20
-//};
+	MOVE = 2000,
+	TEXT_BUFFER = 255
+};
+
+enum CustomerStats {
+	CUSTOMER = 10,
+	CUSTOMER_SPEED = 10,
+	CUSTOMER_TURN = 20
+};
+
+
+enum Padding {
+	PADDING = 10
+};
+
+enum Boolean {
+	NO,
+	YES
+};
+
+enum Alignment {
+	CENTER,
+	LEFT,
+	RIGHT
+};
+
+enum Changes {
+	APPLY,
+	DISCARD
+};
+
+enum MaxLength {
+	MAX_LENGTH = 20
+};
