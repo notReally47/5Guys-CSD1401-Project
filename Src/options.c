@@ -232,7 +232,9 @@ void Options_Update() {
 			configChanged = displayVol == newConfig.settings.audio ? 0 : 1;
 		}
 		if (IsAreaClicked(volumeUp.position.x, volumeUp.position.y, volumeUp.btnWidth, volumeUp.btnHeight, mouse.x, mouse.y)) {
-			displayVol++;
+			if (displayVol < 100) {
+				displayVol++;
+			}
 			configChanged = displayVol == newConfig.settings.audio ? 0 : 1;
 		}
 	}
