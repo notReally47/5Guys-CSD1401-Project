@@ -4,6 +4,7 @@
 #include "structs.h"
 #include "defines.h"
 #include "settings.h"
+#include "cprocessing.h"
 
 /*Reads config.ini*/
 Config readFile() {
@@ -13,8 +14,8 @@ Config readFile() {
 	.save.lastLevelPlayed = 1,
 	.settings.windowed = 1,
 	.settings.audio = 50,
-	.settings.resolutionHeight = 540,
-	.settings.resolutionWidth = 960,
+	.settings.resolutionHeight = (float)CP_System_GetWindowHeight() / 2.f,
+	.settings.resolutionWidth = (float)CP_System_GetWindowWidth() / 2.f,
 	.keybinds.moveUp = 'W',
 	.keybinds.moveLeft = 'A',
 	.keybinds.moveDown = 'S',
