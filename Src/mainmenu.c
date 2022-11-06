@@ -16,7 +16,7 @@ void Main_Menu_Init()
 {
 	CP_System_SetWindowTitle("SevenTree");
 	// declare/define window width/height
-	CP_System_SetWindowSize(config.settings.resolutionWidth,config.settings.resolutionHeight);
+	//CP_System_SetWindowSize(config.settings.resolutionWidth,config.settings.resolutionHeight);
 	windowwidth = (float)CP_System_GetWindowWidth();
 	windowheight = (float)CP_System_GetWindowHeight();
 	CP_Settings_RectMode(CP_POSITION_CENTER); // align rectangle to the center position (else it defaults to top left corner)
@@ -27,7 +27,6 @@ void Main_Menu_Init()
 	buttons.center_y = windowheight * 0.5f;
 	buttons.width = windowwidth * 0.1f;
 	buttons.height = windowheight * 1.f / 12.f;
-	
 }
 
 void Main_Menu_Update()
