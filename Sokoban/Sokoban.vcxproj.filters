@@ -49,6 +49,9 @@
     <ClCompile Include="..\Src\options_draw.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Src\mechanics.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Inc\basegame.h">
@@ -100,6 +103,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Inc\options_draw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\mechanics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
