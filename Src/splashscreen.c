@@ -2,15 +2,24 @@
 #include "mainmenu.h"
 #include "structs.h"
 #include "defines.h"
+#include "settings.h"
 // declare global variables: img,fade,x,y,width,height
 CP_Image img;
 int fade;
 float x,y,width,height;
-extern Config config;
+/*
+* Declare config variable to be used throughout the program.
+* Use 'extern Config config;' to reference global config.
+*/
+Config config;
+
 CP_Sound gameMusic;
 
 void splash_screen_init(void)
 {
+    /*Initalize config by reading from file, or creating the file if it does not exist.*/
+    config = readFile();
+
     gameMusic = CP_Sound_Load("./Assets/Sound/music.mp3");
     img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
 
