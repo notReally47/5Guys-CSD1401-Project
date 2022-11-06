@@ -13,7 +13,15 @@ void splash_screen_init(void)
 {
     gameMusic = CP_Sound_Load("./Assets/Sound/music.mp3");
     img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
-    //CP_System_SetWindowSize(CP_System_GetDisplayWidth()>>1,CP_System_GetDisplayHeight()>>1); // set window size to half of display height/width
+
+    if (config.settings.windowed) {
+        CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight); // set window size to half of display height/width
+    }
+
+    else {
+        CP_System_Fullscreen();
+    }
+    
     fade = 0;
     x = CP_System_GetWindowWidth()>>1;
     y = CP_System_GetWindowHeight()>>1;
