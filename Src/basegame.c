@@ -9,8 +9,10 @@
 #include "spritesheet.h"
 #include "levellogic.h"
 #include "levelTransition.h"
+//#include "mechanics.h"
 #include "mainmenu.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 extern Config config;
 
@@ -31,11 +33,12 @@ void base_Init(void) {
 	totalObjs = getObjective(grid); //Counts number of key objective to meet
 
 	/*Settings*/
-	CP_System_SetWindowTitle("SevenTwee");
-	// already declared in splash_screen. used for main.c -> basegame.c
-	CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight);
 	CP_Settings_RectMode(CP_POSITION_CORNER);
 	CP_Settings_StrokeWeight(0.5f);
+	// for clock settings
+	CP_Settings_TextSize((float)config.settings.resolutionHeight*0.025f);
+	CP_Settings_Fill(BLACK);
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
 
 	/*Initializations*/
 	cellSize = (float)(CP_System_GetWindowHeight()/SOKOBAN_GRID_ROWS);
@@ -44,10 +47,15 @@ void base_Init(void) {
 	elapsedLock = 0;
 	isLocked = 0;
 	load_spritesheet(cellSize);
+	//card_init();
+	//grid[4][5].mecha = 1;
+	//grid[10][10].mecha = 1;
+
 }
 
 void base_Update(void) {
 	int playerPosX, playerPosY, isCompleted = 0;
+	int clock = timer(duration,0.f);
 	
 	if (CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
@@ -71,17 +79,23 @@ void base_Update(void) {
 			}
 		}
 	}
-	
+
 	/*If all objectives reached, do something here*/
 	if (isCompleted == totalObjs) {
 		next_level();
 		CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit); // load transition state
 	}
+	
+	/*Lose condition*/
+	if (clock == 0) {
+		level = 1; // reset level
+		// CP_Engine_SetNextGameState(Main_Menu_Init,Main_Menu_Update,Main_Menu_Exit); 
+	}
 
 	/*If player is stunlocked by customer, all inputs should be ignored.*/
 	if (isLocked) {
 		/*Check if 3 seconds has passed*/
-		if (elapsedLock <= 3) {
+		if (elapsedLock <= lockTimer) {
 			elapsedLock = elapsedLock + CP_System_GetDt();
 			printf("Locked!\n");
 		}
@@ -150,10 +164,14 @@ void base_Update(void) {
 	CP_Graphics_ClearBackground(BLUEGRAY);
 
 	/*Rendering grid*/
-	CP_Graphics_ClearBackground(WHITE);
+	//CP_Graphics_ClearBackground(WHITE);
 	
 	// experimental
 	// world_camera(cellSize,face,dir); // requires dir to be declared outside else loop
+
+	char buffer[50] = {0};
+	sprintf_s(buffer,_countof(buffer),"Time left: %d",clock);
+	CP_Font_DrawText(buffer,cellSize,cellSize);
 	
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -166,7 +184,7 @@ void base_Update(void) {
 			
 			draw_floor(cellX, cellY, cellSize);
 
-			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[move-1][row][col].player) {
+			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[move-1][row][col].player) { // || currCell.mecha
 				if (currCell.boarder)
 					draw_boarder(cellX, cellY, cellSize);
 
@@ -176,11 +194,14 @@ void base_Update(void) {
 				else if (currCell.key) 
 					draw_key(cellX, cellY, cellSize);
 
-				if ((currCell.player && (face != 1 && face != 2)) || moves[move - 1][row][col].player && (face != 3 && face != 4 && face != 0)) player:
+				// else if (currCell.mecha)
+
+				if ((currCell.player && (face != 1 && face != 2)) || moves[move - 1][row][col].player && (face != 3 && face != 4 && face != 0))
 					draw_player(cellx, celly, face);
 
 				else if (currCell.box)
 					draw_box(cellX, cellY, cellSize);
+
 				else if (currCell.shelf)
 					draw_boarder(cellX, cellY, cellSize);
 			}
