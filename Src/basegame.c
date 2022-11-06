@@ -9,7 +9,7 @@
 #include "spritesheet.h"
 #include "levellogic.h"
 #include "levelTransition.h"
-//#include "mechanics.h"
+#include "mechanics.h"
 #include "mainmenu.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,24 +22,25 @@ Customer customer[CUSTOMER];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
-float cellSize, cellAlign, sec, elapsedLock;
+float cellSize,cellAlign,sec,elapsedLock;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, time;
+int totalObjs,isLocked,activatedCusX,activatedCusY,face,time;
 
 void base_Init(void) {
-	
 	move = 1; //Initialise move with 1 for rendering purposes*
+	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
+		for (int col = 0, m = 0; col < SOKOBAN_GRID_COLS; col++) {
+			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
+		}
+	}
 	setMap(grid, customer); //Initialise map
 	totalObjs = getObjective(grid); //Counts number of key objective to meet
 
 	/*Settings*/
-	CP_Settings_RectMode(CP_POSITION_CORNER);
 	CP_Settings_StrokeWeight(0.5f);
 	// for clock settings
 	CP_Settings_TextSize((float)config.settings.resolutionHeight*0.025f);
-	CP_Settings_Fill(BLACK);
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
-
+	
 	/*Initializations*/
 	cellSize = (float)(CP_System_GetWindowHeight()/SOKOBAN_GRID_ROWS);
 	cellAlign = (float)((CP_System_GetWindowWidth()-(int)cellSize*SOKOBAN_GRID_COLS)/2);
@@ -48,15 +49,12 @@ void base_Init(void) {
 	isLocked = 0;
 	load_spritesheet(cellSize);
 	//card_init();
-	//grid[4][5].mecha = 1;
-	//grid[10][10].mecha = 1;
-
 }
 
 void base_Update(void) {
 	int playerPosX, playerPosY, isCompleted = 0;
 	int clock = timer(duration,0.f);
-	
+
 	if (CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 	}
@@ -65,9 +63,9 @@ void base_Update(void) {
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			/*Check if all objectives has been reached*/
-			if (grid[row][col].key && grid[row][col].box)
+			if (grid[row][col].key && grid[row][col].box) 
 				isCompleted++;
-
+				
 			/*Get position of player*/
 			if (grid[row][col].player) {
 				playerPosX = row;
@@ -93,6 +91,7 @@ void base_Update(void) {
 	}
 
 	/*If player is stunlocked by customer, all inputs should be ignored.*/
+	player_status(&isLocked); // UM
 	if (isLocked) {
 		/*Check if 3 seconds has passed*/
 		if (elapsedLock <= lockTimer) {
@@ -129,11 +128,11 @@ void base_Update(void) {
 			face = 4;
 			break;
 		}
-
+		
 		/*If there is movement.*/
 		if (dir > 0) {
 			saveMove(moves, grid);
-			getCell(playerPosX, playerPosY, dir, grid);
+			getCell(&playerPosX, &playerPosY, dir, grid);
 		}
 
 		/*Undo move.*/
@@ -168,7 +167,8 @@ void base_Update(void) {
 	
 	// experimental
 	// world_camera(cellSize,face,dir); // requires dir to be declared outside else loop
-
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
+	CP_Settings_Fill(BLACK);
 	char buffer[50] = {0};
 	sprintf_s(buffer,_countof(buffer),"Time left: %d",clock);
 	CP_Font_DrawText(buffer,cellSize,cellSize);
@@ -179,54 +179,41 @@ void base_Update(void) {
 
 			float cellX = cellSize*(float)col+cellAlign;
 			float cellY = cellSize*(float)row;
-			float cellx = cellSize*(float)playerPosY+cellAlign;
-			float celly = cellSize*(float)playerPosX;
 			
-			draw_floor(cellX, cellY, cellSize);
+			draw_floor(cellX,cellY,cellSize);
 
-			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[move-1][row][col].player) { // || currCell.mecha
+			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[move-1][row][col].player || 
+				currCell.mecha || tele[0]==1 && (row==tele[1] && col==tele[2]) || (row==tele[3] && col==tele[4])) {
 				if (currCell.boarder)
-					draw_boarder(cellX, cellY, cellSize);
+					draw_boarder(cellX,cellY,cellSize);
 
 				else if (currCell.key && currCell.box)
-					draw_key_in_box(cellX, cellY, cellSize);
+					draw_key_in_box(cellX,cellY,cellSize);
 
 				else if (currCell.key) 
-					draw_key(cellX, cellY, cellSize);
+					draw_key(cellX,cellY,cellSize);
 
-				// else if (currCell.mecha)
+				else if (tele[0]==1 && (row==tele[1] && col==tele[2]) || (row==tele[3] && col==tele[4]))
+					draw_boarder(cellX,cellY,cellSize); // draw_tele();
+				
+				else if (currCell.mecha)
+					draw_boarder(cellX,cellY,cellSize); // draw_mecha();
 
-				if ((currCell.player && (face != 1 && face != 2)) || moves[move - 1][row][col].player && (face != 3 && face != 4 && face != 0))
-					draw_player(cellx, celly, face);
+				if ( (currCell.player && (face==3||face==4||face==0)) ||  // renders initial position and when moving right/down
+					(moves[move-1][row][col].player && (face==1||face==2)) )  // renders prev position if moving left/up				
+					draw_player(cellSize,cellAlign,playerPosX,playerPosY,face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
 
 				else if (currCell.box)
-					draw_box(cellX, cellY, cellSize);
+					draw_box(cellX,cellY,cellSize);
 
 				else if (currCell.shelf)
-					draw_boarder(cellX, cellY, cellSize);
+					draw_boarder(cellX,cellY,cellSize);
 			}
 
 			if (currCell.customer) {
 				for (int i = 0; i < CUSTOMER; i++) {
-
 					if (row == customer[i].cusRow && col == customer[i].cusCol) {
-						switch (customer[i].direction) {
-						case SOKOBAN_UP:
-							CP_Settings_Fill(NEON_PINK);
-							break;
-						case SOKOBAN_LEFT:
-							CP_Settings_Fill(CARNATION);
-							break;
-						case SOKOBAN_DOWN:
-							CP_Settings_Fill(SALMON);
-							break;
-						case SOKOBAN_RIGHT:
-							CP_Settings_Fill(COTTON);
-							break;
-						default:
-							break;
-						}
-						CP_Graphics_DrawRect(cellX, cellY, cellSize, cellSize);
+						draw_customer(cellX,cellY,cellSize,customer[i].direction);
 					}
 				}
 			}
