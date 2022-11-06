@@ -2,18 +2,24 @@
 #include "stdio.h"
 #include "structs.h"
 #include "defines.h"
+#include "mechanics.h"
 
 CP_Image spritesheet;
 CP_Vector anim,dimen,trans,camera;
+static float move;
+const float frame = 64.0f;
+int index,x,y;
 
-static float elapsed,move;
-static const float frame = 64.0f;
-static int index,box,x,y;
-
+/* loads all assets using spritesheet
+* takes in cellsize for scaling of player/customer sprite scaling
+* translation is calculated by the cellsize and the sprite dimensions to center itself in the cell
+* 
+* 
+*/
 void load_spritesheet(float cellSize) {
 	spritesheet = CP_Image_Load("./Assets/Spritesheet/spritesheet.png");
 	if (spritesheet == NULL) {
-		printf("Unable to open spritesheet.png\n");
+		fprintf(stderr,"Unable to open spritesheet.png\n");
 		CP_Image_Free(&spritesheet);
 		exit(1);
 	}
@@ -22,8 +28,6 @@ void load_spritesheet(float cellSize) {
 	camera = CP_Vector_Set(0.f, 0.f);
 	move = (float)((int)cellSize/10);
 	index = 0;
-	box = 0;
-	elapsed = 0.0f;
 	x = 1;
 	y = 1;
 	// i have no idea what these do
@@ -34,20 +38,29 @@ void load_spritesheet(float cellSize) {
 	
 	
 }
-
-
-void draw_player(float cellx,float celly,int face) {
+/* cellx and celly scales off player's position x and y. allows for a more accurate animation when moving the player
+* when variable face is 0, the player will re-initialise its position. this is called at the start and whenever player undo their move
+* 
+*/
+void draw_player(float cellSize,float cellAlign,int playerPosX,int playerPosY,int face) {
+	float cellx = cellSize*(float)playerPosY+cellAlign;
+	float celly = cellSize*(float)playerPosX;
+	static float elapsed = 0.f;
 	elapsed += CP_System_GetDt();
 	if (elapsed >= 0.2f) {
 		index = (index+1)%3;
-		elapsed = 0.0f;
+		elapsed = 0.f;
 	}
-	
+
 	CP_Settings_Translate(trans.x,trans.y);
 	switch (face) {
 	case 0: // starting position
 		anim = CP_Vector_Set(cellx,celly);
 	case 3: // face down
+		if (tele[5] == 1) {
+			anim = CP_Vector_Set(cellx,cellSize*(float)(playerPosX-1));
+			tele[5] = 0;
+		}
 		if (anim.y < celly) {
 			anim.y += move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,index*frame,0.f,(index+1)*frame,frame,255);
@@ -56,6 +69,10 @@ void draw_player(float cellx,float celly,int face) {
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,frame,0.f,frame*2.f,frame,255);
 		break;
 	case 1: // face up
+		if (tele[5] == 1) {
+			anim = CP_Vector_Set(cellx,cellSize*(float)(playerPosX+1));
+			tele[5] = 0;
+		}
 		if (anim.y > celly) {
 			anim.y -= move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,(index+3)*frame,0.f,(index+4)*frame,frame,255);
@@ -64,6 +81,10 @@ void draw_player(float cellx,float celly,int face) {
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,frame*4.f,0.f,frame*5.f,frame,255); 
 		break;
 	case 2: // face left
+		if (tele[5] == 1) {
+			anim = CP_Vector_Set(cellSize*(float)(playerPosY+1)+cellAlign,celly);
+			tele[5] = 0;
+		}
 		if (anim.x > cellx) {
 			anim.x -= move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
@@ -72,6 +93,10 @@ void draw_player(float cellx,float celly,int face) {
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,frame*4.f,frame,frame*5.f,frame*2.f,255); 
 		break;
 	case 4: // face right
+		if (tele[5] == 1) {
+			anim = CP_Vector_Set(cellSize*(float)(playerPosY-1)+cellAlign,celly);
+			tele[5] = 0;
+		}
 		if (anim.x < cellx) {
 			anim.x += move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,index*frame,frame,(index+1)*frame,frame*2.f,255);
@@ -82,6 +107,7 @@ void draw_player(float cellx,float celly,int face) {
 	}
 	CP_Settings_Translate(-trans.x,-trans.y);
 }
+
 void draw_boarder(float cellX, float cellY, float cellSize) {
 	//if (cellY == 0.f || cellY*SOKOBAN_GRID_ROWS)
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,240);
@@ -99,6 +125,31 @@ void draw_key_in_box(float cellX,float cellY,float cellSize){
 }
 void draw_floor(float cellX,float cellY,float cellSize){
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,0.f,128.f,64.f,192.f,250);
+}
+/* moves the whole canvas with the player when moving. allow for a zoom-in side scrolling effect
+*/
+void draw_customer(float cellX,float cellY,float cellSize,int customerdirection) {
+	// cellSize is for when the customer moves
+	switch (customerdirection) {
+	case 3:
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,dimen.x,dimen.y,frame,0.f,frame*2.f,frame,255);
+		break;
+	case 1:
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,dimen.x,dimen.y,frame*4.f,0.f,frame*5.f,frame,255); 
+		break;
+	case 2:
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,dimen.x,dimen.y,frame*4.f,frame,frame*5.f,frame*2.f,255);
+		break;
+	case 4:
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,dimen.x,dimen.y,frame,frame,frame*2.f,frame*2.f,255);
+		break;
+	}
+}
+void draw_mecha(void) {
+	// to do
+}
+void draw_tele(void) {
+	// to do
 }
 void world_camera(float cellSize, int face, int dir) {
 	switch (face) {
@@ -125,7 +176,8 @@ void world_camera(float cellSize, int face, int dir) {
 	}
 	CP_Settings_Translate(camera.x,camera.y);
 }
-
+/* frees all assets from memory when called
+*/
 void free_sprite(void) {
 	CP_Image_Free(&spritesheet);
 }
