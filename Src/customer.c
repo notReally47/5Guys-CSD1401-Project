@@ -1,6 +1,7 @@
 #include "CProcessing.h"
 #include "defines.h"
 #include "structs.h"
+#include "mechanics.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,7 +15,7 @@
 * Customer customer: Customer stats.
 */
 void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
-	if (!grid[posX][posY].shelf && !grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer && !grid[posX][posY].key && !grid[posX][posY].player) {
+	if (!grid[posX][posY].shelf && !grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer && !grid[posX][posY].key && !grid[posX][posY].player &&!grid[posX][posY].mecha) {
 		if (customer[cusNum].isRandom) {
 			if ((posY <= customer[cusNum].ogCusRow + 2 && posY >= customer[cusNum].ogCusRow - 2) &&
 				(posX <= customer[cusNum].ogCusCol + 2 && posX >= customer[cusNum].ogCusCol - 2)) {
@@ -176,6 +177,8 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 					if (grid[customer[i].cusRow - x][customer[i].cusCol].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
+						if (infected[i] == 1) // from mechanics.h
+							infected[10] = 1; // status (if true, player is infected)
 						break;
 					}
 				}
@@ -188,6 +191,8 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 					if (grid[customer[i].cusRow][customer[i].cusCol - x].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
+						if (infected[i] == 1) // from mechanics.h
+							infected[10] = 1; // status (if true, player is infected)
 						break;
 					}
 				}
@@ -198,7 +203,9 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				for (int x = 1; x <= customer[i].range; x++) {
 					if (grid[customer[i].cusRow + x][customer[i].cusCol].player) {
 						isLocked = 1;
-						customer[i].isActive = 0;;
+						customer[i].isActive = 0;
+						if (infected[i] == 1) // from mechanics.h
+							infected[10] = 1; // status (if true, player is infected)
 						break;
 					}
 				}
@@ -210,6 +217,8 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 					if (grid[customer[i].cusRow][customer[i].cusCol + x].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
+						if (infected[i] == 1) // from mechanics.h
+							infected[10] = 1; // status (if true, player is infected)
 						break;
 					}
 				}
