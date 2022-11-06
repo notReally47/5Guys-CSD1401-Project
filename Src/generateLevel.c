@@ -42,6 +42,12 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 		printf("File Opening Failed!\n");
 		exit(EXIT_FAILURE);
 	}
+
+	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {			// TEMPORARY
+		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {		// TO BE INTEGRATED
+			grid[row][col].mecha = 0;							// INTO CSV
+		}
+	}
 	do {
 
 		/* Goes to Next Row of the Grid once Column reaches the end */
@@ -53,7 +59,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 		/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties */
 		read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", 
 			&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].boarder, &grid[row][col].shelf, &grid[row][col].customer,
-			&customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range, &customer_active, &customer_idle, &customer_random);
+			 &customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range, &customer_active, &customer_idle, &customer_random);
 		
 		/* If Customer Exists */
 		if (customer_number != 0 && grid[row][col].customer) {
