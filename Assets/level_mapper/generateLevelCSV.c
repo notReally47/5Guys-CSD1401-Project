@@ -11,6 +11,7 @@ typedef struct Cell {
 	int box;
 	int boarder;
     int shelf;
+    int mecha;
 
     // For Customer Struct in the Project
     int is_customer;
@@ -34,6 +35,7 @@ void empty_grid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
                 grid[row][col].box = 0;
                 grid[row][col].boarder = 1;
                 grid[row][col].shelf = 0;
+                grid[row][col].mecha = 0;
                 grid[row][col].customer_posX = 0;
                 grid[row][col].customer_posY = 0;
                 grid[row][col].customer_direction = 0;
@@ -48,6 +50,7 @@ void empty_grid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
                 grid[row][col].box = 0;
                 grid[row][col].boarder = 0;
                 grid[row][col].shelf = 0;
+                grid[row][col].mecha = 0;
                 grid[row][col].customer_posX = 0;
                 grid[row][col].customer_posY = 0;
                 grid[row][col].customer_direction = 0;
