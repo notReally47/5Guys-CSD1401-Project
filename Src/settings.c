@@ -25,7 +25,7 @@ Config readFile() {
 
 	FILE* file;
 	/*READ ONLY*/
-	file = fopen("config.ini", "r");
+	file = fopen("config.dat", "r");
 
 	if (file == NULL) {
 		int err = errno;

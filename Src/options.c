@@ -35,17 +35,25 @@ Config newConfig;
 
 void Options_Init() {
 	/*Initialize config*/
-	//config = readFile();
-	imgSize = CP_System_GetWindowHeight() / 20;
 	newConfig = config;
-	CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight);
+	displayVol = newConfig.settings.audio;
+
+	/*Initialize global variables*/
+	imgSize = CP_System_GetWindowHeight() / 20;
 	window = CP_Vector_Set(CP_System_GetWindowWidth(), CP_System_GetWindowHeight());
 	textSize = (float)window.y * 0.05f;
 	gameplay = CP_Image_Load("./Assets/Gameplay.png");
-
-	//gameMusic = CP_Sound_Load("./Assets/Sound/music.mp3");
 	gameSFX = CP_Sound_Load("./Assets/Sound/sfx.wav");
 
+	/*GIF*/
+	imageIndex = 0;
+	timeElapsed = 0.0f;
+
+	/*Dropdown list*/
+	ddlClicked = NO;
+	configChanged = NO;
+
+	/*Settings*/
 	/*gameFont = CP_Font_Load("./Assets/Fonts/VT323-Regular.ttf");
 	CP_Font_Set(gameFont);*/
 	CP_Settings_TextSize(textSize);
@@ -111,24 +119,12 @@ void Options_Init() {
 	fullscreen.button.position = CP_Vector_Set(fullscreenWindowed.button.position.x, fullscreenWindowed.button.position.y + fullscreen.button.btnHeight);
 
 	resolution[0] = halfscreenWindowed, resolution[1] = fullscreenWindowed, resolution[2] = fullscreen;
-	/*-----------------------------------*/
-
-	// Gif
-	imageIndex = 0;
-	timeElapsed = 0.0f;
-
-	// Dropdown-list
-	ddlClicked = NO;
-	configChanged = NO;
 
 	/*Set selected resolution*/
 	for (int i = 0; i < 3; i++) {
 		resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 	}
-
-	displayVol = newConfig.settings.audio;
-
-	//CP_Sound_PlayAdvanced(gameMusic, config.settings.audio / 100.f, 1, YES, CP_SOUND_GROUP_MUSIC);
+	/*-----------------------------------*/
 }
 
 void Options_Update() {
@@ -159,6 +155,7 @@ void Options_Update() {
 		}
 	}
 
+	/*Select resolution*/
 	if (ddlClicked) {
 		if(CP_Input_MouseClicked())
 		{
@@ -173,8 +170,8 @@ void Options_Update() {
 		}
 	}
 
+	/*Button clicks*/
 	if (CP_Input_MouseClicked()) {
-
 		/*Retract dropdown list*/
 		if (!IsAreaClicked(currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y)) {
 			ddlClicked = NO;
@@ -189,7 +186,6 @@ void Options_Update() {
 		if (IsAreaClicked(currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y)) {
 			ddlClicked = YES;
 		}
-
 	}
 
 	/*Apply and Discard Changes*/
@@ -204,13 +200,17 @@ void Options_Update() {
 					newConfig.settings.windowed = resSelected->windowed;
 					newConfig.settings.audio = displayVol;
 					newConfig.settings.windowed ? CP_System_SetWindowSize(newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight) : CP_System_Fullscreen();
-					//writeConfig(newConfig);
 
-					//CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, displayVol / 100.f);
+					/*Overwrite settings*/
+					config = newConfig;
+					writeConfig(newConfig);
+
+					/*Set volume*/
+					CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, displayVol / 100.f);
 					CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, displayVol / 100.f);
 
 					configChanged = NO;
-					//CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit); // Reload game state to rescale
+					CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit); // Reload game state to rescale
 				}
 				/*Discard*/
 				else if (IsAreaClicked(changes[DISCARD].position.x, changes[DISCARD].position.y, changes[DISCARD].btnWidth, changes[DISCARD].btnHeight, mouse.x, mouse.y)) {
@@ -241,6 +241,7 @@ void Options_Update() {
 		timeElapsed = 0.0f;
 	}
 	gifDimension = window.y * .6f;
+
 
 	/*RENDER*/
 
@@ -315,9 +316,5 @@ void Options_Update() {
 
 void Options_Exit() {
 	CP_Image_Free(&gameplay);
-	//CP_Sound_Free(&gameMusic);
 	CP_Sound_Free(&gameSFX);
-
-	/*Update config to newConfig*/
-	config = newConfig;
 }
