@@ -92,3 +92,8 @@ enum Changes {
 enum MaxLength {
 	MAX_LENGTH = 20
 };
+
+enum Card {
+	MAX_CARDS = 7,
+	UM = 6
+};
