@@ -3,6 +3,7 @@
 #include "defines.h"
 #include "utils.h"
 #include "movement.h"
+#include "mechanics.h"
 #include <stdio.h>
 
 int duration = 60;
@@ -60,50 +61,67 @@ int getDirection(void) {
 * int nextPosX, nextPosY: The following cell after the next cell.
 * int prevPosX, prevPosY: The previous cell that the player was previously at.
 */
-void gameLogic(int posX, int posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+void gameLogic(int *posX, int *posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	/*Push box (No boarder or another box blocking the box being pushed)*/
-	if (grid[posX][posY].box && !grid[nextPosX][nextPosY].box && !grid[posX][posY].boarder && !grid[nextPosX][nextPosY].boarder && !grid[posX][posY].customer && !grid[nextPosX][nextPosY].customer && !grid[posX][posY].shelf && !grid[nextPosX][nextPosY].shelf) {
+	printf("x: %d | y: %d \n", *posY, *posX);
+	if (grid[*posX][*posY].box && !grid[nextPosX][nextPosY].box && 
+		!grid[*posX][*posY].boarder && !grid[nextPosX][nextPosY].boarder && 
+		!grid[*posX][*posY].customer && !grid[nextPosX][nextPosY].customer && 
+		!grid[*posX][*posY].shelf && !grid[nextPosX][nextPosY].shelf &&
+		!grid[*posX][*posY].mecha && !grid[nextPosX][nextPosY].mecha) {
 		grid[prevPosX][prevPosY].player = 0;
-		grid[posX][posY].player = 1;
-		grid[posX][posY].box = 0;
+		grid[*posX][*posY].player = 1;
+		grid[*posX][*posY].box = 0;
 		grid[nextPosX][nextPosY].box = 1;
 		move++;
 		printf("Current Moves: %d\n", move-1);
 	}
-
+	
 	/*Player movement without obstruction*/
-	else if (!grid[posX][posY].box && !grid[posX][posY].boarder && !grid[posX][posY].customer && !grid[posX][posY].shelf) {
+	else if (!grid[*posX][*posY].box && !grid[*posX][*posY].boarder && !grid[*posX][*posY].customer && !grid[*posX][*posY].shelf && !grid[*posX][*posY].mecha) {
 		grid[prevPosX][prevPosY].player = 0;
-		grid[posX][posY].player = 1;
+		if (tele[0] == 1) {
+			if (*posX == tele[1] && *posY == tele[2]) {
+				*posX = tele[3]+(*posX-prevPosX);
+				*posY = tele[4]+(*posY-prevPosY);
+				tele[5] = 1;
+			}
+			else if (*posX == tele[3] && *posY == tele[4]) {
+				*posX = tele[1]+(*posX-prevPosX);
+				*posY = tele[2]+(*posY-prevPosY);
+				tele[5] = 1;
+			}
+		}
+		grid[*posX][*posY].player = 1;
 		move++;
 		printf("Current Moves: %d\n", move-1);
 	}
 }
 
-void getCell(int posX, int posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+void getCell(int *posX, int *posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	switch (direction) {
 	/* Move up */
 	case 1:
-		--posX;
-		gameLogic(posX, posY, posX - 1, posY, posX + 1, posY, grid);
+		--*posX;
+		gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
 		break;
 
 	/* Move left */
 	case 2:
-		--posY;
-		gameLogic(posX, posY, posX, posY - 1, posX, posY + 1, grid);
+		--*posY;
+		gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
 		break;
 
 	/* Move down */
 	case 3:
-		++posX;
-		gameLogic(posX, posY, posX + 1, posY, posX - 1, posY, grid);
+		++*posX;
+		gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
 		break;
 
 	/* Move right */
 	case 4:
-		++posY;
-		gameLogic(posX, posY, posX, posY + 1, posX, posY - 1, grid);
+		++*posY;
+		gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
 		break;
 
 	/* Default case (if any) */
