@@ -52,6 +52,7 @@ typedef struct Cell {
 	int				boarder;
 	int				customer;
 	int				shelf;
+	int				mecha;
 } Cell;
 
 typedef struct Move {
