@@ -174,6 +174,10 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face up */
 			case SOKOBAN_UP:
 				for (int x = 1; x <= customer[i].range; x++) {
+					if (grid[customer[i].cusRow - x][customer[i].cusCol].box || grid[customer[i].cusRow - x][customer[i].cusCol].shelf) {
+						break;
+					}
+
 					if (grid[customer[i].cusRow - x][customer[i].cusCol].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
@@ -188,6 +192,10 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face left */
 			case SOKOBAN_LEFT:
 				for (int x = 1; x <= customer[i].range; x++) {
+					if (grid[customer[i].cusRow][customer[i].cusCol - x].box || grid[customer[i].cusRow][customer[i].cusCol -x].shelf) {
+						break;
+					}
+
 					if (grid[customer[i].cusRow][customer[i].cusCol - x].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
@@ -201,6 +209,10 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face down */
 			case SOKOBAN_DOWN:
 				for (int x = 1; x <= customer[i].range; x++) {
+					if (grid[customer[i].cusRow + x][customer[i].cusCol].box || grid[customer[i].cusRow + x][customer[i].cusCol].shelf) {
+						break;
+					}
+
 					if (grid[customer[i].cusRow + x][customer[i].cusCol].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
@@ -214,6 +226,10 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face right */
 			case SOKOBAN_RIGHT:
 				for (int x = 1; x <= customer[i].range; x++) {
+					if (grid[customer[i].cusRow][customer[i].cusCol + x].box || grid[customer[i].cusRow][customer[i].cusCol + x].shelf) {
+						break;
+					}
+
 					if (grid[customer[i].cusRow][customer[i].cusCol + x].player) {
 						isLocked = 1;
 						customer[i].isActive = 0;
