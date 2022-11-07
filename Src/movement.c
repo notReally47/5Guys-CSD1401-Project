@@ -35,7 +35,7 @@ void undoMove(Move moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[
 }
 
 /*Resets grid to the initial state based on the CSV, resets move to 0*/
-void resetMap(Move moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
+void resetMap(Move moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	for (int map = 0; map < global_move; map++) {
 		for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 			for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -46,6 +46,6 @@ void resetMap(Move moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[
 	}
 
 	/*Call setMap() to reset the map to original state*/
-	setMap(grid, customer);
+	setMap(grid, customer, path);
 	global_move = 1;
 }

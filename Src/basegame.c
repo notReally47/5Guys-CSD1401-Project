@@ -44,7 +44,7 @@ void base_Init(void) {
 	totalElapsedTime = 0;
 	game_pause = 0;
 	load_spritesheet(cellSize);
-	setMap(grid, customer);				// Initialise Map
+	setMap(grid, customer, path);				// Initialise Map
 	totalObjs = getObjective(grid);		// Counts number of key objective to meet
 	global_move = 1;							// Initialise move with 1 for rendering purposes*
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -154,7 +154,7 @@ void base_Update(void) {
 			}
 
 			else if (CP_Input_KeyTriggered(KEY_R)) {
-				resetMap(moves, grid, customer); //Resets grid to the initial values based on the CSV file
+				resetMap(moves, grid, customer, path); //Resets grid to the initial values based on the CSV file
 				face = 0;
 			}
 		}
@@ -174,6 +174,7 @@ void base_Update(void) {
 	else {
 		printf("PAUSED! \n");
 		//TODO Pause Overlay Over the Map
+		//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
 	}
 
 	/*Rendering*/
