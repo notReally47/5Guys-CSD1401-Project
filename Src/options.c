@@ -62,17 +62,17 @@ void Options_Init() {
 	CP_Settings_Stroke(BLACK);
 
 	/*Create Buttons*/
-	setButton(&back, "./Assets/assetsTmp/Back.png",	imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
-	setButton(&volumeDown, "./Assets/assetsTmp/VolumeDown.png", window.x - 3 * PADDING - 2.5 * textSize, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
-	setButton(&volumeUp, "./Assets/assetsTmp/VolumeUp.png",	window.x - PADDING - textSize / 2, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
-	setButton(&apply, "./Assets/assetsTmp/Apply.png", 4 * window.x / 5 - 2 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
-	setButton(&discard, "./Assets/assetsTmp/Discard.png", 4 * window.x / 5 + 2 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
+	setButton(&back, "./Assets/UI/Back.png",	imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
+	setButton(&volumeDown, "./Assets/UI/VolumeDown.png", window.x - 3 * PADDING - 2.5 * textSize, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
+	setButton(&volumeUp, "./Assets/UI/VolumeUp.png",	window.x - PADDING - textSize / 2, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
+	setButton(&apply, "./Assets/UI/Apply.png", 4 * window.x / 5 - 2 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
+	setButton(&discard, "./Assets/UI/Discard.png", 4 * window.x / 5 + 2 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
 	changes[0] = apply, changes[1] = discard;
 
-	setButton(&up, "./Assets/assetsTmp/Up.png", window.x / 4, window.y / 2, 4 * imgSize, 4 * imgSize, NO);
-	setButton(&left, "./Assets/assetsTmp/Left.png", window.x / 4 - 4 * imgSize, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
-	setButton(&down, "./Assets/assetsTmp/Down.png", window.x / 4, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
-	setButton(&right, "./Assets/assetsTmp/Right.png", window.x / 4 + 4 * imgSize, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
+	setButton(&up, "./Assets/UI/Up.png", window.x / 4, window.y / 2, 4 * imgSize, 4 * imgSize, NO);
+	setButton(&left, "./Assets/UI/Left.png", window.x / 4 - 4 * imgSize, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
+	setButton(&down, "./Assets/UI/Down.png", window.x / 4, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
+	setButton(&right, "./Assets/UI/Right.png", window.x / 4 + 4 * imgSize, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
 	controls[0] = up, controls[1] = left, controls[2] = down, controls[3] = right;
 
 	/*Create Dropdown List*/
