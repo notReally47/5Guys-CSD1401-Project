@@ -22,8 +22,8 @@ void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, i
 				grid[posX][posY].customer = 1;
 				grid[prevPosX][prevPosY].customer = 0;
 
-				customer[cusNum].cusCol = posX;
-				customer[cusNum].cusRow = posY;
+				customer[cusNum].cusRow = posX;
+				customer[cusNum].cusCol = posY;
 				customer[cusNum].direction = direction;
 			}
 		}
@@ -32,8 +32,8 @@ void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, i
 			grid[posX][posY].customer = 1;
 			grid[prevPosX][prevPosY].customer = 0;
 
-			customer[cusNum].cusCol = posX;
-			customer[cusNum].cusRow = posY;
+			customer[cusNum].cusRow = posX;
+			customer[cusNum].cusCol = posY;
 			customer[cusNum].direction = direction;
 		}
 	}
@@ -48,8 +48,8 @@ void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, i
 void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
 	for (int i = 0; i < CUSTOMER; i++) {
 		if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
-			int posX = customer[i].cusCol;
-			int posY = customer[i].cusRow;
+			int posX = customer[i].cusRow;
+			int posY = customer[i].cusCol;
 			int curr = path[posX][posY];
 
 			int count = CP_System_GetFrameCount();
@@ -100,7 +100,7 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 void randomCustomerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
 	for (int i = 0; i < CUSTOMER; i++) {
 		if (customer[i].isActive && customer[i].isRandom) {
-			int posX = customer[i].cusCol, posY = customer[i].cusRow;
+			int posX = customer[i].cusRow, posY = customer[i].cusCol;
 			int count = CP_System_GetFrameCount();
 			int state = CP_Random_RangeInt(0, 7);;
 			int curr = SOKOBAN_DOWN;
