@@ -69,7 +69,6 @@ typedef struct rect {
 } rect;
 
 typedef struct Button {
-	/*char*			name;*/
 	CP_Image		img;
 	CP_Vector		position;
 	float			btnWidth;
@@ -78,11 +77,6 @@ typedef struct Button {
 } Button;
 
 typedef struct DropDownList {
-	char			name[25];
-	/*CP_Vector		position;
-	float			btnWidth;
-	float			btnHeight;
-	int				tint;*/
 	unsigned int	actWidth;
 	unsigned int	actHeight;
 	int				windowed;

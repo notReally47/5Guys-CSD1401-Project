@@ -3,18 +3,31 @@
 #include "structs.h"
 #include "defines.h"
 
+void setButton(Button* btn, const char* img, float x, float y, float w, float h, int tint) {
+	btn->img = CP_Image_Load(img);
+	btn->position = CP_Vector_Set(x, y);
+	btn->btnWidth = w;
+	btn->btnHeight = h;
+	btn->tint = tint;
+}
+
+void setDropDownList(DropDownList* ddl, unsigned int w, unsigned int h, int windowed, float x, float y, float btnWidth, float btnHeight) {
+	ddl->actWidth = w;
+	ddl->actHeight = h;
+	ddl->windowed = windowed;
+	ddl->selected = NO;
+	ddl->button.img = NULL;
+	ddl->button.position = CP_Vector_Set(x, y);
+	ddl->button.btnWidth = btnWidth;
+	ddl->button.btnHeight = btnHeight;
+	ddl->button.tint = YES;
+}
+
 void drawTintedButton(CP_Color color, float x, float y, float w, float h, float mouse_x, float mouse_y, int isDDL) {
 	float strokeWeight = isDDL ? 0.0f : 3.0f;
 	IsAreaClicked(x, y, w, h, mouse_x, mouse_y) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
 	CP_Settings_Fill(color);
 	CP_Settings_StrokeWeight(strokeWeight);
-	CP_Graphics_DrawRect(x, y, w, h);
-}
-
-void drawNonTintedButton(CP_Color color, float x, float y, float w, float h) {
-	CP_Settings_NoTint();
-	CP_Settings_Fill(color);
-	CP_Settings_StrokeWeight(3.0f);
 	CP_Graphics_DrawRect(x, y, w, h);
 }
 
@@ -46,9 +59,10 @@ void drawGIF(CP_Image img, float x, float y, float w, float h, static const floa
 		255);
 }
 
-void drawBtn(Button btn) {
-	//float strokeWeight = isDDL ? 0.0f : 3.0f;
+void drawButton(Button btn) {
 	CP_Settings_ImageMode(CP_POSITION_CENTER);
-	IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
+	if (btn.tint) {
+		IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
+	}
 	CP_Image_Draw(btn.img, btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, 255);
 }
