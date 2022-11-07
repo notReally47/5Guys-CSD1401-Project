@@ -27,7 +27,8 @@ CP_Vector window;
 CP_Image gameplay;
 CP_Sound gameSFX;
 CP_Font gameFont;
-int ddlClicked, volChanged, resChanged, configChanged, displayVol;
+Flag ddlClicked, volChanged, resChanged, configChanged;
+int displayVol;
 
 extern Config config;
 Config newConfig;
