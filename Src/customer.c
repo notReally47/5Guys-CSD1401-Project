@@ -14,11 +14,12 @@
 * Cell grid: Grid where the customer exists.
 * Customer customer: Customer stats.
 */
-void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
+void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
 	if (!grid[posX][posY].shelf && !grid[posX][posY].boarder && !grid[posX][posY].box && !grid[posX][posY].customer && !grid[posX][posY].key && !grid[posX][posY].player &&!grid[posX][posY].mecha) {
 		if (customer[cusNum].isRandom) {
-			if ((posY <= customer[cusNum].ogCusRow + 2 && posY >= customer[cusNum].ogCusRow - 2) &&
-				(posX <= customer[cusNum].ogCusCol + 2 && posX >= customer[cusNum].ogCusCol - 2)) {
+			/*Limit customer random movement within 5x5 grid*/
+			if ((customer[cusNum].ogCusCol - 2 <= posY && posY <= customer[cusNum].ogCusCol + 2) &&
+				(customer[cusNum].ogCusRow - 2 <= posX && posX <= customer[cusNum].ogCusRow + 2)) {
 				grid[posX][posY].customer = 1;
 				grid[prevPosX][prevPosY].customer = 0;
 
@@ -45,8 +46,8 @@ void customerLogic(int cusNum, int posX, int posY, int prevPosX, int prevPosY, i
 * int path: Grid where the waypoints is located at.
 * Customer customer: Customer stats.
 */
-void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
-	for (int i = 0; i < CUSTOMER; i++) {
+void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
+	for (int i = 0; i < CUSTOMER_MAX; i++) {
 		if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
 			int posX = customer[i].cusRow;
 			int posY = customer[i].cusCol;
@@ -97,49 +98,43 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 * Cell grid: Grid that the customer exists in.
 * Customer customer: Customer stats.
 */
-void randomCustomerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
-	for (int i = 0; i < CUSTOMER; i++) {
+void randomCustomerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
+	for (int i = 0; i < CUSTOMER_MAX; i++) {
 		if (customer[i].isActive && customer[i].isRandom) {
 			int posX = customer[i].cusRow, posY = customer[i].cusCol;
-			int count = CP_System_GetFrameCount();
-			int state = CP_Random_RangeInt(0, 7);;
-			int curr = SOKOBAN_DOWN;
-
-			if (!(count % (CUSTOMER_SPEED + 5))) { /* delay */
+			int state = CP_Random_RangeInt(SOKOBAN_UP, SOKOBAN_FACE_RIGHT);
+			if (!(CP_System_GetFrameCount() % CUSTOMER_RANDOM_SPEED)) {
 				switch (state) {
-				case 0: /* rotate up */
-					curr = SOKOBAN_UP;
-					break;
-				case 1: /* rotate left */
-					curr = SOKOBAN_LEFT;
-					break;
-				case 2: /* rotate down */
-					curr = SOKOBAN_DOWN;
-					break;
-				case 3: /* rotate right */
-					curr = SOKOBAN_RIGHT;
-					break;
-				case 4: /* move up */
-					curr = SOKOBAN_UP;
+				case SOKOBAN_UP:
 					posX--;
-					customerLogic(i, posX, posY, posX + 1, posY, curr, grid, customer);
+					customerLogic(i, posX, posY, posX + 1, posY, SOKOBAN_UP, grid, customer);
 					break;
-				case 5: /* move left */
-					curr = SOKOBAN_LEFT;
+				case SOKOBAN_LEFT:
 					posY--;
-					customerLogic(i, posX, posY, posX, posY + 1, curr, grid, customer);
+					customerLogic(i, posX, posY, posX, posY + 1, SOKOBAN_LEFT, grid, customer);
 					break;
-				case 6: /* move down */
-					curr = SOKOBAN_DOWN;
+				case SOKOBAN_DOWN:
 					posX++;
-					customerLogic(i, posX, posY, posX - 1, posY, curr, grid, customer);
+					customerLogic(i, posX, posY, posX - 1, posY, SOKOBAN_DOWN, grid, customer);
 					break;
-				case 7: /* move right */
-					curr = SOKOBAN_RIGHT;
+				case SOKOBAN_RIGHT:
 					posY++;
-					customerLogic(i, posX, posY, posX, posY - 1, curr, grid, customer);
+					customerLogic(i, posX, posY, posX, posY - 1, SOKOBAN_RIGHT, grid, customer);
+					break;
+				case SOKOBAN_FACE_UP:
+					customer[i].direction = SOKOBAN_UP;
+					break;
+				case SOKOBAN_FACE_LEFT:
+					customer[i].direction = SOKOBAN_LEFT;
+					break;
+				case SOKOBAN_FACE_DOWN:
+					customer[i].direction = SOKOBAN_DOWN;
+					break;
+				case SOKOBAN_FACE_RIGHT:
+					customer[i].direction = SOKOBAN_RIGHT;
 					break;
 				default:
+					customer[i].direction = SOKOBAN_DOWN;
 					break;
 				}
 			}
@@ -152,7 +147,7 @@ void randomCustomerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cus
 * int cusNum: Array Number for customer.
 * Customer customer: customer stats.
 */
-void customerIdle(int cusNum, Customer customer[CUSTOMER]) {
+void customerIdle(int cusNum, Customer customer[CUSTOMER_MAX]) {
 	int count = CP_System_GetFrameCount();
 
 	// Rotates the customer anti-clockwise
@@ -166,9 +161,9 @@ void customerIdle(int cusNum, Customer customer[CUSTOMER]) {
 * Cell grid: Grid that the customer exists in.
 * Customer customer: customer stats.
 */
-int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
+int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
 	int isLocked = 0;
-	for (int i = 0; i < CUSTOMER; i++) {
+	for (int i = 0; i < CUSTOMER_MAX; i++) {
 		if (customer[i].isActive) {
 			switch (customer[i].direction) {
 				/* Face up */

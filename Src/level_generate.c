@@ -9,7 +9,7 @@
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
 
 /* Parse CSV file to initialise grid array at the start of every stage/level */
-void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	
 	printf("In setMap! \n");
 
@@ -20,7 +20,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0;
 
 	/* For-Loop to clear all customers first (Prevent carry-over from previous levels) */
-	for (int i = 0; i < CUSTOMER; i++) {
+	for (int i = 0; i < CUSTOMER_MAX; i++) {
 		customer[i].cusCol = customer_posX;
 		customer[i].cusRow = customer_posY;
 		customer[i].ogCusCol = customer_posX;

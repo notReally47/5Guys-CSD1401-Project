@@ -11,14 +11,15 @@
 #include "level_transition.h"
 #include "mechanics.h"
 #include "mainmenu.h"
+#include "options_draw.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 extern Config config;
 
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
-Move moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
-Customer customer[CUSTOMER];
+Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+Customer customer[CUSTOMER_MAX];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
@@ -28,7 +29,7 @@ int totalObjs,isLocked,activatedCusX,activatedCusY,face,game_pause,clock;
 
 float totalElapsedTime;
 
-CP_Image logo;
+Button back, pause;
 
 void base_Init(void) {
 
@@ -38,7 +39,6 @@ void base_Init(void) {
 	CP_Settings_TextSize((float)config.settings.resolutionHeight*0.025f);
 	
 	/* Initializations */
-	logo = CP_Image_Load("Assets/PAUSE.png");
 	cellSize = (float)(CP_System_GetWindowHeight()/SOKOBAN_GRID_ROWS);
 	cellAlign = (float)((CP_System_GetWindowWidth()-(int)cellSize*SOKOBAN_GRID_COLS)/2);
 	face = 0;
@@ -55,6 +55,8 @@ void base_Init(void) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
 		}
 	}
+	setButton(&back, "./Assets/UI/Back.png", cellSize * 1.75f + cellAlign, cellSize * 1.75f, 2 * cellSize, 2 * cellSize, YES);
+	setButton(&pause, "./Assets/PAUSE.png", (float)(CP_System_GetWindowWidth() / 2.f), (float)(CP_System_GetWindowHeight() / 2.f), 248.f, 109.f, NO);
 	//card_init();
 	//wetsign_UM();
 }
@@ -65,6 +67,12 @@ void base_Update(void) {
 	
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		game_pause = !game_pause; 
+	}
+	/*Return to main menu*/
+	if (CP_Input_MouseClicked()) {
+		if (IsAreaClicked(back.position.x, back.position.y, back.btnWidth, back.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
+		}
 	}
 
 	/*Read grid*/
@@ -89,6 +97,8 @@ void base_Update(void) {
 	}
 
 	if (!game_pause) {
+		/*Clear Tint*/
+		CP_Settings_NoTint();
 		totalElapsedTime += currentElapsedTime;
 		clock = duration - (int)totalElapsedTime;
 		printf("UNPAUSED! \n");
@@ -166,7 +176,7 @@ void base_Update(void) {
 
 		customerMovement(grid, path, customer);
 
-		for (int i = 0; i < CUSTOMER; i++) {
+		for (int i = 0; i < CUSTOMER_MAX; i++) {
 			if (customer[i].isIdle) {
 				customerIdle(i, customer);
 			}
@@ -181,6 +191,9 @@ void base_Update(void) {
 	//	//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
 	//	CP_Image_Draw(logo, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(logo), CP_Image_GetHeight(logo), 255);
 	//}
+	else {
+		CP_Settings_Tint(DARKGRAY);
+	}
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
@@ -235,7 +248,7 @@ void base_Update(void) {
 			}
 
 			if (currCell.customer) {
-				for (int i = 0; i < CUSTOMER; i++) {
+				for (int i = 0; i < CUSTOMER_MAX; i++) {
 					if (row == customer[i].cusRow && col == customer[i].cusCol) {
 						draw_customer(cellX,cellY,cellSize,customer[i].direction);
 					}
@@ -248,13 +261,15 @@ void base_Update(void) {
 		printf("PAUSED! \n");
 		//TODO Pause Overlay Over the Map
 		//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
-		CP_Image_Draw(logo, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(logo), CP_Image_GetHeight(logo), 255);
+		//CP_Image_Draw(pauseImg, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(pauseImg), CP_Image_GetHeight(pauseImg), 255);
+		drawButton(pause);
+		drawButton(back);
 	}
-
-
-
 }
 
 void base_Exit(void) {
 	free_sprite();
+	CP_Image_Free(&pause.img);
+	CP_Image_Free(&back.img);
+	CP_Settings_StrokeWeight(3.0f);
 }

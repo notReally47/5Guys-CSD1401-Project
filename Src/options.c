@@ -10,7 +10,7 @@
 #include <stdlib.h> //_countof()
 #include <string.h> // strlen()
 
-Button back, volumeDown, volumeUp, changes[2], apply, discard, up, down, left, right, controls[4];
+Button back, volumeDown, volumeUp, changes[2], apply, discard, up, down, left, right, pause, undo, reset, escape, controls[8];
 DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, * resSelected;
 float textSize, volume, numCols, numRows, imgSize;
 
@@ -56,8 +56,8 @@ void Options_Init() {
 	configChanged = NO;
 
 	/*Settings*/
-	/*gameFont = CP_Font_Load("./Assets/Fonts/VT323-Regular.ttf");
-	CP_Font_Set(gameFont);*/
+	gameFont = CP_Font_Load("./Assets/Fonts/VT323-Regular.ttf");
+	CP_Font_Set(gameFont);
 	CP_Settings_TextSize(textSize);
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 	CP_Settings_Stroke(BLACK);
@@ -70,17 +70,22 @@ void Options_Init() {
 	setButton(&discard, "./Assets/UI/Discard.png", 4 * window.x / 5 + 2 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
 	changes[0] = apply, changes[1] = discard;
 
-	setButton(&up, "./Assets/UI/Up.png", window.x / 4, window.y / 2, 4 * imgSize, 4 * imgSize, NO);
-	setButton(&left, "./Assets/UI/Left.png", window.x / 4 - 4 * imgSize, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
-	setButton(&down, "./Assets/UI/Down.png", window.x / 4, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
-	setButton(&right, "./Assets/UI/Right.png", window.x / 4 + 4 * imgSize, window.y / 2 + 4 * imgSize, 4 * imgSize, 4 * imgSize, NO);
-	controls[0] = up, controls[1] = left, controls[2] = down, controls[3] = right;
+	setButton(&up, "./Assets/UI/W.png", PADDING + 0.75 * imgSize, PADDING + imgSize + 5 * textSize, 1.5 * imgSize, 1.5 *imgSize, NO);
+	setButton(&left, "./Assets/UI/A.png", up.position.x, up.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&down, "./Assets/UI/S.png", left.position.x, left.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&right, "./Assets/UI/D.png", down.position.x, down.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&pause, "./Assets/UI/P.png", right.position.x, right.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&escape, "./Assets/UI/ESC.png", pause.position.x + 2 * imgSize, pause.position.y, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&undo, "./Assets/UI/U.png", pause.position.x, pause.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+
+	controls[0] = up, controls[1] = left, controls[2] = down, controls[3] = right, controls[4] = pause, controls[5] = escape, controls[6] = undo, controls[7] = reset;
 
 	/*Create Dropdown List*/
 	setDropDownList(&currentRes, newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight, newConfig.settings.windowed, window.x - (MAX_LENGTH * textSize / 2 + PADDING) / 2 - PADDING, 2 * PADDING + back.btnHeight + textSize / 2, MAX_LENGTH * textSize / 2 + PADDING, textSize);
 	setDropDownList(&halfscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth() / 2), (unsigned int)(CP_System_GetDisplayHeight() / 2), YES, currentRes.button.position.x, currentRes.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
 	setDropDownList(&fullscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight()), YES, halfscreenWindowed.button.position.x, halfscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
-	setDropDownList(&fullscreen, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight()), YES, fullscreenWindowed.button.position.x, fullscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
+	setDropDownList(&fullscreen, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight()), NO, fullscreenWindowed.button.position.x, fullscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
 	resolution[0] = halfscreenWindowed, resolution[1] = fullscreenWindowed, resolution[2] = fullscreen;
 
 	/*Set selected resolution*/
@@ -111,12 +116,16 @@ void Options_Update() {
 				}
 				else resolution[i].selected = NO;
 			}
+			/*Retract dropdown list*/
+			if (!IsAreaClicked(currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y)) {
+				ddlClicked = NO;
+			}
 		}
 	}
 
 	else {
 		/*Adjusting Volume*/
-		if (CP_Input_MouseClicked() || CP_Input_MouseDown(MOUSE_BUTTON_LEFT)) {
+		if (CP_Input_MouseDown(MOUSE_BUTTON_LEFT)) {
 			if (!(CP_System_GetFrameCount() % 5))
 			{
 				/*Vol down*/
@@ -140,10 +149,6 @@ void Options_Update() {
 
 		/*Button clicks*/
 		if (CP_Input_MouseClicked()) {
-			/*Retract dropdown list*/
-			if (!IsAreaClicked(currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y)) {
-				ddlClicked = NO;
-			}
 
 			/*Return to main menu when click on back button*/
 			if (IsAreaClicked(back.position.x, back.position.y, back.btnWidth, back.btnHeight, mouse.x, mouse.y)) {
@@ -237,7 +242,17 @@ void Options_Update() {
 	/*Draw headers: Resolution, Volume, Tutorial*/
 	drawAlignedText(BLACK, LEFT, "Resolution", PADDING, back.btnHeight + 2 * PADDING);
 	drawAlignedText(BLACK, LEFT, "Volume", PADDING, back.btnHeight + 3 * PADDING + textSize);
-	drawAlignedText(BLACK, LEFT, "Tutorial", PADDING, back.btnHeight + 4 * PADDING + 2 * textSize);
+	drawAlignedText(BLACK, LEFT, "Controls", PADDING, back.btnHeight + 4 * PADDING + 2 * textSize);
+
+	const char* controlDescription[sizeof(controls) / sizeof(Button)];
+	controlDescription[0] = "- Move player up";
+	controlDescription[1] = "- Move player left";
+	controlDescription[2] = "- Move player down";
+	controlDescription[3] = "- Move player right";
+	controlDescription[4] = "";
+	controlDescription[5] = "- Pause game";
+	controlDescription[6] = "- Undo previous move";
+	controlDescription[7] = "- Reset map to initial positions";
 
 	char displayRes[25] = { 0 };
 	resSelected->windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", resSelected->actWidth, resSelected->actHeight) :
@@ -255,8 +270,9 @@ void Options_Update() {
 		window.x - PADDING - gifDimension, back.btnHeight + 4 * PADDING + 2 * textSize,
 		gifDimension, gifDimension,
 		DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
-	for (int i = 0; i < sizeof(controls) / sizeof(Button); i++) {
+	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
 		drawButton(controls[i]);
+		drawAlignedText(WHITE, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y - y);
 	}
 
 	/*Draw Resolution dropdown-list*/

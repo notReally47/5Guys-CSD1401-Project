@@ -7,12 +7,12 @@
 #include "mechanics.h"      // to call function
 
 extern Config config;
-extern Customer customer[CUSTOMER];
+extern Customer customer[CUSTOMER_MAX];
 extern Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 rect card,text;
 float size1,size2;
-int cards[MAX_CARDS],size,pos,pos2,infected[CUSTOMER+1],tele[UM];
+int cards[MAX_CARDS],size,pos,pos2,infected[CUSTOMER_MAX+1],tele[UM];
 
 char* negcards[] = {
     "Contagious","Some of the customers are infectious! Talking to them will spread its germs to you, causing you to periodically stand in place and let out a cough",
@@ -52,7 +52,7 @@ void card_init(void) {
         cards[i] = 0;
     for (int i=0;i<=size;i++) // set all but last value to the card number
         cards[i] = 2*i;
-    for (int i=0;i<=CUSTOMER;i++)
+    for (int i=0;i<=CUSTOMER_MAX;i++)
         infected[i] = 0;
     pos = CP_Random_RangeInt(0,size); 
     do {
@@ -145,9 +145,9 @@ void card_effect(int pos,int cards[]) {
         break;
     }
 }
-void customer_status(Customer customer[CUSTOMER]) {
+void customer_status(Customer customer[CUSTOMER_MAX]) {
     int total = 0;
-    for (int i = 0; i < CUSTOMER; i++) 
+    for (int i = 0; i < CUSTOMER_MAX; i++) 
         if (customer[i].isActive) {
             infected[i] = 1; // to be used in customer.c -> customerLock()
             total++;

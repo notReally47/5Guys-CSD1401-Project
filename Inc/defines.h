@@ -25,45 +25,41 @@ enum SOKOBAN {
 	SOKOBAN_LEFT,
 	SOKOBAN_DOWN,
 	SOKOBAN_RIGHT,
+	SOKOBAN_FACE_UP,
+	SOKOBAN_FACE_LEFT,
+	SOKOBAN_FACE_DOWN,
+	SOKOBAN_FACE_RIGHT,
 	SOKOBAN_GRID_COLS = 41,
 	SOKOBAN_GRID_ROWS = 31,
 	TUTORIAL_GRID_COLS = 5,
 	TUTORIAL_GRID_ROWS = 5,
 
-	MOVE = 2000,
+	MOVE_MAX = 2000,
 	TEXT_BUFFER = 255
 };
 
 enum CustomerStats {
-	CUSTOMER = 10,
+	CUSTOMER_MAX = 10,
 	CUSTOMER_SPEED = 10,
-	CUSTOMER_TURN = 20
+	CUSTOMER_TURN = 20,
+	CUSTOMER_RANDOM_SPEED = 50,
 };
 
-
-enum Padding {
-	PADDING = 10
+enum Options {
+	CENTER,
+	LEFT,
+	RIGHT,
+	CORNER,
+	APPLY = 0,
+	DISCARD = 1,
+	PADDING = 10,
+	MAX_LENGTH = 20
 };
 
 typedef enum Logic {
 	NO,
 	YES
 } Flag;
-
-enum Alignment {
-	CENTER,
-	LEFT,
-	RIGHT
-};
-
-enum Changes {
-	APPLY,
-	DISCARD
-};
-
-enum MaxLength {
-	MAX_LENGTH = 20
-};
 
 enum Card {
 	MAX_CARDS = 7,

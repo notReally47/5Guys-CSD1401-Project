@@ -1,10 +1,10 @@
 #pragma once
 
-extern int infected[CUSTOMER+1],tele[UM];
+extern int infected[CUSTOMER_MAX+1],tele[UM];
 
 void card_init(void);
 void card_selection(int stage, CP_BOOL CP_Input_MouseClicked);
-void customer_status(Customer customer[CUSTOMER]);
+void customer_status(Customer customer[CUSTOMER_MAX]);
 void card_deck(int* POS,int cards[], int* size);
 void card_effect(int pos,int cards[]);
 int player_status(int* isLocked);
