@@ -70,12 +70,10 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 		}
 		else {
 			/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties */
-			read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+			read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
 				&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].boarder, &grid[row][col].shelf, &grid[row][col].mecha,
 				&grid[row][col].customer, &customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range,
-				&customer_active, &customer_idle, &customer_random);
-
-			path[row][col] = 0;
+				&customer_active, &customer_idle, &customer_random, &path[row][col]);
 
 			/* If Customer Exists */
 			if (customer_number != 0 && grid[row][col].customer) {
@@ -98,7 +96,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 			}
 
 			// Increments 'col' when the correct number of values were scanned
-			if (read == 15) {
+			if (read == 16) {
 				col++;
 				line++;
 			}

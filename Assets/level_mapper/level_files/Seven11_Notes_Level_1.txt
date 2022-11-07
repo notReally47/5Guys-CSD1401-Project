@@ -86,10 +86,10 @@ Level Duration is 200
 [2][2] is Blank
 [2][3] is Blank
 [2][4] is Blank
-[2][5] is Blank
+[2][5] is a Waypoint
 [2][6] is Blank
 [2][7] is Blank
-[2][8] is Blank
+[2][8] is a Waypoint
 [2][9] is Blank
 [2][10] is Blank
 [2][11] is Blank
@@ -250,7 +250,7 @@ Level Duration is 200
 [6][2] is Blank
 [6][3] is Blank
 [6][4] is Blank
-[6][5] is Blank
+[6][5] is a Waypoint
 [6][6] is Blank
 [6][7] is Blank
 [6][8] is a Customer

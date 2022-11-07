@@ -28,6 +28,8 @@ int totalObjs,isLocked,activatedCusX,activatedCusY,face,game_pause,clock;
 
 float totalElapsedTime;
 
+CP_Image logo;
+
 void base_Init(void) {
 
 	/* Settings */
@@ -36,6 +38,7 @@ void base_Init(void) {
 	CP_Settings_TextSize((float)config.settings.resolutionHeight*0.025f);
 	
 	/* Initializations */
+	logo = CP_Image_Load("Assets/PAUSE.png");
 	cellSize = (float)(CP_System_GetWindowHeight()/SOKOBAN_GRID_ROWS);
 	cellAlign = (float)((CP_System_GetWindowWidth()-(int)cellSize*SOKOBAN_GRID_COLS)/2);
 	face = 0;
@@ -172,11 +175,12 @@ void base_Update(void) {
 			}
 		}
 	}
-	else {
-		printf("PAUSED! \n");
-		//TODO Pause Overlay Over the Map
-		//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
-	}
+	//else {
+	//	printf("PAUSED! \n");
+	//	//TODO Pause Overlay Over the Map
+	//	//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
+	//	CP_Image_Draw(logo, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(logo), CP_Image_GetHeight(logo), 255);
+	//}
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
@@ -239,6 +243,14 @@ void base_Update(void) {
 			}
 		}
 	}
+
+	if(game_pause) {
+		printf("PAUSED! \n");
+		//TODO Pause Overlay Over the Map
+		//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
+		CP_Image_Draw(logo, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(logo), CP_Image_GetHeight(logo), 255);
+	}
+
 
 
 }
