@@ -2,7 +2,7 @@
 #include "utils.h"			// Needed for Mouse Click Logic
 #include "defines.h"		// Needed for define Values
 #include "mainmenu.h"		// Needed to Return to Main Menu
-#include "levellogic.h"		// Needed to use Global Extern Variable 'level'
+#include "level_logic.h"	// Needed to use Global Extern Variable 'level'
 #include "basegame.h"		// Needed to transit into Game Levels
 
 extern Config config;
@@ -11,13 +11,13 @@ rect buttons;
 
 void Level_Select_Init()
 {
-	// declare/define window width/height
-	CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight);
-	windowwidth = (float)CP_System_GetWindowWidth();
-	windowheight = (float)CP_System_GetWindowHeight();
-	CP_Settings_RectMode(CP_POSITION_CENTER); // align rectangle to the center position (else it defaults to top left corner)
-	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255)); // black border around the rectangle
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE); // align text to the middle of the rect box
+	//// declare/define window width/height
+	//CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight);
+	//windowwidth = (float)CP_System_GetWindowWidth();
+	//windowheight = (float)CP_System_GetWindowHeight();
+	//CP_Settings_RectMode(CP_POSITION_CENTER); // align rectangle to the center position (else it defaults to top left corner)
+	//CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255)); // black border around the rectangle
+	//CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE); // align text to the middle of the rect box
 
 	// define buttons
 	buttons.center_x = windowwidth * 0.5f;
@@ -36,7 +36,7 @@ void Level_Select_Update()
 
 	/* For-Loop to Draw Rectangles/Buttons for multiple Levels */
 	for (int i = 0; i < 5; i++, height += 1.5f) {
-		if ((i + 1) <= level) {
+		if ((i + 1) <= global_level) {
 			CP_Settings_Fill(RED); // Fill Rectangle RED
 		}
 		else {
@@ -62,12 +62,17 @@ void Level_Select_Update()
 		/* For-Loop for Rectangle/Button On-Click Function Implementation */
 		for (int j = 0; j < 5; j++, height += 1.5f) {
 			if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * height, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-				if (level > j) {
+				if (global_level > j) {
 					set_temp_level(j+1); // Send over which level to load
 					CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Load Level
 				}
 			}
 		}
+	}
+
+	// Returns to Main Menu if Player hits 'ESC'
+	if (CP_Input_KeyTriggered(KEY_ESCAPE)) {
+		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 	}
 
 }

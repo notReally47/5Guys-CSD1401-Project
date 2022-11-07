@@ -4,7 +4,7 @@
 #include "mainmenu.h"		// Needed to Return to Main Menu
 #include "basegame.h"		// Needed to Transit to Next Level
 #include "mechanics.h"		// Needed for card_selection()
-#include "levellogic.h"		// Needed for level global variable
+#include "level_logic.h"	// Needed for level global variable
 
 extern Config config;
 float windowwidth, windowheight;
@@ -30,7 +30,7 @@ void Level_Transition_Init()
 void Level_Transition_Update()
 {
 	CP_Graphics_ClearBackground(GRAY);
-	switch (level){
+	switch (global_level){
     case 4:
 	case 8:
 	case 12:

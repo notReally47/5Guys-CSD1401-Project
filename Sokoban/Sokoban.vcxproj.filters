@@ -10,16 +10,16 @@
     <ClCompile Include="..\Src\customer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Src\generateLevel.c">
+    <ClCompile Include="..\Src\level_generate.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Src\levellogic.c">
+    <ClCompile Include="..\Src\level_logic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Src\levelSelect.c">
+    <ClCompile Include="..\Src\level_select.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Src\levelTransition.c">
+    <ClCompile Include="..\Src\level_transition.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\main.c">
@@ -66,16 +66,16 @@
     <ClInclude Include="..\Inc\defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\generateLevel.h">
+    <ClInclude Include="..\Inc\level_generate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\levellogic.h">
+    <ClInclude Include="..\Inc\level_logic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\levelSelect.h">
+    <ClInclude Include="..\Inc\level_select.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\levelTransition.h">
+    <ClInclude Include="..\Inc\level_transition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Inc\mainmenu.h">

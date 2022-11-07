@@ -6,7 +6,7 @@
 
 CP_Image spritesheet;
 CP_Vector anim,dimen,trans,camera;
-static float move;
+static float global_move;
 const float frame = 64.0f;
 int index,x,y;
 
@@ -26,7 +26,7 @@ void load_spritesheet(float cellSize) {
 	dimen = CP_Vector_Scale(CP_Vector_Set(frame,frame),cellSize/frame);
 	trans = CP_Vector_Scale(CP_Vector_Set((cellSize-dimen.x),(cellSize-dimen.y)),0.5f);
 	camera = CP_Vector_Set(0.f, 0.f);
-	move = (float)((int)cellSize/10);
+	global_move = (float)((int)cellSize/10);
 	index = 0;
 	x = 1;
 	y = 1;
@@ -62,7 +62,7 @@ void draw_player(float cellSize,float cellAlign,int playerPosX,int playerPosY,in
 			tele[5] = 0;
 		}
 		if (anim.y < celly) {
-			anim.y += move;
+			anim.y += global_move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,index*frame,0.f,(index+1)*frame,frame,255);
 		} 
 		else
@@ -74,7 +74,7 @@ void draw_player(float cellSize,float cellAlign,int playerPosX,int playerPosY,in
 			tele[5] = 0;
 		}
 		if (anim.y > celly) {
-			anim.y -= move;
+			anim.y -= global_move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,(index+3)*frame,0.f,(index+4)*frame,frame,255);
 		}
 		else
@@ -86,7 +86,7 @@ void draw_player(float cellSize,float cellAlign,int playerPosX,int playerPosY,in
 			tele[5] = 0;
 		}
 		if (anim.x > cellx) {
-			anim.x -= move;
+			anim.x -= global_move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
 		}
 		else
@@ -98,7 +98,7 @@ void draw_player(float cellSize,float cellAlign,int playerPosX,int playerPosY,in
 			tele[5] = 0;
 		}
 		if (anim.x < cellx) {
-			anim.x += move;
+			anim.x += global_move;
 			CP_Image_DrawSubImage(spritesheet,anim.x,anim.y,dimen.x,dimen.y,index*frame,frame,(index+1)*frame,frame*2.f,255);
 		}
 		else
@@ -156,22 +156,22 @@ void world_camera(float cellSize, int face, int dir) {
 	case 1: // up
 		y = (dir==1) ? y+1:y;
 		if (camera.y < cellSize*y)
-			camera.y += move;
+			camera.y += global_move;
 		break;
 	case 2: // left
 		x = (dir==2) ? x+1:x;
 		if (camera.x < cellSize*x)
-			camera.x += move;
+			camera.x += global_move;
 		break;
 	case 3: // down
 		y = (dir==3) ? y-1:y;
 		if (camera.y > cellSize*y)
-			camera.y -= move;
+			camera.y -= global_move;
 		break;
 	case 4: //right
 		x = (dir==4) ? x-1:x;
 		if (camera.x > cellSize*x)
-			camera.x -= move;
+			camera.x -= global_move;
 		break;
 	}
 	CP_Settings_Translate(camera.x,camera.y);

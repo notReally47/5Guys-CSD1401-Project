@@ -2,7 +2,7 @@
 #include "structs.h"
 #include "defines.h"
 
-extern int move;
+extern int global_move;
 
 void saveMove(Move moves[MOVE][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]);
 

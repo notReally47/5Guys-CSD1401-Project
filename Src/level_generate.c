@@ -2,20 +2,34 @@
 #define _CRT_SECURE_NO_DEPRECATE	// Needed to use fopen & fscanf instead of fopen_s & fscanf_s
 #include "structs.h"				// Needed for Grid and Customer Structs
 #include "defines.h"				// Needed for define values
-#include "levellogic.h"				// Needed to use Global Extern Variable 'level'
+#include "level_logic.h"			// Needed to use Global Extern Variable 'level'
 #include <stdio.h>					// Needed for parsing CSV file
 #include <stdlib.h>					// Needed for exit() function
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
 
 /* Parse CSV file to initialise grid array at the start of every stage/level */
 void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER]) {
+
+	
 	printf("In setMap! \n");
-	//errno_t err;
 	/* Initialise variables to 0 */
 	int row = 0, col = 0, read = 0;
 
 	/* Declare & initialise Local Customer Properties to 0 */
 	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0;
+
+	/* For-Loop to clear all customers first (Prevent carry-over from previous levels) */
+	for (int i = 0; i < CUSTOMER; i++) {
+		customer[i].cusCol = customer_posX;
+		customer[i].cusRow = customer_posY;
+		customer[i].ogCusCol = customer_posX;
+		customer[i].ogCusRow = customer_posY;
+		customer[i].direction = customer_direction;
+		customer[i].range = customer_range;
+		customer[i].isActive = customer_active;
+		customer[i].isIdle = customer_idle;
+		customer[i].isRandom = customer_random;
+	}
 
 	// File Pointer of CSV File
 	FILE* csv_file;
@@ -25,7 +39,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	char level_char, csv_ext[5] = ".csv";
 
 	// Convert Level Number to char to be used to append to csvfileName
-	level_char = level + '0';
+	level_char = global_level + '0';
 
 	/* Append Level Number & 'csv_ext' to 'csv_file_name' */
 	strncat(csv_file_name, &level_char, 1);
