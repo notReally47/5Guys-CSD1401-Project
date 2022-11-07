@@ -78,6 +78,8 @@ void base_Update(void) {
 			}
 
 			if (customerLock(grid, customer)) {
+				// Add customer movwment to player
+				// Priority to move to player first, ignore all other input but stun timer do not start
 				isLocked = 1;
 			}
 		}
@@ -159,8 +161,7 @@ void base_Update(void) {
 			}
 		}
 
-		//TODO
-		//customerMovement(grid, path, customer);
+		customerMovement(grid, path, customer);
 
 		for (int i = 0; i < CUSTOMER; i++) {
 			if (customer[i].isIdle) {
