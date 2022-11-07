@@ -73,8 +73,8 @@ void gameLogic(int *posX, int *posY, int nextPosX, int nextPosY, int prevPosX, i
 		grid[*posX][*posY].player = 1;
 		grid[*posX][*posY].box = 0;
 		grid[nextPosX][nextPosY].box = 1;
-		move++;
-		printf("Current Moves: %d\n", move-1);
+		global_move++;
+		printf("Current Moves: %d\n", global_move-1);
 	}
 	
 	/*Player movement without obstruction*/
@@ -93,8 +93,8 @@ void gameLogic(int *posX, int *posY, int nextPosX, int nextPosY, int prevPosX, i
 			}
 		}
 		grid[*posX][*posY].player = 1;
-		move++;
-		printf("Current Moves: %d\n", move-1);
+		global_move++;
+		printf("Current Moves: %d\n", global_move-1);
 	}
 }
 

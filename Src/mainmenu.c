@@ -4,8 +4,8 @@
 #include "defines.h"
 #include "basegame.h"
 #include "options.h"
-#include "levellogic.h"
-#include "levelSelect.h"
+#include "level_logic.h"
+#include "level_select.h"
 
 extern Config config;
 float windowwidth,windowheight;
@@ -42,7 +42,7 @@ void Main_Menu_Update()
 	CP_Settings_Fill(BLACK); // set font to black
 	// draw text 'play', 'options', 'credits' and 'exit' on their respective boxes
 	CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f); // set text size scaling to window height
-	(level > 1) ? CP_Font_DrawText("Continue", buttons.center_x, buttons.center_y) : CP_Font_DrawText("Play", buttons.center_x, buttons.center_y); //if player has cleared levels, set to continue to go to latest unlocked level
+	(global_level > 1) ? CP_Font_DrawText("Continue", buttons.center_x, buttons.center_y) : CP_Font_DrawText("Play", buttons.center_x, buttons.center_y); //if player has cleared levels, set to continue to go to latest unlocked level
 	CP_Font_DrawText("Select Level", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
 	CP_Font_DrawText("Options", buttons.center_x,buttons.center_y+buttons.height*3.f);
 	CP_Font_DrawText("Credits",buttons.center_x,buttons.center_y+buttons.height*4.5f);

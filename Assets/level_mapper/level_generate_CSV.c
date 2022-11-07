@@ -64,6 +64,20 @@ void empty_grid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
 	}
 }
 
+/* Set Duration of Level */
+int set_duration() {
+    int duration = 0, read = 0;
+    printf("Please indicate the Duration for this level (s):\n");
+    read = scanf("%d", &duration);
+    if(read == 1) {
+        return duration;
+    }
+    else {
+        printf("Please indicate in the correct format! Exiting...\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
 /* Set position of Player (row, column) */
 void set_player(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     int set_row = 0, set_col = 0, read = 0;
@@ -193,7 +207,7 @@ int main(void) {
     Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS];
 
     /* Declare & Initialise read to 0 & boolean checks of different properties to 0 */
-    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_boarder = 0, is_shelf = 0;
+    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_boarder = 0, is_shelf = 0, duration = 0;
 
     /* Initialise file name without the level number and extension name */
     char csv_file_name[32] = "level_files/Seven11_Level_", reference_file_name[38] = "level_files/Seven11_Notes_Level_", level, csv_ext[5] = ".csv", txt_ext[5] = ".txt";
@@ -220,6 +234,7 @@ int main(void) {
         array_reference = fopen(reference_file_name, "w");
 
         // Sets all settings
+        duration = set_duration();
         empty_grid(grid);
         set_player(grid);
         set_box_key(grid);
@@ -228,12 +243,14 @@ int main(void) {
 
         printf("Level CSV generated!\n");
 
+        fprintf(csv_file, "%d\n", duration);
+        fprintf(array_reference, "Level Duration is %d\n", duration);
         // Prints all the values for the CSV File & Reference File
         for (int row = 0; row < SOKOBAN_ROWS; row++) {
             for (int col = 0; col < SOKOBAN_COLS; col++) {
 
-                fprintf(csv_file,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].boarder, 
-                    grid[row][col].shelf, grid[row][col].is_customer, grid[row][col].customer_no, grid[row][col].customer_posX, grid[row][col].customer_posY,
+                fprintf(csv_file,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].boarder, 
+                    grid[row][col].shelf, grid[row][col].mecha, grid[row][col].is_customer, grid[row][col].customer_no, grid[row][col].customer_posX, grid[row][col].customer_posY,
                     grid[row][col].customer_direction, grid[row][col].customer_range, grid[row][col].is_active, grid[row][col].customer_idle, grid[row][col].customer_random);
                 
                 is_player = (grid[row][col].player) ? 1 : 0;

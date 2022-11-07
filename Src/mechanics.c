@@ -2,7 +2,7 @@
 #include "structs.h"        // rect
 #include "defines.h"        // colours, rows/cols
 #include "utils.h"          // IsAreaClicked(), extern duration/lockTimer
-#include "levellogic.h"     // extern level
+#include "level_logic.h"     // extern level
 #include "basegame.h"       // for base game state
 #include "mechanics.h"      // to call function
 
@@ -108,13 +108,13 @@ void card_selection(int stage, CP_BOOL CP_Input_MouseClicked) {
 void card_effect(int pos,int cards[]) {
     switch (cards[pos]) {
     case 0: // Card 0 : Contagious || Card 0 : Overtime
-        if (level==4||level==8||level==12)
+        if (global_level==4||global_level==8||global_level==12)
             customer_status(customer);
         else
             duration = 70;
         break;
     case 2: // Card 2 : Leakage || Card 2 : It's a slow day
-        if (level==4||level==8||level==12)
+        if (global_level==4||global_level==8||global_level==12)
             wetsign_UM();
         else
             // customer_number--
@@ -126,7 +126,7 @@ void card_effect(int pos,int cards[]) {
             teleport_UM();
         break;
     case 6: // Card 6 : Blabbermouth || Card 6 : Intuitive
-        if (level==4||level==8||level==12)
+        if (global_level==4||global_level==8||global_level==12)
             lockTimer = 4.f;
         else 
             lockTimer = 1.5f;
@@ -138,7 +138,7 @@ void card_effect(int pos,int cards[]) {
             // number of boxes --
         break;
     case 10: // Card 10 : Half shift || Card 10 : Elusive
-        if (level==4||level==8||level==12)
+        if (global_level==4||global_level==8||global_level==12)
             duration = 50;
         else
             // todo

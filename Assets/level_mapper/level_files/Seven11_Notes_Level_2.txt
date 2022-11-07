@@ -1,3 +1,4 @@
+Level Duration is 80
 [0][0] is a Boarder
 [0][1] is a Boarder
 [0][2] is a Boarder
@@ -209,7 +210,7 @@
 [5][3] is Blank
 [5][4] is Blank
 [5][5] is Blank
-[5][6] is Player
+[5][6] is Blank
 [5][7] is Blank
 [5][8] is Blank
 [5][9] is Blank
@@ -332,11 +333,11 @@
 [8][3] is Blank
 [8][4] is Blank
 [8][5] is Blank
-[8][6] is Blank
+[8][6] is Player
 [8][7] is Blank
-[8][8] is Blank
+[8][8] is a Box
 [8][9] is Blank
-[8][10] is Blank
+[8][10] is a Key
 [8][11] is Blank
 [8][12] is Blank
 [8][13] is Blank
@@ -416,9 +417,9 @@
 [10][5] is Blank
 [10][6] is Blank
 [10][7] is Blank
-[10][8] is Blank
+[10][8] is a Box
 [10][9] is Blank
-[10][10] is Blank
+[10][10] is a Key
 [10][11] is Blank
 [10][12] is Blank
 [10][13] is Blank
@@ -631,9 +632,9 @@
 [15][15] is Blank
 [15][16] is Blank
 [15][17] is Blank
-[15][18] is a Key
+[15][18] is Blank
 [15][19] is Blank
-[15][20] is a Box
+[15][20] is Blank
 [15][21] is Blank
 [15][22] is Blank
 [15][23] is Blank
@@ -713,9 +714,9 @@
 [17][15] is Blank
 [17][16] is Blank
 [17][17] is Blank
-[17][18] is a Key
+[17][18] is Blank
 [17][19] is Blank
-[17][20] is a Box
+[17][20] is Blank
 [17][21] is Blank
 [17][22] is Blank
 [17][23] is Blank
