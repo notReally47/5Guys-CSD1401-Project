@@ -190,9 +190,9 @@ void base_Update(void) {
 	//	//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
 	//	CP_Image_Draw(logo, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(logo), CP_Image_GetHeight(logo), 255);
 	//}
-	else {
+	/*else {
 		CP_Settings_Tint(DARKGRAY);
-	}
+	}*/
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
@@ -259,18 +259,14 @@ void base_Update(void) {
 	if(game_pause) {
 		if (clock > 0) {
 			overlay_pause();
+			//drawButton(pause);
+			//drawButton(back);
 			game_pause = unpause(game_pause);
 		}
 		else {
 			overlay_game_over();
 			game_pause = game_over(game_pause);
-		}
-		printf("PAUSED! \n");
-		//TODO Pause Overlay Over the Map
-		//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
-		//CP_Image_Draw(pauseImg, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(pauseImg), CP_Image_GetHeight(pauseImg), 255);
-		drawButton(pause);
-		drawButton(back);
+		}		
 	}
 }
 
