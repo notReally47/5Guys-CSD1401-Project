@@ -60,7 +60,6 @@ void base_Init(void) {
 	game_pause = 0;
 
 	/*GIF*/
-	game_pause = 0;
 	lockIndex = 0;
 	imageIndex = 0;
 
