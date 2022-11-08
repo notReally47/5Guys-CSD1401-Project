@@ -26,7 +26,7 @@ int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellSize, cellAlign, sec, elapsedLock;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, lockIndex;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock;
 
 float totalElapsedTime;
 
@@ -60,7 +60,6 @@ void base_Init(void) {
 	game_pause = 0;
 
 	/*GIF*/
-	lockIndex = 0;
 	imageIndex = 0;
 
 	speechSprite = CP_Image_Load("./Assets/Spritesheet/speech.png");
@@ -111,10 +110,7 @@ void base_Update(void) {
 				playerCol = col;
 			}
 
-			int i = 0;
-
-			if (i = customerLock(grid, customer)) {
-				lockIndex = i;
+			if (customerLock(grid, customer)) {
 				isLocked = 1;
 			}
 		}
@@ -269,10 +265,8 @@ void base_Update(void) {
 				for (int i = 0; i < CUSTOMER_MAX; i++)
 					draw_customer(&cellSize, &cellAlign, &customer[i].cusRow, &customer[i].cusCol, &customer[i].direction, &i);
 
-			if (row == customer[lockIndex].cusRow && col == customer[lockIndex].cusCol && isLocked) {
-				float diagX = cellSize * (float)(col + 1) + cellAlign;
-				float diagY = cellSize * (float)(row - 1);
-				drawGIF(speechSprite, diagX, diagY, cellSize, cellSize, DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+			if (isLocked && currCell.player) {
+				drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
 			}
 		}
 	}
