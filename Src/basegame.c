@@ -32,16 +32,16 @@ float totalElapsedTime;
 
 Button back, pause;
 
-CP_Image speechSprite;
+CP_Sound fail = NULL;
 
-/*GIF stuff*/
+/*Gif*/
 static float timeElapsed;
 static const float DISPLAY_DURATION = .5f;
 static int imageIndex;
 static const float FRAME_DIMENSION = 322.0f;
 static const int TOTAL_FRAMES = 4;
 static const int SPRITESHEET_ROWS = 1;
-static float gifDimension;
+CP_Image speechSprite;
 
 void base_Init(void) {
 
@@ -58,6 +58,9 @@ void base_Init(void) {
 	isLocked = 0;
 	totalElapsedTime = 0;
 	game_pause = 0;
+
+	/*GIF*/
+	game_pause = 0;
 	lockIndex = 0;
 	imageIndex = 0;
 
@@ -72,6 +75,10 @@ void base_Init(void) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
 		}
 	}
+
+	/* SFX */
+	fail = CP_Sound_Load("./Assets/Sound/Fail.wav");
+
 	//setButton(&back, "./Assets/UI/Back.png", cellSize * 1.75f + cellAlign, cellSize * 1.75f, 2 * cellSize, 2 * cellSize, YES);
 	//setButton(&pause, "./Assets/PAUSE.png", (float)(CP_System_GetWindowWidth() / 2.f), (float)(CP_System_GetWindowHeight() / 2.f), 248.f, 109.f, NO);
 	//card_init();
@@ -79,7 +86,7 @@ void base_Init(void) {
 }
 
 void base_Update(void) {
-	int playerRow, playerCol, cusNum, isCompleted = 0;
+	int playerRow, playerCol, isCompleted = 0;
 	float currentElapsedTime = CP_System_GetDt();
 
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
@@ -104,7 +111,9 @@ void base_Update(void) {
 				playerRow = row;
 				playerCol = col;
 			}
+
 			int i = 0;
+
 			if (i = customerLock(grid, customer)) {
 				lockIndex = i;
 				isLocked = 1;
@@ -126,12 +135,14 @@ void base_Update(void) {
 
 		/* Lose Condition */
 		if (clock == 0) {
+			CP_Sound_Play(fail);
 			game_pause = 1;
 		}
 
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
 		player_status(&isLocked); // UM
 		if (isLocked) {
+
 			/*Draw gameplay gif logic*/
 			timeElapsed += CP_System_GetDt();
 			if (timeElapsed >= DISPLAY_DURATION) {
@@ -148,7 +159,6 @@ void base_Update(void) {
 			}
 			else {
 				/*Reset timer and turn customer inactive*/
-				lockIndex = 0;
 				elapsedLock = 0;
 				isLocked = 0;
 				printf("Unlocked.\n");
@@ -255,7 +265,6 @@ void base_Update(void) {
 				else if (currCell.shelf)
 					draw_boarder(cellX, cellY, cellSize);
 			}
-
 			if (currCell.customer) // currCell.customer holds current position and previous position
 				for (int i = 0; i < CUSTOMER_MAX; i++)
 					draw_customer(&cellSize, &cellAlign, &customer[i].cusRow, &customer[i].cusCol, &customer[i].direction, &i);
@@ -297,6 +306,7 @@ void base_Update(void) {
 }
 
 void base_Exit(void) {
+	CP_Sound_Free(&fail);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
 }
