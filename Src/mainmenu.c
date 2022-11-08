@@ -14,7 +14,6 @@ rect buttons;
 
 void Main_Menu_Init()
 {
-	CP_System_SetWindowTitle("SevenTree");
 	// declare/define window width/height
 	//CP_System_SetWindowSize(config.settings.resolutionWidth,config.settings.resolutionHeight);
 	windowwidth = (float)CP_System_GetWindowWidth();
