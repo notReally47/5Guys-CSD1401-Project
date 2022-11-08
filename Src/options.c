@@ -11,7 +11,7 @@
 #include <string.h> // strlen()
 
 Button back, volumeDown, volumeUp, apply, discard, up, down, left, right, pause, undo, reset, escape, controls[8], btns[13];
-DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, * resSelected;
+DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, * resSelected, * initialRes;
 float textSize, volume, numCols, numRows, imgSize;
 
 // Gif
@@ -26,7 +26,7 @@ static float gifDimension;
 CP_Vector window;
 CP_Image gameplay;
 CP_Sound gameSFX;
-Flag ddlClicked, volChanged, resChanged, configChanged;
+Flag ddlClicked, volChanged, resChanged, configChanged, resUnmatch;
 int displayVol;
 
 extern Config config;
@@ -59,7 +59,7 @@ void Options_Init() {
 	CP_Settings_Stroke(BLACK);
 
 	/*Create Buttons*/
-	setButton(&back, "./Assets/UI/Back.png",	imgSize *0.75f + PADDING, imgSize / 2.0f + PADDING, 2 * imgSize, imgSize, YES);
+	setButton(&back, "./Assets/UI/Back.png",	imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING,imgSize, imgSize, YES);
 	setButton(&volumeDown, "./Assets/UI/VolumeDown.png", window.x - 3 * PADDING - 2.5 * textSize, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
 	setButton(&volumeUp, "./Assets/UI/VolumeUp.png",	window.x - PADDING - textSize / 2, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
 	setButton(&apply, "./Assets/UI/Apply.png", window.x - PADDING - 4 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
@@ -89,10 +89,17 @@ void Options_Init() {
 	for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
 		resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 	}
-	if (!(resolution[0].selected) && !(resolution[1].selected) && !(resolution[2].selected)) {
+	/*If none matches config, set default to half screen windowed*/
+	if (!((resolution[0].selected) || (resolution[1].selected) || (resolution[2].selected))) {
 		resolution[0].selected = YES;
-		resSelected = &resolution[0];
+		resUnmatch = YES;
 	}
+	for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
+		if (resolution[i].selected) {
+			resSelected = &resolution[i];
+		}
+	}
+	initialRes = resSelected;
 	/*-----------------------------------*/
 }
 
@@ -182,6 +189,7 @@ void Options_Update() {
 					CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, displayVol / 100.f);
 
 					configChanged = NO;
+					resUnmatch = NO;
 					CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit); // Reload game state to rescale
 				}
 				/*Discard*/
@@ -191,6 +199,7 @@ void Options_Update() {
 						resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 					}
 					configChanged = NO;
+					resChanged = NO;
 				}
 			}
 		}
@@ -251,8 +260,15 @@ void Options_Update() {
 	controlDescription[7] = "- Reset map to initial positions";
 
 	char displayRes[25] = { 0 };
-	resSelected->windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", resSelected->actWidth, resSelected->actHeight) :
-		sprintf_s(displayRes, _countof(displayRes), "%d x %d (fullscreen)", resSelected->actWidth, resSelected->actHeight);
+
+	if ((resUnmatch && !resChanged)) {
+		config.settings.windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", config.settings.resolutionWidth, config.settings.resolutionHeight) :
+			sprintf_s(displayRes, _countof(displayRes), "%d x %d (fullscreen)", config.settings.resolutionWidth, config.settings.resolutionHeight);
+	}
+	else {
+		resSelected->windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", resSelected->actWidth, resSelected->actHeight) :
+			sprintf_s(displayRes, _countof(displayRes), "%d x %d (fullscreen)", resSelected->actWidth, resSelected->actHeight);
+	}	
 
 	/*Draw current volume and the volume up and down buttons*/
 	char currentVol[16] = { 0 };
