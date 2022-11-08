@@ -32,6 +32,8 @@ float totalElapsedTime;
 
 Button back, pause;
 
+CP_Sound fail = NULL;
+
 void base_Init(void) {
 
 	/* Settings */
@@ -56,6 +58,10 @@ void base_Init(void) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
 		}
 	}
+
+	/* SFX */
+	fail = CP_Sound_Load("./Assets/Sound/Fail.wav");
+
 	//setButton(&back, "./Assets/UI/Back.png", cellSize * 1.75f + cellAlign, cellSize * 1.75f, 2 * cellSize, 2 * cellSize, YES);
 	//setButton(&pause, "./Assets/PAUSE.png", (float)(CP_System_GetWindowWidth() / 2.f), (float)(CP_System_GetWindowHeight() / 2.f), 248.f, 109.f, NO);
 	//card_init();
@@ -63,7 +69,7 @@ void base_Init(void) {
 }
 
 void base_Update(void) {
-	int playerRow, playerCol, cusNum, isCompleted = 0;
+	int playerRow, playerCol, isCompleted = 0;
 	float currentElapsedTime = CP_System_GetDt();
 	
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
@@ -109,6 +115,7 @@ void base_Update(void) {
 
 		/* Lose Condition */
 		if (clock == 0) {
+			CP_Sound_Play(fail);
 			game_pause = 1;
 		}
 
@@ -265,6 +272,7 @@ void base_Update(void) {
 }
 
 void base_Exit(void) {
+	CP_Sound_Free(&fail);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
 }
