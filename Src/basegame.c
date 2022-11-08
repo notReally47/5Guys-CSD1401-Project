@@ -11,6 +11,7 @@
 #include "level_transition.h"
 #include "mechanics.h"
 #include "mainmenu.h"
+#include "level_overlay.h"
 #include "options_draw.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +49,7 @@ void base_Init(void) {
 	game_pause = 0;
 	load_spritesheet(cellSize);
 	setMap(grid, customer, path);				// Initialise Map
-	totalObjs = getObjective(grid);		// Counts number of key objective to meet
+	totalObjs = getObjective(grid);				// Counts number of key objective to meet
 	global_move = 1;							// Initialise move with 1 for rendering purposes*
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0, m = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -101,6 +102,7 @@ void base_Update(void) {
 		CP_Settings_NoTint();
 		totalElapsedTime += currentElapsedTime;
 		clock = duration - (int)totalElapsedTime;
+		free_overlay();
 		printf("UNPAUSED! \n");
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
@@ -112,9 +114,6 @@ void base_Update(void) {
 		/* Lose Condition */
 		if (clock == 0) {
 			game_pause = 1;
-			global_level = 1; // reset level
-			//TODO Game Over Overlay over Map
-			// CP_Engine_SetNextGameState(Main_Menu_Init,Main_Menu_Update,Main_Menu_Exit); 
 		}
 
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
@@ -258,6 +257,14 @@ void base_Update(void) {
 	}
 
 	if(game_pause) {
+		if (clock > 0) {
+			overlay_pause();
+			game_pause = unpause(game_pause);
+		}
+		else {
+			overlay_game_over();
+			game_pause = game_over(game_pause);
+		}
 		printf("PAUSED! \n");
 		//TODO Pause Overlay Over the Map
 		//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
@@ -272,4 +279,5 @@ void base_Exit(void) {
 	CP_Image_Free(&pause.img);
 	CP_Image_Free(&back.img);
 	CP_Settings_StrokeWeight(3.0f);
+	free_overlay();
 }

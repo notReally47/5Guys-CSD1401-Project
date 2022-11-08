@@ -46,6 +46,7 @@ void empty_grid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
                 grid[row][col].is_active = 0;  
                 grid[row][col].customer_idle = 0;
                 grid[row][col].customer_random = 0;
+                grid[row][col].customer_no = 0;
             }else {
                 grid[row][col].player = 0;
                 grid[row][col].key = 0;
@@ -62,6 +63,7 @@ void empty_grid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
                 grid[row][col].is_active = 0;
                 grid[row][col].customer_idle = 0;
                 grid[row][col].customer_random = 0;
+                grid[row][col].customer_no = 0;
             }
 		}
 	}
@@ -177,6 +179,10 @@ void set_customer(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
                                 if(read == 3) {
                                     grid[set_row][set_col].path = set_direction;
                                 }
+                                else {
+                                    printf("Please indicate in the correct format! Exiting...\n");
+                                    exit(EXIT_FAILURE);
+                                }
                                 printf("Any more Waypoints? (Y/N)\n");
                                 scanf(" %c", &choice);
                             }while(choice == 'Y' || choice == 'y');
@@ -236,7 +242,8 @@ int main(void) {
     int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_boarder = 0, is_shelf = 0, is_waypoint = 0, duration = 0;
 
     /* Initialise file name without the level number and extension name */
-    char csv_file_name[32] = "level_files/Seven11_Level_", reference_file_name[38] = "level_files/Seven11_Notes_Level_", level, csv_ext[5] = ".csv", txt_ext[5] = ".txt";
+    char csv_file_name[32] = "level_files/Seven11_Level_", reference_file_name[38] = "level_files/Seven11_Notes_Level_", level, 
+        csv_ext[5] = ".csv", txt_ext[5] = ".txt", csv_bak_file[37] = "level_files/Seven11_Level_", bak_file[5] = "_bak";
 
     // Get level number
     printf("Please indicate the Level for this map:\n");
@@ -246,6 +253,11 @@ int main(void) {
         /* Appends 'csv_file_name' with level number and csv extension */
         strncat(csv_file_name, &level, 1);
         strcat(csv_file_name, csv_ext);
+        
+        /* Appends the backup file similarly but with '_bak_*/
+        strncat(csv_bak_file, &level, 1);
+        strcat(csv_bak_file, bak_file);
+        strcat(csv_bak_file, csv_ext);
 
         /* Appends 'reference_file_name' with level number and txt extension */
         strncat(reference_file_name, &level, 1);
@@ -253,10 +265,12 @@ int main(void) {
 
         // File pointers for csv_file_name & reference_file_name
         FILE* csv_file;
+        FILE* csv_bak;
         FILE* array_reference;
 
         // Opens 'csv_file_name' & 'reference_file_name' in write mode
         csv_file = fopen(csv_file_name, "w");
+        csv_bak = fopen(csv_bak_file, "w");
         array_reference = fopen(reference_file_name, "w");
 
         // Sets all settings
@@ -270,12 +284,17 @@ int main(void) {
         printf("Level CSV generated!\n");
 
         fprintf(csv_file, "%d\n", duration);
+        fprintf(csv_bak, "%d\n", duration);
         fprintf(array_reference, "Level Duration is %d\n", duration);
         // Prints all the values for the CSV File & Reference File
         for (int row = 0; row < SOKOBAN_ROWS; row++) {
             for (int col = 0; col < SOKOBAN_COLS; col++) {
 
                 fprintf(csv_file,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].boarder, 
+                    grid[row][col].shelf, grid[row][col].mecha, grid[row][col].is_customer, grid[row][col].customer_no, grid[row][col].customer_posX, grid[row][col].customer_posY,
+                    grid[row][col].customer_direction, grid[row][col].customer_range, grid[row][col].is_active, grid[row][col].customer_idle, grid[row][col].customer_random, grid[row][col].path);
+
+                fprintf(csv_bak,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].boarder, 
                     grid[row][col].shelf, grid[row][col].mecha, grid[row][col].is_customer, grid[row][col].customer_no, grid[row][col].customer_posX, grid[row][col].customer_posY,
                     grid[row][col].customer_direction, grid[row][col].customer_range, grid[row][col].is_active, grid[row][col].customer_idle, grid[row][col].customer_random, grid[row][col].path);
                 
@@ -298,8 +317,9 @@ int main(void) {
             }
         }
 
-        // Close both file
+        // Close all file
         fclose(csv_file);
+        fclose(csv_bak);
         fclose(array_reference);
     }
     else {

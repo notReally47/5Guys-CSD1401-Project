@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "movement.h"
 #include "mechanics.h"
+#include "mainmenu.h"
 #include <stdio.h>
 
 int duration = 60;
