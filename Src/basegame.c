@@ -63,7 +63,7 @@ void base_Init(void) {
 }
 
 void base_Update(void) {
-	int playerPosX, playerPosY, isCompleted = 0;
+	int playerRow, playerCol, cusNum, isCompleted = 0;
 	float currentElapsedTime = CP_System_GetDt();
 	
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
@@ -85,13 +85,11 @@ void base_Update(void) {
 
 			/*Get position of player*/
 			if (grid[row][col].player) {
-				playerPosX = row;
-				playerPosY = col;
+				playerRow = row;
+				playerCol = col;
 			}
 
 			if (customerLock(grid, customer)) {
-				// Add customer movwment to player
-				// Priority to move to player first, ignore all other input but stun timer do not start
 				isLocked = 1;
 			}
 		}
@@ -117,6 +115,8 @@ void base_Update(void) {
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
 		player_status(&isLocked); // UM
 		if (isLocked) {
+			// Moves the Customer to the player
+			customerMoveToPlayer(playerRow, playerCol, grid, customer);
 			/*Check if 3 seconds has passed*/
 			if (elapsedLock <= lockTimer) {
 				elapsedLock = elapsedLock + CP_System_GetDt();
@@ -137,27 +137,27 @@ void base_Update(void) {
 			/*Check for input and get the direction of the input*/
 			int dir = getDirection();
 
-		/*Set direction that the player is facing.*/
-		switch (dir) {
-		case 1: // up
-			face = 1;
-			break;
-		case 2: // left
-			face = 2;
-			break;
-		case 3: // down
-			face = 3;
-			break;
-		case 4: // right
-			face = 4;
-			break;
-		}
-		
-		/*If there is movement.*/
-		if (dir > 0) {
-			saveMove(moves, grid);
-			getCell(&playerPosX, &playerPosY, dir, grid);
-		}
+			/*Set direction that the player is facing.*/
+			switch (dir) {
+			case 1: // up
+				face = 1;
+				break;
+			case 2: // left
+				face = 2;
+				break;
+			case 3: // down
+				face = 3;
+				break;
+			case 4: // right
+				face = 4;
+				break;
+			}
+
+			/*If there is movement.*/
+			if (dir > 0) {
+				saveMove(moves, grid);
+				getCell(&playerRow, &playerCol, dir, grid);
+			}
 
 			/*Undo move.*/
 			if (CP_Input_KeyTriggered(KEY_U) && global_move > 1) {
@@ -222,7 +222,7 @@ void base_Update(void) {
 
 				if ( (currCell.player && (face==3||face==4||face==0)) ||  // renders initial position and when moving right/down
 					(moves[global_move-1][row][col].player && (face==1||face==2)) )  // renders prev position if moving left/up				
-					draw_player(&cellSize,&cellAlign,&playerPosX,&playerPosY,&face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
+					draw_player(&cellSize,&cellAlign, &playerRow, &playerCol, &face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
 
 				else if (currCell.box)
 					draw_box(cellX,cellY,cellSize);
