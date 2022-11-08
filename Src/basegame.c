@@ -12,6 +12,7 @@
 #include "mechanics.h"
 #include "mainmenu.h"
 #include "level_overlay.h"
+#include "options_draw.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -25,7 +26,7 @@ int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellSize, cellAlign, sec, elapsedLock;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating;
 
 float totalElapsedTime;
 
@@ -55,6 +56,7 @@ void base_Init(void) {
 	isLocked = 0;
 	totalElapsedTime = 0;
 	game_pause = 0;
+	isAnimating = 0;
 
 	/*GIF*/
 	imageIndex = 0;
@@ -144,7 +146,11 @@ void base_Update(void) {
 
 			// Moves the Customer to the player
 			// Temporary removed the face return value due to unintended issues
-			customerMoveToPlayer(playerRow, playerCol, stunner, grid, customer);
+			if (!isAnimating) {
+				// Moves the Customer to the player
+				int newDir = customerMoveToPlayer(playerRow, playerCol, stunner, grid, customer);
+				face = newDir > 0 ? newDir : face;
+			}
 
 			/*Check if 3 seconds has passed*/
 			if (elapsedLock <= lockTimer) {
@@ -251,7 +257,7 @@ void base_Update(void) {
 
 				if ((currCell.player && (face == 3 || face == 4 || face == 0)) ||  // renders initial position and when moving right/down
 					(moves[global_move - 1][row][col].player && (face == 1 || face == 2)))  // renders prev position if moving left/up				
-					draw_player(&cellSize, &cellAlign, &playerRow, &playerCol, &face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
+					isAnimating = draw_player(&cellSize, &cellAlign, &playerRow, &playerCol, &face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
 
 				else if (currCell.box)
 					draw_box(cellX, cellY, cellSize);
@@ -263,7 +269,7 @@ void base_Update(void) {
 				for (int i = 0; i < CUSTOMER_MAX; i++)
 					draw_customer(&cellSize, &cellAlign, &customer[i].cusRow, &customer[i].cusCol, &customer[i].direction, &i);
 
-			if (isLocked && currCell.player) {
+			if (isLocked && currCell.player && !isAnimating) {
 				drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
 			}
 		}

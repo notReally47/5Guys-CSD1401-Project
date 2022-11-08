@@ -260,28 +260,28 @@ int customerMoveToPlayer(int playerRow, int playerCol, int cusNum, Cell grid[SOK
 			customer[cusNum].isRandom = 0;
 			switch (direction) {
 			case SOKOBAN_UP:
-				if (cusRow != playerRow + 1) {
+				if (cusRow != playerRow - 1) {
 					cusRow--;
 					customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, direction, grid, customer);
 					face = 3;
 				}
 				break;
 			case SOKOBAN_LEFT:
-				if (cusCol != playerCol + 1) {
+				if (cusCol != playerCol - 1) {
 					cusCol--;
 					customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, direction, grid, customer);
 					face = 4;
 				}
 				break;
 			case SOKOBAN_DOWN:
-				if (cusRow != playerRow - 1) {
+				if (cusRow != playerRow + 1) {
 					cusRow++;
 					customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, direction, grid, customer);
 					face = 1;
 				}
 				break;
 			case SOKOBAN_RIGHT:
-				if (cusRow != playerCol - 1) {
+				if (cusRow != playerCol + 1) {
 					cusCol++;
 					customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, direction, grid, customer);
 					face = 2;
