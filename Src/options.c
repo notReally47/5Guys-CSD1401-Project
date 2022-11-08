@@ -10,7 +10,7 @@
 #include <stdlib.h> //_countof()
 #include <string.h> // strlen()
 
-Button back, volumeDown, volumeUp, changes[2], apply, discard, up, down, left, right, pause, undo, reset, escape, controls[8];
+Button back, volumeDown, volumeUp, apply, discard, up, down, left, right, pause, undo, reset, escape, controls[8], btns[13];
 DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, * resSelected;
 float textSize, volume, numCols, numRows, imgSize;
 
@@ -38,9 +38,8 @@ void Options_Init() {
 	displayVol = newConfig.settings.audio;
 
 	/*Initialize global variables*/
-	imgSize = CP_System_GetWindowHeight() / 20;
+	imgSize = (float)(CP_System_GetWindowHeight() / 20.f), textSize = imgSize;
 	window = CP_Vector_Set((float)CP_System_GetWindowWidth(), (float)CP_System_GetWindowHeight());
-	textSize = (float)window.y * 0.05f;
 	gameplay = CP_Image_Load("./Assets/Gameplay.png");
 	gameSFX = CP_Sound_Load("./Assets/Sound/sfx.wav");
 
@@ -60,12 +59,11 @@ void Options_Init() {
 	CP_Settings_Stroke(BLACK);
 
 	/*Create Buttons*/
-	setButton(&back, "./Assets/UI/Back.png",	imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
+	setButton(&back, "./Assets/UI/Back.png",	imgSize *0.75f + PADDING, imgSize / 2.0f + PADDING, 2 * imgSize, imgSize, YES);
 	setButton(&volumeDown, "./Assets/UI/VolumeDown.png", window.x - 3 * PADDING - 2.5 * textSize, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
 	setButton(&volumeUp, "./Assets/UI/VolumeUp.png",	window.x - PADDING - textSize / 2, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
-	setButton(&apply, "./Assets/UI/Apply.png", 4 * window.x / 5 - 2 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
-	setButton(&discard, "./Assets/UI/Discard.png", 4 * window.x / 5 + 2 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
-	changes[0] = apply, changes[1] = discard;
+	setButton(&apply, "./Assets/UI/Apply.png", window.x - PADDING - 4 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
+	setButton(&discard, "./Assets/UI/Discard.png", window.x - PADDING - imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
 
 	setButton(&up, "./Assets/UI/W.png", PADDING + 0.75 * imgSize, PADDING + imgSize + 5 * textSize, 1.5 * imgSize, 1.5 *imgSize, NO);
 	setButton(&left, "./Assets/UI/A.png", up.position.x, up.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
@@ -77,6 +75,8 @@ void Options_Init() {
 	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
 
 	controls[0] = up, controls[1] = left, controls[2] = down, controls[3] = right, controls[4] = pause, controls[5] = escape, controls[6] = undo, controls[7] = reset;
+
+	btns[0] = back, btns[1] = volumeDown, btns[2] = volumeUp, btns[3] = apply, btns[4] = discard, btns[5] = up, btns[6] = left, btns[7] = down, btns[8] = right, btns[9] = pause, btns[10] = escape, btns[11] = undo, btns[12] = reset;
 
 	/*Create Dropdown List*/
 	setDropDownList(&currentRes, newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight, newConfig.settings.windowed, window.x - (MAX_LENGTH * textSize / 2 + PADDING) / 2 - PADDING, 2 * PADDING + back.btnHeight + textSize / 2, MAX_LENGTH * textSize / 2 + PADDING, textSize);
@@ -161,35 +161,32 @@ void Options_Update() {
 		/*Apply and Discard Changes*/
 		if (configChanged) {
 			if (CP_Input_MouseClicked()) {
-				for (int i = 0; i < sizeof(changes) / sizeof(Button); i++)
-				{
-					/*Apply*/
-					if (IsAreaClicked(changes[APPLY].position.x, changes[APPLY].position.y, changes[APPLY].btnWidth, changes[APPLY].btnHeight, mouse.x, mouse.y)) {
-						newConfig.settings.resolutionWidth = resSelected->actWidth;
-						newConfig.settings.resolutionHeight = resSelected->actHeight;
-						newConfig.settings.windowed = resSelected->windowed;
-						newConfig.settings.audio = displayVol;
-						newConfig.settings.windowed ? CP_System_SetWindowSize(newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight) : CP_System_Fullscreen();
+				/*Apply*/
+				if (IsAreaClicked(apply.position.x, apply.position.y, apply.btnWidth, apply.btnHeight, mouse.x, mouse.y)) {
+					newConfig.settings.resolutionWidth = resSelected->actWidth;
+					newConfig.settings.resolutionHeight = resSelected->actHeight;
+					newConfig.settings.windowed = resSelected->windowed;
+					newConfig.settings.audio = displayVol;
+					newConfig.settings.windowed ? CP_System_SetWindowSize(newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight) : CP_System_Fullscreen();
 
-						/*Overwrite settings*/
-						config = newConfig;
-						writeConfig(newConfig);
+					/*Overwrite settings*/
+					config = newConfig;
+					writeConfig(newConfig);
 
-						/*Set volume*/
-						CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, displayVol / 100.f);
-						CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, displayVol / 100.f);
+					/*Set volume*/
+					CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, displayVol / 100.f);
+					CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, displayVol / 100.f);
 
-						configChanged = NO;
-						CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit); // Reload game state to rescale
+					configChanged = NO;
+					CP_Engine_SetNextGameStateForced(Options_Init, Options_Update, Options_Exit); // Reload game state to rescale
+				}
+				/*Discard*/
+				else if (IsAreaClicked(discard.position.x, discard.position.y, discard.btnWidth, discard.btnHeight, mouse.x, mouse.y)) {
+					displayVol = newConfig.settings.audio;
+					for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
+						resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 					}
-					/*Discard*/
-					else if (IsAreaClicked(changes[DISCARD].position.x, changes[DISCARD].position.y, changes[DISCARD].btnWidth, changes[DISCARD].btnHeight, mouse.x, mouse.y)) {
-						displayVol = newConfig.settings.audio;
-						for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
-							resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
-						}
-						configChanged = NO;
-					}
+					configChanged = NO;
 				}
 			}
 		}
@@ -211,7 +208,7 @@ void Options_Update() {
 		imageIndex = (imageIndex + 1) % TOTAL_FRAMES;
 		timeElapsed = 0.0f;
 	}
-	gifDimension = window.y * .6f;
+	gifDimension = imgSize * 10;
 
 	/*RENDER*/
 
@@ -227,19 +224,17 @@ void Options_Update() {
 
 	/*Draw apply and discard*/
 	if (configChanged) {
-		for (int i = 0; i < sizeof(changes) / sizeof(Button); i++)
-		{
-			drawButton(changes[i]);
-		}
+		drawButton(apply);
+		drawButton(discard);
 	}
 
 	/*Draw back button*/
 	drawButton(back);
 
 	/*Draw headers: Resolution, Volume, Tutorial*/
-	drawAlignedText(BLACK, LEFT, "Resolution", PADDING, back.btnHeight + 2 * PADDING);
-	drawAlignedText(BLACK, LEFT, "Volume", PADDING, back.btnHeight + 3 * PADDING + textSize);
-	drawAlignedText(BLACK, LEFT, "Controls", PADDING, back.btnHeight + 4 * PADDING + 2 * textSize);
+	const char* headers[3];
+	headers[0] = "Resolution", headers[1] = "Volume", headers[2] = "Controls";
+	drawHeader(headers, 3);
 
 	const char* controlDescription[sizeof(controls) / sizeof(Button)];
 	controlDescription[0] = "- Move player up";
@@ -264,7 +259,7 @@ void Options_Update() {
 
 	/*Draw tutorial*/
 	drawGIF(gameplay,
-		window.x - PADDING - gifDimension, back.btnHeight + 4 * PADDING + 2 * textSize,
+		window.x - PADDING - gifDimension, up.position.y - up.btnHeight / 2,
 		gifDimension, gifDimension,
 		DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
 	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
@@ -274,7 +269,7 @@ void Options_Update() {
 
 	/*Draw Resolution dropdown-list*/
 	drawTintedButton(currentResColor, currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y, YES);
-	drawAlignedText(BLACK, RIGHT, displayRes, window.x - 2 * PADDING, back.btnHeight + 2 * PADDING);
+	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 
 	if (ddlClicked) {
 		float textX = window.x - 2 * PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.button.btnHeight;
@@ -282,21 +277,11 @@ void Options_Update() {
 			drawTintedButton(GRAY, resolution[i].button.position.x, resolution[i].button.position.y, resolution[i].button.btnWidth, resolution[i].button.btnHeight, mouse.x, mouse.y, YES);
 			drawAlignedText(BLACK, RIGHT, resList[i], textX, textY);
 		}
-		CP_Font_DrawText(displayRes, window.x - 2 * PADDING, back.btnHeight + 2 * PADDING);
+		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 	}
 }
 
 void Options_Exit() {
-	CP_Image_Free(&gameplay);
-	CP_Image_Free(&back.img);
-	CP_Image_Free(&volumeDown.img);
-	CP_Image_Free(&volumeUp.img);
-	CP_Image_Free(&volumeDown.img);
-	CP_Image_Free(&apply.img);
-	CP_Image_Free(&discard.img);
-	CP_Image_Free(&up.img);
-	CP_Image_Free(&left.img);
-	CP_Image_Free(&down.img);
-	CP_Image_Free(&right.img);
+	freeButtonImg(btns, 13);
 	CP_Sound_Free(&gameSFX);
 }

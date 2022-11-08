@@ -66,3 +66,28 @@ void drawButton(Button btn) {
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
 	CP_Settings_NoTint();
 }
+
+void drawDivider(float y) {
+	CP_Settings_Stroke(WHITE);
+	CP_Settings_StrokeWeight(3.0f);
+	CP_Graphics_DrawLine(PADDING, y, CP_System_GetWindowWidth() - PADDING, y);
+	CP_Settings_Stroke(BLACK);
+}
+
+void drawHeader(const char* stringArr[], int size) {
+	float textX = PADDING, textSize = CP_System_GetWindowHeight() / 20, textY = textSize + 2 * PADDING;
+	float divY = 2 * PADDING + textSize + textSize / 2 + 0.6 * textSize;
+	for (int i = 0; i < size; i++, textY += PADDING + textSize) {
+		drawAlignedText(BLACK, LEFT, stringArr[i], textX, textY);		
+		if (!(i % 2)) {
+			drawDivider(divY);
+			divY += 0.9 * textSize + 1.5 * PADDING;
+		}
+	}
+}
+
+void freeButtonImg(Button btn[], int size) {
+	for (int i = 0; i < size; i++) {
+		CP_Image_Free(&(btn[i].img));
+	}
+}
