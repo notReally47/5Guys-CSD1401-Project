@@ -4,8 +4,7 @@
 #include "level_logic.h"	// Needed for global extern variable 'global_level'
 #include "mainmenu.h"		// Needed to transition back to Main Menu
 
-extern Config config;	// For Resolution Settings
-CP_Image black_film;	// For Black Tint
+extern Config config;		// For Resolution Settings
 
 /* Struct for Pause Overlay Asset Properties */
 typedef struct Pause_Size {
@@ -75,23 +74,20 @@ struct Pause_Size initialise_pause_size() {
 /* Render Pause Overlay */
 void overlay_pause() {
 	struct Pause_Size size = initialise_pause_size();
-	black_film = CP_Image_Load("Assets/BLACK_FILM.png");
 
-	printf("PAUSED! \n");
-	CP_Settings_Fill(WHITE);	// Set Font to WHITE
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);	// Align Text to Middle
-	CP_Settings_TextSize(size.pause_text_size);	// Set Font Size
-	CP_Font_DrawText("PAUSE", size.pause_text_width, size.pause_text_height);	// Draw PAUSE Text
-	CP_Image_Draw(black_film, 0, 0, CP_Image_GetWidth(black_film), CP_Image_GetHeight(black_film), 100);	// Load Black Tint
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
+	CP_Settings_TextSize(size.pause_text_size);																					// Set Font Size
+	CP_Font_DrawText("PAUSE", size.pause_text_width, size.pause_text_height);													// Draw PAUSE Text
 
-	CP_Settings_Fill(RED);	// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.resume_position_x, size.resume_position_y, size.resume_width, size.resume_height);	// Place Holder for 'Resume' Buttom
+	CP_Settings_Fill(RED);																										// Set Button Colour to RED
+	CP_Graphics_DrawRect(size.resume_position_x, size.resume_position_y, size.resume_width, size.resume_height);				// Place Holder for 'Resume' Buttom
 	CP_Graphics_DrawRect(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height);	// Place Holder for 'Main Menu' Button
 
-	CP_Settings_Fill(WHITE);	// Set Font to WHITE
-	CP_Settings_TextSize(size.button_text_size);	// Set Font Size
-	CP_Font_DrawText("RESUME", size.resume_position_x, size.resume_position_y);	// Draw RESUME Text
-	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);	// Draw MAIN MENUU Text
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
+	CP_Font_DrawText("RESUME", size.resume_position_x, size.resume_position_y);													// Draw RESUME Text
+	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);										// Draw MAIN MENUU Text
 }
 
 /* Unpause Logic, whether Resume Game or return to Main Menu */
@@ -101,11 +97,11 @@ int unpause(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.resume_position_x, size.resume_position_y, size.resume_width, size.resume_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			game_pause = 0; // Resume Game is Resume Button Clicked
+			game_pause = 0;																										// Resume Game is Resume Button Clicked
 		}
 		else if (IsAreaClicked(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			game_pause = 0;
-			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);	// Load Main Menu when MAIN MENU is Clicked
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
 		}
 	}
 	return game_pause;
@@ -134,20 +130,18 @@ struct Game_Over_Size initialise_game_over_size() {
 /* Renders Game_Over overlay */
 void overlay_game_over() {
 	struct Game_Over_Size size = initialise_game_over_size();
-	black_film = CP_Image_Load("Assets/BLACK_FILM.png");
 
-	CP_Settings_Fill(WHITE);	// Set Font to WHITE
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);	// Align Text to Middle
-	CP_Settings_TextSize(size.game_over_text_size);	//Set Font Size
-	CP_Font_DrawText("YOU'RE FIRED!", size.game_over_text_width, size.game_over_text_height);	// Draw "YOU'RE FIRED!" Text
-	CP_Image_Draw(black_film, 0, 0, CP_Image_GetWidth(black_film), CP_Image_GetHeight(black_film), 100);	// Load Black Tint
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
+	CP_Settings_TextSize(size.game_over_text_size);																				//Set Font Size
+	CP_Font_DrawText("YOU'RE FIRED!", size.game_over_text_width, size.game_over_text_height);									// Draw "YOU'RE FIRED!" Text
 
-	CP_Settings_Fill(RED);	// Set Button Colour to RED
+	CP_Settings_Fill(RED);																										// Set Button Colour to RED
 	CP_Graphics_DrawRect(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height);	// Place Holder for 'Main Menu' Button
 
-	CP_Settings_Fill(WHITE);	// Set Font to WHITE
-	CP_Settings_TextSize(size.button_text_size);	// Set FONT Size
-	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);	// Draw MAIN MENU Text
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextSize(size.button_text_size);																				// Set FONT Size
+	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);										// Draw MAIN MENU Text
 }
 
 /* Game Over Logic, returns to Main Menu only */
@@ -159,14 +153,14 @@ int game_over(int game_pause) {
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			game_pause = 0;
-			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit); // Load Main Menu when MAIN MENU is Clicked
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
 		}
 	}
 	return game_pause;
 }
 
 /* Free PNG file */
-void free_overlay() {
-	black_film = CP_Image_Load("Assets/BLACK_FILM.png");
-	CP_Image_Free(&black_film);
-}
+//void free_overlay() {
+//	black_film = CP_Image_Load("Assets/BLACK_FILM.png");
+//	CP_Image_Free(&black_film);
+//}

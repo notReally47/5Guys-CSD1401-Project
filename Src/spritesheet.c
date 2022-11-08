@@ -55,10 +55,10 @@ void draw_player(const float* cellSize,const float* cellAlign,const int* playerP
 		index = (index+1)%3;
 		elapsed = 0.f;
 	}
-	if (infected[10]==1)
-		CP_Settings_Tint(CP_Color_Create(0,255,0,250));
-	else 
-		CP_Settings_NoTint();
+	//if (infected[10]==1)
+	//	CP_Settings_Tint(CP_Color_Create(0,255,0,250));
+	//else 
+	//	CP_Settings_NoTint();
 	CP_Settings_Translate(trans.x,trans.y);
 	switch (*face) {
 	case 0: // starting position
@@ -113,7 +113,7 @@ void draw_player(const float* cellSize,const float* cellAlign,const int* playerP
 			CP_Image_DrawSubImage(spritesheet,Player.Animation.x,Player.Animation.y,dimen.x,dimen.y,frame,frame,frame*2.f,frame*2.f,255);
 		break;
 	}
-	CP_Settings_NoTint();
+	//CP_Settings_NoTint();
 	CP_Settings_Translate(-trans.x,-trans.y);
 }
 
@@ -151,8 +151,8 @@ void draw_customer(const float* cellSize,const float* cellAlign,const int* custo
 	}
 	static float elapsed = 0.f;
 	elapsed += CP_System_GetDt();
-	(infected[i]==1)?CP_Settings_Tint(CP_Color_Create(0,255,0,250)):CP_Settings_NoTint(); // infected[1] means customer[1] is infected
-	CP_Settings_Translate(trans.x,trans.y);
+	//(infected[i]==1)?CP_Settings_Tint(CP_Color_Create(0,255,0,250)):CP_Settings_NoTint(); // infected[1] means customer[1] is infected
+	//CP_Settings_Translate(trans.x,trans.y);
 	
 	switch (*customerdirection) {
 	case 3: // down
@@ -194,7 +194,7 @@ void draw_customer(const float* cellSize,const float* cellAlign,const int* custo
 		break;
 	}
 	CP_Settings_Translate(-trans.x,-trans.y);
-	CP_Settings_NoTint();
+	//CP_Settings_NoTint();
 }
 void draw_mecha(void) {
 	// to do

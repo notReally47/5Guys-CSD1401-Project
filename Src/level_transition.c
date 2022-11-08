@@ -20,7 +20,7 @@ void Level_Transition_Init()
 	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255)); // black border around the rectangle
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE); // align text to the middle of the rect box
 
-	// define buttons
+	// Define buttons
 	buttons.center_x = windowwidth * 0.5f;
 	buttons.center_y = windowheight * 0.5f;
 	buttons.width = windowwidth * 0.1f;
@@ -53,15 +53,15 @@ void Level_Transition_Update()
 		}
 		break;
 	}
-	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y, buttons.width, buttons.height); // Draw 1st Button as 'Next'
-	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height); // Draw 2nd Button as 'Main Menu'
-	CP_Settings_Fill(BLACK); // Set font to BLACK
+	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y, buttons.width, buttons.height);							// Draw 1st Button as 'Next'
+	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height);	// Draw 2nd Button as 'Main Menu'
+	CP_Settings_Fill(BLACK);																							// Set Font to BLACK
 
 	// Draw Texts 'Next' & 'Main Menu' on Rectangles
-	CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f); // Set Text Size scaling to Window Height
+	CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f);															// Set Text Size scaling to Window Height
 	CP_Font_DrawText("Next", buttons.center_x, buttons.center_y);
 	CP_Font_DrawText("Main Menu", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
-	CP_Settings_Fill(WHITE); // Set font to WHITE
+	CP_Settings_Fill(WHITE);																							// Set font to WHITE
 
 	// Draw Text 'Level Complete!"
 	CP_Settings_TextSize(100.f);

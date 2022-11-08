@@ -56,8 +56,8 @@ void base_Init(void) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
 		}
 	}
-	setButton(&back, "./Assets/UI/Back.png", cellSize * 1.75f + cellAlign, cellSize * 1.75f, 2 * cellSize, 2 * cellSize, YES);
-	setButton(&pause, "./Assets/PAUSE.png", (float)(CP_System_GetWindowWidth() / 2.f), (float)(CP_System_GetWindowHeight() / 2.f), 248.f, 109.f, NO);
+	//setButton(&back, "./Assets/UI/Back.png", cellSize * 1.75f + cellAlign, cellSize * 1.75f, 2 * cellSize, 2 * cellSize, YES);
+	//setButton(&pause, "./Assets/PAUSE.png", (float)(CP_System_GetWindowWidth() / 2.f), (float)(CP_System_GetWindowHeight() / 2.f), 248.f, 109.f, NO);
 	//card_init();
 	//wetsign_UM();
 }
@@ -69,12 +69,12 @@ void base_Update(void) {
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		game_pause = !game_pause; 
 	}
-	/*Return to main menu*/
-	if (CP_Input_MouseClicked()) {
-		if (IsAreaClicked(back.position.x, back.position.y, back.btnWidth, back.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
-		}
-	}
+	///*Return to main menu*/
+	//if (CP_Input_MouseClicked()) {
+	//	if (IsAreaClicked(back.position.x, back.position.y, back.btnWidth, back.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+	//		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
+	//	}
+	//}
 
 	/*Read grid*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -102,7 +102,6 @@ void base_Update(void) {
 		CP_Settings_NoTint();
 		totalElapsedTime += currentElapsedTime;
 		clock = duration - (int)totalElapsedTime;
-		//free_overlay();
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (isCompleted == totalObjs) {
@@ -183,10 +182,11 @@ void base_Update(void) {
 			}
 		}
 	}
-
+	/*else {
+		CP_Settings_Tint(DARKGRAY);
+	}*/
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
-
 	/*Rendering grid*/
 	//CP_Graphics_ClearBackground(WHITE);
 	
@@ -245,10 +245,9 @@ void base_Update(void) {
 		//printf("Customer 0: R %d C %d \n",customer[0].prevCusRow,customer[0].prevCusCol);
 		//}
 	if(game_pause) {
+		CP_Settings_Tint(DARKGRAY);
 		if (clock > 0) {
 			overlay_pause();
-			//drawButton(pause);
-			//drawButton(back);
 			game_pause = unpause(game_pause);
 		}
 		else {
@@ -267,8 +266,5 @@ void base_Update(void) {
 
 void base_Exit(void) {
 	free_sprite();
-	CP_Image_Free(&pause.img);
-	CP_Image_Free(&back.img);
 	CP_Settings_StrokeWeight(3.0f);
-	free_overlay();
 }

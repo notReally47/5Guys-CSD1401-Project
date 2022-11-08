@@ -11,15 +11,7 @@ rect buttons;
 
 void Level_Select_Init()
 {
-	//// declare/define window width/height
-	//CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight);
-	//windowwidth = (float)CP_System_GetWindowWidth();
-	//windowheight = (float)CP_System_GetWindowHeight();
-	//CP_Settings_RectMode(CP_POSITION_CENTER); // align rectangle to the center position (else it defaults to top left corner)
-	//CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255)); // black border around the rectangle
-	//CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE); // align text to the middle of the rect box
-
-	// define buttons
+	// Define buttons
 	buttons.center_x = windowwidth * 0.5f;
 	buttons.center_y = windowheight * 0.5f;
 	buttons.width = windowwidth * 0.1f;
