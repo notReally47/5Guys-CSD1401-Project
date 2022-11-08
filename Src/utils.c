@@ -39,7 +39,7 @@ int getDirection(void) {
 		key = (CP_Input_KeyTriggered(KEY_D) || CP_Input_KeyDown(KEY_D) && CP_Input_KeyReleased(KEY_ANY)) ? KEY_D : key; // D
 		break;
 	}
-	if ((CP_Input_KeyDown(key) && delay>0.55f) || (CP_Input_KeyTriggered(key) && delay>0.6f)) {
+	if (	(CP_Input_KeyDown(key) && delay>(10.f/CP_System_GetFrameRate())) || (CP_Input_KeyTriggered(key) && delay>(10.f/CP_System_GetFrameRate()))	) {
 		delay = 0.f;
 		if (CP_Input_KeyDown(key))
 		switch (key) {
@@ -64,7 +64,6 @@ int getDirection(void) {
 */
 void gameLogic(int *posX, int *posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	/*Push box (No boarder or another box blocking the box being pushed)*/
-	printf("x: %d | y: %d \n", *posY, *posX);
 	if (grid[*posX][*posY].box && !grid[nextPosX][nextPosY].box && 
 		!grid[*posX][*posY].boarder && !grid[nextPosX][nextPosY].boarder && 
 		!grid[*posX][*posY].customer && !grid[nextPosX][nextPosY].customer && 
@@ -103,25 +102,25 @@ void getCell(int *posX, int *posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][S
 	switch (direction) {
 	/* Move up */
 	case 1:
-		--*posX;
+		*posX = (*posX>1)?--*posX:*posX;
 		gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
 		break;
 
 	/* Move left */
 	case 2:
-		--*posY;
+		*posY = (*posY>1)?--*posY:*posY;
 		gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
 		break;
 
 	/* Move down */
 	case 3:
-		++*posX;
+		*posX = (*posX<SOKOBAN_GRID_ROWS-1)?++*posX:*posX;
 		gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
 		break;
 
 	/* Move right */
 	case 4:
-		++*posY;
+		*posY = (*posY<SOKOBAN_GRID_COLS-1)?++*posY:*posY;
 		gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
 		break;
 

@@ -55,14 +55,16 @@ void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[
 
 			int count = CP_System_GetFrameCount();
 
-			if (!curr) {
-				curr = customer[i].direction;
-			}
-			else {
-				customer[i].direction = curr;
-			}
-
-			if (!(count % CUSTOMER_SPEED)) {
+			static float delay = 0.f;
+			delay += CP_System_GetDt();
+			if (!(count % CUSTOMER_SPEED) && delay > 1.5f) {
+				delay = 0.f;
+				if (!curr) {
+					curr = customer[i].direction;
+				}
+				else {
+					customer[i].direction = curr;
+				}
 				switch (curr) {
 					// Move Up
 				case SOKOBAN_UP:

@@ -151,16 +151,18 @@ void customer_status(Customer customer[CUSTOMER_MAX]) {
         if (customer[i].isActive) {
             infected[i] = 1; // to be used in customer.c -> customerLock()
             total++;
-            if (total == 4)
+            if (total == 3)
                 break;
         }
 }
 int player_status(int* isLocked) {
     if (infected[10] == 1){
-    static float elapse = 0.f;
-    elapse += CP_System_GetDt();
-        if (elapse >= 2.f)
-            *isLocked = (CP_Random_RangeInt(0,10)%10==0)?1:0; // 10% chance of getting locked every 2 seconds 
+        static float elapse = 0.f;
+        elapse += CP_System_GetDt();
+        if (elapse >= 5.f){
+            elapse = 0.f;
+            *isLocked = (CP_Random_RangeInt(0,10)%10==0)?1:0; // 10% chance of getting locked every 5 seconds 
+        }
     }
     return *isLocked;
 }
@@ -168,9 +170,9 @@ void teleport_UM(void) {
     // initialize teleport_UM array
     tele[0] = 1; // enable tele
     tele[1] = 4; // row of 1st
-    tele[2] = 4; // col of 1st
-    tele[3] = 10; // row of 2nd
-    tele[4] = 10; // col of 2nd
+    tele[2] = 15; // col of 1st
+    tele[3] = 4; // row of 2nd
+    tele[4] = 25; // col of 2nd
     tele[5] = 0; // cooldown
 }
 void wetsign_UM(void) {

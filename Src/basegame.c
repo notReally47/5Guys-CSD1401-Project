@@ -102,8 +102,7 @@ void base_Update(void) {
 		CP_Settings_NoTint();
 		totalElapsedTime += currentElapsedTime;
 		clock = duration - (int)totalElapsedTime;
-		free_overlay();
-		printf("UNPAUSED! \n");
+		//free_overlay();
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (isCompleted == totalObjs) {
@@ -139,27 +138,27 @@ void base_Update(void) {
 			/*Check for input and get the direction of the input*/
 			int dir = getDirection();
 
-			/*Set direction that the player is facing.*/
-			switch (dir) {
-			case 1: // up
-				face = 1;
-				break;
-			case 2: // left
-				face = 2;
-				break;
-			case 3: // down
-				face = 3;
-				break;
-			case 4: // right
-				face = 4;
-				break;
-			}
-
-			/*If there is movement.*/
-			if (dir > 0) {
-				saveMove(moves, grid);
-				getCell(&playerPosX, &playerPosY, dir, grid);
-			}
+		/*Set direction that the player is facing.*/
+		switch (dir) {
+		case 1: // up
+			face = 1;
+			break;
+		case 2: // left
+			face = 2;
+			break;
+		case 3: // down
+			face = 3;
+			break;
+		case 4: // right
+			face = 4;
+			break;
+		}
+		
+		/*If there is movement.*/
+		if (dir > 0) {
+			saveMove(moves, grid);
+			getCell(&playerPosX, &playerPosY, dir, grid);
+		}
 
 			/*Undo move.*/
 			if (CP_Input_KeyTriggered(KEY_U) && global_move > 1) {
@@ -192,12 +191,7 @@ void base_Update(void) {
 	//CP_Graphics_ClearBackground(WHITE);
 	
 	// experimental
-	// world_camera(cellSize,face,dir); // requires dir to be declared outside else loop
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
-	CP_Settings_Fill(BLACK);
-	char buffer[20] = {0};
-	sprintf_s(buffer,_countof(buffer),"Time left: %d",clock);
-	CP_Font_DrawText(buffer,cellSize,cellSize);
+	//world_camera(cellSize,face,dir); // requires dir to be declared outside else loop
 	
 	/* Map Rendering */
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -228,7 +222,7 @@ void base_Update(void) {
 
 				if ( (currCell.player && (face==3||face==4||face==0)) ||  // renders initial position and when moving right/down
 					(moves[global_move-1][row][col].player && (face==1||face==2)) )  // renders prev position if moving left/up				
-					draw_player(cellSize,cellAlign,playerPosX,playerPosY,face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
+					draw_player(&cellSize,&cellAlign,&playerPosX,&playerPosY,&face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
 
 				else if (currCell.box)
 					draw_box(cellX,cellY,cellSize);
@@ -236,17 +230,20 @@ void base_Update(void) {
 				else if (currCell.shelf)
 					draw_boarder(cellX,cellY,cellSize);
 			}
-
-			if (currCell.customer) {
-				for (int i = 0; i < CUSTOMER_MAX; i++) {
-					if (row == customer[i].cusRow && col == customer[i].cusCol) {
-						draw_customer(cellX,cellY,cellSize,customer[i].direction);
-					}
-				}
-			}
+			if (currCell.customer) // currCell.customer holds current position and previous position
+				for (int i = 0; i < CUSTOMER_MAX; i++) 
+						draw_customer(&cellSize,&cellAlign,&customer[i].cusRow,&customer[i].cusCol,&customer[i].direction,&i);
 		}
 	}
 
+	//customer[i].isIdle || (!(row==customer[i].cusRow) && col==customer[i].cusCol) ||	
+						//(row==customer[i].cusRow && col==customer[i].cusCol) && !(customer[i].direction==1) && !(customer[i].direction==2)
+	//(!(row==customer[i].cusRow) && col==customer[i].cusCol) || 
+						//(row==customer[i].cusRow && col==customer[i].cusCol) && !(customer[i].direction==1) && !(customer[i].direction==2)
+	//if (CP_Input_KeyTriggered(KEY_U)){
+		//printf("Customer 0: R %d C %d \n",customer[0].cusRow,customer[0].cusCol);
+		//printf("Customer 0: R %d C %d \n",customer[0].prevCusRow,customer[0].prevCusCol);
+		//}
 	if(game_pause) {
 		if (clock > 0) {
 			overlay_pause();
@@ -259,6 +256,13 @@ void base_Update(void) {
 			game_pause = game_over(game_pause);
 		}		
 	}
+
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
+	CP_Settings_Fill(BLACK);
+	char buffer[20] = { 0 };
+	sprintf_s(buffer, _countof(buffer), "Time left: %d", clock);
+	CP_Font_DrawText(buffer, cellSize, cellSize);
+
 }
 
 void base_Exit(void) {
