@@ -50,8 +50,6 @@ enum Options {
 	LEFT,
 	RIGHT,
 	CORNER,
-	APPLY = 0,
-	DISCARD = 1,
 	PADDING = 10,
 	MAX_LENGTH = 20
 };
