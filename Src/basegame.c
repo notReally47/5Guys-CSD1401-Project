@@ -25,7 +25,7 @@ int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 float cellSize, cellAlign, sec, elapsedLock;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner;
 
 float totalElapsedTime;
 
@@ -105,8 +105,10 @@ void base_Update(void) {
 				playerCol = col;
 			}
 
-			if (customerLock(grid, customer)) {
+			int temp = 0;
+			if (temp = customerLock(grid, customer)) {
 				isLocked = 1;
+				stunner = temp - 1;
 			}
 		}
 	}
@@ -141,7 +143,8 @@ void base_Update(void) {
 			}
 
 			// Moves the Customer to the player
-			face = customerMoveToPlayer(playerRow, playerCol, grid, customer);
+			// Temporary removed the face return value due to unintended issues
+			customerMoveToPlayer(playerRow, playerCol, stunner, grid, customer);
 
 			/*Check if 3 seconds has passed*/
 			if (elapsedLock <= lockTimer) {
