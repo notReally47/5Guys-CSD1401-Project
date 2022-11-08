@@ -12,7 +12,6 @@
 #include "mechanics.h"
 #include "mainmenu.h"
 #include "level_overlay.h"
-#include "options_draw.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,8 +28,6 @@ float cellSize, cellAlign, sec, elapsedLock;
 int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock;
 
 float totalElapsedTime;
-
-Button back, pause;
 
 CP_Sound fail = NULL;
 
@@ -77,8 +74,6 @@ void base_Init(void) {
 	/* SFX */
 	fail = CP_Sound_Load("./Assets/Sound/Fail.wav");
 
-	//setButton(&back, "./Assets/UI/Back.png", cellSize * 1.75f + cellAlign, cellSize * 1.75f, 2 * cellSize, 2 * cellSize, YES);
-	//setButton(&pause, "./Assets/PAUSE.png", (float)(CP_System_GetWindowWidth() / 2.f), (float)(CP_System_GetWindowHeight() / 2.f), 248.f, 109.f, NO);
 	//card_init();
 	//wetsign_UM();
 }
@@ -296,7 +291,6 @@ void base_Update(void) {
 	char buffer[20] = { 0 };
 	sprintf_s(buffer, _countof(buffer), "Time left: %d", clock);
 	CP_Font_DrawText(buffer, cellSize, cellSize);
-
 }
 
 void base_Exit(void) {
