@@ -6,4 +6,3 @@ void overlay_pause();
 int unpause(int game_pause);
 void overlay_game_over();
 int game_over(int game_pause0);
-void free_overlay();

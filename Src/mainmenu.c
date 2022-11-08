@@ -32,6 +32,7 @@ void Main_Menu_Init()
 void Main_Menu_Update()
 {
 	set_level(); //set to latest unlocked level
+	CP_Settings_NoTint(); //Clear Tint
 	CP_Graphics_ClearBackground(GRAY); // set background to dark grey
 	CP_Settings_Fill(RED); // fill rect with the colour red
 	CP_Graphics_DrawRect(buttons.center_x,buttons.center_y,buttons.width,buttons.height); // draw buttons as 'play'
