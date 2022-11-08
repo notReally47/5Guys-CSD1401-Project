@@ -89,6 +89,10 @@ void Options_Init() {
 	for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
 		resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
 	}
+	if (!(resolution[0].selected) && !(resolution[1].selected) && !(resolution[2].selected)) {
+		resolution[0].selected = YES;
+		resSelected = &resolution[0];
+	}
 	/*-----------------------------------*/
 }
 
