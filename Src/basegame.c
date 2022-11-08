@@ -184,15 +184,6 @@ void base_Update(void) {
 			}
 		}
 	}
-	//else {
-	//	printf("PAUSED! \n");
-	//	//TODO Pause Overlay Over the Map
-	//	//CP_Graphics_DrawRect((float)config.settings.resolutionWidth / 2.f, (float)config.settings.resolutionHeight * 0.5f);
-	//	CP_Image_Draw(logo, (float)config.settings.resolutionWidth / 3.f, (float)config.settings.resolutionHeight * 0.5f, CP_Image_GetWidth(logo), CP_Image_GetHeight(logo), 255);
-	//}
-	/*else {
-		CP_Settings_Tint(DARKGRAY);
-	}*/
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
