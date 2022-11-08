@@ -14,6 +14,7 @@ float x,y,width,height;
 Config config;
 
 CP_Sound gameMusic;
+CP_Font gameFont;
 
 void splash_screen_init(void)
 {
@@ -21,6 +22,8 @@ void splash_screen_init(void)
     config = readFile();
 
     gameMusic = CP_Sound_Load("./Assets/Sound/music.mp3");
+    gameFont = CP_Font_Load("./Assets/Font/VT323-Regular.ttf");
+    CP_Font_Set(gameFont);
     img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
 
     CP_System_SetWindowTitle("SevenTree");

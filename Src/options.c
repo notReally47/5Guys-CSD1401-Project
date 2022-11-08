@@ -26,7 +26,6 @@ static float gifDimension;
 CP_Vector window;
 CP_Image gameplay;
 CP_Sound gameSFX;
-CP_Font gameFont;
 Flag ddlClicked, volChanged, resChanged, configChanged;
 int displayVol;
 
@@ -56,8 +55,6 @@ void Options_Init() {
 	configChanged = NO;
 
 	/*Settings*/
-	/*gameFont = CP_Font_Load("./Assets/Fonts/VT323-Regular.ttf");
-	CP_Font_Set(gameFont);*/
 	CP_Settings_TextSize(textSize);
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 	CP_Settings_Stroke(BLACK);
