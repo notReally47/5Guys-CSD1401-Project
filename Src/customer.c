@@ -15,7 +15,7 @@
 * Customer customer: Customer stats.
 */
 void customerLogic(int cusNum, int cusRow, int cusCol, int prevCusRow, int prevCusCol, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
-	if (!grid[cusRow][cusCol].shelf && !grid[cusRow][cusCol].boarder && !grid[cusRow][cusCol].box && !grid[cusRow][cusCol].customer && !grid[cusRow][cusCol].key && !grid[cusRow][cusCol].player &&!grid[cusRow][cusCol].mecha) {
+	if (!grid[cusRow][cusCol].shelf && !grid[cusRow][cusCol].boarder && !grid[cusRow][cusCol].box && !grid[cusRow][cusCol].customer && !grid[cusRow][cusCol].key && !grid[cusRow][cusCol].player && !grid[cusRow][cusCol].mecha) {
 		if (customer[cusNum].isRandom) {
 			/*Limit customer random movement within 5x5 grid*/
 			if ((customer[cusNum].ogCusCol - 2 <= cusCol && cusCol <= customer[cusNum].ogCusCol + 2) &&
@@ -192,7 +192,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face left */
 			case SOKOBAN_LEFT:
 				for (int x = 1; x <= customer[i].range; x++) {
-					if (grid[cusRow][cusCol - x].box || grid[cusRow][cusCol -x].shelf) {
+					if (grid[cusRow][cusCol - x].box || grid[cusRow][cusCol - x].shelf) {
 						break;
 					}
 
@@ -250,23 +250,23 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 	return isLocked;
 }
 
-int checkPlayer(int playerRow, int playerCol, int cusNum, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
+int checkPlayer(int playerRow, int playerCol, int cusNum, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
 	for (int i = 1; i <= customer[cusNum].range; i++) {
-		switch (direction) {
+		switch (customer[cusNum].direction) {
 		case SOKOBAN_UP:
-			if ((playerRow + i) == customer[cusNum].cusRow) {
+			if ((customer[cusNum].cusRow - i) == playerRow) {
 				return TRUE;
 			}
 		case SOKOBAN_LEFT:
-			if ((playerCol + i) == customer[cusNum].cusCol) {
+			if ((customer[cusNum].cusCol - i) == playerCol) {
 				return TRUE;
 			}
 		case SOKOBAN_DOWN:
-			if ((playerRow - i) == customer[cusNum].cusRow) {
+			if ((customer[cusNum].cusRow + i) == playerRow) {
 				return TRUE;
 			}
 		case SOKOBAN_RIGHT:
-			if ((playerCol - i) == customer[cusNum].cusCol) {
+			if ((customer[cusNum].cusCol + i) == playerCol) {
 				return TRUE;
 			}
 		default:
@@ -276,47 +276,49 @@ int checkPlayer(int playerRow, int playerCol, int cusNum, int direction, Cell gr
 	return FALSE;
 }
 
-void customerMoveToPlayer(int playerRow, int playerCol, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
-	//int count = CP_System_GetFrameCount();
+int customerMoveToPlayer(int playerRow, int playerCol, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
+	int face = 0;
 	for (int i = 0; i < CUSTOMER_MAX; i++) {
 		int cusRow = customer[i].cusRow;
 		int cusCol = customer[i].cusCol;
 		int direction = customer[i].direction;
 
-		//if (!(count % CUSTOMER_SPEED)) {
-			if (!customer[i].isActive) {
-				customer[i].isIdle = 0;
-				customer[i].isRandom = 0;
-				switch (direction) {
-				case SOKOBAN_UP:
-					if (cusRow != playerRow + 1 && checkPlayer(playerRow, playerCol, i, direction, grid, customer)) {
-						cusRow--;
-						customerLogic(i, cusRow, cusCol, cusRow + 1, cusCol, customer[i].direction, grid, customer);
-					}
-					break;
-				case SOKOBAN_LEFT:
-					if (cusCol != playerCol + 1 && checkPlayer(playerRow, playerCol, i, direction, grid, customer)) {
-						cusCol--;
-						customerLogic(i, cusRow, cusCol, cusRow, cusCol + 1, customer[i].direction, grid, customer);
-					}
-					break;
-				case SOKOBAN_DOWN:
-					if (cusRow != playerRow - 1 && checkPlayer(playerRow, playerCol, i, direction, grid, customer)) {
-						cusRow++;
-						customerLogic(i, cusRow, cusCol, cusRow - 1, cusCol, customer[i].direction, grid, customer);
-					}
-					break;
-				case SOKOBAN_RIGHT:
-					if (cusRow != playerCol - 1 && checkPlayer(playerRow, playerCol, i, direction, grid, customer)) {
-						cusCol++;
-						customerLogic(i, cusRow, cusCol, cusRow, cusCol - 1, customer[i].direction, grid, customer);
-					}
-					break;
-					// Default case (if any)
-				default:
-					break;
+		if (!customer[i].isActive) {
+			customer[i].isRandom = 0;
+			switch (direction) {
+			case SOKOBAN_UP:
+				if (cusRow != playerRow + 1 && checkPlayer(playerRow, playerCol, i, grid, customer)) {
+					cusRow--;
+					customerLogic(i, cusRow, cusCol, cusRow + 1, cusCol, customer[i].direction, grid, customer);
+					face = 3;
 				}
+				break;
+			case SOKOBAN_LEFT:
+				if (cusCol != playerCol + 1 && checkPlayer(playerRow, playerCol, i, grid, customer)) {
+					cusCol--;
+					customerLogic(i, cusRow, cusCol, cusRow, cusCol + 1, customer[i].direction, grid, customer);
+					face = 4;
+				}
+				break;
+			case SOKOBAN_DOWN:
+				if (cusRow != playerRow - 1 && checkPlayer(playerRow, playerCol, i, grid, customer)) {
+					cusRow++;
+					customerLogic(i, cusRow, cusCol, cusRow - 1, cusCol, customer[i].direction, grid, customer);
+					face = 1;
+				}
+				break;
+			case SOKOBAN_RIGHT:
+				if (cusRow != playerCol - 1 && checkPlayer(playerRow, playerCol, i, grid, customer)) {
+					cusCol++;
+					customerLogic(i, cusRow, cusCol, cusRow, cusCol - 1, customer[i].direction, grid, customer);
+					face = 2;
+				}
+				break;
+				// Default case (if any)
+			default:
+				break;
 			}
-		//}
+		}
 	}
+	return face;
 }

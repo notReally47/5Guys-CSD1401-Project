@@ -24,29 +24,46 @@ Customer customer[CUSTOMER_MAX];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
-float cellSize,cellAlign,sec,elapsedLock;
+float cellSize, cellAlign, sec, elapsedLock;
 
-int totalObjs,isLocked,activatedCusX,activatedCusY,face,game_pause,clock;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock;
 
 float totalElapsedTime;
 
 Button back, pause;
+
+CP_Sound fail = NULL;
+
+/*Gif*/
+static float timeElapsed;
+static const float DISPLAY_DURATION = .5f;
+static int imageIndex;
+static const float FRAME_DIMENSION = 322.0f;
+static const int TOTAL_FRAMES = 4;
+static const int SPRITESHEET_ROWS = 1;
+CP_Image speechSprite;
 
 void base_Init(void) {
 
 	/* Settings */
 	CP_Settings_StrokeWeight(0.5f);
 	// for clock settings
-	CP_Settings_TextSize((float)config.settings.resolutionHeight*0.025f);
-	
+	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
+
 	/* Initializations */
-	cellSize = (float)(CP_System_GetWindowHeight()/SOKOBAN_GRID_ROWS);
-	cellAlign = (float)((CP_System_GetWindowWidth()-(int)cellSize*SOKOBAN_GRID_COLS)/2);
+	cellSize = (float)(CP_System_GetWindowHeight() / SOKOBAN_GRID_ROWS);
+	cellAlign = (float)((CP_System_GetWindowWidth() - (int)cellSize * SOKOBAN_GRID_COLS) / 2);
 	face = 0;
 	elapsedLock = 0;
 	isLocked = 0;
 	totalElapsedTime = 0;
 	game_pause = 0;
+
+	/*GIF*/
+	imageIndex = 0;
+
+	speechSprite = CP_Image_Load("./Assets/Spritesheet/speech.png");
+
 	load_spritesheet(cellSize);
 	setMap(grid, customer, path);				// Initialise Map
 	totalObjs = getObjective(grid);				// Counts number of key objective to meet
@@ -56,6 +73,10 @@ void base_Init(void) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
 		}
 	}
+
+	/* SFX */
+	fail = CP_Sound_Load("./Assets/Sound/Fail.wav");
+
 	//setButton(&back, "./Assets/UI/Back.png", cellSize * 1.75f + cellAlign, cellSize * 1.75f, 2 * cellSize, 2 * cellSize, YES);
 	//setButton(&pause, "./Assets/PAUSE.png", (float)(CP_System_GetWindowWidth() / 2.f), (float)(CP_System_GetWindowHeight() / 2.f), 248.f, 109.f, NO);
 	//card_init();
@@ -63,11 +84,11 @@ void base_Init(void) {
 }
 
 void base_Update(void) {
-	int playerRow, playerCol, cusNum, isCompleted = 0;
+	int playerRow, playerCol, isCompleted = 0;
 	float currentElapsedTime = CP_System_GetDt();
-	
+
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
-		game_pause = !game_pause; 
+		game_pause = !game_pause;
 	}
 	///*Return to main menu*/
 	//if (CP_Input_MouseClicked()) {
@@ -109,14 +130,24 @@ void base_Update(void) {
 
 		/* Lose Condition */
 		if (clock == 0) {
+			CP_Sound_Play(fail);
 			game_pause = 1;
 		}
 
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
 		player_status(&isLocked); // UM
 		if (isLocked) {
+
+			/*Draw gameplay gif logic*/
+			timeElapsed += CP_System_GetDt();
+			if (timeElapsed >= DISPLAY_DURATION) {
+				imageIndex = (imageIndex + 1) % TOTAL_FRAMES;
+				timeElapsed = 0.0f;
+			}
+
 			// Moves the Customer to the player
-			customerMoveToPlayer(playerRow, playerCol, grid, customer);
+			face = customerMoveToPlayer(playerRow, playerCol, grid, customer);
+
 			/*Check if 3 seconds has passed*/
 			if (elapsedLock <= lockTimer) {
 				elapsedLock = elapsedLock + CP_System_GetDt();
@@ -189,50 +220,54 @@ void base_Update(void) {
 	CP_Graphics_ClearBackground(BLUEGRAY);
 	/*Rendering grid*/
 	//CP_Graphics_ClearBackground(WHITE);
-	
+
 	// experimental
 	//world_camera(cellSize,face,dir); // requires dir to be declared outside else loop
-	
+
 	/* Map Rendering */
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			Cell currCell = grid[row][col];
 
-			float cellX = cellSize*(float)col+cellAlign;
-			float cellY = cellSize*(float)row;
-			
-			draw_floor(cellX,cellY,cellSize);
+			float cellX = cellSize * (float)col + cellAlign;
+			float cellY = cellSize * (float)row;
 
-			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[global_move-1][row][col].player || 
-				currCell.mecha || tele[0]==1 && (row==tele[1] && col==tele[2]) || (row==tele[3] && col==tele[4])) {
+			draw_floor(cellX, cellY, cellSize);
+
+			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[global_move - 1][row][col].player ||
+				currCell.mecha || tele[0] == 1 && (row == tele[1] && col == tele[2]) || (row == tele[3] && col == tele[4])) {
 				if (currCell.boarder)
-					draw_boarder(cellX,cellY,cellSize);
+					draw_boarder(cellX, cellY, cellSize);
 
 				else if (currCell.key && currCell.box)
-					draw_key_in_box(cellX,cellY,cellSize);
+					draw_key_in_box(cellX, cellY, cellSize);
 
-				else if (currCell.key) 
-					draw_key(cellX,cellY,cellSize);
+				else if (currCell.key)
+					draw_key(cellX, cellY, cellSize);
 
-				else if (tele[0]==1 && (row==tele[1] && col==tele[2]) || (row==tele[3] && col==tele[4]))
-					draw_boarder(cellX,cellY,cellSize); // draw_tele();
-				
+				else if (tele[0] == 1 && (row == tele[1] && col == tele[2]) || (row == tele[3] && col == tele[4]))
+					draw_boarder(cellX, cellY, cellSize); // draw_tele();
+
 				else if (currCell.mecha)
-					draw_boarder(cellX,cellY,cellSize); // draw_mecha();
+					draw_boarder(cellX, cellY, cellSize); // draw_mecha();
 
-				if ( (currCell.player && (face==3||face==4||face==0)) ||  // renders initial position and when moving right/down
-					(moves[global_move-1][row][col].player && (face==1||face==2)) )  // renders prev position if moving left/up				
-					draw_player(&cellSize,&cellAlign, &playerRow, &playerCol, &face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
+				if ((currCell.player && (face == 3 || face == 4 || face == 0)) ||  // renders initial position and when moving right/down
+					(moves[global_move - 1][row][col].player && (face == 1 || face == 2)))  // renders prev position if moving left/up				
+					draw_player(&cellSize, &cellAlign, &playerRow, &playerCol, &face);  // bugfix: player doesn't render if turning left/up into obs if previous face was 3/4/0
 
 				else if (currCell.box)
-					draw_box(cellX,cellY,cellSize);
+					draw_box(cellX, cellY, cellSize);
 
 				else if (currCell.shelf)
-					draw_boarder(cellX,cellY,cellSize);
+					draw_boarder(cellX, cellY, cellSize);
 			}
 			if (currCell.customer) // currCell.customer holds current position and previous position
-				for (int i = 0; i < CUSTOMER_MAX; i++) 
-						draw_customer(&cellSize,&cellAlign,&customer[i].cusRow,&customer[i].cusCol,&customer[i].direction,&i);
+				for (int i = 0; i < CUSTOMER_MAX; i++)
+					draw_customer(&cellSize, &cellAlign, &customer[i].cusRow, &customer[i].cusCol, &customer[i].direction, &i);
+
+			if (isLocked && currCell.player) {
+				drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+			}
 		}
 	}
 
@@ -244,7 +279,7 @@ void base_Update(void) {
 		//printf("Customer 0: R %d C %d \n",customer[0].cusRow,customer[0].cusCol);
 		//printf("Customer 0: R %d C %d \n",customer[0].prevCusRow,customer[0].prevCusCol);
 		//}
-	if(game_pause) {
+	if (game_pause) {
 		CP_Settings_Tint(DARKGRAY);
 		if (clock > 0) {
 			overlay_pause();
@@ -253,7 +288,7 @@ void base_Update(void) {
 		else {
 			overlay_game_over();
 			game_pause = game_over(game_pause);
-		}		
+		}
 	}
 
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
@@ -265,6 +300,7 @@ void base_Update(void) {
 }
 
 void base_Exit(void) {
+	CP_Sound_Free(&fail);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
 }
