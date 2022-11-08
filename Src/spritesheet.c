@@ -94,7 +94,6 @@ void draw_player(const float* cellSize,const float* cellAlign,const int* playerP
 		}
 		if (Player.Animation.x > cellx) {
 			Player.Animation.x -= move;
-			printf("posy %d player %.2f cell %.2f \n", *playerPosY, Player.Animation.x, cellx);
 			CP_Image_DrawSubImage(spritesheet,Player.Animation.x,Player.Animation.y,dimen.x,dimen.y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
 		}
 		else

@@ -150,7 +150,8 @@ void base_Update(void) {
 			}
 
 			// Moves the Customer to the player
-			customerMoveToPlayer(playerRow, playerCol, grid, customer);
+			face = customerMoveToPlayer(playerRow, playerCol, grid, customer);
+
 			/*Check if 3 seconds has passed*/
 			if (elapsedLock <= lockTimer) {
 				elapsedLock = elapsedLock + CP_System_GetDt();
