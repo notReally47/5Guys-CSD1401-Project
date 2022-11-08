@@ -18,7 +18,7 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 	// finding X2,Y2 coords -- bottom right corner of the rectangle
 	float x2 = area_center_x + area_width * 0.5f;
 	float y2 = area_center_y + area_height * 0.5f;
-	return ((click_x<x2&& click_x>x1 && click_y<y2&& click_y>y1) ? 1 : 0); // return 1 if the mouse is within the rectangle
+	return ((click_x < x2 && click_x > x1 && click_y < y2 && click_y > y1) ? 1 : 0); // return 1 if the mouse is within the rectangle
 }
 
 /*
@@ -26,10 +26,10 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 */
 int getDirection(void) {
 	static int key;
-	static float delay=0.f;
+	static float delay = 0.f;
 	delay += CP_System_GetDt();
 	switch (CP_Input_KeyDown(KEY_ANY)) {
-	case 3: 
+	case 3:
 	case 4: // limits key input to 2
 		break; // requires some error catching tests
 	default:
@@ -39,92 +39,128 @@ int getDirection(void) {
 		key = (CP_Input_KeyTriggered(KEY_D) || CP_Input_KeyDown(KEY_D) && CP_Input_KeyReleased(KEY_ANY)) ? KEY_D : key; // D
 		break;
 	}
-	if (	(CP_Input_KeyDown(key) && delay>(10.f/CP_System_GetFrameRate())) || (CP_Input_KeyTriggered(key) && delay>(10.f/CP_System_GetFrameRate()))	) {
+	if ((CP_Input_KeyDown(key) && delay > (10.f / CP_System_GetFrameRate())) || (CP_Input_KeyTriggered(key) && delay > (10.f / CP_System_GetFrameRate()))) {
 		delay = 0.f;
 		if (CP_Input_KeyDown(key))
-		switch (key) {
-		case KEY_W:
-			return SOKOBAN_UP;
-		case KEY_A:
-			return SOKOBAN_LEFT;
-		case KEY_S:
-			return SOKOBAN_DOWN;
-		case KEY_D:
-			return SOKOBAN_RIGHT;
-		}
+			switch (key) {
+			case KEY_W:
+				return SOKOBAN_UP;
+			case KEY_A:
+				return SOKOBAN_LEFT;
+			case KEY_S:
+				return SOKOBAN_DOWN;
+			case KEY_D:
+				return SOKOBAN_RIGHT;
+			}
 	}
 	return SOKOBAN_IDLE;
 }
 
+/*returns TRUE if valid move is allowed, FALSE if illegal move*/
+int collisionCheck(int posX, int posY, int moveX, int moveY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+
+	int newPosX = posX + moveX, newPosY = posY + moveY;
+	/*Check if tile directly after has obstructions*/
+	if (!grid[newPosX][newPosY].boarder &&
+		!grid[newPosX][newPosY].customer &&
+		!grid[newPosX][newPosY].shelf &&
+		!grid[newPosX][newPosY].mecha)
+	{
+		/*If player is pushing a box, check if theres anything occupying the tile after*/
+		if (grid[newPosX][newPosY].box) {
+			int nextPosX = newPosX + moveX, nextPosY = newPosY + moveY;
+
+			if (!grid[nextPosX][nextPosY].box &&
+				!grid[nextPosX][nextPosY].boarder &&
+				!grid[nextPosX][nextPosY].customer &&
+				!grid[nextPosX][nextPosY].shelf &&
+				!grid[nextPosX][nextPosY].mecha)
+			{
+				return TRUE;
+			}
+		}
+		/*Player is not pushing a box*/
+		else if (!grid[newPosX][newPosY].box) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 /*
-* gameLogic - Logic and interactions between players, boxes, objective and boarders. 
+* gameLogic - Logic and interactions between players, boxes, objective and boarders.
 * int posX, posY: The next cell that the player is moving towards.
 * int nextPosX, nextPosY: The following cell after the next cell.
 * int prevPosX, prevPosY: The previous cell that the player was previously at.
 */
-void gameLogic(int *posX, int *posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+void gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	/*Push box (No boarder or another box blocking the box being pushed)*/
-	if (grid[*posX][*posY].box && !grid[nextPosX][nextPosY].box && 
-		!grid[*posX][*posY].boarder && !grid[nextPosX][nextPosY].boarder && 
-		!grid[*posX][*posY].customer && !grid[nextPosX][nextPosY].customer && 
-		!grid[*posX][*posY].shelf && !grid[nextPosX][nextPosY].shelf &&
-		!grid[*posX][*posY].mecha && !grid[nextPosX][nextPosY].mecha) {
+	if (grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
 		grid[*posX][*posY].player = 1;
 		grid[*posX][*posY].box = 0;
 		grid[nextPosX][nextPosY].box = 1;
 		global_move++;
-		printf("Current Moves: %d\n", global_move-1);
+		printf("Current Moves: %d\n", global_move - 1);
 	}
-	
+
 	/*Player movement without obstruction*/
-	else if (!grid[*posX][*posY].box && !grid[*posX][*posY].boarder && !grid[*posX][*posY].customer && !grid[*posX][*posY].shelf && !grid[*posX][*posY].mecha) {
+	else if (!grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
 		if (tele[0] == 1) {
 			if (*posX == tele[1] && *posY == tele[2]) {
-				*posX = tele[3]+(*posX-prevPosX);
-				*posY = tele[4]+(*posY-prevPosY);
+				*posX = tele[3] + (*posX - prevPosX);
+				*posY = tele[4] + (*posY - prevPosY);
 				tele[5] = 1;
 			}
 			else if (*posX == tele[3] && *posY == tele[4]) {
-				*posX = tele[1]+(*posX-prevPosX);
-				*posY = tele[2]+(*posY-prevPosY);
+				*posX = tele[1] + (*posX - prevPosX);
+				*posY = tele[2] + (*posY - prevPosY);
 				tele[5] = 1;
 			}
 		}
 		grid[*posX][*posY].player = 1;
 		global_move++;
-		printf("Current Moves: %d\n", global_move-1);
+		printf("Current Moves: %d\n", global_move - 1);
 	}
 }
 
-void getCell(int *posX, int *posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	switch (direction) {
-	/* Move up */
+		/* Move up */
 	case 1:
-		*posX = (*posX>1)?--*posX:*posX;
-		gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
+		if (collisionCheck(*posX, *posY, -1, 0, grid)) {
+			--* posX;
+			gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
+		}
 		break;
 
-	/* Move left */
+		/* Move left */
 	case 2:
-		*posY = (*posY>1)?--*posY:*posY;
-		gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
+		if (collisionCheck(*posX, *posY, 0, -1, grid)) {
+			--* posY;
+			gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
+		}
 		break;
 
-	/* Move down */
+		/* Move down */
 	case 3:
-		*posX = (*posX<SOKOBAN_GRID_ROWS-1)?++*posX:*posX;
-		gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
+		if (collisionCheck(*posX, *posY, 1, 0, grid)) {
+			++* posX;
+			gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
+		}
 		break;
 
-	/* Move right */
+		/* Move right */
 	case 4:
-		*posY = (*posY<SOKOBAN_GRID_COLS-1)?++*posY:*posY;
-		gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
+		if (collisionCheck(*posX, *posY, 0, 1, grid)) {
+			++* posY;
+			gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
+		}
 		break;
 
-	/* Default case (if any) */
+		/* Default case (if any) */
 	default:
 		break;
 	}
