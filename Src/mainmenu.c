@@ -9,6 +9,7 @@
 
 extern Config config;
 float windowwidth, windowheight;
+CP_Sound click = NULL;
 
 rect buttons;
 
@@ -26,6 +27,9 @@ void Main_Menu_Init()
 	buttons.center_y = windowheight * 0.4f;
 	buttons.width = windowwidth * 0.2f;
 	buttons.height = windowheight * 1.f / 12.f;
+
+	// SFX
+	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
 }
 
 void Main_Menu_Update()
@@ -54,18 +58,23 @@ void Main_Menu_Update()
 
 	if (CP_Input_MouseClicked()) { // check for mouse input if pressed down, then check if the mouse is within any of the rectangles
 		if (IsAreaClicked(buttons.center_x, buttons.center_y, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Temparary set to launch game_test
 		}
 		else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Engine_SetNextGameState(Level_Select_Init, Level_Select_Update, Level_Select_Exit); // load options state
 		}
 		else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 3.f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Engine_SetNextGameState(Options_Init, Options_Update, Options_Exit); // load options state
 		}
 		else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 4.5f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Engine_SetNextGameState(Credits_Init, Credits_Update, Credits_Exit); // Load Credit page
 		}
 		else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Engine_Terminate(); // quit the program
 		}
 	}

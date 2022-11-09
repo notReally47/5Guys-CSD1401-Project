@@ -10,6 +10,7 @@ extern Config config;
 float windowwidth, windowheight;
 rect buttons;
 int selected;
+CP_Sound nextLvl = NULL, click;
 
 void Level_Transition_Init()
 {
@@ -28,6 +29,10 @@ void Level_Transition_Init()
 	buttons.height = windowheight * 1.f / 12.f;
 
 	selected = 0;
+
+	// Level Complete SFX
+	nextLvl = CP_Sound_Load("./Assets/Sound/SFX/Level.wav");
+	CP_Sound_PlayAdvanced(nextLvl, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 }
 
 void Level_Transition_Update()
@@ -51,11 +56,15 @@ void Level_Transition_Update()
 	}
 	(selected == 0) ? CP_Settings_Fill(GRAY) : CP_Settings_Fill(RED); // Fill Rectangle RED
 	if (CP_Input_MouseClicked() && selected == 1) { // Check for Mouse Input if Clicked, then checks if the Mouse is within any of the Rectangles
-			if (IsAreaClicked(buttons.center_x, buttons.center_y, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
-				CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit);											// Go to the Next Level
-			else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
-				CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);							// Return to Main Menu
+		if (IsAreaClicked(buttons.center_x, buttons.center_y, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Go to the Next Level
 		}
+		else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit); // Return to Main Menu
+		}
+	}
 	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y, buttons.width, buttons.height);							// Draw 1st Button as 'Next'
 	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height);	// Draw 2nd Button as 'Main Menu'
 	CP_Settings_Fill(BLACK);																							// Set Font to BLACK
@@ -69,10 +78,9 @@ void Level_Transition_Update()
 	// Draw Text 'Level Complete!"
 	CP_Settings_TextSize(100.f);
 	CP_Font_DrawText("Level Complete!", (float)CP_System_GetWindowWidth() / 2, 150.f);
-
 }
 
 void Level_Transition_Exit()
 {
-
+	CP_Sound_Free(&nextLvl);
 }

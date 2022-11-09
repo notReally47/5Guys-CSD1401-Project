@@ -97,7 +97,7 @@ int collisionCheck(int posX, int posY, int moveX, int moveY, Cell grid[SOKOBAN_G
 * int nextPosX, nextPosY: The following cell after the next cell.
 * int prevPosX, prevPosY: The previous cell that the player was previously at.
 */
-void gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	/*Push box (No boarder or another box blocking the box being pushed)*/
 	if (grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
@@ -106,6 +106,7 @@ void gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, i
 		grid[nextPosX][nextPosY].box = 1;
 		global_move++;
 		printf("Current Moves: %d\n", global_move - 1);
+		return grid[nextPosX][nextPosY].key ? 2 : 1;
 	}
 
 	/*Player movement without obstruction*/
@@ -125,42 +126,43 @@ void gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, i
 		}
 		grid[*posX][*posY].player = 1;
 		global_move++;
+		return 0;
 		printf("Current Moves: %d\n", global_move - 1);
 	}
 }
 
-void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
-	int isRendering = 0;
+int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+	int pushBox = 0;
 	switch (direction) {
 		/* Move up */
 	case 1:
 		if (collisionCheck(*posX, *posY, -1, 0, grid)) {
-			--* posX, isRendering=1;
-			gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
+			--* posX;
+			pushBox = gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
 		}
 		break;
 
 		/* Move left */
 	case 2:
 		if (collisionCheck(*posX, *posY, 0, -1, grid)) {
-			--* posY, isRendering=1;
-			gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
+			--* posY;
+			pushBox = gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
 		}
 		break;
 
 		/* Move down */
 	case 3:
 		if (collisionCheck(*posX, *posY, 1, 0, grid)) {
-			++* posX, isRendering=1;
-			gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
+			++* posX;
+			pushBox = gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
 		}
 		break;
 
 		/* Move right */
 	case 4:
 		if (collisionCheck(*posX, *posY, 0, 1, grid)) {
-			++* posY, isRendering=1;
-			gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
+			++* posY;
+			pushBox = gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
 		}
 		break;
 
@@ -168,7 +170,7 @@ void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][S
 	default:
 		break;
 	}
-	return isRendering;
+	return pushBox;
 }
 
 /*
