@@ -10,27 +10,21 @@
 #include <stdlib.h> //_countof()
 #include <string.h> // strlen()
 
-Button back, volumeDown, volumeUp, apply, discard, up, down, left, right, pause, undo, reset, escape, controls[8], btns[13];
-DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, * resSelected, * initialRes;
-float textSize, volume, numCols, numRows, imgSize;
-
-// Gif
-static float timeElapsed;
-static const float DISPLAY_DURATION = .5f;
-static int imageIndex;
-static const float FRAME_DIMENSION = 600.0f;
-static const int TOTAL_FRAMES = 14;
-static const int SPRITESHEET_ROWS = 2;
-static float gifDimension;
-
-CP_Vector window;
-CP_Image gameplay;
-CP_Sound gameSFX;
-Flag ddlClicked, volChanged, resChanged, configChanged, resUnmatch;
-int displayVol;
-
 extern Config config;
 Config newConfig;
+
+Button back, volumeDown, volumeUp, apply, discard, controls[8], up, down, left, right, pause, undo, reset, escape, btns[13];
+DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, * resSelected, * initialRes;
+
+GIF gameplay;
+static float timeElapsed;
+static const float displayDuration = .1f;
+
+CP_Vector window;
+CP_Sound gameSFX;
+Flag ddlClicked, volChanged, resChanged, configChanged, resUnmatch;
+float textSize, imgSize;
+int displayVol;
 
 void Options_Init() {
 	/*Initialize config*/
@@ -40,12 +34,7 @@ void Options_Init() {
 	/*Initialize global variables*/
 	imgSize = (float)(CP_System_GetWindowHeight() / 20.f), textSize = imgSize;
 	window = CP_Vector_Set((float)CP_System_GetWindowWidth(), (float)CP_System_GetWindowHeight());
-	gameplay = CP_Image_Load("./Assets/Gameplay.png");
 	gameSFX = CP_Sound_Load("./Assets/Sound/sfx.wav");
-
-	/*GIF*/
-	imageIndex = 0;
-	timeElapsed = 0.0f;
 
 	/*Logic Flags*/
 	ddlClicked = NO;
@@ -100,12 +89,17 @@ void Options_Init() {
 		}
 	}
 	initialRes = resSelected;
+
+	/*GIF*/
+	timeElapsed = 0.0f;
+	setGIF(&gameplay, "./Assets/Spritesheet/gameplay_white.png", 5, 9, window.x - PADDING - imgSize * 10, up.position.y - up.btnHeight / 2, imgSize * 10);
 	/*-----------------------------------*/
 }
 
 void Options_Update() {
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
 	CP_Color currentResColor = ddlClicked ? DARKGRAY : GRAY;
+	timeElapsed += CP_System_GetDt();
 	CP_Settings_NoTint();
 	CP_Graphics_ClearBackground(GRAY);
 
@@ -215,14 +209,6 @@ void Options_Update() {
 		}
 	}
 
-	/*Draw gameplay gif logic*/
-	timeElapsed += CP_System_GetDt();
-	if (timeElapsed >= DISPLAY_DURATION) {
-		imageIndex = (imageIndex + 1) % TOTAL_FRAMES;
-		timeElapsed = 0.0f;
-	}
-	gifDimension = imgSize * 10;
-
 	/*RENDER*/
 
 	/*Resolution text*/
@@ -277,11 +263,8 @@ void Options_Update() {
 	drawButton(volumeDown);
 	drawAlignedText(BLACK, CENTER, currentVol, volumeDown.position.x + ((volumeUp.position.x - volumeDown.position.x) / 2), back.btnHeight + 3 * PADDING + 1.5 * textSize);
 
-	/*Draw tutorial*/
-	drawGIF(gameplay,
-		window.x - PADDING - gifDimension, up.position.y - up.btnHeight / 2,
-		gifDimension, gifDimension,
-		1, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+	/*Draw Gameplay GIF & Controls*/
+	drawGIF(&gameplay, &timeElapsed, displayDuration, YES);
 	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
 		drawButton(controls[i]);
 		drawAlignedText(WHITE, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y - y);
@@ -303,5 +286,6 @@ void Options_Update() {
 
 void Options_Exit() {
 	freeButtonImg(btns, 13);
+	CP_Image_Free(&gameplay.spritesheet);
 	CP_Sound_Free(&gameSFX);
 }

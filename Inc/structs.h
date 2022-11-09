@@ -83,3 +83,10 @@ typedef struct DropDownList {
 	int				selected;
 	Button			button;
 } DropDownList;
+
+typedef struct GIF {
+	CP_Image spritesheet;
+	CP_Vector position;
+	int numRows, numCols, currCol, imgIndex;
+	float imgWidth, imgHeight, gifDimensions;
+} GIF;
