@@ -12,7 +12,7 @@ extern Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 rect card,text;
 float size1,size2;
-int cards[MAX_CARDS],size,pos,pos2,infected[CUSTOMER_MAX+1],tele[UM];
+int cards[MAX_DECK],size,pos,pos2,infected[CUSTOMER_MAX+1],teleporter[SETTINGS];
 
 char* negcards[] = {
     "Contagious","Some of the customers are infectious! Talking to them will spread its germs to you, causing you to periodically stand in place and let out a cough",
@@ -46,9 +46,9 @@ void card_init(void) {
     
     /*Initialization*/
     size = 5;
-    for (int i=0;i<UM;i++)
-        tele[i] = 0;
-    for (int i=0;i<MAX_CARDS;i++) // set array to 0 (called cause last value has to be 0 as a buffer)
+    for (int i=0;i<SETTINGS;i++)
+        teleporter[i] = 0;
+    for (int i=0;i<MAX_DECK;i++) // set array to 0 (called cause last value has to be 0 as a buffer)
         cards[i] = 0;
     for (int i=0;i<=size;i++) // set all but last value to the card number
         cards[i] = 2*i;
@@ -76,33 +76,35 @@ void card_deck(int* POS,int cards[], int* size) {
         }
     }
 }
-void card_selection(int stage, CP_BOOL CP_Input_MouseClicked) {
-    char* pickcard[12] = {'\0'};
-    for (int i=0;i<12;i++)
-        pickcard[i] = (stage == 1) ? negcards[i] : poscards[i];
-    CP_Settings_RectMode(CP_POSITION_CENTER);
-    CP_Settings_Fill(BLUEGRAY);
-    CP_Graphics_DrawRect(card.center_x,card.center_y,card.width,card.height);                                       // Card selection 1
-    CP_Graphics_DrawRect(card.center_x+card.center_x,card.center_y,card.width,card.height);                         // Card selection 2
-    CP_Settings_Fill(BLACK);
-    CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);
-    CP_Settings_TextSize(size1);
-    CP_Font_DrawTextBox(pickcard[cards[pos]],text.center_x,text.center_y+text.height,text.width);                   // Card selection 1
-    CP_Font_DrawTextBox(pickcard[cards[pos2]],text.center_x+card.center_x,text.center_y+text.height,text.width);    // Card selection 2
-    CP_Settings_TextSize(size2);
-    CP_Font_DrawTextBox(pickcard[cards[pos]+1],text.center_x,text.center_y+2*text.height,text.width);               // Card selection 1
-    CP_Font_DrawTextBox(pickcard[cards[pos2]+1],text.center_x+card.center_x,text.center_y+2*text.height,text.width);// Card selection 2
+void card_selection(int stage, int* selected) {
+    if (*selected == 0) {
+        char* pickcard[12] = { '\0' };
+        for (int i = 0; i < 12; i++)
+            pickcard[i] = (stage == 1) ? negcards[i] : poscards[i];
+        CP_Settings_RectMode(CP_POSITION_CENTER);
+        CP_Settings_Fill(BLUEGRAY);
+        CP_Graphics_DrawRect(card.center_x, card.center_y, card.width, card.height);                                       // Card selection 1
+        CP_Graphics_DrawRect(card.center_x + card.center_x, card.center_y, card.width, card.height);                         // Card selection 2
+        CP_Settings_Fill(BLACK);
+        CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);
+        CP_Settings_TextSize(size1);
+        CP_Font_DrawTextBox(pickcard[cards[pos]], text.center_x, text.center_y + text.height, text.width);                   // Card selection 1
+        CP_Font_DrawTextBox(pickcard[cards[pos2]], text.center_x + card.center_x, text.center_y + text.height, text.width);    // Card selection 2
+        CP_Settings_TextSize(size2);
+        CP_Font_DrawTextBox(pickcard[cards[pos] + 1], text.center_x, text.center_y + 2 * text.height, text.width);               // Card selection 1
+        CP_Font_DrawTextBox(pickcard[cards[pos2] + 1], text.center_x + card.center_x, text.center_y + 2 * text.height, text.width);// Card selection 2
 
-    if (CP_Input_MouseClicked) {
-        if (IsAreaClicked(card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-            card_effect(pos, cards);
-            card_deck(&pos, cards, &size);
-            CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Go to the Next Level
-        }
-        else if (IsAreaClicked(card.center_x + card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-            card_effect(pos2, cards);
-            card_deck(&pos2, cards, &size);
-            CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Go to the Next Level
+        if (CP_Input_MouseClicked()) {
+            if (IsAreaClicked(card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                card_effect(pos, cards);
+                card_deck(&pos, cards, &size);
+                *selected = 1;
+            }
+            else if (IsAreaClicked(card.center_x + card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                card_effect(pos2, cards);
+                card_deck(&pos2, cards, &size);
+                *selected = 1;
+            }
         }
     }
 }
@@ -169,12 +171,12 @@ int player_status(int* isLocked) {
 }
 void teleport_UM(void) {
     // initialize teleport_UM array
-    tele[0] = 1; // enable tele
-    tele[1] = 4; // row of 1st
-    tele[2] = 15; // col of 1st
-    tele[3] = 4; // row of 2nd
-    tele[4] = 25; // col of 2nd
-    tele[5] = 0; // cooldown
+    teleporter[0] = 1; // enable tele
+    teleporter[1] = 4; // row of 1st
+    teleporter[2] = 15; // col of 1st
+    teleporter[3] = 4; // row of 2nd
+    teleporter[4] = 25; // col of 2nd
+    teleporter[5] = 0; // cooldown
 }
 void wetsign_UM(void) {
     int total = 0;

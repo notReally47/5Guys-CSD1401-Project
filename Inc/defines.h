@@ -59,7 +59,7 @@ typedef enum Logic {
 	YES
 } Flag;
 
-enum Card {
-	MAX_CARDS = 7,
-	UM = 6
+enum UniqueMechanics {
+	MAX_DECK = 7,
+	SETTINGS = 6
 };

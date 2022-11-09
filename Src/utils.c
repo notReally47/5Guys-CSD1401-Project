@@ -111,16 +111,16 @@ void gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, i
 	/*Player movement without obstruction*/
 	else if (!grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
-		if (tele[0] == 1) {
-			if (*posX == tele[1] && *posY == tele[2]) {
-				*posX = tele[3] + (*posX - prevPosX);
-				*posY = tele[4] + (*posY - prevPosY);
-				tele[5] = 1;
+		if (teleporter[0] == 1) {
+			if (*posX == teleporter[1] && *posY == teleporter[2]) {
+				*posX = teleporter[3] + (*posX - prevPosX);
+				*posY = teleporter[4] + (*posY - prevPosY);
+				teleporter[5] = 1;
 			}
-			else if (*posX == tele[3] && *posY == tele[4]) {
-				*posX = tele[1] + (*posX - prevPosX);
-				*posY = tele[2] + (*posY - prevPosY);
-				tele[5] = 1;
+			else if (*posX == teleporter[3] && *posY == teleporter[4]) {
+				*posX = teleporter[1] + (*posX - prevPosX);
+				*posY = teleporter[2] + (*posY - prevPosY);
+				teleporter[5] = 1;
 			}
 		}
 		grid[*posX][*posY].player = 1;
@@ -130,11 +130,12 @@ void gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, i
 }
 
 void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+	int isRendering = 0;
 	switch (direction) {
 		/* Move up */
 	case 1:
 		if (collisionCheck(*posX, *posY, -1, 0, grid)) {
-			--* posX;
+			--* posX, isRendering=1;
 			gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
 		}
 		break;
@@ -142,7 +143,7 @@ void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][S
 		/* Move left */
 	case 2:
 		if (collisionCheck(*posX, *posY, 0, -1, grid)) {
-			--* posY;
+			--* posY, isRendering=1;
 			gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
 		}
 		break;
@@ -150,7 +151,7 @@ void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][S
 		/* Move down */
 	case 3:
 		if (collisionCheck(*posX, *posY, 1, 0, grid)) {
-			++* posX;
+			++* posX, isRendering=1;
 			gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
 		}
 		break;
@@ -158,7 +159,7 @@ void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][S
 		/* Move right */
 	case 4:
 		if (collisionCheck(*posX, *posY, 0, 1, grid)) {
-			++* posY;
+			++* posY, isRendering=1;
 			gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
 		}
 		break;
@@ -167,6 +168,7 @@ void getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][S
 	default:
 		break;
 	}
+	return isRendering;
 }
 
 /*

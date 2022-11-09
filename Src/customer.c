@@ -47,17 +47,16 @@ void customerLogic(int cusNum, int cusRow, int cusCol, int prevCusRow, int prevC
 * Customer customer: Customer stats.
 */
 void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
-	static float delay = 0.f;
-	delay += CP_System_GetDt();
+	for (int i = 0; i < CUSTOMER_MAX; i++) {
+		if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
+			int cusRow = customer[i].cusRow;
+			int cusCol = customer[i].cusCol;
+			int curr = path[cusRow][cusCol];
 
-	if (delay > 1.5f) {
-		delay = 0.f;
-		for (int i = 0; i < CUSTOMER_MAX; i++) {
-			if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
-				int cusRow = customer[i].cusRow;
-				int cusCol = customer[i].cusCol;
-				int curr = path[cusRow][cusCol];
-
+			static float delay = 0.f;
+			delay += CP_System_GetDt();
+			if (delay > 1.5f) {
+				delay = 0.f;
 				if (!curr) {
 					curr = customer[i].direction;
 				}
@@ -104,7 +103,10 @@ void randomCustomerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cus
 		if (customer[i].isActive && customer[i].isRandom) {
 			int cusRow = customer[i].cusRow, cusCol = customer[i].cusCol;
 			int state = CP_Random_RangeInt(SOKOBAN_UP, SOKOBAN_FACE_RIGHT);
-			if (!(CP_System_GetFrameCount() % CUSTOMER_RANDOM_SPEED)) {
+			static float delay = 0.f;
+			delay += CP_System_GetDt();
+			if (delay > 1.5f) {
+				delay = 0.f;
 				switch (state) {
 				case SOKOBAN_UP:
 					cusRow--;
@@ -149,10 +151,12 @@ void randomCustomerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cus
 * Customer customer: customer stats.
 */
 void customerIdle(int cusNum, Customer customer[CUSTOMER_MAX]) {
-	int count = CP_System_GetFrameCount();
+	static float delay = 0.f;
+	delay += CP_System_GetDt();
 
 	// Rotates the customer anti-clockwise
-	if (customer[cusNum].isActive && !(count % CUSTOMER_TURN)) {
+	if (customer[cusNum].isActive && delay > 1.5f) {
+		delay = 0.f;
 		customer[cusNum].direction = (customer[cusNum].direction % 4) + 1;
 	}
 }
