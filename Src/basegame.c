@@ -313,32 +313,44 @@ void base_Update(void) {
 		//printf("Customer 0: R %d C %d \n",customer[0].cusRow,customer[0].cusCol);
 		//printf("Customer 0: R %d C %d \n",customer[0].prevCusRow,customer[0].prevCusCol);
 		//}
-	if (game_pause) {
-		if (reset_triggered && clock > 0) {
-			overlay_reset();
-			reset_confirmed = reset_check(reset_confirmed);
 
+
+	/* Overlay Appears when Pausing, Resetting & Game Over */
+	if (game_pause) {
+
+		/* Resetting Map Overlay */
+		if (reset_triggered && clock > 0) {
+			overlay_reset();									// Renders Reset Confirmation Overlay
+			reset_confirmed = reset_check(reset_confirmed);		// Check Whether 'YES' or 'NO' was Clicked
+
+			/* If 'YES' was Clicked */
 			if (reset_confirmed == 1) {
-				resetMap(moves, grid, customer, path); //Resets grid to the initial values based on the CSV file
-				totalElapsedTime = 0;
-				face = 0;
-				reset_confirmed = 0;
-				reset_triggered = 0;
-				game_pause = 0;
+				resetMap(moves, grid, customer, path);			// Resets grid to the initial values based on the CSV file
+				totalElapsedTime = 0;							// Reset Timer
+				face = 0;										// Reset Player Direcction
+				reset_confirmed = 0;							// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
+				reset_triggered = 0;							// Set reset_triggered to 0 so that will stop rendering Reset Overlay
+				game_pause = 0;									// Set game_pause to 0 to resume game
 			}
+
+			/* If 'NO' was Clicked */
 			else if (reset_confirmed == 2) {
-				reset_confirmed = 0;
-				reset_triggered = 0;
-				game_pause = 0;
+				reset_confirmed = 0;							// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
+				reset_triggered = 0;							// Set reset_triggered to 0 so that will stop rendering Reset Overlay
+				game_pause = 0;									// Set game_pause to 0 to resume game
 			}	
 		}
+
+		/* Pause Overlay */
 		else if (!reset_triggered && clock > 0) {
-			overlay_pause();
-			game_pause = unpause(game_pause);
+			overlay_pause();									// Renders Pause Overlay
+			game_pause = unpause(game_pause);					// game_pause will trigger unpause function to either return to game or Main Menu
 		}
+
+		/* Game Over Overlay */
 		else if(!reset_triggered) {
-			overlay_game_over();
-			game_pause = game_over(game_pause);
+			overlay_game_over();								// Renders Game Over Overlay
+			game_pause = game_over(game_pause);					// game_pause will trigger to return to Main Menu
 		}
 	}
 
