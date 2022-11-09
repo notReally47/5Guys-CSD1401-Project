@@ -1,6 +1,6 @@
-#define _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_DEPRECATE
-#include "cprocessing.h"
+#define _CRT_SECURE_NO_WARNINGS		// Needed to use strcpy() and strcat() instead of strcopy_s() & strcat_s()
+#define _CRT_SECURE_NO_DEPRECATE	// Needed to use strcpy() and strcat() instead of strcopy_s() & strcat_s()
+#include "cprocessing.h"	
 #include "structs.h"
 #include "defines.h"
 #include "utils.h"
@@ -194,14 +194,15 @@ int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	return objective;
 }
 
+/* Function to Show Text/Label beside/on the Game */
 void show_stats(float text_size, float cell_size_x, float cell_size_h, char *stat, int value) {
-	CP_Settings_TextSize(text_size);
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
-	CP_Settings_Fill(BLACK);
-	char buffer[20] = { 0 };
-	sprintf_s(buffer, _countof(buffer), "%d", value);
-	char line[50] = { 0 };
-	strcpy(line, stat);
-	strcat(line, buffer);	
-	CP_Font_DrawText(line , cell_size_x, cell_size_h);
+	CP_Settings_TextSize(text_size);										// Set Font Size
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);	// Align Text Left and Top
+	CP_Settings_Fill(BLACK);												// Set Font to BLACK
+	char buffer[20] = { 0 };												// Buffer to convert 'value' to text/char/string
+	sprintf_s(buffer, _countof(buffer), "%d", value);						// Converting 'value' to text/char/string
+	char line[50] = { 0 };													// String to be printed
+	strcpy(line, stat);														// Copy stat/label that needs to be printed to line
+	strcat(line, buffer);													// Concatenate line with buffer
+	CP_Font_DrawText(line , cell_size_x, cell_size_h);						// Draw Text 'line' on the Game
 }

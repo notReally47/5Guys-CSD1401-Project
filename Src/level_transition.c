@@ -52,9 +52,9 @@ void Level_Transition_Update()
 	(selected == 0) ? CP_Settings_Fill(GRAY) : CP_Settings_Fill(RED); // Fill Rectangle RED
 	if (CP_Input_MouseClicked() && selected == 1) { // Check for Mouse Input if Clicked, then checks if the Mouse is within any of the Rectangles
 			if (IsAreaClicked(buttons.center_x, buttons.center_y, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
-				CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Go to the Next Level
+				CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit);											// Go to the Next Level
 			else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
-				CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit); // Return to Main Menu
+				CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);							// Return to Main Menu
 		}
 	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y, buttons.width, buttons.height);							// Draw 1st Button as 'Next'
 	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height);	// Draw 2nd Button as 'Main Menu'
@@ -64,7 +64,7 @@ void Level_Transition_Update()
 	CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f);															// Set Text Size scaling to Window Height
 	CP_Font_DrawText("Next", buttons.center_x, buttons.center_y);
 	CP_Font_DrawText("Main Menu", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
-	CP_Settings_Fill(WHITE);																							// Set font to WHITE
+	CP_Settings_Fill(WHITE);																							// Set Font to WHITE
 
 	// Draw Text 'Level Complete!"
 	CP_Settings_TextSize(100.f);

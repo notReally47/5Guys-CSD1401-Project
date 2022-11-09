@@ -237,10 +237,10 @@ int reset_check(int reset_confirmed) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.yes_position_x, size.yes_position_y, size.yes_width, size.yes_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			reset_confirmed = 1;																										
+			reset_confirmed = 1;																								// Returns 1 to Reset Map																								
 		}
 		else if (IsAreaClicked(size.no_position_x, size.no_position_y, size.no_width, size.no_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			reset_confirmed = 2;
+			reset_confirmed = 2;																								// Returns 2 to Return to Game
 		}
 	}
 	return reset_confirmed;
