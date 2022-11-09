@@ -1,4 +1,4 @@
-Level Duration is 800
+Level Duration is 100
 [0][0] is a Boarder
 [0][1] is a Boarder
 [0][2] is a Boarder
@@ -41,7 +41,7 @@ Level Duration is 800
 [0][39] is a Boarder
 [0][40] is a Boarder
 [1][0] is a Boarder
-[1][1] is Player
+[1][1] is Blank
 [1][2] is Blank
 [1][3] is Blank
 [1][4] is Blank
@@ -83,11 +83,11 @@ Level Duration is 800
 [1][40] is a Boarder
 [2][0] is a Boarder
 [2][1] is Blank
-[2][2] is Blank
+[2][2] is Player
 [2][3] is Blank
-[2][4] is Blank
+[2][4] is a Box
 [2][5] is Blank
-[2][6] is Blank
+[2][6] is a Key
 [2][7] is Blank
 [2][8] is Blank
 [2][9] is Blank
@@ -126,7 +126,7 @@ Level Duration is 800
 [3][1] is Blank
 [3][2] is Blank
 [3][3] is Blank
-[3][4] is Blank
+[3][4] is a Customer
 [3][5] is Blank
 [3][6] is Blank
 [3][7] is Blank
@@ -167,7 +167,7 @@ Level Duration is 800
 [4][1] is Blank
 [4][2] is Blank
 [4][3] is Blank
-[4][4] is a Box
+[4][4] is Blank
 [4][5] is Blank
 [4][6] is Blank
 [4][7] is Blank
@@ -251,7 +251,7 @@ Level Duration is 800
 [6][3] is Blank
 [6][4] is Blank
 [6][5] is Blank
-[6][6] is a Key
+[6][6] is Blank
 [6][7] is Blank
 [6][8] is Blank
 [6][9] is Blank
