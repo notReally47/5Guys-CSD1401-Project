@@ -29,3 +29,5 @@ Make sure bothe files are at the top.
 Click 'View' > 'Synchronise Vertical Scrolling'
 Click 'View' > 'Synchronise Horizontal Scrolling'
 Edit and Save.
+
+Please refer to screenshots in 'instruction_example_screenshots' for example.

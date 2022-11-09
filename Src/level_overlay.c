@@ -1,5 +1,4 @@
 #include "cprocessing.h"	// Needed for C Processing Functions
-#include "defines.h"		// Needed for defined values
 #include "utils.h"			// Needed for IsAreaClicked() Function
 #include "level_logic.h"	// Needed for global extern variable 'global_level'
 #include "mainmenu.h"		// Needed to transition back to Main Menu
@@ -75,7 +74,7 @@ struct Pause_Size initialise_pause_size() {
 void overlay_pause() {
 	struct Pause_Size size = initialise_pause_size();
 
-	CP_Settings_NoTint();
+	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
 	CP_Settings_TextSize(size.pause_text_size);																					// Set Font Size
@@ -89,7 +88,7 @@ void overlay_pause() {
 	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
 	CP_Font_DrawText("RESUME", size.resume_position_x, size.resume_position_y);													// Draw RESUME Text
 	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);										// Draw MAIN MENUU Text
-	CP_Settings_Tint(DARKGRAY);
+	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Unpause Logic, whether Resume Game or return to Main Menu */
@@ -133,17 +132,19 @@ struct Game_Over_Size initialise_game_over_size() {
 void overlay_game_over() {
 	struct Game_Over_Size size = initialise_game_over_size();
 
+	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.game_over_text_size);																				//Set Font Size
+	CP_Settings_TextSize(size.game_over_text_size);																				// Set Font Size
 	CP_Font_DrawText("YOU'RE FIRED!", size.game_over_text_width, size.game_over_text_height);									// Draw "YOU'RE FIRED!" Text
 
 	CP_Settings_Fill(RED);																										// Set Button Colour to RED
 	CP_Graphics_DrawRect(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height);	// Place Holder for 'Main Menu' Button
 
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextSize(size.button_text_size);																				// Set FONT Size
+	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
 	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);										// Draw MAIN MENU Text
+	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Game Over Logic, returns to Main Menu only */
@@ -160,9 +161,3 @@ int game_over(int game_pause) {
 	}
 	return game_pause;
 }
-
-/* Free PNG file */
-//void free_overlay() {
-//	black_film = CP_Image_Load("Assets/BLACK_FILM.png");
-//	CP_Image_Free(&black_film);
-//}
