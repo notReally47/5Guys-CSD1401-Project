@@ -31,7 +31,7 @@ void drawTintedButton(CP_Color color, float x, float y, float w, float h, float 
 	CP_Graphics_DrawRect(x, y, w, h);
 }
 
-void drawAlignedText(CP_Color color, int alignment, const char *text, float x, float y) {
+void drawAlignedText(CP_Color color, int alignment, const char* text, float x, float y) {
 	CP_Settings_Fill(color);
 	CP_Settings_StrokeWeight(3.0f);
 	switch (alignment) {
@@ -50,13 +50,15 @@ void drawAlignedText(CP_Color color, int alignment, const char *text, float x, f
 	CP_Font_DrawText(text, x, y);
 }
 
-void drawGIF(CP_Image img, float x, float y, float w, float h, static const float display_duration, static const float frame_dimension, static float timeElapsed, static int imageIndex, int totalFrames, int numRows) {
+void drawGIF(CP_Image img, float x, float y, float w, float h, int flip, static const float frame_dimension, static float timeElapsed, static int imageIndex, int totalFrames, int numRows) {
 	CP_Settings_NoTint();
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
-	CP_Image_DrawSubImage(img, x, y, w, h,
-		(imageIndex % (totalFrames / numRows))* frame_dimension, (imageIndex < (totalFrames / numRows)) ? 0 : frame_dimension,
-		((imageIndex % (totalFrames / numRows)) + 1)* frame_dimension, (imageIndex < (totalFrames / numRows)) ? frame_dimension : frame_dimension * numRows,
-		255);
+	float u0, v0, u1, v1;
+	u0 = (imageIndex % (totalFrames / numRows)) * frame_dimension;
+	v0 = (imageIndex < (totalFrames / numRows)) ? 0 : frame_dimension;
+	u1 = ((imageIndex % (totalFrames / numRows)) + 1) * frame_dimension;
+	v1 = (imageIndex < (totalFrames / numRows)) ? frame_dimension : frame_dimension * numRows;
+	CP_Image_DrawSubImage(img, x, y, w, h, flip ? u0 : u1, v0, flip ? u1 : u0, v1, 255);
 }
 
 void drawButton(Button btn) {
@@ -78,7 +80,7 @@ void drawHeader(const char* stringArr[], int size) {
 	float textX = PADDING, textSize = CP_System_GetWindowHeight() / 20, textY = textSize + 2 * PADDING;
 	float divY = 2 * PADDING + textSize + textSize / 2 + 0.6 * textSize;
 	for (int i = 0; i < size; i++, textY += PADDING + textSize) {
-		drawAlignedText(BLACK, LEFT, stringArr[i], textX, textY);		
+		drawAlignedText(BLACK, LEFT, stringArr[i], textX, textY);
 		if (!(i % 2)) {
 			drawDivider(divY);
 			divY += 0.9 * textSize + 1.5 * PADDING;

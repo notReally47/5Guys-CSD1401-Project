@@ -15,6 +15,7 @@
 #include "options_draw.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 extern Config config;
 
@@ -24,11 +25,9 @@ Customer customer[CUSTOMER_MAX];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
-float cellSize, cellAlign, sec, elapsedLock;
+float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating;
-
-float totalElapsedTime;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip;
 
 CP_Sound fail = NULL;
 
@@ -57,6 +56,8 @@ void base_Init(void) {
 	totalElapsedTime = 0;
 	game_pause = 0;
 	isAnimating = 0;
+	flip = 0;
+	oneSecondFlip = 0;
 
 	/*GIF*/
 	imageIndex = 0;
@@ -121,6 +122,12 @@ void base_Update(void) {
 		totalElapsedTime += currentElapsedTime;
 		clock = duration - (int)totalElapsedTime;
 
+		oneSecondFlip += currentElapsedTime;
+		if (oneSecondFlip >= 1.f) {
+			flip = !flip;
+			oneSecondFlip = 0;
+		}
+
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (isCompleted == totalObjs) {
 			next_level();
@@ -144,8 +151,6 @@ void base_Update(void) {
 				timeElapsed = 0.0f;
 			}
 
-			// Moves the Customer to the player
-			// Temporary removed the face return value due to unintended issues
 			if (!isAnimating) {
 				// Moves the Customer to the player
 				int newDir = customerMoveToPlayer(playerRow, playerCol, stunner, grid, customer);
@@ -269,9 +274,21 @@ void base_Update(void) {
 				for (int i = 0; i < CUSTOMER_MAX; i++)
 					draw_customer(&cellSize, &cellAlign, &customer[i].cusRow, &customer[i].cusCol, &customer[i].direction, &i);
 
-			if (isLocked && currCell.player && !isAnimating) {
-				drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+			if (isLocked && !isAnimating) {
+				if (flip && currCell.player) {
+					if (face == 2 || face == 3)
+						drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, 1, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+					else
+						drawGIF(speechSprite, cellX - cellSize, cellY - cellSize, cellSize, cellSize, 0, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+				}
+				if (!flip && customer[stunner].cusCol == col && customer[stunner].cusRow == row) {
+					if (customer[stunner].direction == 2 || customer[stunner].direction == 3)
+						drawGIF(speechSprite, cellSize * ((float)customer[stunner].cusCol + 1) + cellAlign, cellSize * ((float)row - 1), cellSize, cellSize, 1, FRAME_DIMENSION - 0.2f, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+					else
+						drawGIF(speechSprite, cellSize * ((float)customer[stunner].cusCol - 1) + cellAlign, cellSize * ((float)row - 1), cellSize, cellSize, 0, FRAME_DIMENSION - 0.2f, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+				}
 			}
+
 		}
 	}
 

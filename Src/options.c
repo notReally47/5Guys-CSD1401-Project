@@ -281,7 +281,7 @@ void Options_Update() {
 	drawGIF(gameplay,
 		window.x - PADDING - gifDimension, up.position.y - up.btnHeight / 2,
 		gifDimension, gifDimension,
-		DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+		1, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
 	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
 		drawButton(controls[i]);
 		drawAlignedText(WHITE, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y - y);
