@@ -1,7 +1,7 @@
 #include <stdio.h>	// Needed for printf
 
 /* Global Variable 'level' initialised to 0 whenever New Game */
-int global_level = 3;
+int global_level = 4;
 
 /* Local File Variable 'temp_level' initialised to 0. 
 To be used when Selecting Level from Level Select Screen */
