@@ -359,10 +359,10 @@ void base_Update(void) {
 	}
 
 	/* Show Timer */
-	show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize, stat[0], clock);
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize*55.f, cellSize, stat[0], clock);
 
 	/* Show Move Count */
-	show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize*2.f, stat[1], global_move);
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize*55.f, cellSize*3.f, stat[1], global_move);
 
 }
 

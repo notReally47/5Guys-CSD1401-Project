@@ -199,7 +199,7 @@ int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 /* Function to Show Text/Label beside/on the Game */
 void show_stats(float text_size, float cell_size_x, float cell_size_h, char *stat, int value) {
 	CP_Settings_TextSize(text_size);										// Set Font Size
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);	// Align Text Left and Top
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);	// Align Text Left and Top
 	CP_Settings_Fill(BLACK);												// Set Font to BLACK
 	char buffer[20] = { 0 };												// Buffer to convert 'value' to text/char/string
 	sprintf_s(buffer, _countof(buffer), "%d", value);						// Converting 'value' to text/char/string

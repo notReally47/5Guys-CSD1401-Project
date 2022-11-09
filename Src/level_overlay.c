@@ -47,7 +47,7 @@ typedef struct Game_Over_Size {
 } Game_Over_Size;
 
 typedef struct Reset_Size {
-	// Pause Text Properties
+	// Reset Text Properties
 	float reset_text_size;
 	float reset_text_width;
 	float reset_text_height;
