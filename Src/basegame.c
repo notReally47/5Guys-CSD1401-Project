@@ -75,6 +75,8 @@ void base_Init(void) {
 	}
 
 	/* SFX */
+	// Set all audio in SFX group in accordance to the audio settings
+	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
 	fail = CP_Sound_Load("./Assets/Sound/Fail.wav");
 
 	//card_init();
@@ -136,7 +138,7 @@ void base_Update(void) {
 
 		/* Lose Condition */
 		if (clock == 0) {
-			CP_Sound_Play(fail);
+			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			game_pause = 1;
 		}
 
@@ -207,6 +209,7 @@ void base_Update(void) {
 
 			else if (CP_Input_KeyTriggered(KEY_R)) {
 				resetMap(moves, grid, customer, path); //Resets grid to the initial values based on the CSV file
+				totalElapsedTime = 0;
 				face = 0;
 			}
 		}
@@ -276,17 +279,22 @@ void base_Update(void) {
 
 			if (isLocked && !isAnimating) {
 				if (flip && currCell.player) {
-					if (face == 2 || face == 3)
+					if (face == 2 || face == 3) {
 						drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, 1, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
-					else
+					}
+					else {
 						drawGIF(speechSprite, cellX - cellSize, cellY - cellSize, cellSize, cellSize, 0, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+					}
 				}
-				if (!flip && customer[stunner].cusCol == col && customer[stunner].cusRow == row) {
-					if (customer[stunner].direction == 2 || customer[stunner].direction == 3)
-						drawGIF(speechSprite, cellSize * ((float)customer[stunner].cusCol + 1) + cellAlign, cellSize * ((float)row - 1), cellSize, cellSize, 1, FRAME_DIMENSION - 0.2f, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
-					else
-						drawGIF(speechSprite, cellSize * ((float)customer[stunner].cusCol - 1) + cellAlign, cellSize * ((float)row - 1), cellSize, cellSize, 0, FRAME_DIMENSION - 0.2f, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+				if (!flip && customer[stunner].cusRow == row && customer[stunner].cusCol == col) {
+					if (customer[stunner].direction == 2 || customer[stunner].direction == 3) {
+						drawGIF(speechSprite, cellSize* (float)(customer[stunner].cusCol + 1) + cellAlign, cellSize* (float)(customer[stunner].cusRow - 1), cellSize, cellSize, 1, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+					}
+					else {
+						drawGIF(speechSprite, cellSize* (float)(customer[stunner].cusCol - 1) + cellAlign, cellSize* (float)(customer[stunner].cusRow - 1), cellSize, cellSize, 0, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+					}
 				}
+
 			}
 
 		}
@@ -301,7 +309,6 @@ void base_Update(void) {
 		//printf("Customer 0: R %d C %d \n",customer[0].prevCusRow,customer[0].prevCusCol);
 		//}
 	if (game_pause) {
-		CP_Settings_Tint(DARKGRAY);
 		if (clock > 0) {
 			overlay_pause();
 			game_pause = unpause(game_pause);
@@ -312,6 +319,7 @@ void base_Update(void) {
 		}
 	}
 
+	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
 	CP_Settings_Fill(BLACK);
 	char buffer[20] = { 0 };
@@ -323,4 +331,5 @@ void base_Exit(void) {
 	CP_Sound_Free(&fail);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
+	CP_Image_Free(&speechSprite);
 }

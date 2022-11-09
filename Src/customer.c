@@ -47,18 +47,17 @@ void customerLogic(int cusNum, int cusRow, int cusCol, int prevCusRow, int prevC
 * Customer customer: Customer stats.
 */
 void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
-	for (int i = 0; i < CUSTOMER_MAX; i++) {
-		if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
-			int cusRow = customer[i].cusRow;
-			int cusCol = customer[i].cusCol;
-			int curr = path[cusRow][cusCol];
+	static float delay = 0.f;
+	delay += CP_System_GetDt();
 
-			int count = CP_System_GetFrameCount();
+	if (delay > 1.5f) {
+		delay = 0.f;
+		for (int i = 0; i < CUSTOMER_MAX; i++) {
+			if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
+				int cusRow = customer[i].cusRow;
+				int cusCol = customer[i].cusCol;
+				int curr = path[cusRow][cusCol];
 
-			static float delay = 0.f;
-			delay += CP_System_GetDt();
-			if (!(count % CUSTOMER_SPEED) && delay > 1.5f) {
-				delay = 0.f;
 				if (!curr) {
 					curr = customer[i].direction;
 				}
@@ -263,28 +262,28 @@ int customerMoveToPlayer(int playerRow, int playerCol, int cusNum, Cell grid[SOK
 			if (cusRow != playerRow - 1) {
 				cusRow--;
 				customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, direction, grid, customer);
-				face = SOKOBAN_DOWN;
+				face = 3;
 			}
 			break;
 		case SOKOBAN_LEFT:
 			if (cusCol != playerCol - 1) {
 				cusCol--;
 				customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, direction, grid, customer);
-				face = SOKOBAN_RIGHT;
+				face = 4;
 			}
 			break;
 		case SOKOBAN_DOWN:
 			if (cusRow != playerRow + 1) {
 				cusRow++;
 				customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, direction, grid, customer);
-				face = SOKOBAN_UP;
+				face = 1;
 			}
 			break;
 		case SOKOBAN_RIGHT:
 			if (cusRow != playerCol + 1) {
 				cusCol++;
 				customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, direction, grid, customer);
-				face = SOKOBAN_LEFT;
+				face = 2;
 			}
 			break;
 			// Default case (if any)

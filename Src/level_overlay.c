@@ -75,6 +75,7 @@ struct Pause_Size initialise_pause_size() {
 void overlay_pause() {
 	struct Pause_Size size = initialise_pause_size();
 
+	CP_Settings_NoTint();
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
 	CP_Settings_TextSize(size.pause_text_size);																					// Set Font Size
@@ -88,6 +89,7 @@ void overlay_pause() {
 	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
 	CP_Font_DrawText("RESUME", size.resume_position_x, size.resume_position_y);													// Draw RESUME Text
 	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);										// Draw MAIN MENUU Text
+	CP_Settings_Tint(DARKGRAY);
 }
 
 /* Unpause Logic, whether Resume Game or return to Main Menu */
