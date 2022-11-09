@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRECATE
 #include "cprocessing.h"
 #include "structs.h"
 #include "defines.h"
@@ -187,4 +189,17 @@ int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	}
 	printf("Objectives: %d\n", objective);
 	return objective;
+}
+
+void show_stats(float text_size, float cell_size_x, float cell_size_h, char *stat, int value) {
+	CP_Settings_TextSize(text_size);
+	//CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
+	CP_Settings_Fill(BLACK);
+	char buffer[20] = { 0 };
+	char line[50];
+	strcpy(line, *stat);
+	strcat(line, ": %d");
+	sprintf_s(buffer, _countof(buffer), line, value);
+	CP_Font_DrawText(buffer, cell_size_x, cell_size_h);
 }

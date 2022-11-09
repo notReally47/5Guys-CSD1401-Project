@@ -24,6 +24,7 @@ Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Customer customer[CUSTOMER_MAX];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+char* stat[2];
 
 float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip;
 
@@ -58,6 +59,8 @@ void base_Init(void) {
 	isAnimating = 0;
 	flip = 0;
 	oneSecondFlip = 0;
+	stat[0] = "Time Left: ";
+	stat[1] = "Move: ";
 
 	/*GIF*/
 	imageIndex = 0;
@@ -318,13 +321,17 @@ void base_Update(void) {
 			game_pause = game_over(game_pause);
 		}
 	}
-
+	/*show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize, stat[0], clock);
+	show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize*2.f, stat[0], global_move);*/
 	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
 	CP_Settings_Fill(BLACK);
 	char buffer[20] = { 0 };
 	sprintf_s(buffer, _countof(buffer), "Time left: %d", clock);
 	CP_Font_DrawText(buffer, cellSize, cellSize);
+
+	sprintf_s(buffer, _countof(buffer), "Moves: %d", global_move-1);
+	CP_Font_DrawText(buffer, cellSize, cellSize*2.f);
 }
 
 void base_Exit(void) {

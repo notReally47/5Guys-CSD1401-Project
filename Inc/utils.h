@@ -12,3 +12,4 @@ void getCell(int *posX, int *posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][S
 void gameLogic(int *posX, int *posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]);
 int timer(int duration, float startTime);
 int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]);
+void show_stats(float text_size, float cell_size_x, float cell_size_h, char* stat, int value);
