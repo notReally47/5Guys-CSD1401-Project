@@ -26,6 +26,9 @@ Flag ddlClicked, volChanged, resChanged, configChanged, resUnmatch;
 float textSize, imgSize;
 int displayVol;
 
+
+CP_Sound click;
+
 void Options_Init() {
 	/*Initialize config*/
 	newConfig = config;
@@ -94,6 +97,7 @@ void Options_Init() {
 	timeElapsed = 0.0f;
 	setGIF(&gameplay, "./Assets/Spritesheet/gameplay_white.png", 5, 9, window.x - PADDING - imgSize * 10, up.position.y - up.btnHeight / 2, imgSize * 10);
 	/*-----------------------------------*/
+
 }
 
 void Options_Update() {
@@ -111,6 +115,7 @@ void Options_Update() {
 		{
 			for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
 				if (IsAreaClicked(resolution[i].button.position.x, resolution[i].button.position.y, resolution[i].button.btnWidth, resolution[i].button.btnHeight, mouse.x, mouse.y)) {
+					CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 					resolution[i].selected = YES;
 					ddlClicked = NO;
 					resChanged = (resolution[i].actWidth == currentRes.actWidth && resolution[i].actHeight == currentRes.actHeight && resolution[i].windowed == currentRes.windowed) ? NO : YES;
@@ -120,6 +125,7 @@ void Options_Update() {
 			}
 			/*Retract dropdown list*/
 			if (!IsAreaClicked(currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y)) {
+				CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 				ddlClicked = NO;
 			}
 		}
@@ -154,11 +160,13 @@ void Options_Update() {
 
 			/*Return to main menu when click on back button*/
 			if (IsAreaClicked(back.position.x, back.position.y, back.btnWidth, back.btnHeight, mouse.x, mouse.y)) {
+				CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 				CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 			}
 
 			/*Display dropdown list*/
 			if (IsAreaClicked(currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y)) {
+				CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 				ddlClicked = YES;
 			}
 		}
@@ -168,6 +176,7 @@ void Options_Update() {
 			if (CP_Input_MouseClicked()) {
 				/*Apply*/
 				if (IsAreaClicked(apply.position.x, apply.position.y, apply.btnWidth, apply.btnHeight, mouse.x, mouse.y)) {
+					CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 					newConfig.settings.resolutionWidth = resSelected->actWidth;
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
 					newConfig.settings.windowed = resSelected->windowed;
@@ -188,6 +197,7 @@ void Options_Update() {
 				}
 				/*Discard*/
 				else if (IsAreaClicked(discard.position.x, discard.position.y, discard.btnWidth, discard.btnHeight, mouse.x, mouse.y)) {
+					CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 					displayVol = newConfig.settings.audio;
 					for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
 						resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;

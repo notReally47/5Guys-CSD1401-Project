@@ -30,7 +30,7 @@ float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip,cam
 
 int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed,cameratoggle;
 
-CP_Sound fail = NULL;
+CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL;
 
 /*Gif*/
 static float timeElapsed;
@@ -81,7 +81,10 @@ void base_Init(void) {
 	/* SFX */
 	// Set all audio in SFX group in accordance to the audio settings
 	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
-	fail = CP_Sound_Load("./Assets/Sound/Fail.wav");
+	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");
+	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
+	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
+	//teleport = CP_Sound_Load();
 
 	card_init();
 }
@@ -136,6 +139,7 @@ void base_Update(void) {
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (isCompleted == totalObjs) {
+			
 			next_level();
 			CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);
 		}
@@ -200,9 +204,18 @@ void base_Update(void) {
 			}
 
 			/*If there is movement.*/
+			int pushBox = 0;
 			if (dir > 0) {
 				saveMove(moves, grid);
-				getCell(&playerRow, &playerCol, dir, grid);
+				pushBox = getCell(&playerRow, &playerCol, dir, grid);
+			}
+
+			if (pushBox == 1) {
+				CP_Sound_PlayAdvanced(push, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+			}
+
+			if (pushBox == 2) {
+				CP_Sound_PlayAdvanced(success, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			}
 
 			/*Undo move.*/
@@ -355,6 +368,8 @@ void base_Update(void) {
 
 void base_Exit(void) {
 	CP_Sound_Free(&fail);
+	CP_Sound_Free(&push);
+	CP_Sound_Free(&success);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
 	//CP_Image_Free(&speechSprite);

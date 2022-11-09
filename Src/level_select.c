@@ -8,6 +8,7 @@
 extern Config config;
 float windowwidth, windowheight;
 rect buttons;
+CP_Sound click;
 
 void Level_Select_Init()
 {
@@ -54,6 +55,7 @@ void Level_Select_Update()
 		/* For-Loop for Rectangle/Button On-Click Function Implementation */
 		for (int j = 0; j < 5; j++, height += 1.5f) {
 			if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * height, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+				CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 				if (global_level > j) {
 					set_temp_level(j+1); // Send over which level to load
 					CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Load Level
@@ -64,6 +66,7 @@ void Level_Select_Update()
 
 	// Returns to Main Menu if Player hits 'ESC'
 	if (CP_Input_KeyTriggered(KEY_ESCAPE)) {
+		CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
 	}
 

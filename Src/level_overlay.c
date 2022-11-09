@@ -4,6 +4,7 @@
 #include "mainmenu.h"		// Needed to transition back to Main Menu
 
 extern Config config;		// For Resolution Settings
+CP_Sound click;				// Clicking SFX
 
 /* Struct for Pause Overlay Asset Properties */
 typedef struct Pause_Size {
@@ -120,9 +121,11 @@ int unpause(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.resume_position_x, size.resume_position_y, size.resume_width, size.resume_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
 			game_pause = 0;																										// Resume Game is Resume Button Clicked
 		}
 		else if (IsAreaClicked(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
 			game_pause = 0;
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
 		}
@@ -177,6 +180,7 @@ int game_over(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
 			game_pause = 0;
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
 		}
@@ -237,9 +241,11 @@ int reset_check(int reset_confirmed) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.yes_position_x, size.yes_position_y, size.yes_width, size.yes_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			reset_confirmed = 1;																										
 		}
 		else if (IsAreaClicked(size.no_position_x, size.no_position_y, size.no_width, size.no_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			reset_confirmed = 2;
 		}
 	}
