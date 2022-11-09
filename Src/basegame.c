@@ -74,6 +74,8 @@ void base_Init(void) {
 	}
 
 	/* SFX */
+	// Set all audio in SFX group in accordance to the audio settings
+	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
 	fail = CP_Sound_Load("./Assets/Sound/Fail.wav");
 
 	//card_init();
@@ -129,7 +131,7 @@ void base_Update(void) {
 
 		/* Lose Condition */
 		if (clock == 0) {
-			CP_Sound_Play(fail);
+			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			game_pause = 1;
 		}
 
