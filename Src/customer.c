@@ -252,45 +252,45 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 
 int customerMoveToPlayer(int playerRow, int playerCol, int cusNum, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
 	int face = 0;
-		int cusRow = customer[cusNum].cusRow;
-		int cusCol = customer[cusNum].cusCol;
-		int direction = customer[cusNum].direction;
+	int cusRow = customer[cusNum].cusRow;
+	int cusCol = customer[cusNum].cusCol;
+	int direction = customer[cusNum].direction;
 
-		if (!customer[cusNum].isActive) {
-			customer[cusNum].isRandom = 0;
-			switch (direction) {
-			case SOKOBAN_UP:
-				if (cusRow != playerRow - 1) {
-					cusRow--;
-					customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, direction, grid, customer);
-					face = 3;
-				}
-				break;
-			case SOKOBAN_LEFT:
-				if (cusCol != playerCol - 1) {
-					cusCol--;
-					customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, direction, grid, customer);
-					face = 4;
-				}
-				break;
-			case SOKOBAN_DOWN:
-				if (cusRow != playerRow + 1) {
-					cusRow++;
-					customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, direction, grid, customer);
-					face = 1;
-				}
-				break;
-			case SOKOBAN_RIGHT:
-				if (cusRow != playerCol + 1) {
-					cusCol++;
-					customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, direction, grid, customer);
-					face = 2;
-				}
-				break;
-				// Default case (if any)
-			default:
-				break;
+	if (!customer[cusNum].isActive) {
+		customer[cusNum].isRandom = 0;
+		switch (direction) {
+		case SOKOBAN_UP:
+			if (cusRow != playerRow - 1) {
+				cusRow--;
+				customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, direction, grid, customer);
+				face = 3;
 			}
+			break;
+		case SOKOBAN_LEFT:
+			if (cusCol != playerCol - 1) {
+				cusCol--;
+				customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, direction, grid, customer);
+				face = 4;
+			}
+			break;
+		case SOKOBAN_DOWN:
+			if (cusRow != playerRow + 1) {
+				cusRow++;
+				customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, direction, grid, customer);
+				face = 1;
+			}
+			break;
+		case SOKOBAN_RIGHT:
+			if (cusRow != playerCol + 1) {
+				cusCol++;
+				customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, direction, grid, customer);
+				face = 2;
+			}
+			break;
+			// Default case (if any)
+		default:
+			break;
 		}
+	}
 	return face;
 }
