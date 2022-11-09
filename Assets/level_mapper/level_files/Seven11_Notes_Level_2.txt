@@ -977,11 +977,11 @@ Level Duration is 600
 [23][32] is a Waypoint
 [23][33] is Blank
 [23][34] is Blank
-[23][35] is a Shelf
-[23][36] is a Shelf
-[23][37] is a Shelf
-[23][38] is a Shelf
-[23][39] is a Shelf
+[23][35] is Blank
+[23][36] is Blank
+[23][37] is Blank
+[23][38] is Blank
+[23][39] is Blank
 [23][40] is a Boarder
 [24][0] is a Boarder
 [24][1] is a Shelf

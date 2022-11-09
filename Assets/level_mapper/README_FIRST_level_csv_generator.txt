@@ -1,3 +1,5 @@
+You can create a text file with all the inputs in it. (Example 'Seven11_Level_2_Input.txt')
+
 Run wsl in current directory (level_mapper) and run 'gcc -o level_generate_CSV.exe level_generate_CSV.c' to get the latest version of the exe file.
 
 If level_generate_CSV.c was edited, compile into an executable file in wsl with:
@@ -5,6 +7,9 @@ gcc -o level_generate_CSV.exe level_generate_CSV.c
 
 Run level_generate_CSV.exe in cmd or wsl:
 ./level_generate_CSV.exe
+
+Or feed in the Input File:
+./level_generate_CSV.exe < Seven11_Level_2_Input.txt
 
 The program will ask for different inputs. Please read and follow the input format correctly.
 
