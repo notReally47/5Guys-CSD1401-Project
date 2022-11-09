@@ -26,13 +26,13 @@ void setDropDownList(DropDownList* ddl, unsigned int w, unsigned int h, Flag win
 void setGIF(GIF* gif, const char* spritesheet, int rows, int cols, float x, float y, float dimensions) {
 	gif->spritesheet = CP_Image_Load(spritesheet);
 	gif->position = CP_Vector_Set(x, y);
+	gif->imgWidth = (float)CP_Image_GetWidth(gif->spritesheet);
+	gif->imgHeight = (float)CP_Image_GetHeight(gif->spritesheet);
+	gif->gifDimensions = dimensions;
 	gif->numCols = cols;
 	gif->numRows = rows;
 	gif->currCol = 0;
 	gif->imgIndex = 0;
-	gif->imgWidth = (float)CP_Image_GetWidth(gif->spritesheet);
-	gif->imgHeight = (float)CP_Image_GetHeight(gif->spritesheet);
-	gif->gifDimensions = dimensions;
 }
 
 void drawTintedButton(CP_Color color, float x, float y, float w, float h, float mouse_x, float mouse_y, Flag isDDL) {
