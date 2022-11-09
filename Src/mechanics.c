@@ -97,12 +97,13 @@ void card_selection(int stage, CP_BOOL CP_Input_MouseClicked) {
         if (IsAreaClicked(card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
             card_effect(pos, cards);
             card_deck(&pos, cards, &size);
+            CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Go to the Next Level
         }
         else if (IsAreaClicked(card.center_x + card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
             card_effect(pos2, cards);
             card_deck(&pos2, cards, &size);
+            CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Go to the Next Level
         }
-        CP_Engine_SetNextGameState(base_Init,base_Update,base_Exit); // Go to the Next Level
     }
 }
 void card_effect(int pos,int cards[]) {

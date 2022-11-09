@@ -45,6 +45,28 @@ typedef struct Game_Over_Size {
 	float main_menu_height;
 } Game_Over_Size;
 
+typedef struct Reset_Size {
+	// Pause Text Properties
+	float reset_text_size;
+	float reset_text_width;
+	float reset_text_height;
+
+	// Button Text Size
+	float button_text_size;
+
+	// Yes Button & Text Properties
+	float yes_position_x;
+	float yes_position_y;
+	float yes_width;
+	float yes_height;
+
+	// No Button & Text Properties
+	float no_position_x;
+	float no_position_y;
+	float no_width;
+	float no_height;
+} Reset_Size;
+
 /* Initialise Pause_Size struct with values that scale with resolution */
 struct Pause_Size initialise_pause_size() {
 	struct Pause_Size size;
@@ -160,4 +182,66 @@ int game_over(int game_pause) {
 		}
 	}
 	return game_pause;
+}
+
+/* Initialise Reset_Size struct with values that scale with resolution */
+struct Reset_Size initialise_reset_size() {
+	struct Reset_Size size;
+	size.reset_text_size = (float)config.settings.resolutionHeight * 0.3f;
+	size.reset_text_width = (float)config.settings.resolutionWidth / 2.f;
+	size.reset_text_height = (float)config.settings.resolutionHeight * 0.45f;
+
+	size.button_text_size = (float)config.settings.resolutionHeight * 0.04f;
+
+	size.yes_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.yes_position_y = (float)config.settings.resolutionHeight * 0.6f;
+	size.yes_width = (float)config.settings.resolutionWidth / 6.f;
+	size.yes_height = (float)config.settings.resolutionHeight / 10.f;
+
+	size.no_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.no_position_y = (float)config.settings.resolutionHeight * 0.75f;
+	size.no_width = (float)config.settings.resolutionWidth / 6.f;
+	size.no_height = (float)config.settings.resolutionHeight / 10.f;
+
+	struct Reset_Size set_size = { size.reset_text_size, size.reset_text_width, size.reset_text_height, size.button_text_size, size.yes_position_x,
+		size.yes_position_y, size.yes_width, size.yes_height, size.no_position_x, size.no_position_y, size.no_width, size.no_height };
+
+	return set_size;
+}
+
+/* Render Reset Overlay */
+void overlay_reset() {
+	struct Reset_Size size = initialise_reset_size();
+
+	CP_Settings_NoTint();																										// Clear any Existing Tint
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
+	CP_Settings_TextSize(size.reset_text_size);																					// Set Font Size
+	CP_Font_DrawText("RESET MAP?", size.reset_text_width, size.reset_text_height);												// Draw RESET MAP? Text
+
+	CP_Settings_Fill(RED);																										// Set Button Colour to RED
+	CP_Graphics_DrawRect(size.yes_position_x, size.yes_position_y, size.yes_width, size.yes_height);							// Place Holder for 'YES' Buttom
+	CP_Graphics_DrawRect(size.no_position_x, size.no_position_y, size.no_width, size.no_height);								// Place Holder for 'NO' Button
+
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
+	CP_Font_DrawText("YES", size.yes_position_x, size.yes_position_y);															// Draw YES Text
+	CP_Font_DrawText("NO", size.no_position_x, size.no_position_y);																// Draw NO Text
+	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
+}
+
+/* Reset Map if Yes, return to Game if No */
+int reset_check(int reset_confirmed) {
+	struct Reset_Size size = initialise_reset_size();
+
+	/* Check for Mouse Click Input */
+	if (CP_Input_MouseClicked()) {
+		if (IsAreaClicked(size.yes_position_x, size.yes_position_y, size.yes_width, size.yes_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			reset_confirmed = 1;																										
+		}
+		else if (IsAreaClicked(size.no_position_x, size.no_position_y, size.no_width, size.no_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			reset_confirmed = 2;
+		}
+	}
+	return reset_confirmed;
 }

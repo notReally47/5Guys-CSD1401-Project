@@ -28,7 +28,7 @@ char* stat[2];
 
 float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed;
 
 CP_Sound fail = NULL;
 
@@ -59,6 +59,8 @@ void base_Init(void) {
 	isAnimating = 0;
 	flip = 0;
 	oneSecondFlip = 0;
+	reset_triggered = 0;
+	reset_confirmed = 0;
 	stat[0] = "Time Left: ";
 	stat[1] = "Move: ";
 
@@ -210,10 +212,10 @@ void base_Update(void) {
 				face = 0;
 			}
 
+			/* Reset Map (Function in game_pause condition) */
 			else if (CP_Input_KeyTriggered(KEY_R)) {
-				resetMap(moves, grid, customer, path); //Resets grid to the initial values based on the CSV file
-				totalElapsedTime = 0;
-				face = 0;
+				reset_triggered = 1;
+				game_pause = 1;
 			}
 		}
 
@@ -312,26 +314,40 @@ void base_Update(void) {
 		//printf("Customer 0: R %d C %d \n",customer[0].prevCusRow,customer[0].prevCusCol);
 		//}
 	if (game_pause) {
-		if (clock > 0) {
+		if (reset_triggered && clock > 0) {
+			overlay_reset();
+			reset_confirmed = reset_check(reset_confirmed);
+
+			if (reset_confirmed == 1) {
+				resetMap(moves, grid, customer, path); //Resets grid to the initial values based on the CSV file
+				totalElapsedTime = 0;
+				face = 0;
+				reset_confirmed = 0;
+				reset_triggered = 0;
+				game_pause = 0;
+			}
+			else if (reset_confirmed == 2) {
+				reset_confirmed = 0;
+				reset_triggered = 0;
+				game_pause = 0;
+			}	
+		}
+		else if (!reset_triggered && clock > 0) {
 			overlay_pause();
 			game_pause = unpause(game_pause);
 		}
-		else {
+		else if(!reset_triggered) {
 			overlay_game_over();
 			game_pause = game_over(game_pause);
 		}
 	}
-	/*show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize, stat[0], clock);
-	show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize*2.f, stat[0], global_move);*/
-	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
-	CP_Settings_Fill(BLACK);
-	char buffer[20] = { 0 };
-	sprintf_s(buffer, _countof(buffer), "Time left: %d", clock);
-	CP_Font_DrawText(buffer, cellSize, cellSize);
 
-	sprintf_s(buffer, _countof(buffer), "Moves: %d", global_move-1);
-	CP_Font_DrawText(buffer, cellSize, cellSize*2.f);
+	/* Show Timer */
+	show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize, stat[0], clock);
+
+	/* Show Move Count */
+	show_stats((float)config.settings.resolutionHeight * 0.025f, cellSize, cellSize*2.f, stat[1], global_move);
+
 }
 
 void base_Exit(void) {

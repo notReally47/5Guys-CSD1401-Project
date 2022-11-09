@@ -34,14 +34,14 @@ void Level_Transition_Update()
     case 4:
 	case 8:
 	case 12:
-		CP_Settings_Fill(GRAY); // Fill Rectangle GRAY
-		card_selection(1,CP_Input_MouseClicked());
+		card_selection(1, CP_Input_MouseClicked());
+		CP_Settings_Fill(GRAY); // Fill Rectangle GRAY	
 		break;
 	case 6:
 	case 10:
 	case 14:
+		card_selection(0, CP_Input_MouseClicked());
 		CP_Settings_Fill(GRAY); // Fill Rectangle GRAY
-		card_selection(0,CP_Input_MouseClicked());
 		break;
 	default:
 		CP_Settings_Fill(RED); // Fill Rectangle RED
