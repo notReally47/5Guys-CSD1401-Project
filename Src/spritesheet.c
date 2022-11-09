@@ -5,234 +5,247 @@
 #include "defines.h"
 #include "mechanics.h"
 
+extern Config config;
 CP_Image spritesheet;
-CP_Vector anim, dimen, trans, camera;
+CP_Vector CustomerS[CUSTOMER_MAX],Player,Camera,Offset[3];
 static float move;
 const float frame = 64.0f;
-int index, x, y;
-struct Animation {
-	CP_Vector Animation;
-} CustomerS[CUSTOMER_MAX], Player;
+int index,toggled;
 
 /* loads all assets using spritesheet
 * takes in cellsize for scaling of player/customer sprite scaling
 * translation is calculated by the cellsize and the sprite dimensions to center itself in the cell
-*
-*
+* 
+* 
 */
-void load_spritesheet(float cellSize) {
+void init_spritesheet(float* cellSize,int cameratoggle) {
+	*cellSize = (float)(config.settings.resolutionHeight/(SOKOBAN_GRID_ROWS/cameratoggle));
+	// Sprite Dimensions - Scale sprite based on cellSize
+	Offset[0] = CP_Vector_Scale(CP_Vector_Set(frame,frame),*cellSize/frame);
+	// Offset[1]lation - Align sprite placement to the center of the cell
+	Offset[1] = CP_Vector_Scale(CP_Vector_Set((*cellSize-Offset[0].x),(*cellSize-Offset[0].y)),0.5f);
+	// Camera Translation - Aligns camera to player's position
+	Offset[2] = CP_Vector_Set((float)(SOKOBAN_GRID_COLS/(cameratoggle*2)),(float)(SOKOBAN_GRID_ROWS/(cameratoggle*2)));
+	
+	move = (float)((int)*cellSize / (CP_System_GetFrameRate()/3.f));
+}
+void load_spritesheet(float* cellSize,int cameratoggle) {
 	spritesheet = CP_Image_Load("./Assets/Spritesheet/spritesheet.png");
 	if (spritesheet == NULL) {
-		fprintf(stderr, "Unable to open spritesheet.png\n");
+		fprintf(stderr,"Unable to open spritesheet.png\n");
 		CP_Image_Free(&spritesheet);
 		exit(1);
 	}
-	dimen = CP_Vector_Scale(CP_Vector_Set(frame, frame), cellSize / frame);
-	trans = CP_Vector_Scale(CP_Vector_Set((cellSize - dimen.x), (cellSize - dimen.y)), 0.5f);
-	camera = CP_Vector_Set(0.f, 0.f);
-	move = (float)((int)cellSize / (CP_System_GetFrameRate() / 3.f));
-	index = 0;
-	x = 1;
-	y = 1;
-	// i have no idea what these do
-	CP_Settings_AntiAlias(TRUE);
-	CP_Settings_ImageFilterMode(CP_IMAGE_FILTER_LINEAR);
-	CP_Settings_ImageWrapMode(CP_IMAGE_WRAP_CLAMP_EDGE);
-	CP_Settings_ImageMode(CP_POSITION_CORNER);
-
+	else {
+		// i have no idea what these do
+		//CP_Settings_AntiAlias(TRUE);
+		CP_Settings_ImageFilterMode(CP_IMAGE_FILTER_NEAREST);
+		//CP_Settings_ImageWrapMode(CP_IMAGE_WRAP_MIRROR);
+		CP_Settings_ImageMode(CP_POSITION_CORNER); // Required to align tiles
+		//CP_Settings_BlendMode(CP_BLEND_ALPHA);
+		index = 0;
+		toggled = 0;
+		init_spritesheet(cellSize,cameratoggle);	// Separated initialisation to allow camera toggle
+	}
+		
 }
+
 /* cellx and celly scales off player's position x and y. allows for a more accurate animation when moving the player
 * when variable face is 0, the player will re-initialise its position. this is called at the start and whenever player undo their move
-*
+* 
 */
-int draw_player(const float* cellSize, const float* cellAlign, const int* playerPosX, const int* playerPosY, const int* face) {
-	float cellx = *cellSize * (float)*playerPosY + *cellAlign;
-	float celly = *cellSize * (float)*playerPosX;
-
+int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int cameratoggle) {
+	float cellx = cellSize*(float)playerPosY;
+	float celly = cellSize*(float)playerPosX;
 	int isAnimating = 0;
-
 	static float elapsed = 0.f;
 	elapsed += CP_System_GetDt();
 	if (elapsed >= 0.2f) {
-		index = (index + 1) % 3;
+		index = (index+1)%3;
 		elapsed = 0.f;
+	}
+
+	if (cameratoggle==(toggled+1)){
+		Player = CP_Vector_Set(cellx,celly);
+		toggled = !toggled;
 	}
 	//if (infected[10]==1)
 	//	CP_Settings_Tint(CP_Color_Create(0,255,0,250));
 	//else 
 	//	CP_Settings_NoTint();
-	CP_Settings_Translate(trans.x, trans.y);
-	switch (*face) {
+	CP_Settings_Translate(Offset[1].x,Offset[1].y);
+	switch (face) {
 	case 0: // starting position
-		Player.Animation = CP_Vector_Set(cellx, celly);
-	case 3: // face down
-		if (tele[5] == 1) {
-			Player.Animation = CP_Vector_Set(cellx, *cellSize * (float)(*playerPosX - 1));
-			tele[5] = 0;
+		Player = CP_Vector_Set(cellx,celly);
+	case SOKOBAN_DOWN:
+		if (teleporter[5] == 1) {
+			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX-1));
+			teleporter[5] = 0;
 		}
-		if (Player.Animation.y < celly) {
+		if (Player.y < celly) {
 			isAnimating = 1;
-			Player.Animation.y += move;
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, index * frame, 0.f, (index + 1) * frame, frame, 255);
-		}
+			Player.y += move;
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,index*frame,0.f,(index+1)*frame,frame,255);
+		} 
 		else
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, frame, 0.f, frame * 2.f, frame, 255);
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,frame,0.f,frame*2.f,frame,255);
 		break;
-	case 1: // face up
-		if (tele[5] == 1) {
-			Player.Animation = CP_Vector_Set(cellx, *cellSize * (float)(*playerPosX + 1));
-			tele[5] = 0;
+	case SOKOBAN_UP:
+		if (teleporter[5] == 1) {
+			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX+1));
+			teleporter[5] = 0;
 		}
-		if (Player.Animation.y > celly) {
+		if (Player.y > celly) {
 			isAnimating = 1;
-			Player.Animation.y -= move;
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, (index + 3) * frame, 0.f, (index + 4) * frame, frame, 255);
+			Player.y -= move;
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,(index+3)*frame,0.f,(index+4)*frame,frame,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, frame * 4.f, 0.f, frame * 5.f, frame, 255);
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,frame*4.f,0.f,frame*5.f,frame,255); 
 		break;
-	case 2: // face left
-		if (tele[5] == 1) {
-			Player.Animation = CP_Vector_Set(*cellSize * (float)(*playerPosY + 1) + *cellAlign, celly);
-			tele[5] = 0;
+	case SOKOBAN_LEFT:
+		if (teleporter[5] == 1) {
+			Player = CP_Vector_Set(cellSize*(float)(playerPosY+1),celly);
+			teleporter[5] = 0;
 		}
-		if (Player.Animation.x > cellx) {
+		if (Player.x > cellx) {
 			isAnimating = 1;
-			Player.Animation.x -= move;
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, (index + 3) * frame, frame, (index + 4) * frame, frame * 2.f, 255);
+			Player.x -= move;
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, frame * 4.f, frame, frame * 5.f, frame * 2.f, 255);
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,frame*4.f,frame,frame*5.f,frame*2.f,255); 
 		break;
-	case 4: // face right
-		if (tele[5] == 1) {
-			Player.Animation = CP_Vector_Set(*cellSize * (float)(*playerPosY - 1) + *cellAlign, celly);
-			tele[5] = 0;
+	case SOKOBAN_RIGHT:
+		if (teleporter[5] == 1) {
+			Player = CP_Vector_Set(cellSize*(float)(playerPosY-1),celly);
+			teleporter[5] = 0;
 		}
-		if (Player.Animation.x < cellx) {
+		if (Player.x < cellx) {
 			isAnimating = 1;
-			Player.Animation.x += move;
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, index * frame, frame, (index + 1) * frame, frame * 2.f, 255);
+			Player.x += move;
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,index*frame,frame,(index+1)*frame,frame*2.f,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet, Player.Animation.x, Player.Animation.y, dimen.x, dimen.y, frame, frame, frame * 2.f, frame * 2.f, 255);
+			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,frame,frame,frame*2.f,frame*2.f,255);
 		break;
 	}
 	//CP_Settings_NoTint();
-	CP_Settings_Translate(-trans.x, -trans.y);
+	CP_Settings_Translate(-Offset[1].x, -Offset[1].y);
 
 	return isAnimating;
 }
 
 void draw_boarder(float cellX, float cellY, float cellSize) {
 	//if (cellY == 0.f || cellY*SOKOBAN_GRID_ROWS)
-	CP_Image_DrawSubImage(spritesheet, cellX, cellY, cellSize, cellSize, 320.f, 128.f, 384.f, 192.f, 240);
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,240);
 	//else if (cellX == 0.f || cellX*SOKOBAN_GRID_COLS)
 		//CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,255);
 }
-void draw_box(float cellX, float cellY, float cellSize) {
-	CP_Image_DrawSubImage(spritesheet, cellX, cellY, cellSize, cellSize, 64.f, 128.f, 128.f, 192.f, 255);
+void draw_box(float cellX,float cellY,float cellSize){
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,64.f,128.f,128.f,192.f,255);
 }
-void draw_key(float cellX, float cellY, float cellSize) {
-	CP_Image_DrawSubImage(spritesheet, cellX, cellY, cellSize, cellSize, 256.f, 128.f, 320.f, 192.f, 255);
+void draw_key(float cellX,float cellY,float cellSize){
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,256.f,128.f,320.f,192.f,255);
 }
-void draw_key_in_box(float cellX, float cellY, float cellSize) {
-	CP_Image_DrawSubImage(spritesheet, cellX, cellY, cellSize, cellSize, frame * 2.f, 128.f, frame * 3.f, 192.f, 255);
+void draw_key_in_box(float cellX,float cellY,float cellSize){
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,frame*2.f,128.f,frame*3.f,192.f,255);
 }
-void draw_floor(float cellX, float cellY, float cellSize) {
-	CP_Image_DrawSubImage(spritesheet, cellX, cellY, cellSize, cellSize, 0.f, 128.f, 64.f, 192.f, 250);
+void draw_floor(float cellX,float cellY,float cellSize){
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,0.f,128.f,64.f,192.f,250);
 }
 /* moves the whole canvas with the player when moving. allow for a zoom-in side scrolling effect
 */
 
-void draw_customer(const float* cellSize, const float* cellAlign, const int* customerPosX, const int* customerPosY, const int* customerdirection, const int* customernumber) {
-	float cellx = *cellSize * (float)*customerPosY + *cellAlign;
-	float celly = *cellSize * (float)*customerPosX;
-	static init[10] = { 0 };
+void draw_customer(float cellSize,int customerPosX,int customerPosY,int customerdirection,int customernumber,int cameratoggle) {
+	float cellx = cellSize*(float)customerPosY;
+	float celly = cellSize*(float)customerPosX;
 
 	// cellSize is for when the customer moves
-	int i = *customernumber;
-	if (init[i] == 0) {
-		CustomerS[i].Animation = CP_Vector_Set(cellx, celly);
-		init[i] = 1;
-	}
-	static float elapsed = 0.f;
-	elapsed += CP_System_GetDt();
+	int i = customernumber;
+	if (cameratoggle==(toggled+1))
+		CustomerS[i] = CP_Vector_Set(cellx,celly);
+	
 	//(infected[i]==1)?CP_Settings_Tint(CP_Color_Create(0,255,0,250)):CP_Settings_NoTint(); // infected[1] means customer[1] is infected
-	//CP_Settings_Translate(trans.x,trans.y);
-
-	switch (*customerdirection) {
-	case 3: // down
-		if (CustomerS[i].Animation.y < celly && elapsed > 1.3f) {
-			elapsed = 0.f;
-			CustomerS[i].Animation.y += move;
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, index * frame, 0.f, (index + 1) * frame, frame, 255);
-		}
+	CP_Settings_Translate(Offset[1].x,Offset[1].y);
+	
+	switch (customerdirection) {
+	case SOKOBAN_DOWN: // down
+		if (CustomerS[i].y < celly) {
+			CustomerS[i].y += move;
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,index*frame,0.f,(index+1)*frame,frame,255);
+		} 
 		else
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, frame, 0.f, frame * 2.f, frame, 255);
-		//CP_Image_DrawSubImage(spritesheet,cellx,celly,dimen.x,dimen.y,frame,0.f,frame*2.f,frame,255);
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame,0.f,frame*2.f,frame,255);
 		break;
-	case 1: // up
-		if (CustomerS[i].Animation.y > celly && elapsed > 1.3f) {
-			elapsed = 0.f;
-			CustomerS[i].Animation.y -= move;
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, (index + 3) * frame, 0.f, (index + 4) * frame, frame, 255);
+	case SOKOBAN_UP: // up
+		if (CustomerS[i].y > celly) {
+			CustomerS[i].y -= move;
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,(index+3)*frame,0.f,(index+4)*frame,frame,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, frame * 4.f, 0.f, frame * 5.f, frame, 255);
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame*4.f,0.f,frame*5.f,frame,255);
 		break;
-	case 2: // left
-		if (CustomerS[i].Animation.x > cellx && elapsed > 1.3f) {
-			elapsed = 0.f;
-			CustomerS[i].Animation.x -= move;
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, (index + 3) * frame, frame, (index + 4) * frame, frame * 2.f, 255);
+	case SOKOBAN_LEFT: // left
+		if (CustomerS[i].x > cellx) {
+			CustomerS[i].x -= move;
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, frame * 4.f, frame, frame * 5.f, frame * 2.f, 255);
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame*4.f,frame,frame*5.f,frame*2.f,255); 
 		break;
-	case 4: // right
-		if (CustomerS[i].Animation.x < cellx && elapsed > 1.3f) {
-			elapsed = 0.f;
-			CustomerS[i].Animation.x += move;
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, index * frame, frame, (index + 1) * frame, frame * 2.f, 255);
+	case SOKOBAN_RIGHT: // right
+		if (CustomerS[i].x < cellx) {
+			CustomerS[i].x += move;
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,index*frame,frame,(index+1)*frame,frame*2.f,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet, CustomerS[i].Animation.x, CustomerS[i].Animation.y, dimen.x, dimen.y, frame, frame, frame * 2.f, frame * 2.f, 255);
+			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame,frame,frame*2.f,frame*2.f,255);
 		break;
 	}
-	CP_Settings_Translate(-trans.x, -trans.y);
+	CP_Settings_Translate(-Offset[1].x,-Offset[1].y);
 	//CP_Settings_NoTint();
 }
 void draw_mecha(void) {
 	// to do
 }
-void draw_tele(void) {
+void draw_teleporter(void) {
 	// to do
 }
-void world_camera(float cellSize, int face, int dir) {
+void world_camera(float cellSize,int playerRow,int playerCol,int face,int cameratoggle) {
+	float cellx = cellSize*(float)playerCol;
+	float celly = cellSize*(float)playerRow;
+	int xoffset = playerCol-Offset[2].x;
+	int yoffset = playerRow-Offset[2].y;
+	if (cameratoggle==(toggled+1))
+		Camera = CP_Vector_Set((float)xoffset*cellSize,(float)yoffset*cellSize);
 	switch (face) {
-	case 1: // up
-		y = (dir == 1) ? y + 1 : y;
-		if (camera.y < cellSize * y)
-			camera.y += move;
+	case SOKOBAN_UP: // up
+		if (teleporter[5] == 1) 
+			Camera = CP_Vector_Set((float)xoffset*cellSize,(float)(yoffset+1)*cellSize);
+		if (Player.y > celly) 
+			Camera.y -= move;
 		break;
-	case 2: // left
-		x = (dir == 2) ? x + 1 : x;
-		if (camera.x < cellSize * x)
-			camera.x += move;
+	case SOKOBAN_LEFT: // left
+		if (teleporter[5] == 1) 
+			Camera = CP_Vector_Set((float)(xoffset+1)*cellSize,(float)(yoffset)*cellSize);
+		if (Player.x > cellx)
+			Camera.x -= move;
 		break;
-	case 3: // down
-		y = (dir == 3) ? y - 1 : y;
-		if (camera.y > cellSize * y)
-			camera.y -= move;
+	case SOKOBAN_DOWN: // down
+		if (teleporter[5] == 1) 
+			Camera = CP_Vector_Set((float)xoffset*cellSize,(float)(yoffset-1)*cellSize);
+		if (Player.y < celly)
+			Camera.y += move;
 		break;
-		//case 4: //right
-			//x = (dir==4) ? x-1:x;
-			//if (camera.x > cellSize*x)
-				//camera.x -= move;
-			//break;
+	case SOKOBAN_RIGHT: //right
+		if (teleporter[5] == 1) 
+			Camera = CP_Vector_Set((float)(xoffset-1)*cellSize,(float)(yoffset)*cellSize);
+		if (Player.x < cellx)
+			Camera.x += move;
+		break;
 	}
-	CP_Settings_Translate(camera.x, camera.y);
+	CP_Settings_Translate(-Camera.x,-Camera.y);
 }
 /* frees all assets from memory when called
 */
