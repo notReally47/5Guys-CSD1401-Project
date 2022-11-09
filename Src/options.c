@@ -264,7 +264,7 @@ void Options_Update() {
 	drawAlignedText(BLACK, CENTER, currentVol, volumeDown.position.x + ((volumeUp.position.x - volumeDown.position.x) / 2), back.btnHeight + 3 * PADDING + 1.5 * textSize);
 
 	/*Draw Gameplay GIF & Controls*/
-	drawGIF(&gameplay, &timeElapsed, displayDuration, YES);
+	drawGIF(&gameplay, &timeElapsed, displayDuration, YES, NO);
 	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
 		drawButton(controls[i]);
 		drawAlignedText(WHITE, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y - y);

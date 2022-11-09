@@ -70,7 +70,7 @@ void drawAlignedText(CP_Color color, int alignment, const char* text, float x, f
 * const float displayDuration: Duration each frame to be displayed in seconds
 * Flag flip: Flag to determine whether to flip the left and right of the gif
 */
-void drawGIF(GIF* gif, float* timeElapsed, const float displayDuration, Flag flip);
+void drawGIF(GIF* gif, float* timeElapsed, const float displayDuration, Flag flipLR, Flag flipTB);
 
 /*
 * drawButton - Draws button from button struct

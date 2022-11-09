@@ -62,7 +62,7 @@ void drawAlignedText(CP_Color color, int alignment, const char* text, float x, f
 	CP_Font_DrawText(text, x, y);
 }
 
-void drawGIF(GIF* gif, float* timeElapsed, const float displayDuration, Flag flip) {
+void drawGIF(GIF* gif, float* timeElapsed, const float displayDuration, Flag flipLR, Flag flipTB) {
 	int totalFrames = gif->numRows * gif->numCols;
 	float frameWidth = gif->imgWidth / gif->numCols;
 	float frameHeight = gif->imgHeight / gif->numRows;
@@ -76,10 +76,10 @@ void drawGIF(GIF* gif, float* timeElapsed, const float displayDuration, Flag fli
 		*timeElapsed = 0.f;
 	}
 
-	left = flip ? ((gif->imgIndex % gif->numCols) + 1) * frameWidth : (gif->imgIndex % gif->numCols) * frameWidth;
-	top = gif->currCol * frameHeight;
-	right = flip ? (gif->imgIndex % gif->numCols) * frameWidth : ((gif->imgIndex % gif->numCols) + 1) * frameWidth;
-	bottom = (gif->currCol + 1) * frameHeight;
+	left = flipLR ? ((gif->imgIndex % gif->numCols) + 1) * frameWidth : (gif->imgIndex % gif->numCols) * frameWidth;
+	top = flipTB ? (gif->currCol + 1) * frameHeight : gif->currCol * frameHeight;
+	right = flipLR ? (gif->imgIndex % gif->numCols) * frameWidth : ((gif->imgIndex % gif->numCols) + 1) * frameWidth;
+	bottom = flipTB ? gif->currCol * frameHeight : (gif->currCol + 1) * frameHeight;
 
 	CP_Image_DrawSubImage(gif->spritesheet, gif->position.x, gif->position.y, gif->gifDimensions, gif->gifDimensions, left, top, right, bottom, 255);
 }
