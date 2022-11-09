@@ -102,8 +102,8 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 	if (grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
 		grid[*posX][*posY].player = 1;
+		grid[nextPosX][nextPosY].box = grid[*posX][*posY].box;
 		grid[*posX][*posY].box = 0;
-		grid[nextPosX][nextPosY].box = 1;
 		global_move++;
 		printf("Current Moves: %d\n", global_move - 1);
 		return grid[nextPosX][nextPosY].key ? 2 : 1;

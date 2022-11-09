@@ -49,6 +49,7 @@ typedef struct Cell {
 	int				player;
 	int				key;
 	int				box;
+	int				tele;
 	int				boarder;
 	int				customer;
 	int				shelf;
