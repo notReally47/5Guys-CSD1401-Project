@@ -50,7 +50,7 @@ void drawAlignedText(CP_Color color, int alignment, const char *text, float x, f
 	CP_Font_DrawText(text, x, y);
 }
 
-void drawGIF(CP_Image img, float x, float y, float w, float h, static const float display_duration, static const float frame_dimension, static float timeElapsed, static int imageIndex, int totalFrames, int numRows) {
+void drawGIF(CP_Image img, float x, float y, float w, float h, static const float frame_dimension, static float timeElapsed, static int imageIndex, int totalFrames, int numRows) {
 	CP_Settings_NoTint();
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
 	CP_Image_DrawSubImage(img, x, y, w, h,

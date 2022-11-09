@@ -271,7 +271,7 @@ void base_Update(void) {
 					draw_customer(&cellSize, &cellAlign, &customer[i].cusRow, &customer[i].cusCol, &customer[i].direction, &i);
 
 			if (isLocked && currCell.player && !isAnimating) {
-				drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, DISPLAY_DURATION, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
+				drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
 			}
 		}
 	}
@@ -285,7 +285,6 @@ void base_Update(void) {
 		//printf("Customer 0: R %d C %d \n",customer[0].prevCusRow,customer[0].prevCusCol);
 		//}
 	if (game_pause) {
-		CP_Settings_Tint(DARKGRAY);
 		if (clock > 0) {
 			overlay_pause();
 			game_pause = unpause(game_pause);
