@@ -202,6 +202,7 @@ void base_Update(void) {
 
 			else if (CP_Input_KeyTriggered(KEY_R)) {
 				resetMap(moves, grid, customer, path); //Resets grid to the initial values based on the CSV file
+				totalElapsedTime = 0;
 				face = 0;
 			}
 		}
@@ -295,6 +296,7 @@ void base_Update(void) {
 		}
 	}
 
+	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_TOP);
 	CP_Settings_Fill(BLACK);
 	char buffer[20] = { 0 };
@@ -306,4 +308,5 @@ void base_Exit(void) {
 	CP_Sound_Free(&fail);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
+	CP_Image_Free(&speechSprite);
 }

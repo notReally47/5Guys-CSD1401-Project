@@ -152,10 +152,10 @@ void set_customer(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
                 read = scanf("%d,%d", &set_row, &set_col);
                 printf("Please indicate Customer #%d's direction:\n", (counter + 1));
                 read1 = scanf("%d", &set_direction);
-                printf("Is Customer Idle? (Y/N) ");
+                printf("Is Customer Idle? (Y/N)\n");
                 scanf(" %c", &choice);
                 set_idle = (choice == 'Y' || choice == 'y') ? 1 : 0;
-                printf("Is Customer Random? (Y/N) ");
+                printf("Is Customer Random? (Y/N)\n");
                 scanf(" %c", &choice);
                 set_random = (choice == 'Y' || choice == 'y') ? 1 : 0;
                 if(read == 2 && read1 == 1) {
@@ -170,7 +170,7 @@ void set_customer(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
                     grid[set_row][set_col].customer_random = set_random;
 
                     if(!grid[set_row][set_col].customer_idle) {
-                        printf("For Non-Idle Customers, are there Waypoints? (Y/N) ");
+                        printf("For Non-Idle Customers, are there Waypoints? (Y/N)\n");
                         scanf(" %c", &choice);
                         if(choice == 'Y' || choice == 'y') {
                             do {
@@ -311,6 +311,7 @@ int main(void) {
                 else if(is_key) fprintf(array_reference, "[%d][%d] is a Key\n", row, col);
                 else if(is_boarder) fprintf(array_reference, "[%d][%d] is a Boarder\n", row, col);
                 else if(is_customer) fprintf(array_reference, "[%d][%d] is a Customer\n", row, col);
+                else if(is_customer && is_waypoint) fprintf(array_reference, "[%d][%d] is a Customer & a Waypoint\n", row, col);
                 else if(is_shelf) fprintf(array_reference, "[%d][%d] is a Shelf\n", row, col);
                 else if(is_waypoint) fprintf(array_reference, "[%d][%d] is a Waypoint\n", row, col);
                 else fprintf(array_reference, "[%d][%d] is Blank\n", row, col);
