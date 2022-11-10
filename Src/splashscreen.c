@@ -56,6 +56,8 @@ void splash_screen_update(void)
 
 void splash_screen_exit(void)
 {
-    CP_Sound_PlayAdvanced(gameMusic, config.settings.audio / 100.f, 1, YES, CP_SOUND_GROUP_MUSIC);
+    CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
+    CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, config.settings.audio / 100.f);
+    CP_Sound_PlayAdvanced(gameMusic, 1, 1, YES, CP_SOUND_GROUP_MUSIC);
     CP_Image_Free(&img); // unload the img
 }

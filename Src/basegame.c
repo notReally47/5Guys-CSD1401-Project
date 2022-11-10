@@ -80,7 +80,6 @@ void base_Init(void) {
 
 	/* SFX */
 	// Set all audio in SFX group in accordance to the audio settings
-	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
 	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");
 	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
