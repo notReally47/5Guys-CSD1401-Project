@@ -9,7 +9,7 @@ typedef struct Cell {
 	int player;
 	int key;
 	int box;
-	int boarder;
+	int border;
     int shelf;
     int mecha;
     int tele;
@@ -35,7 +35,7 @@ void empty_grid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
                 grid[row][col].player = 0;
                 grid[row][col].key = 0;
                 grid[row][col].box = 0;
-                grid[row][col].boarder = 1;
+                grid[row][col].border = 1;
                 grid[row][col].shelf = 0;
                 grid[row][col].tele = 0;
                 grid[row][col].mecha = 0;
@@ -53,7 +53,7 @@ void empty_grid (Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]){
                 grid[row][col].player = 0;
                 grid[row][col].key = 0;
                 grid[row][col].box = 0;
-                grid[row][col].boarder = 0;
+                grid[row][col].border = 0;
                 grid[row][col].shelf = 0;
                 grid[row][col].tele = 0;
                 grid[row][col].mecha = 0;
@@ -276,7 +276,7 @@ int main(void) {
     Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS];
 
     /* Declare & Initialise read to 0 & boolean checks of different properties to 0 */
-    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_boarder = 0, is_shelf = 0, is_tele = 0, is_waypoint = 0, duration = 0;
+    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_border = 0, is_shelf = 0, is_tele = 0, is_waypoint = 0, duration = 0;
 
     /* Initialise file name without the level number and extension name */
     char csv_file_name[32] = "level_files/Seven11_Level_", reference_file_name[38] = "level_files/Seven11_Notes_Level_", level, 
@@ -328,18 +328,18 @@ int main(void) {
         for (int row = 0; row < SOKOBAN_ROWS; row++) {
             for (int col = 0; col < SOKOBAN_COLS; col++) {
 
-                fprintf(csv_file,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].tele, grid[row][col].boarder, 
+                fprintf(csv_file,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].tele, grid[row][col].border, 
                     grid[row][col].shelf, grid[row][col].mecha, grid[row][col].is_customer, grid[row][col].customer_no, grid[row][col].customer_posX, grid[row][col].customer_posY,
                     grid[row][col].customer_direction, grid[row][col].customer_range, grid[row][col].is_active, grid[row][col].customer_idle, grid[row][col].customer_random, grid[row][col].path);
 
-                fprintf(csv_bak,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].tele, grid[row][col].boarder, 
+                fprintf(csv_bak,"%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", grid[row][col].player, grid[row][col].key, grid[row][col].box, grid[row][col].tele, grid[row][col].border, 
                     grid[row][col].shelf, grid[row][col].mecha, grid[row][col].is_customer, grid[row][col].customer_no, grid[row][col].customer_posX, grid[row][col].customer_posY,
                     grid[row][col].customer_direction, grid[row][col].customer_range, grid[row][col].is_active, grid[row][col].customer_idle, grid[row][col].customer_random, grid[row][col].path);
                 
                 is_player = (grid[row][col].player) ? 1 : 0;
                 is_box = (grid[row][col].box) ? 1 : 0;
                 is_key = (grid[row][col].key) ? 1 : 0;
-                is_boarder = (grid[row][col].boarder) ? 1 : 0;
+                is_border = (grid[row][col].border) ? 1 : 0;
                 is_tele = (grid[row][col].tele) ? 1 : 0;
                 is_customer = (grid[row][col].is_customer) ? 1 : 0;
                 is_shelf = (grid[row][col].shelf) ? 1 : 0;
@@ -348,7 +348,7 @@ int main(void) {
                 if(is_player) fprintf(array_reference, "[%d][%d] is Player\n", row, col);
                 else if(is_box) fprintf(array_reference, "[%d][%d] is a Box\n", row, col);
                 else if(is_key) fprintf(array_reference, "[%d][%d] is a Key\n", row, col);
-                else if(is_boarder) fprintf(array_reference, "[%d][%d] is a Boarder\n", row, col);
+                else if(is_border) fprintf(array_reference, "[%d][%d] is a Border\n", row, col);
                 else if(is_tele) fprintf(array_reference, "[%d][%d] is a Teleporter\n", row, col);
                 else if(is_customer) fprintf(array_reference, "[%d][%d] is a Customer\n", row, col);
                 else if(is_customer && is_waypoint) fprintf(array_reference, "[%d][%d] is a Customer & a Waypoint\n", row, col);
