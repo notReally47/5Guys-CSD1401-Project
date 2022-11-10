@@ -28,7 +28,7 @@ void Level_Select_Update()
 	CP_Graphics_ClearBackground(GRAY);
 
 	/* For-Loop to Draw Rectangles/Buttons for multiple Levels */
-	for (int i = 0; i < 5; i++, height += 1.5f) {
+	for (int i = 0; i < 5; i++, height += 1.25f) {
 		if ((i + 1) <= global_level) {
 			CP_Settings_Fill(RED); // Fill Rectangle RED
 		}
@@ -53,7 +53,7 @@ void Level_Select_Update()
 	if (CP_Input_MouseClicked()) {
 		height = 0.f;
 		/* For-Loop for Rectangle/Button On-Click Function Implementation */
-		for (int j = 0; j < 5; j++, height += 1.5f) {
+		for (int j = 0; j < 5; j++, height += 1.25f) {
 			if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * height, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 				CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 				if (global_level > j) {

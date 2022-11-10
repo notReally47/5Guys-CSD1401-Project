@@ -1,4 +1,4 @@
-Level Duration is 100
+Level Duration is 350
 [0][0] is a Boarder
 [0][1] is a Boarder
 [0][2] is a Boarder
@@ -50,7 +50,7 @@ Level Duration is 100
 [1][7] is Blank
 [1][8] is Blank
 [1][9] is Blank
-[1][10] is Blank
+[1][10] is a Shelf
 [1][11] is Blank
 [1][12] is Blank
 [1][13] is Blank
@@ -59,9 +59,9 @@ Level Duration is 100
 [1][16] is Blank
 [1][17] is Blank
 [1][18] is Blank
-[1][19] is Blank
-[1][20] is Blank
-[1][21] is Blank
+[1][19] is a Shelf
+[1][20] is a Shelf
+[1][21] is a Shelf
 [1][22] is Blank
 [1][23] is Blank
 [1][24] is Blank
@@ -91,7 +91,7 @@ Level Duration is 100
 [2][7] is Blank
 [2][8] is Blank
 [2][9] is Blank
-[2][10] is Blank
+[2][10] is a Shelf
 [2][11] is Blank
 [2][12] is Blank
 [2][13] is Blank
@@ -100,9 +100,9 @@ Level Duration is 100
 [2][16] is Blank
 [2][17] is Blank
 [2][18] is Blank
-[2][19] is Blank
-[2][20] is Blank
-[2][21] is Blank
+[2][19] is a Shelf
+[2][20] is a Shelf
+[2][21] is a Shelf
 [2][22] is Blank
 [2][23] is Blank
 [2][24] is Blank
@@ -126,13 +126,13 @@ Level Duration is 100
 [3][1] is Blank
 [3][2] is Blank
 [3][3] is Blank
-[3][4] is Blank
+[3][4] is a Box
 [3][5] is Blank
 [3][6] is Blank
 [3][7] is Blank
 [3][8] is Blank
 [3][9] is Blank
-[3][10] is Blank
+[3][10] is a Shelf
 [3][11] is Blank
 [3][12] is Blank
 [3][13] is Blank
@@ -141,12 +141,12 @@ Level Duration is 100
 [3][16] is Blank
 [3][17] is Blank
 [3][18] is Blank
-[3][19] is Blank
-[3][20] is Blank
-[3][21] is Blank
+[3][19] is a Shelf
+[3][20] is a Shelf
+[3][21] is a Shelf
 [3][22] is Blank
 [3][23] is Blank
-[3][24] is Blank
+[3][24] is a Box
 [3][25] is Blank
 [3][26] is Blank
 [3][27] is Blank
@@ -159,7 +159,7 @@ Level Duration is 100
 [3][34] is Blank
 [3][35] is Blank
 [3][36] is Blank
-[3][37] is Blank
+[3][37] is Player
 [3][38] is Blank
 [3][39] is Blank
 [3][40] is a Boarder
@@ -173,7 +173,7 @@ Level Duration is 100
 [4][7] is Blank
 [4][8] is Blank
 [4][9] is Blank
-[4][10] is Blank
+[4][10] is a Shelf
 [4][11] is Blank
 [4][12] is Blank
 [4][13] is Blank
@@ -181,10 +181,10 @@ Level Duration is 100
 [4][15] is Blank
 [4][16] is Blank
 [4][17] is Blank
-[4][18] is Blank
+[4][18] is a Box
 [4][19] is Blank
-[4][20] is Blank
-[4][21] is Blank
+[4][20] is a Key
+[4][21] is a Shelf
 [4][22] is Blank
 [4][23] is Blank
 [4][24] is Blank
@@ -209,12 +209,12 @@ Level Duration is 100
 [5][2] is Blank
 [5][3] is Blank
 [5][4] is Blank
-[5][5] is Blank
-[5][6] is Player
+[5][5] is a Teleporter
+[5][6] is Blank
 [5][7] is Blank
-[5][8] is a Box
+[5][8] is Blank
 [5][9] is Blank
-[5][10] is a Key
+[5][10] is a Shelf
 [5][11] is Blank
 [5][12] is Blank
 [5][13] is Blank
@@ -223,8 +223,8 @@ Level Duration is 100
 [5][16] is Blank
 [5][17] is Blank
 [5][18] is Blank
-[5][19] is Blank
-[5][20] is Blank
+[5][19] is a Shelf
+[5][20] is a Key
 [5][21] is Blank
 [5][22] is Blank
 [5][23] is Blank
@@ -255,18 +255,18 @@ Level Duration is 100
 [6][7] is Blank
 [6][8] is Blank
 [6][9] is Blank
-[6][10] is Blank
+[6][10] is a Shelf
 [6][11] is Blank
 [6][12] is Blank
 [6][13] is Blank
-[6][14] is Blank
+[6][14] is a Box
 [6][15] is Blank
 [6][16] is Blank
 [6][17] is Blank
 [6][18] is Blank
-[6][19] is Blank
-[6][20] is Blank
-[6][21] is Blank
+[6][19] is a Shelf
+[6][20] is a Shelf
+[6][21] is a Shelf
 [6][22] is Blank
 [6][23] is Blank
 [6][24] is Blank
@@ -277,14 +277,14 @@ Level Duration is 100
 [6][29] is Blank
 [6][30] is Blank
 [6][31] is Blank
-[6][32] is Blank
-[6][33] is Blank
-[6][34] is Blank
-[6][35] is Blank
-[6][36] is Blank
-[6][37] is Blank
-[6][38] is Blank
-[6][39] is Blank
+[6][32] is a Shelf
+[6][33] is a Shelf
+[6][34] is a Shelf
+[6][35] is a Shelf
+[6][36] is a Shelf
+[6][37] is a Shelf
+[6][38] is a Shelf
+[6][39] is a Shelf
 [6][40] is a Boarder
 [7][0] is a Boarder
 [7][1] is Blank
@@ -294,9 +294,9 @@ Level Duration is 100
 [7][5] is Blank
 [7][6] is Blank
 [7][7] is Blank
-[7][8] is a Box
+[7][8] is Blank
 [7][9] is Blank
-[7][10] is a Key
+[7][10] is a Shelf
 [7][11] is Blank
 [7][12] is Blank
 [7][13] is Blank
@@ -305,9 +305,9 @@ Level Duration is 100
 [7][16] is Blank
 [7][17] is Blank
 [7][18] is Blank
-[7][19] is Blank
-[7][20] is Blank
-[7][21] is Blank
+[7][19] is a Shelf
+[7][20] is a Shelf
+[7][21] is a Shelf
 [7][22] is Blank
 [7][23] is Blank
 [7][24] is Blank
@@ -332,7 +332,7 @@ Level Duration is 100
 [8][2] is Blank
 [8][3] is Blank
 [8][4] is Blank
-[8][5] is Blank
+[8][5] is a Box
 [8][6] is Blank
 [8][7] is Blank
 [8][8] is Blank
@@ -346,9 +346,9 @@ Level Duration is 100
 [8][16] is Blank
 [8][17] is Blank
 [8][18] is Blank
-[8][19] is Blank
-[8][20] is Blank
-[8][21] is Blank
+[8][19] is a Shelf
+[8][20] is a Shelf
+[8][21] is a Shelf
 [8][22] is Blank
 [8][23] is Blank
 [8][24] is Blank
@@ -387,9 +387,9 @@ Level Duration is 100
 [9][16] is Blank
 [9][17] is Blank
 [9][18] is Blank
-[9][19] is Blank
-[9][20] is Blank
-[9][21] is Blank
+[9][19] is a Shelf
+[9][20] is a Shelf
+[9][21] is a Shelf
 [9][22] is Blank
 [9][23] is Blank
 [9][24] is Blank
@@ -400,30 +400,30 @@ Level Duration is 100
 [9][29] is Blank
 [9][30] is Blank
 [9][31] is Blank
-[9][32] is Blank
+[9][32] is a Shelf
 [9][33] is Blank
 [9][34] is Blank
 [9][35] is Blank
 [9][36] is Blank
 [9][37] is Blank
 [9][38] is Blank
-[9][39] is Blank
+[9][39] is a Key
 [9][40] is a Boarder
 [10][0] is a Boarder
-[10][1] is Blank
-[10][2] is Blank
-[10][3] is Blank
-[10][4] is Blank
-[10][5] is Blank
-[10][6] is Blank
-[10][7] is Blank
-[10][8] is Blank
+[10][1] is a Shelf
+[10][2] is a Shelf
+[10][3] is a Shelf
+[10][4] is a Shelf
+[10][5] is a Shelf
+[10][6] is a Shelf
+[10][7] is a Shelf
+[10][8] is a Shelf
 [10][9] is Blank
-[10][10] is Blank
+[10][10] is a Waypoint
 [10][11] is Blank
 [10][12] is Blank
 [10][13] is Blank
-[10][14] is Blank
+[10][14] is a Customer
 [10][15] is Blank
 [10][16] is Blank
 [10][17] is Blank
@@ -435,13 +435,13 @@ Level Duration is 100
 [10][23] is Blank
 [10][24] is Blank
 [10][25] is Blank
-[10][26] is Blank
+[10][26] is a Waypoint
 [10][27] is Blank
 [10][28] is Blank
 [10][29] is Blank
 [10][30] is Blank
 [10][31] is Blank
-[10][32] is Blank
+[10][32] is a Shelf
 [10][33] is Blank
 [10][34] is Blank
 [10][35] is Blank
@@ -469,9 +469,9 @@ Level Duration is 100
 [11][16] is Blank
 [11][17] is Blank
 [11][18] is Blank
-[11][19] is Blank
-[11][20] is Blank
-[11][21] is Blank
+[11][19] is a Shelf
+[11][20] is a Shelf
+[11][21] is a Shelf
 [11][22] is Blank
 [11][23] is Blank
 [11][24] is Blank
@@ -482,7 +482,7 @@ Level Duration is 100
 [11][29] is Blank
 [11][30] is Blank
 [11][31] is Blank
-[11][32] is Blank
+[11][32] is a Shelf
 [11][33] is Blank
 [11][34] is Blank
 [11][35] is Blank
@@ -493,7 +493,7 @@ Level Duration is 100
 [11][40] is a Boarder
 [12][0] is a Boarder
 [12][1] is Blank
-[12][2] is Blank
+[12][2] is a Key
 [12][3] is Blank
 [12][4] is Blank
 [12][5] is Blank
@@ -510,9 +510,9 @@ Level Duration is 100
 [12][16] is Blank
 [12][17] is Blank
 [12][18] is Blank
-[12][19] is Blank
-[12][20] is Blank
-[12][21] is Blank
+[12][19] is a Shelf
+[12][20] is a Shelf
+[12][21] is a Shelf
 [12][22] is Blank
 [12][23] is Blank
 [12][24] is Blank
@@ -523,7 +523,7 @@ Level Duration is 100
 [12][29] is Blank
 [12][30] is Blank
 [12][31] is Blank
-[12][32] is Blank
+[12][32] is a Shelf
 [12][33] is Blank
 [12][34] is Blank
 [12][35] is Blank
@@ -551,9 +551,9 @@ Level Duration is 100
 [13][16] is Blank
 [13][17] is Blank
 [13][18] is Blank
-[13][19] is Blank
-[13][20] is Blank
-[13][21] is Blank
+[13][19] is a Shelf
+[13][20] is a Shelf
+[13][21] is a Shelf
 [13][22] is Blank
 [13][23] is Blank
 [13][24] is Blank
@@ -564,24 +564,24 @@ Level Duration is 100
 [13][29] is Blank
 [13][30] is Blank
 [13][31] is Blank
-[13][32] is Blank
+[13][32] is a Shelf
 [13][33] is Blank
 [13][34] is Blank
 [13][35] is Blank
-[13][36] is Blank
+[13][36] is a Customer
 [13][37] is Blank
 [13][38] is Blank
-[13][39] is Blank
+[13][39] is a Key
 [13][40] is a Boarder
 [14][0] is a Boarder
-[14][1] is Blank
-[14][2] is Blank
-[14][3] is Blank
-[14][4] is Blank
-[14][5] is Blank
-[14][6] is Blank
-[14][7] is Blank
-[14][8] is Blank
+[14][1] is a Shelf
+[14][2] is a Shelf
+[14][3] is a Shelf
+[14][4] is a Shelf
+[14][5] is a Shelf
+[14][6] is a Shelf
+[14][7] is a Shelf
+[14][8] is a Shelf
 [14][9] is Blank
 [14][10] is Blank
 [14][11] is Blank
@@ -592,9 +592,9 @@ Level Duration is 100
 [14][16] is Blank
 [14][17] is Blank
 [14][18] is Blank
-[14][19] is Blank
-[14][20] is Blank
-[14][21] is Blank
+[14][19] is a Shelf
+[14][20] is a Shelf
+[14][21] is a Shelf
 [14][22] is Blank
 [14][23] is Blank
 [14][24] is Blank
@@ -605,7 +605,7 @@ Level Duration is 100
 [14][29] is Blank
 [14][30] is Blank
 [14][31] is Blank
-[14][32] is Blank
+[14][32] is a Shelf
 [14][33] is Blank
 [14][34] is Blank
 [14][35] is Blank
@@ -628,25 +628,25 @@ Level Duration is 100
 [15][11] is Blank
 [15][12] is Blank
 [15][13] is Blank
-[15][14] is Blank
+[15][14] is a Waypoint
 [15][15] is Blank
 [15][16] is Blank
 [15][17] is Blank
 [15][18] is Blank
 [15][19] is Blank
-[15][20] is Blank
+[15][20] is a Customer
 [15][21] is Blank
 [15][22] is Blank
 [15][23] is Blank
 [15][24] is Blank
 [15][25] is Blank
-[15][26] is Blank
+[15][26] is a Waypoint
 [15][27] is Blank
 [15][28] is Blank
 [15][29] is Blank
 [15][30] is Blank
 [15][31] is Blank
-[15][32] is Blank
+[15][32] is a Shelf
 [15][33] is Blank
 [15][34] is Blank
 [15][35] is Blank
@@ -657,7 +657,7 @@ Level Duration is 100
 [15][40] is a Boarder
 [16][0] is a Boarder
 [16][1] is Blank
-[16][2] is Blank
+[16][2] is a Box
 [16][3] is Blank
 [16][4] is Blank
 [16][5] is Blank
@@ -674,9 +674,9 @@ Level Duration is 100
 [16][16] is Blank
 [16][17] is Blank
 [16][18] is Blank
-[16][19] is Blank
-[16][20] is Blank
-[16][21] is Blank
+[16][19] is a Shelf
+[16][20] is a Shelf
+[16][21] is a Shelf
 [16][22] is Blank
 [16][23] is Blank
 [16][24] is Blank
@@ -687,7 +687,7 @@ Level Duration is 100
 [16][29] is Blank
 [16][30] is Blank
 [16][31] is Blank
-[16][32] is Blank
+[16][32] is a Shelf
 [16][33] is Blank
 [16][34] is Blank
 [16][35] is Blank
@@ -715,9 +715,9 @@ Level Duration is 100
 [17][16] is Blank
 [17][17] is Blank
 [17][18] is Blank
-[17][19] is Blank
-[17][20] is Blank
-[17][21] is Blank
+[17][19] is a Shelf
+[17][20] is a Shelf
+[17][21] is a Shelf
 [17][22] is Blank
 [17][23] is Blank
 [17][24] is Blank
@@ -728,37 +728,37 @@ Level Duration is 100
 [17][29] is Blank
 [17][30] is Blank
 [17][31] is Blank
-[17][32] is Blank
+[17][32] is a Shelf
 [17][33] is Blank
 [17][34] is Blank
 [17][35] is Blank
 [17][36] is Blank
 [17][37] is Blank
 [17][38] is Blank
-[17][39] is Blank
+[17][39] is a Key
 [17][40] is a Boarder
 [18][0] is a Boarder
-[18][1] is Blank
-[18][2] is Blank
-[18][3] is Blank
-[18][4] is Blank
-[18][5] is Blank
-[18][6] is Blank
-[18][7] is Blank
-[18][8] is Blank
+[18][1] is a Shelf
+[18][2] is a Shelf
+[18][3] is a Shelf
+[18][4] is a Shelf
+[18][5] is a Shelf
+[18][6] is a Shelf
+[18][7] is a Shelf
+[18][8] is a Shelf
 [18][9] is Blank
 [18][10] is Blank
 [18][11] is Blank
-[18][12] is Blank
+[18][12] is a Box
 [18][13] is Blank
 [18][14] is Blank
 [18][15] is Blank
 [18][16] is Blank
 [18][17] is Blank
 [18][18] is Blank
-[18][19] is Blank
-[18][20] is Blank
-[18][21] is Blank
+[18][19] is a Shelf
+[18][20] is a Shelf
+[18][21] is a Shelf
 [18][22] is Blank
 [18][23] is Blank
 [18][24] is Blank
@@ -797,9 +797,9 @@ Level Duration is 100
 [19][16] is Blank
 [19][17] is Blank
 [19][18] is Blank
-[19][19] is Blank
-[19][20] is Blank
-[19][21] is Blank
+[19][19] is a Shelf
+[19][20] is a Shelf
+[19][21] is a Shelf
 [19][22] is Blank
 [19][23] is Blank
 [19][24] is Blank
@@ -821,7 +821,7 @@ Level Duration is 100
 [19][40] is a Boarder
 [20][0] is a Boarder
 [20][1] is Blank
-[20][2] is Blank
+[20][2] is a Key
 [20][3] is Blank
 [20][4] is Blank
 [20][5] is Blank
@@ -833,7 +833,7 @@ Level Duration is 100
 [20][11] is Blank
 [20][12] is Blank
 [20][13] is Blank
-[20][14] is Blank
+[20][14] is a Waypoint
 [20][15] is Blank
 [20][16] is Blank
 [20][17] is Blank
@@ -845,20 +845,20 @@ Level Duration is 100
 [20][23] is Blank
 [20][24] is Blank
 [20][25] is Blank
-[20][26] is Blank
+[20][26] is a Customer
 [20][27] is Blank
 [20][28] is Blank
 [20][29] is Blank
 [20][30] is Blank
 [20][31] is Blank
-[20][32] is Blank
-[20][33] is Blank
-[20][34] is Blank
-[20][35] is Blank
-[20][36] is Blank
-[20][37] is Blank
-[20][38] is Blank
-[20][39] is Blank
+[20][32] is a Shelf
+[20][33] is a Shelf
+[20][34] is a Shelf
+[20][35] is a Shelf
+[20][36] is a Shelf
+[20][37] is a Shelf
+[20][38] is a Shelf
+[20][39] is a Shelf
 [20][40] is a Boarder
 [21][0] is a Boarder
 [21][1] is Blank
@@ -879,9 +879,9 @@ Level Duration is 100
 [21][16] is Blank
 [21][17] is Blank
 [21][18] is Blank
-[21][19] is Blank
-[21][20] is Blank
-[21][21] is Blank
+[21][19] is a Shelf
+[21][20] is a Shelf
+[21][21] is a Shelf
 [21][22] is Blank
 [21][23] is Blank
 [21][24] is Blank
@@ -902,14 +902,14 @@ Level Duration is 100
 [21][39] is Blank
 [21][40] is a Boarder
 [22][0] is a Boarder
-[22][1] is Blank
-[22][2] is Blank
-[22][3] is Blank
-[22][4] is Blank
-[22][5] is Blank
-[22][6] is Blank
-[22][7] is Blank
-[22][8] is Blank
+[22][1] is a Shelf
+[22][2] is a Shelf
+[22][3] is a Shelf
+[22][4] is a Shelf
+[22][5] is a Shelf
+[22][6] is a Shelf
+[22][7] is a Shelf
+[22][8] is a Shelf
 [22][9] is Blank
 [22][10] is Blank
 [22][11] is Blank
@@ -920,9 +920,9 @@ Level Duration is 100
 [22][16] is Blank
 [22][17] is Blank
 [22][18] is Blank
-[22][19] is Blank
-[22][20] is Blank
-[22][21] is Blank
+[22][19] is a Shelf
+[22][20] is a Shelf
+[22][21] is a Shelf
 [22][22] is Blank
 [22][23] is Blank
 [22][24] is Blank
@@ -961,9 +961,9 @@ Level Duration is 100
 [23][16] is Blank
 [23][17] is Blank
 [23][18] is Blank
-[23][19] is Blank
-[23][20] is Blank
-[23][21] is Blank
+[23][19] is a Shelf
+[23][20] is a Shelf
+[23][21] is a Shelf
 [23][22] is Blank
 [23][23] is Blank
 [23][24] is Blank
@@ -972,7 +972,7 @@ Level Duration is 100
 [23][27] is Blank
 [23][28] is Blank
 [23][29] is Blank
-[23][30] is Blank
+[23][30] is a Shelf
 [23][31] is Blank
 [23][32] is Blank
 [23][33] is Blank
@@ -985,7 +985,7 @@ Level Duration is 100
 [23][40] is a Boarder
 [24][0] is a Boarder
 [24][1] is Blank
-[24][2] is Blank
+[24][2] is a Box
 [24][3] is Blank
 [24][4] is Blank
 [24][5] is Blank
@@ -1002,9 +1002,9 @@ Level Duration is 100
 [24][16] is Blank
 [24][17] is Blank
 [24][18] is Blank
-[24][19] is Blank
-[24][20] is Blank
-[24][21] is Blank
+[24][19] is a Shelf
+[24][20] is a Shelf
+[24][21] is a Shelf
 [24][22] is Blank
 [24][23] is Blank
 [24][24] is Blank
@@ -1013,7 +1013,7 @@ Level Duration is 100
 [24][27] is Blank
 [24][28] is Blank
 [24][29] is Blank
-[24][30] is Blank
+[24][30] is a Shelf
 [24][31] is Blank
 [24][32] is Blank
 [24][33] is Blank
@@ -1043,8 +1043,8 @@ Level Duration is 100
 [25][16] is Blank
 [25][17] is Blank
 [25][18] is Blank
-[25][19] is Blank
-[25][20] is Blank
+[25][19] is a Shelf
+[25][20] is a Key
 [25][21] is Blank
 [25][22] is Blank
 [25][23] is Blank
@@ -1054,28 +1054,28 @@ Level Duration is 100
 [25][27] is Blank
 [25][28] is Blank
 [25][29] is Blank
-[25][30] is Blank
+[25][30] is a Shelf
 [25][31] is Blank
 [25][32] is Blank
 [25][33] is Blank
 [25][34] is Blank
-[25][35] is Blank
+[25][35] is a Teleporter
 [25][36] is Blank
 [25][37] is Blank
 [25][38] is Blank
 [25][39] is Blank
 [25][40] is a Boarder
 [26][0] is a Boarder
-[26][1] is Blank
-[26][2] is Blank
-[26][3] is Blank
-[26][4] is Blank
-[26][5] is Blank
-[26][6] is Blank
-[26][7] is Blank
-[26][8] is Blank
+[26][1] is a Shelf
+[26][2] is a Shelf
+[26][3] is a Shelf
+[26][4] is a Shelf
+[26][5] is a Shelf
+[26][6] is a Shelf
+[26][7] is a Shelf
+[26][8] is a Shelf
 [26][9] is Blank
-[26][10] is Blank
+[26][10] is a Customer
 [26][11] is Blank
 [26][12] is Blank
 [26][13] is Blank
@@ -1085,8 +1085,8 @@ Level Duration is 100
 [26][17] is Blank
 [26][18] is Blank
 [26][19] is Blank
-[26][20] is Blank
-[26][21] is Blank
+[26][20] is a Key
+[26][21] is a Shelf
 [26][22] is Blank
 [26][23] is Blank
 [26][24] is Blank
@@ -1095,7 +1095,7 @@ Level Duration is 100
 [26][27] is Blank
 [26][28] is Blank
 [26][29] is Blank
-[26][30] is Blank
+[26][30] is a Shelf
 [26][31] is Blank
 [26][32] is Blank
 [26][33] is Blank
@@ -1125,9 +1125,9 @@ Level Duration is 100
 [27][16] is Blank
 [27][17] is Blank
 [27][18] is Blank
-[27][19] is Blank
-[27][20] is Blank
-[27][21] is Blank
+[27][19] is a Shelf
+[27][20] is a Shelf
+[27][21] is a Shelf
 [27][22] is Blank
 [27][23] is Blank
 [27][24] is Blank
@@ -1136,10 +1136,10 @@ Level Duration is 100
 [27][27] is Blank
 [27][28] is Blank
 [27][29] is Blank
-[27][30] is Blank
+[27][30] is a Shelf
 [27][31] is Blank
 [27][32] is Blank
-[27][33] is Blank
+[27][33] is a Box
 [27][34] is Blank
 [27][35] is Blank
 [27][36] is Blank
@@ -1149,7 +1149,7 @@ Level Duration is 100
 [27][40] is a Boarder
 [28][0] is a Boarder
 [28][1] is Blank
-[28][2] is Blank
+[28][2] is a Key
 [28][3] is Blank
 [28][4] is Blank
 [28][5] is Blank
@@ -1164,11 +1164,11 @@ Level Duration is 100
 [28][14] is Blank
 [28][15] is Blank
 [28][16] is Blank
-[28][17] is Blank
+[28][17] is a Box
 [28][18] is Blank
-[28][19] is Blank
-[28][20] is Blank
-[28][21] is Blank
+[28][19] is a Shelf
+[28][20] is a Shelf
+[28][21] is a Shelf
 [28][22] is Blank
 [28][23] is Blank
 [28][24] is Blank
@@ -1177,7 +1177,7 @@ Level Duration is 100
 [28][27] is Blank
 [28][28] is Blank
 [28][29] is Blank
-[28][30] is Blank
+[28][30] is a Shelf
 [28][31] is Blank
 [28][32] is Blank
 [28][33] is Blank
@@ -1207,9 +1207,9 @@ Level Duration is 100
 [29][16] is Blank
 [29][17] is Blank
 [29][18] is Blank
-[29][19] is Blank
-[29][20] is Blank
-[29][21] is Blank
+[29][19] is a Shelf
+[29][20] is a Shelf
+[29][21] is a Shelf
 [29][22] is Blank
 [29][23] is Blank
 [29][24] is Blank
@@ -1218,7 +1218,7 @@ Level Duration is 100
 [29][27] is Blank
 [29][28] is Blank
 [29][29] is Blank
-[29][30] is Blank
+[29][30] is a Shelf
 [29][31] is Blank
 [29][32] is Blank
 [29][33] is Blank
