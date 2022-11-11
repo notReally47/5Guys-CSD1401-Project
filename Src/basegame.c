@@ -28,7 +28,7 @@ char* stat[3];
 
 float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip,cameratogglecooldown;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed,cameratoggle, times_distracted;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed,cameratoggle, times_distracted, is_game_over;
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL;
 
@@ -56,6 +56,7 @@ void base_Init(void) {
 	totalElapsedTime = 0.f;
 	cameratogglecooldown = 0.f;
 	game_pause = 0;
+	is_game_over = 0;
 	isAnimating = 0;
 	flip = 0;
 	oneSecondFlip = 0;
@@ -148,6 +149,7 @@ void base_Update(void) {
 		/* Lose Condition */
 		if (clock == 0 || times_distracted > 3) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+			is_game_over = 1;
 			game_pause = 1;
 		}
 
@@ -344,13 +346,13 @@ void base_Update(void) {
 		}
 
 		/* Pause Overlay */
-		else if (!reset_triggered && clock > 0) {
+		else if (!reset_triggered && clock > 0 && !is_game_over) {
 			overlay_pause();									// Renders Pause Overlay
 			game_pause = unpause(game_pause);					// game_pause will trigger unpause function to either return to game or Main Menu
 		}
 
 		/* Game Over Overlay */
-		else if(!reset_triggered) {
+		else if(!reset_triggered && is_game_over) {
 			overlay_game_over();								// Renders Game Over Overlay
 			game_pause = game_over(game_pause);					// game_pause will trigger to return to Main Menu
 		}
