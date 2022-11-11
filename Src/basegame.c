@@ -24,11 +24,11 @@ Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Customer customer[CUSTOMER_MAX];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
-char* stat[2];
+char* stat[3];
 
 float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip,cameratogglecooldown;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed,cameratoggle;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed,cameratoggle, times_distracted;
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL;
 
@@ -61,8 +61,10 @@ void base_Init(void) {
 	oneSecondFlip = 0;
 	reset_triggered = 0;
 	reset_confirmed = 0;
+	times_distracted = 0;
 	stat[0] = "Time Left: ";
 	stat[1] = "Move: ";
+	stat[2] = "Times Distracted: ";
 
 	/*GIF*/
 	imageIndex = 0;
@@ -144,7 +146,7 @@ void base_Update(void) {
 		}
 
 		/* Lose Condition */
-		if (clock == 0) {
+		if (clock == 0 || times_distracted > 3) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			game_pause = 1;
 		}
@@ -152,7 +154,6 @@ void base_Update(void) {
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
 		player_status(&isLocked); // UM
 		if (isLocked) {
-
 			/*Draw gameplay gif logic*/
 			timeElapsed += currentElapsedTime;
 			if (timeElapsed >= DISPLAY_DURATION) {
@@ -175,6 +176,7 @@ void base_Update(void) {
 				/*Reset timer and turn customer inactive*/
 				elapsedLock = 0;
 				isLocked = 0;
+				times_distracted++;
 				printf("Unlocked.\n");
 			}
 		}
@@ -247,9 +249,6 @@ void base_Update(void) {
 			}
 		}
 	}
-	/*else {
-		CP_Settings_Tint(DARKGRAY);
-	}*/
 
 	/*Rendering*/
 	CP_Graphics_ClearBackground(BLUEGRAY);
@@ -362,6 +361,9 @@ void base_Update(void) {
 
 	/* Show Move Count */
 	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize*55.f, cellSize*3.f, stat[1], global_move);
+
+	/* Show Distracted Count */
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize*55.f, cellSize * 5.f, stat[2], times_distracted);
 
 }
 
