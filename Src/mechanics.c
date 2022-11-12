@@ -171,12 +171,21 @@ int player_status(int* isLocked) {
 }
 void teleport_UM(void) {
     // initialize teleport_UM array
-    teleporter[0] = 1; // enable tele
-    teleporter[1] = 4; // row of 1st
-    teleporter[2] = 15; // col of 1st
-    teleporter[3] = 4; // row of 2nd
-    teleporter[4] = 25; // col of 2nd
-    teleporter[5] = 0; // cooldown
+    int rows = 0, cols = 0, i = 0, set_teleporter_row = 0, set_teleporter_col = 0;
+    for (rows = 0; rows < SOKOBAN_GRID_ROWS; rows++) {
+        for (cols = 0; cols < SOKOBAN_GRID_COLS; cols++) {
+            for (i = 1; i < 9; i++) {
+                set_teleporter_row = i * 2 - 1;
+                set_teleporter_col = i + i;
+                if (grid[rows][cols].tele == i) {
+                    teleporter[0] = 1;                              // Teleporter Enabler
+                    teleporter[set_teleporter_row] = rows;          // Teleporter Row
+                    teleporter[set_teleporter_col] = cols;          // Teleporter Column
+                    teleporter[17] = 0;                             // Cooldown                
+                }
+            }
+        }
+    }
 }
 void wetsign_UM(void) {
     int total = 0;

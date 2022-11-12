@@ -87,13 +87,15 @@ void base_Init(void) {
 	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
 	//teleport = CP_Sound_Load();
+	//teleport_UM();
 
 	card_init();
 }
 
 void base_Update(void) {
-	int playerRow, playerCol, isCompleted = 0;
+	int playerRow, playerCol, isCompleted = 0, set_teleporter_row = 0, set_teleporter_col = 0;
 	float currentElapsedTime = CP_System_GetDt();
+	teleport_UM();
 
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		game_pause = !game_pause;
@@ -269,7 +271,7 @@ void base_Update(void) {
 			draw_floor(cellX, cellY, cellSize);
 
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[global_move - 1][row][col].player ||
-				currCell.mecha || teleporter[0] == 1 && (row == teleporter[1] && col == teleporter[2]) || (row == teleporter[3] && col == teleporter[4])) {
+				currCell.mecha || teleporter[0] == 1 && currCell.tele != 0) {
 				if (currCell.boarder)
 					draw_boarder(cellX, cellY, cellSize);
 
@@ -279,9 +281,6 @@ void base_Update(void) {
 				else if (currCell.key)
 					draw_key(cellX, cellY, cellSize);
 
-				else if (teleporter[0] == 1 && (row == teleporter[1] && col == teleporter[2]) || (row == teleporter[3] && col == teleporter[4]))
-					draw_boarder(cellX, cellY, cellSize); // draw_tele();
-
 				else if (currCell.mecha)
 					draw_boarder(cellX, cellY, cellSize); // draw_mecha();
 
@@ -290,6 +289,15 @@ void base_Update(void) {
 
 				else if (currCell.shelf)
 					draw_boarder(cellX, cellY, cellSize);
+
+				else if (teleporter[0] == 1 && currCell.tele != 0) {
+					for (int i = 1; i < 9; i++) {
+						set_teleporter_row = i * 2 - 1;
+						set_teleporter_col = i + i;
+						if (row == teleporter[set_teleporter_row] && col == teleporter[set_teleporter_col])
+							draw_boarder(cellX, cellY, cellSize); // draw_tele();
+					}
+				}
 
 			}
 			/*

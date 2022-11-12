@@ -21,7 +21,7 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 	// finding X2,Y2 coords -- bottom right corner of the rectangle
 	float x2 = area_center_x + area_width * 0.5f;
 	float y2 = area_center_y + area_height * 0.5f;
-	return ((click_x < x2 && click_x > x1 && click_y < y2 && click_y > y1) ? 1 : 0); // return 1 if the mouse is within the rectangle
+	return ((click_x < x2&& click_x > x1 && click_y < y2&& click_y > y1) ? 1 : 0); // return 1 if the mouse is within the rectangle
 }
 
 /*
@@ -112,18 +112,42 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 	/*Player movement without obstruction*/
 	else if (!grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
-		if (teleporter[0] == 1) {
-			if (*posX == teleporter[1] && *posY == teleporter[2]) {
-				*posX = teleporter[3] + (*posX - prevPosX);
-				*posY = teleporter[4] + (*posY - prevPosY);
-				teleporter[5] = 1;
-			}
-			else if (*posX == teleporter[3] && *posY == teleporter[4]) {
-				*posX = teleporter[1] + (*posX - prevPosX);
-				*posY = teleporter[2] + (*posY - prevPosY);
-				teleporter[5] = 1;
+
+
+		for (int i = 1; i < 9; i++) {
+			int teleporter_stepin_posX = i * 2 - 1, teleporter_stepin_posY = i + i, teleporter_stepout_01_posX = i * 2 + 1, teleporter_stepout_01_posY = i + i + 2,
+				teleporter_stepout_02_posX = i * 2 - 3, teleporter_stepout_02_posY = i + i - 2;
+			if (teleporter[0] == 1) {
+				if ((i % 2) == 1) {
+					if (*posX == teleporter[teleporter_stepin_posX] && *posY == teleporter[teleporter_stepin_posY]) {
+						*posX = teleporter[teleporter_stepout_01_posX] + (*posX - prevPosX);
+						*posY = teleporter[teleporter_stepout_01_posY] + (*posY - prevPosY);
+						teleporter[17] = 1;
+					}
+				}
+				else {
+					if (*posX == teleporter[teleporter_stepin_posX] && *posY == teleporter[teleporter_stepin_posY]) {
+						*posX = teleporter[teleporter_stepout_02_posX] + (*posX - prevPosX);
+						*posY = teleporter[teleporter_stepout_02_posY] + (*posY - prevPosY);
+						teleporter[17] = 1;
+					}
+				}
+
 			}
 		}
+
+		//if (teleporter[0] == 1) {
+		//	if (*posX == teleporter[1] && *posY == teleporter[2]) {
+		//		*posX = teleporter[3] + (*posX - prevPosX);
+		//		*posY = teleporter[4] + (*posY - prevPosY);
+		//		teleporter[9] = 1;
+		//	}
+		//	else if (*posX == teleporter[3] && *posY == teleporter[4]) {
+		//		*posX = teleporter[1] + (*posX - prevPosX);
+		//		*posY = teleporter[2] + (*posY - prevPosY);
+		//		teleporter[9] = 1;
+		//	}
+		//}
 		grid[*posX][*posY].player = 1;
 		global_move++;
 		return 0;
@@ -197,7 +221,7 @@ int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 }
 
 /* Function to Show Text/Label beside/on the Game */
-void show_stats(float text_size, float cell_size_x, float cell_size_h, char *stat, int value) {
+void show_stats(float text_size, float cell_size_x, float cell_size_h, char* stat, int value) {
 	CP_Settings_TextSize(text_size);										// Set Font Size
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);	// Align Text Left and Top
 	CP_Settings_Fill(BLACK);												// Set Font to BLACK
@@ -206,5 +230,5 @@ void show_stats(float text_size, float cell_size_x, float cell_size_h, char *sta
 	char line[50] = { 0 };													// String to be printed
 	strcpy(line, stat);														// Copy stat/label that needs to be printed to line
 	strcat(line, buffer);													// Concatenate line with buffer
-	CP_Font_DrawText(line , cell_size_x, cell_size_h);						// Draw Text 'line' on the Game
+	CP_Font_DrawText(line, cell_size_x, cell_size_h);						// Draw Text 'line' on the Game
 }
