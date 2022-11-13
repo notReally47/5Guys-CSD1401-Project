@@ -368,7 +368,7 @@ void base_Update(void) {
 	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize, stat[0], clock);
 
 	/* Show Move Count */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 3.f, stat[1], global_move);
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 3.f, stat[1], (global_move - 1));
 
 	/* Show Distracted Count */
 	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 5.f, stat[2], times_distracted);

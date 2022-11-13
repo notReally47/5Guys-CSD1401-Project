@@ -276,28 +276,30 @@ int main(void) {
     Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS];
 
     /* Declare & Initialise read to 0 & boolean checks of different properties to 0 */
-    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_border = 0, is_shelf = 0, is_tele = 0, is_waypoint = 0, duration = 0;
+    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_border = 0, is_shelf = 0, is_tele = 0, is_waypoint = 0, duration = 0, level;
 
     /* Initialise file name without the level number and extension name */
-    char csv_file_name[32] = "level_files/Seven11_Level_", reference_file_name[38] = "level_files/Seven11_Notes_Level_", level, 
-        csv_ext[5] = ".csv", txt_ext[5] = ".txt", csv_bak_file[37] = "level_files/Seven11_Level_", bak_file[5] = "_bak";
+    char csv_file_name[33] = "level_files/Seven11_Level_", reference_file_name[39] = "level_files/Seven11_Notes_Level_", level_str[3], 
+        csv_ext[5] = ".csv", txt_ext[5] = ".txt", csv_bak_file[38] = "level_files/Seven11_Level_", bak_file[5] = "_bak";
 
     // Get level number
     printf("Please indicate the Level for this map:\n");
-    read = scanf(" %c", &level);
+    read = scanf(" %d", &level);
     if(read == 1) {
 
+        sprintf(level_str, "%d", level);
+
         /* Appends 'csv_file_name' with level number and csv extension */
-        strncat(csv_file_name, &level, 1);
+        strcat(csv_file_name, level_str);
         strcat(csv_file_name, csv_ext);
         
         /* Appends the backup file similarly but with '_bak_*/
-        strncat(csv_bak_file, &level, 1);
+        strcat(csv_bak_file, level_str);
         strcat(csv_bak_file, bak_file);
         strcat(csv_bak_file, csv_ext);
 
         /* Appends 'reference_file_name' with level number and txt extension */
-        strncat(reference_file_name, &level, 1);
+        strcat(reference_file_name, level_str);
         strcat(reference_file_name, txt_ext);
 
         // File pointers for csv_file_name & reference_file_name

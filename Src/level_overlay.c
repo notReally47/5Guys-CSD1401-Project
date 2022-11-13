@@ -40,17 +40,17 @@ typedef struct Size {
 struct Size initialise_pause_reset_size() {
 	struct Size size;
 	size.header_text_size = (float)config.settings.resolutionHeight * 0.3f;
-	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
+	size.header_text_width = (float)config.settings.resolutionWidth / 2.75f;
 	size.header_text_height = (float)config.settings.resolutionHeight * 0.45f;
 
 	size.button_text_size = (float)config.settings.resolutionHeight * 0.04f;
 
-	size.button_01_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.button_01_position_x = (float)config.settings.resolutionWidth / 2.75f;
 	size.button_01_position_y = (float)config.settings.resolutionHeight * 0.6f;
 	size.button_01_width = (float)config.settings.resolutionWidth / 6.f;
 	size.button_01_height = (float)config.settings.resolutionHeight / 10.f;
 
-	size.button_02_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.button_02_position_x = (float)config.settings.resolutionWidth / 2.75f;
 	size.button_02_position_y = (float)config.settings.resolutionHeight * 0.75f;
 	size.button_02_width = (float)config.settings.resolutionWidth / 6.f;
 	size.button_02_height = (float)config.settings.resolutionHeight / 10.f;
@@ -111,12 +111,12 @@ int unpause(int game_pause) {
 struct Size initialise_game_over_size() {
 	struct Size size;
 	size.header_text_size = (float)config.settings.resolutionHeight * 0.3f;
-	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
+	size.header_text_width = (float)config.settings.resolutionWidth / 2.75f;
 	size.header_text_height = (float)config.settings.resolutionHeight * 0.45f;
 
 	size.button_text_size = (float)config.settings.resolutionHeight * 0.04f;
 
-	size.button_01_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.button_01_position_x = (float)config.settings.resolutionWidth / 2.75f;
 	size.button_01_position_y = (float)config.settings.resolutionHeight * 0.75f;
 	size.button_01_width = (float)config.settings.resolutionWidth / 6.f;
 	size.button_01_height = (float)config.settings.resolutionHeight / 10.f;

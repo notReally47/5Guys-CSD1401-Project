@@ -36,15 +36,16 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	FILE* csv_file;
 
 	// CSV File name & CSV Extension
-	char csv_file_name[63] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";
-	char level_char, csv_ext[5] = ".csv";
+	char csv_file_name[64] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";
+	char level_char[3], csv_ext[5] = ".csv";
 
-	// Convert Level Number to char to be used to append to csvfileName
-	level_char = global_level + '0';
+	// Convert Level Number to char to be used to append to csv_file_name
+	sprintf(level_char, "%d", global_level);
 
 	/* Append Level Number & 'csv_ext' to 'csv_file_name' */
-	strncat(csv_file_name, &level_char, 1);
+	strcat(csv_file_name, level_char);
 	strcat(csv_file_name, csv_ext);
+	
 
 	// Open 'csv_file_name' in read mode
 	csv_file = fopen(csv_file_name, "r");
@@ -58,7 +59,6 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	}
 
 	do {
-
 		/* Goes to Next Row of the Grid once Column reaches the end */
 		if (col == SOKOBAN_GRID_COLS) {
 			row++;
