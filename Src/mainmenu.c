@@ -24,7 +24,7 @@ void Main_Menu_Init()
 	// define buttons
 	buttons.center_x = windowwidth * 0.5f;
 	buttons.center_y = windowheight * 0.4f;
-	buttons.width = windowwidth * 0.2f;
+	buttons.width = windowwidth * 0.15f;
 	buttons.height = windowheight * 1.f / 12.f;
 
 	// SFX
@@ -69,11 +69,11 @@ void Main_Menu_Update()
 	drawAlignedText(WHITE, CENTER, "Seven11", windowwidth / 2, windowheight / 5);
 
 	/*BUTTONS*/
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width,  buttons.height, mousePos.x, mousePos.y, NO);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 3.f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 4.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
+	drawTintedButton(WHITE, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width,  buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 3.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 4.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
 
 	/*TEXT*/
 	CP_Settings_TextSize(windowwidth * 0.025f);

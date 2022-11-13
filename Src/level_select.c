@@ -8,18 +8,14 @@
 
 extern Config config;
 float windowwidth, windowheight;
-rect buttons;
+extern rect buttons;
 CP_Sound click;
 Button back;
 
 void Level_Select_Init()
 {
+	/*INITIALISE*/
 	float imgSize = (float)(CP_System_GetWindowHeight() / 20.0f);
-	// Define buttons
-	buttons.center_x = windowwidth * 0.5f;
-	buttons.center_y = windowheight * 0.4f;
-	buttons.width = windowwidth * 0.2f;
-	buttons.height = windowheight * 1.f / 12.f;
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
 }
 
@@ -47,7 +43,7 @@ void Level_Select_Update()
 		else {
 			btnColor = GRAY;
 		}
-		drawTintedButton(btnColor, buttons.center_x, buttons.center_y + buttons.height * height, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
+		drawTintedButton(btnColor, buttons.center_x, buttons.center_y + buttons.height * height, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
 
 		level_char[0] = (i + 1) + '0'; // To be set as Text for Level Number
 		CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f); // Set Text Size scaling to Window Height
