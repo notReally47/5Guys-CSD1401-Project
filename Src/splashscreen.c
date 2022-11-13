@@ -5,7 +5,7 @@
 #include "settings.h"
 // declare global variables: img,fade,x,y,width,height
 CP_Image img;
-int fade;
+int fade, global_level;
 float x,y,width,height;
 /*
 * Declare config variable to be used throughout the program.
@@ -20,6 +20,7 @@ void splash_screen_init(void)
 {
     /*Initalize config by reading from file, or creating the file if it does not exist.*/
     config = readFile();
+    global_level = config.save.lastLevelPlayed;
 
     gameMusic = CP_Sound_Load("./Assets/Sound/BGM.mp3");
     gameFont = CP_Font_Load("./Assets/Font/VT323-Regular.ttf");

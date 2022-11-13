@@ -138,8 +138,9 @@ void base_Update(void) {
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (isCompleted == totalObjs) {
-
 			next_level();
+			config.save.lastLevelPlayed = global_level;
+			writeConfig(config);
 			CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);
 		}
 
