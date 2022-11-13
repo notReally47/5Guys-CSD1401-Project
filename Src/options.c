@@ -13,7 +13,7 @@
 extern Config config;
 Config newConfig;
 
-Button back, volumeDown, volumeUp, apply, discard, controls[8], up, down, left, right, pause, undo, reset, escape, btns[13];
+Button back, volumeDown, volumeUp, apply, discard, controls[9], up, down, left, right, pause, undo, reset, escape, camera, btns[14];
 DropDownList currentRes, resolution[3], halfscreenWindowed, fullscreenWindowed, fullscreen, * resSelected, * initialRes;
 
 GIF gameplay;
@@ -34,7 +34,7 @@ void Options_Init() {
 	displayVol = newConfig.settings.audio;
 
 	/*Initialize global variables*/
-	imgSize = (float)(CP_System_GetWindowHeight() / 20.f), textSize = imgSize;
+	imgSize = (float)(CP_System_GetWindowHeight() / 20.0f), textSize = imgSize;
 	window = CP_Vector_Set((float)CP_System_GetWindowWidth(), (float)CP_System_GetWindowHeight());
 
 	/*Logic Flags*/
@@ -56,17 +56,18 @@ void Options_Init() {
 	setButton(&discard, "./Assets/UI/Discard.png", window.x - PADDING - imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
 
 	setButton(&up, "./Assets/UI/W.png", PADDING + 0.75 * imgSize, PADDING + imgSize + 5 * textSize, 1.5 * imgSize, 1.5 *imgSize, NO);
-	setButton(&left, "./Assets/UI/A.png", up.position.x, up.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&down, "./Assets/UI/S.png", left.position.x, left.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&right, "./Assets/UI/D.png", down.position.x, down.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&pause, "./Assets/UI/P.png", right.position.x, right.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&left, "./Assets/UI/A.png", up.position.x + 10 * imgSize, up.position.y , 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&down, "./Assets/UI/S.png", up.position.x, up.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&right, "./Assets/UI/D.png", left.position.x, down.position.y, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&pause, "./Assets/UI/P.png", down.position.x, down.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
 	setButton(&escape, "./Assets/UI/ESC.png", pause.position.x + 2 * imgSize, pause.position.y, 1.5 * imgSize, 1.5 * imgSize, NO);
 	setButton(&undo, "./Assets/UI/U.png", pause.position.x, pause.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
 	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&camera, "./Assets/UI/C.png", reset.position.x, reset.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
 
-	controls[0] = up, controls[1] = left, controls[2] = down, controls[3] = right, controls[4] = pause, controls[5] = escape, controls[6] = undo, controls[7] = reset;
+	controls[0] = up, controls[1] = left, controls[2] = down, controls[3] = right, controls[4] = pause, controls[5] = escape, controls[6] = undo, controls[7] = reset, controls[8] = camera;
 
-	btns[0] = back, btns[1] = volumeDown, btns[2] = volumeUp, btns[3] = apply, btns[4] = discard, btns[5] = up, btns[6] = left, btns[7] = down, btns[8] = right, btns[9] = pause, btns[10] = escape, btns[11] = undo, btns[12] = reset;
+	btns[0] = back, btns[1] = volumeDown, btns[2] = volumeUp, btns[3] = apply, btns[4] = discard, btns[5] = up, btns[6] = left, btns[7] = down, btns[8] = right, btns[9] = pause, btns[10] = escape, btns[11] = undo, btns[12] = reset, btns[13] = camera;
 
 	/*Create Dropdown List*/
 	setDropDownList(&currentRes, newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight, newConfig.settings.windowed, window.x - (MAX_LENGTH * textSize / 2 + PADDING) / 2 - PADDING, 2 * PADDING + back.btnHeight + textSize / 2, MAX_LENGTH * textSize / 2 + PADDING, textSize);
@@ -252,6 +253,7 @@ void Options_Update() {
 	controlDescription[5] = "- Pause game";
 	controlDescription[6] = "- Undo previous move";
 	controlDescription[7] = "- Reset map to initial positions";
+	controlDescription[8] = "- Focus / Unfocus camera on player";
 
 	char displayRes[25] = { 0 };
 
@@ -293,6 +295,6 @@ void Options_Update() {
 }
 
 void Options_Exit() {
-	freeButtonImg(btns, 13);
+	freeButtonImg(btns, 14);
 	CP_Image_Free(&gameplay.spritesheet);
 }
