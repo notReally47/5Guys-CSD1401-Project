@@ -6,3 +6,5 @@ void overlay_game_over();
 int game_over(int game_pause0);
 void overlay_reset();
 int reset_check(int reset_confirmed);
+int overlay_welcome();
+int welcome_done(int game_pause);
