@@ -2,6 +2,9 @@
 
 /* Global Variable 'level' initialised to 0 whenever New Game */
 extern int global_level;
+/*debug
+* int global_level = whatever level
+*/
 
 /* Local File Variable 'temp_level' initialised to 0. 
 To be used when Selecting Level from Level Select Screen */
