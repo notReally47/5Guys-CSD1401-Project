@@ -26,20 +26,16 @@ Customer customer[CUSTOMER_MAX];
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 char* stat[3];
 
-float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip,cameratogglecooldown;
+float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed,cameratoggle, times_distracted, is_game_over;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over;
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL;
 
 /*Gif*/
-static float timeElapsed;
+static float gifElasped;
 static const float DISPLAY_DURATION = .5f;
-static int imageIndex;
-static const float FRAME_DIMENSION = 322.0f;
-static const int TOTAL_FRAMES = 4;
-static const int SPRITESHEET_ROWS = 1;
-CP_Image speechSprite;
+GIF speechSprite;
 
 void base_Init(void) {
 
@@ -67,11 +63,7 @@ void base_Init(void) {
 	stat[1] = "Move: ";
 	stat[2] = "Times Distracted: ";
 
-	/*GIF*/
-	imageIndex = 0;
-	//speechSprite = CP_Image_Load("./Assets/Spritesheet/speech.png");
-
-	load_spritesheet(&cellSize,cameratoggle);
+	load_spritesheet(&cellSize, cameratoggle);
 	setMap(grid, customer, path);				// Initialise Map
 	totalObjs = getObjective(grid);				// Counts number of key objective to meet
 	global_move = 1;							// Initialise move with 1 for rendering purposes*
@@ -80,6 +72,10 @@ void base_Init(void) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
 		}
 	}
+
+	/*GIF*/
+	setGIF(&speechSprite, "./Assets/Spritesheet/speech.png", 1, 4, 0, 0, cellSize);
+	gifElasped = 0.f;
 
 	/* SFX */
 	// Set all audio in SFX group in accordance to the audio settings
@@ -100,12 +96,6 @@ void base_Update(void) {
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		game_pause = !game_pause;
 	}
-	///*Return to main menu*/
-	//if (CP_Input_MouseClicked()) {
-	//	if (IsAreaClicked(back.position.x, back.position.y, back.btnWidth, back.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-	//		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
-	//	}
-	//}
 
 	/*Read grid*/
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -119,21 +109,22 @@ void base_Update(void) {
 				playerRow = row;
 				playerCol = col;
 			}
-
-			int temp = 0;
-			if (temp = customerLock(grid, customer)) {
-				isLocked = 1;
-				stunner = temp - 1;
-			}
 		}
 	}
 
 	if (!game_pause) {
+		int temp = 0;
+		if (temp = customerLock(grid, customer)) {
+			isLocked = 1;
+			stunner = temp - 1;
+		}
+
 		/*Clear Tint*/
 		CP_Settings_NoTint();
 		totalElapsedTime += currentElapsedTime;
 		cameratogglecooldown += currentElapsedTime;
 		clock = duration - (int)totalElapsedTime;
+		gifElasped += CP_System_GetDt();
 
 		oneSecondFlip += currentElapsedTime;
 		if (oneSecondFlip >= 1.f) {
@@ -143,7 +134,7 @@ void base_Update(void) {
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (isCompleted == totalObjs) {
-			
+
 			next_level();
 			CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);
 		}
@@ -158,13 +149,6 @@ void base_Update(void) {
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
 		player_status(&isLocked); // UM
 		if (isLocked) {
-			/*Draw gameplay gif logic*/
-			timeElapsed += currentElapsedTime;
-			if (timeElapsed >= DISPLAY_DURATION) {
-				imageIndex = (imageIndex + 1) % TOTAL_FRAMES;
-				timeElapsed = 0.0f;
-			}
-
 			if (!isAnimating) {
 				// Moves the Customer to the player
 				int newDir = customerMoveToPlayer(playerRow, playerCol, stunner, grid, customer);
@@ -229,7 +213,7 @@ void base_Update(void) {
 				face = 0;
 			}
 
-			else if (CP_Input_KeyTriggered(KEY_C) && cameratogglecooldown>0.5f) {
+			else if (CP_Input_KeyTriggered(KEY_C) && cameratogglecooldown > 0.5f) {
 				cameratogglecooldown = 0.f;
 				cameratoggle = (cameratoggle == 1) ? 2 : 1;
 				init_spritesheet(&cellSize, cameratoggle);
@@ -258,7 +242,7 @@ void base_Update(void) {
 	CP_Graphics_ClearBackground(BLUEGRAY);
 
 	if (cameratoggle == 2)
-		world_camera(cellSize,playerRow,playerCol,face,cameratoggle);
+		world_camera(cellSize, playerRow, playerCol, face, cameratoggle);
 
 	/* Map Rendering */
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -298,35 +282,38 @@ void base_Update(void) {
 							draw_boarder(cellX, cellY, cellSize); // draw_tele();
 					}
 				}
-
 			}
-			/*
-			if (isLocked && !isAnimating) {
-				if (flip && currCell.player) {
-					if (face == 2 || face == 3) {
-						drawGIF(speechSprite, cellX + cellSize, cellY - cellSize, cellSize, cellSize, 1, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
-					}
-					else {
-						drawGIF(speechSprite, cellX - cellSize, cellY - cellSize, cellSize, cellSize, 0, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
-					}
-				}
-				if (!flip && customer[stunner].cusRow == row && customer[stunner].cusCol == col) {
-					if (customer[stunner].direction == 2 || customer[stunner].direction == 3) {
-						drawGIF(speechSprite, cellSize * (float)(customer[stunner].cusCol + 1) + cellAlign, cellSize * (float)(customer[stunner].cusRow - 1), cellSize, cellSize, 1, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
-					}
-					else {
-						drawGIF(speechSprite, cellSize * (float)(customer[stunner].cusCol - 1) + cellAlign, cellSize * (float)(customer[stunner].cusRow - 1), cellSize, cellSize, 0, FRAME_DIMENSION, timeElapsed, imageIndex, TOTAL_FRAMES, SPRITESHEET_ROWS);
-					}
-				}
-			}
-			*/
 		}
 	}
 
 	for (int i = 0; i < CUSTOMER_MAX; i++)
-		draw_customer(cellSize,customer[i].cusRow,customer[i].cusCol,customer[i].direction,i,cameratoggle);
-	
-	isAnimating = draw_player(cellSize,playerRow,playerCol,face,cameratoggle);
+		draw_customer(cellSize, customer[i].cusRow, customer[i].cusCol, customer[i].direction, i, cameratoggle);
+
+	isAnimating = draw_player(cellSize, playerRow, playerCol, face, cameratoggle);
+
+	if (isLocked && !isAnimating) {
+		if (flip) {
+			if (face == 2 || face == 3) {
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol + 1), cellSize * (float)(playerRow - 1));
+				drawGIF(&speechSprite, &gifElasped, 0.1, NO, NO);
+			}
+			else {
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol - 1), cellSize * (float)(playerRow - 1));
+				drawGIF(&speechSprite, &gifElasped, 0.1, YES, NO);
+			}
+		}
+		if (!flip) {
+			if (customer[stunner].direction == 2 || customer[stunner].direction == 3) {
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol + 1), cellSize * (float)(customer[stunner].cusRow - 1));
+				drawGIF(&speechSprite, &gifElasped, 0.1, NO, NO);
+			}
+			else {
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol - 1), cellSize * (float)(customer[stunner].cusRow - 1));
+				drawGIF(&speechSprite, &gifElasped, 0.1, YES, NO);
+			}
+		}
+	}
+
 
 	if (game_pause) {
 
@@ -350,7 +337,7 @@ void base_Update(void) {
 				reset_confirmed = 0;							// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
 				reset_triggered = 0;							// Set reset_triggered to 0 so that will stop rendering Reset Overlay
 				game_pause = 0;									// Set game_pause to 0 to resume game
-			}	
+			}
 		}
 
 		/* Pause Overlay */
@@ -360,20 +347,20 @@ void base_Update(void) {
 		}
 
 		/* Game Over Overlay */
-		else if(!reset_triggered && is_game_over) {
+		else if (!reset_triggered && is_game_over) {
 			overlay_game_over();								// Renders Game Over Overlay
 			game_pause = game_over(game_pause);					// game_pause will trigger to return to Main Menu
 		}
 	}
 
 	/* Show Timer */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize*55.f, cellSize, stat[0], clock);
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize, stat[0], clock);
 
 	/* Show Move Count */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize*55.f, cellSize*3.f, stat[1], global_move);
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 3.f, stat[1], global_move);
 
 	/* Show Distracted Count */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize*55.f, cellSize * 5.f, stat[2], times_distracted);
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 5.f, stat[2], times_distracted);
 
 }
 
