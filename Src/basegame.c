@@ -365,6 +365,7 @@ void base_Update(void) {
 }
 
 void base_Exit(void) {
+	CP_Image_Free(speechSprite.spritesheet);
 	CP_Sound_Free(&fail);
 	CP_Sound_Free(&push);
 	CP_Sound_Free(&success);
