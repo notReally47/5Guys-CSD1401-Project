@@ -6,125 +6,99 @@
 extern Config config;		// For Resolution Settings
 CP_Sound click;				// Clicking SFX
 
-/* Struct for Pause Overlay Asset Properties */
-typedef struct Pause_Size {
-	// Pause Text Properties
-	float pause_text_size;
-	float pause_text_width;
-	float pause_text_height;
+/* Struct for Asset Properties */
+typedef struct Size {
+	// Header Text Properties
+	float header_text_size;
+	float header_text_width;
+	float header_text_height;
 
 	// Button Text Size
 	float button_text_size;
 
-	// Resume Button & Text Properties
-	float resume_position_x;
-	float resume_position_y;
-	float resume_width;
-	float resume_height;
+	//Button 1 & Text Properties
+	float button_01_position_x;
+	float button_01_position_y;
+	float button_01_width;
+	float button_01_height;
 
-	// Main Menu Button & Text Properties
-	float main_menu_position_x;
-	float main_menu_position_y;
-	float main_menu_width;
-	float main_menu_height;
-} Pause_Size;
+	// Button 2 & Text Properties
+	float button_02_position_x;
+	float button_02_position_y;
+	float button_02_width;
+	float button_02_height;
 
-/* Struct for Game Over Overlay Asset Properties */
-typedef struct Game_Over_Size {
-	// Game Over Text Properties
-	float game_over_text_size;
-	float game_over_text_width;
-	float game_over_text_height;
+	// Text Box Properties
+	float text_box_text_size;
+	float text_box_position_x;
+	float text_box_position_y;
+	float text_box_row_width;
+} Size;
 
-	// Button Text Size
-	float button_text_size;
 
-	// Main Menu Button & Text Size Properties
-	float main_menu_position_x;
-	float main_menu_position_y;
-	float main_menu_width;
-	float main_menu_height;
-} Game_Over_Size;
-
-typedef struct Reset_Size {
-	// Reset Text Properties
-	float reset_text_size;
-	float reset_text_width;
-	float reset_text_height;
-
-	// Button Text Size
-	float button_text_size;
-
-	// Yes Button & Text Properties
-	float yes_position_x;
-	float yes_position_y;
-	float yes_width;
-	float yes_height;
-
-	// No Button & Text Properties
-	float no_position_x;
-	float no_position_y;
-	float no_width;
-	float no_height;
-} Reset_Size;
-
-/* Initialise Pause_Size struct with values that scale with resolution */
-struct Pause_Size initialise_pause_size() {
-	struct Pause_Size size;
-	size.pause_text_size = (float)config.settings.resolutionHeight * 0.3f;
-	size.pause_text_width = (float)config.settings.resolutionWidth / 2.f;
-	size.pause_text_height = (float)config.settings.resolutionHeight * 0.45f;
+/* Initialise Size struct with values that scale with resolution */
+struct Size initialise_pause_reset_size() {
+	struct Size size;
+	size.header_text_size = (float)config.settings.resolutionHeight * 0.3f;
+	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
+	size.header_text_height = (float)config.settings.resolutionHeight * 0.45f;
 
 	size.button_text_size = (float)config.settings.resolutionHeight * 0.04f;
 
-	size.resume_position_x = (float)config.settings.resolutionWidth / 2.f;
-	size.resume_position_y = (float)config.settings.resolutionHeight * 0.6f;
-	size.resume_width = (float)config.settings.resolutionWidth / 6.f;
-	size.resume_height = (float)config.settings.resolutionHeight / 10.f;
+	size.button_01_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.button_01_position_y = (float)config.settings.resolutionHeight * 0.6f;
+	size.button_01_width = (float)config.settings.resolutionWidth / 6.f;
+	size.button_01_height = (float)config.settings.resolutionHeight / 10.f;
 
-	size.main_menu_position_x = (float)config.settings.resolutionWidth / 2.f;
-	size.main_menu_position_y = (float)config.settings.resolutionHeight * 0.75f;
-	size.main_menu_width = (float)config.settings.resolutionWidth / 6.f;
-	size.main_menu_height = (float)config.settings.resolutionHeight / 10.f;
+	size.button_02_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.button_02_position_y = (float)config.settings.resolutionHeight * 0.75f;
+	size.button_02_width = (float)config.settings.resolutionWidth / 6.f;
+	size.button_02_height = (float)config.settings.resolutionHeight / 10.f;
 
-	struct Pause_Size set_size = { size.pause_text_size, size.pause_text_width, size.pause_text_height, size.button_text_size, size.resume_position_x, 
-		size.resume_position_y, size.resume_width, size.resume_height, size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height };
+	size.text_box_text_size = 0.f;
+	size.text_box_position_x = 0.f;
+	size.text_box_position_y = 0.f;
+	size.text_box_row_width = 0.f;
+
+	struct Size set_size = { size.header_text_size, size.header_text_width, size.header_text_height, size.button_text_size, size.button_01_position_x,
+		size.button_01_position_y, size.button_01_width, size.button_01_height, size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height,
+		size.text_box_text_size, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width };
 
 	return set_size;
 }
 
 /* Render Pause Overlay */
 void overlay_pause() {
-	struct Pause_Size size = initialise_pause_size();
+	struct Size size = initialise_pause_reset_size();
 
 	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.pause_text_size);																					// Set Font Size
-	CP_Font_DrawText("PAUSE", size.pause_text_width, size.pause_text_height);													// Draw PAUSE Text
+	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
+	CP_Font_DrawText("PAUSE", size.header_text_width, size.header_text_height);													// Draw PAUSE Text
 
 	CP_Settings_Fill(RED);																										// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.resume_position_x, size.resume_position_y, size.resume_width, size.resume_height);				// Place Holder for 'Resume' Buttom
-	CP_Graphics_DrawRect(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height);	// Place Holder for 'Main Menu' Button
+	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'Resume' Buttom
+	CP_Graphics_DrawRect(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height);	// Place Holder for 'Main Menu' Button
 
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
-	CP_Font_DrawText("RESUME", size.resume_position_x, size.resume_position_y);													// Draw RESUME Text
-	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);										// Draw MAIN MENUU Text
+	CP_Font_DrawText("RESUME", size.button_01_position_x, size.button_01_position_y);											// Draw RESUME Text
+	CP_Font_DrawText("MAIN MENU", size.button_02_position_x, size.button_02_position_y);										// Draw MAIN MENUU Text
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Unpause Logic, whether Resume Game or return to Main Menu */
 int unpause(int game_pause) {
-	struct Pause_Size size = initialise_pause_size();
+	struct Size size = initialise_pause_reset_size();
 
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
-		if (IsAreaClicked(size.resume_position_x, size.resume_position_y, size.resume_width, size.resume_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
 			game_pause = 0;																										// Resume Game is Resume Button Clicked
 		}
-		else if (IsAreaClicked(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+		else if (IsAreaClicked(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
 			game_pause = 0;
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
@@ -133,53 +107,64 @@ int unpause(int game_pause) {
 	return game_pause;
 }
 
-/* Initialise Game_Over_Size structwith values that scale with resolution */
-struct Game_Over_Size initialise_game_over_size() {
-	struct Game_Over_Size size;
-	size.game_over_text_size = (float)config.settings.resolutionHeight * 0.3f;
-	size.game_over_text_width = (float)config.settings.resolutionWidth / 2.f;
-	size.game_over_text_height = (float)config.settings.resolutionHeight * 0.45f;
+/* Initialise Game_Over_Size struct with values that scale with resolution */
+struct Size initialise_game_over_size() {
+	struct Size size;
+	size.header_text_size = (float)config.settings.resolutionHeight * 0.3f;
+	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
+	size.header_text_height = (float)config.settings.resolutionHeight * 0.45f;
 
 	size.button_text_size = (float)config.settings.resolutionHeight * 0.04f;
 
-	size.main_menu_position_x = (float)config.settings.resolutionWidth / 2.f;
-	size.main_menu_position_y = (float)config.settings.resolutionHeight * 0.75f;
-	size.main_menu_width = (float)config.settings.resolutionWidth / 6.f;
-	size.main_menu_height = (float)config.settings.resolutionHeight / 10.f;
+	size.button_01_position_x = (float)config.settings.resolutionWidth / 2.f;
+	size.button_01_position_y = (float)config.settings.resolutionHeight * 0.75f;
+	size.button_01_width = (float)config.settings.resolutionWidth / 6.f;
+	size.button_01_height = (float)config.settings.resolutionHeight / 10.f;
 
-	struct Game_Over_Size set_size = { size.game_over_text_size, size.game_over_text_width, size.game_over_text_height, 
-		size.button_text_size, size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height };
+	size.button_02_position_x = 0.f;
+	size.button_02_position_y = 0.f;
+	size.button_02_width = 0.f;
+	size.button_02_height = 0.f;
+
+	size.text_box_text_size = 0.f;
+	size.text_box_position_x = 0.f;
+	size.text_box_position_y = 0.f;
+	size.text_box_row_width = 0.f;
+
+	struct Size set_size = { size.header_text_size, size.header_text_width, size.header_text_height, size.button_text_size, size.button_01_position_x,
+		size.button_01_position_y, size.button_01_width, size.button_01_height, size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height,
+		size.text_box_text_size, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width };
 
 	return set_size;
 }
 
 /* Renders Game_Over overlay */
 void overlay_game_over() {
-	struct Game_Over_Size size = initialise_game_over_size();
+	global_level = 1;
+	struct Size size = initialise_game_over_size();
 
 	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.game_over_text_size);																				// Set Font Size
-	CP_Font_DrawText("YOU'RE FIRED!", size.game_over_text_width, size.game_over_text_height);									// Draw "YOU'RE FIRED!" Text
+	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
+	CP_Font_DrawText("YOU'RE FIRED!", size.header_text_width, size.header_text_height);											// Draw "YOU'RE FIRED!" Text
 
 	CP_Settings_Fill(RED);																										// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height);	// Place Holder for 'Main Menu' Button
+	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'Main Menu' Button
 
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
-	CP_Font_DrawText("MAIN MENU", size.main_menu_position_x, size.main_menu_position_y);										// Draw MAIN MENU Text
+	CP_Font_DrawText("MAIN MENU", size.button_01_position_x, size.button_01_position_y);										// Draw MAIN MENU Text
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Game Over Logic, returns to Main Menu only */
 int game_over(int game_pause) {
-	global_level = 1;
-	struct Game_Over_Size size = initialise_game_over_size();
+	struct Size size = initialise_game_over_size();
 
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
-		if (IsAreaClicked(size.main_menu_position_x, size.main_menu_position_y, size.main_menu_width, size.main_menu_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
 			game_pause = 0;
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
@@ -188,66 +173,114 @@ int game_over(int game_pause) {
 	return game_pause;
 }
 
-/* Initialise Reset_Size struct with values that scale with resolution */
-struct Reset_Size initialise_reset_size() {
-	struct Reset_Size size;
-	size.reset_text_size = (float)config.settings.resolutionHeight * 0.3f;
-	size.reset_text_width = (float)config.settings.resolutionWidth / 2.f;
-	size.reset_text_height = (float)config.settings.resolutionHeight * 0.45f;
-
-	size.button_text_size = (float)config.settings.resolutionHeight * 0.04f;
-
-	size.yes_position_x = (float)config.settings.resolutionWidth / 2.f;
-	size.yes_position_y = (float)config.settings.resolutionHeight * 0.6f;
-	size.yes_width = (float)config.settings.resolutionWidth / 6.f;
-	size.yes_height = (float)config.settings.resolutionHeight / 10.f;
-
-	size.no_position_x = (float)config.settings.resolutionWidth / 2.f;
-	size.no_position_y = (float)config.settings.resolutionHeight * 0.75f;
-	size.no_width = (float)config.settings.resolutionWidth / 6.f;
-	size.no_height = (float)config.settings.resolutionHeight / 10.f;
-
-	struct Reset_Size set_size = { size.reset_text_size, size.reset_text_width, size.reset_text_height, size.button_text_size, size.yes_position_x,
-		size.yes_position_y, size.yes_width, size.yes_height, size.no_position_x, size.no_position_y, size.no_width, size.no_height };
-
-	return set_size;
-}
-
 /* Render Reset Overlay */
 void overlay_reset() {
-	struct Reset_Size size = initialise_reset_size();
+	struct Size size = initialise_pause_reset_size();
 
 	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.reset_text_size);																					// Set Font Size
-	CP_Font_DrawText("RESET MAP?", size.reset_text_width, size.reset_text_height);												// Draw RESET MAP? Text
+	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
+	CP_Font_DrawText("RESET MAP?", size.header_text_width, size.header_text_height);											// Draw RESET MAP? Text
 
 	CP_Settings_Fill(RED);																										// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.yes_position_x, size.yes_position_y, size.yes_width, size.yes_height);							// Place Holder for 'YES' Buttom
-	CP_Graphics_DrawRect(size.no_position_x, size.no_position_y, size.no_width, size.no_height);								// Place Holder for 'NO' Button
+	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'YES' Buttom
+	CP_Graphics_DrawRect(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height);	// Place Holder for 'NO' Button
 
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
-	CP_Font_DrawText("YES", size.yes_position_x, size.yes_position_y);															// Draw YES Text
-	CP_Font_DrawText("NO", size.no_position_x, size.no_position_y);																// Draw NO Text
+	CP_Font_DrawText("YES", size.button_01_position_x, size.button_01_position_y);												// Draw YES Text
+	CP_Font_DrawText("NO", size.button_02_position_x, size.button_02_position_y);												// Draw NO Text
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Reset Map if Yes, return to Game if No */
 int reset_check(int reset_confirmed) {
-	struct Reset_Size size = initialise_reset_size();
+	struct Size size = initialise_pause_reset_size();
 
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
-		if (IsAreaClicked(size.yes_position_x, size.yes_position_y, size.yes_width, size.yes_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			reset_confirmed = 1;																										
 		}
-		else if (IsAreaClicked(size.no_position_x, size.no_position_y, size.no_width, size.no_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+		else if (IsAreaClicked(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			reset_confirmed = 2;
 		}
 	}
 	return reset_confirmed;
+}
+
+struct Size initialise_welcome_size() {
+	struct Size size;
+	size.header_text_size = (float)config.settings.resolutionHeight * 0.1f;
+	size.header_text_width = (float)config.settings.resolutionWidth / 2.75f;
+	size.header_text_height = (float)config.settings.resolutionHeight * 0.15f;
+
+	size.button_text_size = (float)config.settings.resolutionHeight * 0.04f;
+
+	size.button_01_position_x = (float)config.settings.resolutionWidth / 2.75f;
+	size.button_01_position_y = (float)config.settings.resolutionHeight * 0.75f;
+	size.button_01_width = (float)config.settings.resolutionWidth / 6.f;
+	size.button_01_height = (float)config.settings.resolutionHeight / 10.f;
+
+	size.button_02_position_x = 0.f;
+	size.button_02_position_y = 0.f;
+	size.button_02_width = 0.f;
+	size.button_02_height = 0.f;
+
+	size.text_box_text_size = (float)config.settings.resolutionHeight * 0.032f;
+	size.text_box_position_x = (float)config.settings.resolutionWidth / 10.f;
+	size.text_box_position_y = (float)config.settings.resolutionHeight * 0.2f;
+	size.text_box_row_width = (float)config.settings.resolutionWidth / 1.90f;
+
+	struct Size set_size = { size.header_text_size, size.header_text_width, size.header_text_height, size.button_text_size, size.button_01_position_x,
+		size.button_01_position_y, size.button_01_width, size.button_01_height, size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height,
+		size.text_box_text_size, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width };
+
+	return set_size;
+}
+
+void overlay_welcome() {
+	struct Size size = initialise_welcome_size();
+	char* welcome_text = "Welcome uhh... New Guy, to Seven11! Today will be your first day on the job & we will be watching your every move."
+		"Your job is to move erm... Stuff, around to the designated place & avoid talking to the customers. However, Customers will take every chance they get to talk to you."
+		"If you waste too much time or talk to too many customers, we're afraid we will have to let you go. Yes, you can be fired on your first day!"
+		"So get out there and only move them things. You got everything? Alright, nice talk. Have a pleasant working experience with us.";
+
+	char* move_text = "Uhh.. You do know how to move right? Well, if you didn't, and I'm not sure why, use the W, A, S, D keys. We have also given you the Retrace Stone together with your employee handbook."
+		"Simply press U to undo a move & R to reset everything. Be careful as undoing a move will not recover lost time! Now Then, Happy Working!";
+
+	
+	CP_Settings_NoTint();																										// Clear any Existing Tint
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
+	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
+	CP_Font_DrawText("WELCOME!", size.header_text_width, size.header_text_height);												// Draw WELCOME Text
+
+	CP_Settings_Fill(RED);																										// Set Button Colour to RED
+	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'Let's Work' Buttom
+
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
+	CP_Font_DrawText("Let's Work", size.button_01_position_x, size.button_01_position_y);										// Draw Let's Work Text
+
+	CP_Settings_TextSize(size.text_box_text_size);
+	CP_Font_DrawTextBox(welcome_text, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width);				// Welcome Message
+	CP_Font_DrawTextBox(move_text, size.text_box_position_x, size.text_box_position_y * 2.5f, size.text_box_row_width);			// Welcome Message
+	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
+}
+
+int welcome_done(int game_pause) {
+	struct Size size = initialise_welcome_size();
+
+	/* Check for Mouse Click Input */
+	if (CP_Input_MouseClicked()) {
+		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
+			game_pause = 0;																										// Unpause & Start Game
+		}
+	}
+	return game_pause;
 }

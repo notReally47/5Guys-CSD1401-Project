@@ -28,7 +28,7 @@ char* stat[3];
 
 float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome;
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL;
 
@@ -59,6 +59,7 @@ void base_Init(void) {
 	reset_triggered = 0;
 	reset_confirmed = 0;
 	times_distracted = 0;
+	is_welcome = 1;
 	stat[0] = "Time Left: ";
 	stat[1] = "Move: ";
 	stat[2] = "Times Distracted: ";
@@ -110,6 +111,9 @@ void base_Update(void) {
 				playerCol = col;
 			}
 		}
+	}
+	if (global_level == 1 && is_welcome) {
+		game_pause = 1;
 	}
 
 	if (!game_pause) {
@@ -317,8 +321,15 @@ void base_Update(void) {
 
 	if (game_pause) {
 
+		/* Welcome Message at Level 01 */
+		if (global_level == 1 && is_welcome) {
+			overlay_welcome();									// Rednders Welcome Message
+			is_welcome = welcome_done(game_pause);				// Remove is_welcome flag
+			game_pause = welcome_done(game_pause);				// Unpause game
+		}
+
 		/* Resetting Map Overlay */
-		if (reset_triggered && clock > 0) {
+		else if (reset_triggered && clock > 0) {
 			overlay_reset();									// Renders Reset Confirmation Overlay
 			reset_confirmed = reset_check(reset_confirmed);		// Check Whether 'YES' or 'NO' was Clicked
 
