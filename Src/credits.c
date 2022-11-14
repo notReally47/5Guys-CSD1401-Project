@@ -64,8 +64,8 @@ void Credits_Update() {
 	drawAlignedText(BLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
 	drawAlignedText(BLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
 	drawAlignedText(BLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
-	drawAlignedText(WHITE, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[11]);
-	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + 1, dynamicY[11]);
+	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[11]);
+	drawAlignedText(WHITE, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + .075f * textSize, dynamicY[11]);
 
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);

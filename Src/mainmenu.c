@@ -69,7 +69,7 @@ void Main_Menu_Update()
 
 	CP_Settings_TextSize(windowwidth * .15f);
 	drawAlignedText(BLACK, CENTER, "Seven11", windowwidth / 2, windowheight / 5);
-	drawAlignedText(WHITE, CENTER, "Seven11", (windowwidth / 2) + 5.f, windowheight / 5);
+	drawAlignedText(WHITE, CENTER, "Seven11", (windowwidth / 2) + .05f * (windowwidth * .15f), windowheight / 5);
 
 	/*BUTTONS*/
 	drawTintedButton(RED, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
