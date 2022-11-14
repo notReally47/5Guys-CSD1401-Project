@@ -332,7 +332,7 @@ void base_Update(void) {
 		}
 
 		/* Resetting Map Overlay */
-		else if (reset_triggered && clock > 0) {
+		else if (reset_triggered && clock > 0 && !is_game_over) {
 			overlay_reset();									// Renders Reset Confirmation Overlay
 			reset_confirmed = reset_check(reset_confirmed);		// Check Whether 'YES' or 'NO' was Clicked
 
