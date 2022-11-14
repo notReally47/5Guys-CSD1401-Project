@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "defines.h"
 #include "structs.h"
-#include "options_draw.h"
+#include "easydraw.h"
 #include "settings.h"
 #include "options.h"
 #include <stdio.h> // sprintf_s()

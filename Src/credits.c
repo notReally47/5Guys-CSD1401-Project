@@ -2,7 +2,7 @@
 #include "mainmenu.h"
 #include "utils.h"
 #include "defines.h"
-#include "options_draw.h"
+#include "easydraw.h"
 
 float windowsWidth, windowsHeight, textSize, btnWidth, btnHeight;
 CP_Sound click;

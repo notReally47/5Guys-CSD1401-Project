@@ -6,7 +6,7 @@
 #include "options.h"
 #include "level_logic.h"
 #include "level_select.h"
-#include "options_draw.h"
+#include "easydraw.h"
 
 extern Config config;
 float windowwidth, windowheight;

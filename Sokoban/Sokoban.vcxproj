@@ -106,7 +106,7 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
     <ClInclude Include="..\Inc\defines.h" />
     <ClInclude Include="..\Inc\level_overlay.h" />
     <ClInclude Include="..\Inc\mechanics.h" />
-    <ClInclude Include="..\Inc\options_draw.h" />
+    <ClInclude Include="..\Inc\easydraw.h" />
     <ClInclude Include="..\Inc\level_generate.h" />
     <ClInclude Include="..\Inc\level_logic.h" />
     <ClInclude Include="..\Inc\level_select.h" />
@@ -125,7 +125,7 @@ xcopy "$(SolutionDir)Assets\*" "$(OutDir)Assets\" /s /r /y /q
     <ClCompile Include="..\Src\credits.c" />
     <ClCompile Include="..\Src\level_overlay.c" />
     <ClCompile Include="..\Src\mechanics.c" />
-    <ClCompile Include="..\Src\options_draw.c" />
+    <ClCompile Include="..\Src\easydraw.c" />
     <ClCompile Include="..\Src\level_generate.c" />
     <ClCompile Include="..\Src\level_logic.c" />
     <ClCompile Include="..\Src\level_select.c" />

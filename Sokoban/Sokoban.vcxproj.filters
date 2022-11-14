@@ -46,7 +46,7 @@
     <ClCompile Include="..\Src\utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Src\options_draw.c">
+    <ClCompile Include="..\Src\easydraw.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\mechanics.c">
@@ -105,7 +105,7 @@
     <ClInclude Include="..\Inc\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\options_draw.h">
+    <ClInclude Include="..\Inc\easydraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Inc\mechanics.h">

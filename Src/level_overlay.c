@@ -2,7 +2,7 @@
 #include "utils.h"			// Needed for IsAreaClicked() Function
 #include "level_logic.h"	// Needed for global extern variable 'global_level'
 #include "mainmenu.h"		// Needed to transition back to Main Menu
-#include "options_draw.h"
+#include "easydraw.h"
 
 extern Config config;		// For Resolution Settings
 CP_Sound click;				// Clicking SFX

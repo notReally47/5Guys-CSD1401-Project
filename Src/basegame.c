@@ -12,7 +12,7 @@
 #include "mechanics.h"
 #include "mainmenu.h"
 #include "level_overlay.h"
-#include "options_draw.h"
+#include "easydraw.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

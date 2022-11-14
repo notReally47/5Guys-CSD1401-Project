@@ -6,7 +6,7 @@
 #include "mainmenu.h"				// Needed to Return to Main Menu
 #include "level_logic.h"			// Needed to use Global Extern Variable 'level'
 #include "basegame.h"				// Needed to transit into Game Levels
-#include "options_draw.h"
+#include "easydraw.h"
 #include <stdio.h>
 
 extern Config config;
