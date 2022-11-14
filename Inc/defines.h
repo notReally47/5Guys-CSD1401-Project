@@ -61,5 +61,6 @@ typedef enum Logic {
 
 enum UniqueMechanics {
 	MAX_DECK = 7,
-	SETTINGS = 18
+	SETTINGS = 2,
+	TELEPORTER_NUMBER = 8
 };

@@ -62,6 +62,12 @@ typedef struct Move {
 	int				customer;
 } Move;
 
+typedef struct Teleporter {
+	int				teleporter_number;
+	int				posY;
+	int				posX;
+} Teleporter;
+
 typedef struct rect {
 	float			center_x;
 	float			center_y;

@@ -18,10 +18,10 @@
 #include <math.h>
 
 extern Config config;
-
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Customer customer[CUSTOMER_MAX];
+Teleporter teleporters[TELEPORTER_NUMBER];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 char* stat[3];
@@ -65,7 +65,7 @@ void base_Init(void) {
 	stat[2] = "Times Distracted: ";
 
 	load_spritesheet(&cellSize, cameratoggle);
-	setMap(grid, customer, path);				// Initialise Map
+	setMap(grid, customer, path, teleporters);				// Initialise Map
 	totalObjs = getObjective(grid);				// Counts number of key objective to meet
 	global_move = 1;							// Initialise move with 1 for rendering purposes*
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
@@ -85,7 +85,7 @@ void base_Init(void) {
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
 	//teleport = CP_Sound_Load();
 	card_init();
-	//teleport_UM();
+	teleport_UM();
 
 	
 }
@@ -93,7 +93,6 @@ void base_Init(void) {
 void base_Update(void) {
 	int playerRow, playerCol, isCompleted = 0, set_teleporter_row = 0, set_teleporter_col = 0;
 	float currentElapsedTime = CP_System_GetDt();
-	//teleport_UM();
 
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		game_pause = !game_pause;
@@ -203,7 +202,7 @@ void base_Update(void) {
 			int pushBox = 0;
 			if (dir > 0) {
 				saveMove(moves, grid);
-				pushBox = getCell(&playerRow, &playerCol, dir, grid);
+				pushBox = getCell(&playerRow, &playerCol, dir, grid, teleporters);
 			}
 
 			if (pushBox == 1) {
@@ -282,12 +281,9 @@ void base_Update(void) {
 					draw_boarder(cellX, cellY, cellSize);
 
 				else if (teleporter[0] == 1 && currCell.tele != 0) {
-					for (int i = 1; i < 9; i++) {
-						set_teleporter_row = i * 2 - 1;
-						set_teleporter_col = i + i;
-						if (row == teleporter[set_teleporter_row] && col == teleporter[set_teleporter_col])
+						if ((row == teleporters[currCell.tele-1].posY) && col == teleporters[currCell.tele-1].posX) {
 							draw_boarder(cellX, cellY, cellSize); // draw_tele();
-					}
+						}
 				}
 			}
 		}
@@ -338,7 +334,7 @@ void base_Update(void) {
 
 			/* If 'YES' was Clicked */
 			if (reset_confirmed == 1) {
-				resetMap(moves, grid, customer, path);			// Resets grid to the initial values based on the CSV file
+				resetMap(moves, grid, customer, path, teleporters);			// Resets grid to the initial values based on the CSV file
 				totalElapsedTime = 0;							// Reset Timer
 				face = 0;										// Reset Player Direcction
 				reset_confirmed = 0;							// Set reset_confirmed to 0 so that will stop rendering Reset Overlay

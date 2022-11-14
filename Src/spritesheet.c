@@ -78,9 +78,9 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 	case 0: // starting position
 		Player = CP_Vector_Set(cellx,celly);
 	case SOKOBAN_DOWN:
-		if (teleporter[17] == 1) {
+		if (teleporter[1] == 1) {
 			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX-1));
-			teleporter[17] = 0;
+			teleporter[1] = 0;
 		}
 		if (Player.y < celly) {
 			isAnimating = 1;
@@ -91,9 +91,9 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,frame,0.f,frame*2.f,frame,255);
 		break;
 	case SOKOBAN_UP:
-		if (teleporter[17] == 1) {
+		if (teleporter[1] == 1) {
 			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX+1));
-			teleporter[17] = 0;
+			teleporter[1] = 0;
 		}
 		if (Player.y > celly) {
 			isAnimating = 1;
@@ -104,9 +104,9 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,frame*4.f,0.f,frame*5.f,frame,255); 
 		break;
 	case SOKOBAN_LEFT:
-		if (teleporter[17] == 1) {
+		if (teleporter[1] == 1) {
 			Player = CP_Vector_Set(cellSize*(float)(playerPosY+1),celly);
-			teleporter[17] = 0;
+			teleporter[1] = 0;
 		}
 		if (Player.x > cellx) {
 			isAnimating = 1;
@@ -117,9 +117,9 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 			CP_Image_DrawSubImage(spritesheet,Player.x,Player.y,Offset[0].x,Offset[0].y,frame*4.f,frame,frame*5.f,frame*2.f,255); 
 		break;
 	case SOKOBAN_RIGHT:
-		if (teleporter[17] == 1) {
+		if (teleporter[1] == 1) {
 			Player = CP_Vector_Set(cellSize*(float)(playerPosY-1),celly);
-			teleporter[17] = 0;
+			teleporter[1] = 0;
 		}
 		if (Player.x < cellx) {
 			isAnimating = 1;
@@ -221,25 +221,25 @@ void world_camera(float cellSize,int playerRow,int playerCol,int face,int camera
 		Camera = CP_Vector_Set((float)xoffset*cellSize,(float)yoffset*cellSize);
 	switch (face) {
 	case SOKOBAN_UP: // up
-		if (teleporter[17] == 1) 
+		if (teleporter[1] == 1) 
 			Camera = CP_Vector_Set((float)xoffset*cellSize,(float)(yoffset+1)*cellSize);
 		if (Player.y > celly) 
 			Camera.y -= move;
 		break;
 	case SOKOBAN_LEFT: // left
-		if (teleporter[17] == 1) 
+		if (teleporter[1] == 1) 
 			Camera = CP_Vector_Set((float)(xoffset+1)*cellSize,(float)(yoffset)*cellSize);
 		if (Player.x > cellx)
 			Camera.x -= move;
 		break;
 	case SOKOBAN_DOWN: // down
-		if (teleporter[17] == 1) 
+		if (teleporter[1] == 1) 
 			Camera = CP_Vector_Set((float)xoffset*cellSize,(float)(yoffset-1)*cellSize);
 		if (Player.y < celly)
 			Camera.y += move;
 		break;
 	case SOKOBAN_RIGHT: //right
-		if (teleporter[17] == 1) 
+		if (teleporter[1] == 1) 
 			Camera = CP_Vector_Set((float)(xoffset-1)*cellSize,(float)(yoffset)*cellSize);
 		if (Player.x < cellx)
 			Camera.x += move;

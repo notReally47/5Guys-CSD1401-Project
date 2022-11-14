@@ -7,15 +7,16 @@
 #include <stdio.h>					// Needed for parsing CSV file
 #include <stdlib.h>					// Needed for exit() function
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
+#include "mechanics.h"
 
 /* Parse CSV file to initialise grid array at the start of every stage/level */
-void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
 
 	/* Initialise variables to 0 */
 	int row = 0, col = 0, read = 0, line = 0;
 
 	/* Declare & initialise Local Customer Properties to 0 */
-	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0;
+	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0, teleporter_index = 0, set_teleporter_row = 0, set_teleporter_col = 0;
 
 	/* For-Loop to clear all customers first (Prevent carry-over from previous levels) */
 	for (int i = 0; i < CUSTOMER_MAX; i++) {
@@ -28,6 +29,12 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 		customer[i].isActive = customer_active;
 		customer[i].isIdle = customer_idle;
 		customer[i].isRandom = customer_random;
+	}
+
+	for (int i = 0; i < TELEPORTER_NUMBER; i++) {
+		teleporters[i].teleporter_number = 0;
+		teleporters[i].posX = 0;
+		teleporters[i].posY = 0;
 	}
 
 	// File Pointer of CSV File
@@ -91,6 +98,22 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 				printf("Customer Number: %d, PosX: %d, PosY: %d, Direction: %d, Range: %d, Active: %d \n",
 					customer_number, customer[customer_number].cusRow, customer[customer_number].cusCol,
 					customer[customer_number].direction, customer[customer_number].range, customer[customer_number].isActive);
+			}
+
+			if (grid[row][col].tele != 0) {
+				teleporter_index = grid[row][col].tele - 1;
+				//set_teleporter_row = grid[row][col].tele * 2 - 1;
+				//set_teleporter_col = grid[row][col].tele + grid[row][col].tele;
+				////teleporter[0] = 1;                              // Teleporter Enabler
+				//teleporter[set_teleporter_row] = row;          // Teleporter Row
+				//teleporter[set_teleporter_col] = col;          // Teleporter Column
+				////teleporter[17] = 0;                             // Cooldown
+
+				teleporters[teleporter_index].teleporter_number = grid[row][col].tele;
+				teleporters[teleporter_index].posX = col;
+				teleporters[teleporter_index].posY = row;
+
+				printf("Teleporter %d, is at row %d & column %d \n", grid[row][col].tele, teleporters[teleporter_index].posY, teleporters[teleporter_index].posX);
 			}
 
 			// Increments 'col' when the correct number of values were scanned

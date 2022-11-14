@@ -12,7 +12,7 @@
 
 int duration = 60;
 float lockTimer = 3.f;
-CP_Sound tele = NULL;
+CP_Sound teleport_sound = NULL;
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
@@ -98,7 +98,7 @@ int collisionCheck(int posX, int posY, int moveX, int moveY, Cell grid[SOKOBAN_G
 * int nextPosX, nextPosY: The following cell after the next cell.
 * int prevPosX, prevPosY: The previous cell that the player was previously at.
 */
-int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, int prevPosY, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
 	/*Push box (No boarder or another box blocking the box being pushed)*/
 	if (grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
@@ -114,29 +114,24 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 	else if (!grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
 
-
-		for (int i = 1; i < 9; i++) {
-			int teleporter_stepin_posX = i * 2 - 1, teleporter_stepin_posY = i + i, teleporter_stepout_01_posX = i * 2 + 1, teleporter_stepout_01_posY = i + i + 2,
-				teleporter_stepout_02_posX = i * 2 - 3, teleporter_stepout_02_posY = i + i - 2;
-			if (teleporter[0] == 1) {
-				tele = CP_Sound_Load("./Assets/Sound/SFX/Teleport.wav");
-				if ((i % 2) == 1) {
-					if (*posX == teleporter[teleporter_stepin_posX] && *posY == teleporter[teleporter_stepin_posY]) {
-						CP_Sound_PlayAdvanced(tele, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
-						*posX = teleporter[teleporter_stepout_01_posX] + (*posX - prevPosX);
-						*posY = teleporter[teleporter_stepout_01_posY] + (*posY - prevPosY);
-						teleporter[17] = 1;
-					}
+		if (teleporter[0] == 1 && grid[*posX][*posY].tele != 0) {
+			int tele = grid[*posX][*posY].tele - 1;
+			if ((grid[*posX][*posY].tele % 2) == 1) {
+				if (*posX == teleporters[tele].posY && *posY == teleporters[tele].posX) {
+					CP_Sound_PlayAdvanced(teleport_sound, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+					*posX = teleporters[tele + 1].posY + (*posX - prevPosX);
+					*posY = teleporters[tele + 1].posX + (*posY - prevPosY);
+					teleporter[1] = 1;
 				}
-				else {
-					if (*posX == teleporter[teleporter_stepin_posX] && *posY == teleporter[teleporter_stepin_posY]) {
-						CP_Sound_PlayAdvanced(tele, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
-						*posX = teleporter[teleporter_stepout_02_posX] + (*posX - prevPosX);
-						*posY = teleporter[teleporter_stepout_02_posY] + (*posY - prevPosY);
-						teleporter[17] = 1;
-					}
+			}
+			else {
+				if (*posX == teleporters[tele].posY && *posY == teleporters[tele].posX) {
+					CP_Sound_PlayAdvanced(teleport_sound, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+					*posX = teleporters[tele - 1].posY + (*posX - prevPosX);
+					*posY = teleporters[tele - 1].posX + (*posY - prevPosY);
+					teleporter[1] = 1;
 				}
-				CP_Sound_Free(&tele);
+				CP_Sound_Free(&teleport_sound);
 			}
 		}
 
@@ -159,14 +154,14 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 	}
 }
 
-int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
 	int pushBox = 0;
 	switch (direction) {
 		/* Move up */
 	case 1:
 		if (collisionCheck(*posX, *posY, -1, 0, grid)) {
 			--* posX;
-			pushBox = gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid);
+			pushBox = gameLogic(posX, posY, *posX - 1, *posY, *posX + 1, *posY, grid, teleporters);
 		}
 		break;
 
@@ -174,7 +169,7 @@ int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SO
 	case 2:
 		if (collisionCheck(*posX, *posY, 0, -1, grid)) {
 			--* posY;
-			pushBox = gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid);
+			pushBox = gameLogic(posX, posY, *posX, *posY - 1, *posX, *posY + 1, grid, teleporters);
 		}
 		break;
 
@@ -182,7 +177,7 @@ int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SO
 	case 3:
 		if (collisionCheck(*posX, *posY, 1, 0, grid)) {
 			++* posX;
-			pushBox = gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid);
+			pushBox = gameLogic(posX, posY, *posX + 1, *posY, *posX - 1, *posY, grid, teleporters);
 		}
 		break;
 
@@ -190,7 +185,7 @@ int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SO
 	case 4:
 		if (collisionCheck(*posX, *posY, 0, 1, grid)) {
 			++* posY;
-			pushBox = gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid);
+			pushBox = gameLogic(posX, posY, *posX, *posY + 1, *posX, *posY - 1, grid, teleporters);
 		}
 		break;
 
