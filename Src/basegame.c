@@ -1,17 +1,17 @@
-#include "cprocessing.h"
-#include "structs.h"
+#include "cprocessing.h"			// Needed for C Processing Functions
+#include "structs.h"				// Needed for Game Asset Structs
 #include "customer.h"
-#include "level_generate.h"
-#include "movement.h"
 #include "utils.h"
-#include "defines.h"
+#include "defines.h"				// Needed for Defined Values
 #include "settings.h"
 #include "spritesheet.h"
-#include "level_logic.h"
-#include "level_transition.h"
 #include "mechanics.h"
 #include "mainmenu.h"
-#include "level_overlay.h"
+#include "movement.h"				// Needed for saveMove(), undoMove() & resetMap() functions
+#include "level_logic.h"			// Needed for extern global_level and leveling logic
+#include "level_generate.h"			// Needed to Generate Game Map
+#include "level_transition.h"		// Needed to transit to Level Transition state
+#include "level_overlay.h"			// Needed for Overlays during Welcome, Pause, Reset or Game Over
 #include "easydraw.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,13 +26,18 @@ Teleporter teleporters[TELEPORTER_NUMBER];
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 char* stat[4];
 
-float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown, cusDelay;
+float cellSize, cellAlign, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown, cusDelay;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome, duration_lost, time_lost, ignore_penalty;
+int total_objectives,											// Objectives to Meet
+isLocked, activatedCusX, activatedCusY, stunner,				// Stunner/Customer Logic Variables/Flags
+face, isAnimating, flip, cameratoggle,							// Drawing/Animation Logic Variables/Flags
+game_pause, overlay_function, is_welcome, reset_confirmed,		// Pause/Overlays Logic Variables/Flags
+clock, times_distracted, duration_lost,							// Stats Variables
+time_lost, ignore_penalty;										// Unique Mechanic Variables
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL, levelBGM = NULL, gameMusic;
 
-/*Gif*/
+/* GIF */
 static float gifElasped;
 static const float DISPLAY_DURATION = .5f;
 GIF speechSprite;
@@ -41,8 +46,10 @@ void base_Init(void) {
 
 	/* Settings */
 	CP_Settings_StrokeWeight(0.5f);
+
 	// for clock settings
 	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
+
 	/* Initializations */
 	cameratoggle = 1;
 	cellSize = 0.f;
@@ -52,28 +59,27 @@ void base_Init(void) {
 	totalElapsedTime = 0.f;
 	cameratogglecooldown = 0.f;
 	cusDelay = 1.5f;
-	game_pause = 0;
-	is_game_over = 0;
 	isAnimating = 0;
 	flip = 0;
 	oneSecondFlip = 0;
-	reset_triggered = 0;
-	reset_confirmed = 0;
-	times_distracted = 0;
-	duration_lost = 0;
-	is_welcome = 1;
-	stat[0] = "Time Left: ";
-	stat[1] = "Move: ";
-	stat[2] = "Times Distracted: ";
-	stat[3] = "Time Wasted: ";
+	game_pause = 0;													// Flag whether game is Paused/Not, Set to 0 for Unpause
+	reset_confirmed = 0;											// Flag to Check whether Resetting the map confirmed, 0 for no Reset
+	times_distracted = 0;											// Stat for Number of Times Distracted, 0 at Level Load
+	duration_lost = 0;												// Stat for Duration Lost getting distracted, 0 at Level Load
+	is_welcome = 1;													// Set to 1 To start off Level 1 with a Welcome Message
+	overlay_function = 0;											// 1 for Welcome Message, 2 for Reset, 3 for Pause, 4 for Game Over
+	stat[0] = "Time Left: ";										// Text Stat to Print for Time Left
+	stat[1] = "Move: ";												// Text Stat to Print for Move Count
+	stat[2] = "Times Distracted: ";									// Text Stat to Print for Number of Times Distracted
+	stat[3] = "Time Wasted: ";										// Text Stat to print for Time Wasted Getting Distracted
 
 	load_spritesheet(&cellSize, cameratoggle);
-	setMap(grid, customer, path, teleporters);				// Initialise Map
-	totalObjs = getObjective(grid);							// Counts number of key objective to meet
-	global_move = 1;										// Initialise move with 1 for rendering purposes*
+	setMap(grid, customer, path, teleporters);						// Initialise Map
+	total_objectives = getObjective(grid);							// Counts number of key objective to meet
+	global_move = 1;												// Initialise move with 1 for rendering purposes*
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0, m = 0; col < SOKOBAN_GRID_COLS; col++) {
-			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
+			moves[0][row][col].player = 0;							//Initialise to 0 for rendering purposes
 		}
 	}
 	/*Unique mechanics Initialisation*/
@@ -97,11 +103,14 @@ void base_Init(void) {
 void base_Update(void) {
 	int playerRow, playerCol, isCompleted = 0, set_teleporter_row = 0, set_teleporter_col = 0;
 	float currentElapsedTime = CP_System_GetDt();
-	
 
+	/* When ESC/P Key pressed, pause/unpause the game */
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
-		game_pause = !game_pause;
-		reset_triggered = 0;
+		if (!game_pause && (overlay_function == 0 || overlay_function == 2))
+			overlay_function = 3;												// 3 for Pause Overlay
+		else if (game_pause && overlay_function == 3)
+			overlay_function = 0;												// 0 to remove any Overlays
+		game_pause = !game_pause;												// Toggle Pause State
 	}
 
 	/*Read grid*/
@@ -118,7 +127,10 @@ void base_Update(void) {
 			}
 		}
 	}
-	if (global_level == 1 && is_welcome) {
+
+	/* Display Welcome Message at the start of Level 1 */
+	if (global_level == 1 && is_welcome == 1) {
+		overlay_function = 1;													// 1 for Welcome Message Overlay
 		game_pause = 1;
 	}
 
@@ -143,17 +155,17 @@ void base_Update(void) {
 		}
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
-		if (isCompleted == totalObjs) {
+		if (isCompleted == total_objectives) {
 			next_level();
 			config.save.lastLevelPlayed = global_level;
 			writeConfig(config);
 			CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);
 		}
 
-		/* Lose Condition */
+		/* Lose Condition, When Time's Up */
 		if (clock <= 0) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
-			is_game_over = 1;
+			overlay_function = 4;												// 4 for Game Over Overlay
 			game_pause = 1;
 			card_init();	// resets all card selection/flags
 		}
@@ -227,7 +239,7 @@ void base_Update(void) {
 				CP_Sound_PlayAdvanced(success, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			}
 
-			/*Undo move.*/
+			/* Undo Move */
 			if (CP_Input_KeyTriggered(KEY_U) && global_move > 1) {
 				undoMove(moves, grid);
 				face = 0;
@@ -239,9 +251,8 @@ void base_Update(void) {
 				init_spritesheet(&cellSize, cameratoggle);
 			}
 
-
 			else if (CP_Input_KeyTriggered(KEY_R)) {
-				reset_triggered = 1;
+				overlay_function = 2;
 				game_pause = 1;
 			}
 		}
@@ -263,10 +274,12 @@ void base_Update(void) {
 				}
 			}
 		}
-	}
 
-	/*Rendering*/
+	} // End of if(!game_pause) Brace
+
+	/* Rendering */
 	draw_background(); // clears and draw background art
+
 	if (cameratoggle == 2)
 		world_camera(cellSize, playerRow, playerCol, face, cameratoggle);
 
@@ -343,58 +356,56 @@ void base_Update(void) {
 
 	if (game_pause) {
 		/* Welcome Message at Level 01 */
-		if (global_level == 1 && is_welcome && !is_game_over) {
-			overlay_welcome();									// Rednders Welcome Message
-			is_welcome = welcome_done(game_pause);				// Remove is_welcome flag
-			game_pause = welcome_done(game_pause);				// Unpause game
+		if (global_level == 1 && overlay_function == 1) {					// If Level is 1, is_welcome flag triggered & Not yet Game Over
+			overlay_welcome();												// Rednders Welcome Message
+			is_welcome = welcome_done(game_pause);							// Remove is_welcome flag
+			overlay_function = welcome_done(game_pause);
+			game_pause = welcome_done(game_pause);							// Unpause game
 		}
 		/* Resetting Map Overlay */
-		else if (reset_triggered && clock > 0 && !is_game_over) {
-			overlay_reset();									// Renders Reset Confirmation Overlay
-			reset_confirmed = reset_check(reset_confirmed);		// Check Whether 'YES' or 'NO' was Clicked
+		else if (overlay_function == 2) {			// Else If reset_triggered flag is trigggered, There is still time & Not yet Game Over
+			overlay_reset();												// Renders Reset Confirmation Overlay
+			reset_confirmed = reset_check(reset_confirmed);					// Check Whether 'YES' or 'NO' was Clicked
 
 			/* If 'YES' was Clicked */
 			if (reset_confirmed == 1) {
 				resetMap(moves, grid, customer, path, teleporters);			// Resets grid to the initial values based on the CSV file
-				totalElapsedTime = 0;							// Reset Timer
-				face = 0;										// Reset Player Direcction
-				reset_confirmed = 0;							// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
-				reset_triggered = 0;							// Set reset_triggered to 0 so that will stop rendering Reset Overlay
-				game_pause = 0;									// Set game_pause to 0 to resume game
+				totalElapsedTime = 0;										// Reset Timer
+				face = 0;													// Reset Player Direcction
+				reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
+				times_distracted = 0;										// Reset the display of number of timesdistracted
+				duration_lost = 0;											// Reset the display of duration lost due to distractions
+				overlay_function = 0;
+				game_pause = 0;												// Set game_pause to 0 to resume game
 			}
 
 			/* If 'NO' was Clicked */
 			else if (reset_confirmed == 2) {
-				reset_confirmed = 0;							// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
-				reset_triggered = 0;							// Set reset_triggered to 0 so that will stop rendering Reset Overlay
-				game_pause = 0;									// Set game_pause to 0 to resume game
+				reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
+				overlay_function = 0;
+				game_pause = 0;												// Set game_pause to 0 to resume game
 			}
 		}
 
 		/* Pause Overlay */
-		else if (!reset_triggered && clock > 0 && !is_game_over) {
-			overlay_pause();									// Renders Pause Overlay
-			game_pause = unpause(game_pause);					// game_pause will trigger unpause function to either return to game or Main Menu
+		else if (overlay_function == 3) {									// Else If 
+			overlay_pause();												// Renders Pause Overlay
+			game_pause = unpause(game_pause);								// game_pause will trigger unpause function to either return to game or Main Menu
 		}
 
 		/* Game Over Overlay */
-		else if (!reset_triggered && is_game_over) {
-			overlay_game_over();								// Renders Game Over Overlay
-			game_pause = game_over(game_pause);					// game_pause will trigger to return to Main Menu
+		else if (overlay_function == 4) {
+			overlay_game_over();											// Renders Game Over Overlay
+			game_pause = game_over(game_pause);								// game_pause will trigger to return to Main Menu
 		}
+
 	}
 
-	/* Show Timer */
-	show_stats(cellSize, stat[0], clock, cameratoggle, 1.f);
-
-	/* Show Move Count */
-	show_stats(cellSize, stat[1], global_move, cameratoggle, 2.f);
-
-	/* Show Distracted Count */
-	show_stats(cellSize, stat[2], times_distracted, cameratoggle, 3.f);
-
-	/* Show Duration Lost */
-	show_stats(cellSize, stat[3], duration_lost, cameratoggle, 4.f);
+	/* Show Stats */
+	show_stats(cellSize, stat[0], clock, cameratoggle, 1.f);				// Show Timer
+	show_stats(cellSize, stat[1], global_move, cameratoggle, 2.f);			// Show Move Count
+	show_stats(cellSize, stat[2], times_distracted, cameratoggle, 3.f);		// Show Number of Times Distracted Count
+	show_stats(cellSize, stat[3], duration_lost, cameratoggle, 4.f);		// Show Duration Lost
 
 }
 
