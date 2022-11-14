@@ -42,7 +42,7 @@ enum CustomerStats {
 	CUSTOMER_MAX = 10,
 	CUSTOMER_SPEED = 10,
 	CUSTOMER_TURN = 20,
-	CUSTOMER_RANDOM_SPEED = 50,
+	CUSTOMER_RANDOM_SPEED = 50
 };
 
 enum Options {

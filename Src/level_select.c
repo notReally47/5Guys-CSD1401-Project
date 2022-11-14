@@ -24,7 +24,7 @@ void Level_Select_Init()
 
 void Level_Select_Update()
 {
-	/*INITIALISE VARIABLES*/
+	/* INITIALISE VARIABLES */
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 	CP_Color btnColor = GRAY;
 
@@ -43,12 +43,13 @@ void Level_Select_Update()
 	for (col = 0; col < 2; col++, column += .5f) {
 		for (; row < row_limit; row++, height += 1.5f) {
 			if ((row + 1) <= global_level) {
-				btnColor = WHITE;
+				btnColor = WHITE;																									
 			}
 			else {
 				btnColor = GRAY;
 			}
-			drawTintedButton(btnColor, buttons.center_x * column, buttons.center_y + buttons.height * height, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+			drawTintedButton(btnColor, buttons.center_x * column, buttons.center_y + buttons.height * height,
+				buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
 
 			sprintf(level_char, "%d", (row + 1));	// To be set as Text for Level Number
 			CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f); // Set Text Size scaling to Window Height

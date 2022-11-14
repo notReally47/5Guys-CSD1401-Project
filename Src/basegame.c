@@ -84,18 +84,20 @@ void base_Init(void) {
 	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
 	//teleport = CP_Sound_Load();
+	card_init();
 	//teleport_UM();
 
-	card_init();
+	
 }
 
 void base_Update(void) {
 	int playerRow, playerCol, isCompleted = 0, set_teleporter_row = 0, set_teleporter_col = 0;
 	float currentElapsedTime = CP_System_GetDt();
-	teleport_UM();
+	//teleport_UM();
 
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		game_pause = !game_pause;
+		reset_triggered = 0;
 	}
 
 	/*Read grid*/
@@ -323,7 +325,7 @@ void base_Update(void) {
 	if (game_pause) {
 
 		/* Welcome Message at Level 01 */
-		if (global_level == 1 && is_welcome) {
+		if (global_level == 1 && is_welcome && !game_over) {
 			overlay_welcome();									// Rednders Welcome Message
 			is_welcome = welcome_done(game_pause);				// Remove is_welcome flag
 			game_pause = welcome_done(game_pause);				// Unpause game

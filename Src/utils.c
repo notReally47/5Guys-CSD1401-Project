@@ -113,11 +113,11 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 	else if (!grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
 
+		if (teleporter[0] == 1) {
+			for (int i = 1; i < 9; i++) {
+				int teleporter_stepin_posX = i * 2 - 1, teleporter_stepin_posY = i + i, teleporter_stepout_01_posX = i * 2 + 1, teleporter_stepout_01_posY = i + i + 2,
+					teleporter_stepout_02_posX = i * 2 - 3, teleporter_stepout_02_posY = i + i - 2;
 
-		for (int i = 1; i < 9; i++) {
-			int teleporter_stepin_posX = i * 2 - 1, teleporter_stepin_posY = i + i, teleporter_stepout_01_posX = i * 2 + 1, teleporter_stepout_01_posY = i + i + 2,
-				teleporter_stepout_02_posX = i * 2 - 3, teleporter_stepout_02_posY = i + i - 2;
-			if (teleporter[0] == 1) {
 				if ((i % 2) == 1) {
 					if (*posX == teleporter[teleporter_stepin_posX] && *posY == teleporter[teleporter_stepin_posY]) {
 						*posX = teleporter[teleporter_stepout_01_posX] + (*posX - prevPosX);

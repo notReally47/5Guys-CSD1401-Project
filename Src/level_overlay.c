@@ -110,7 +110,7 @@ int unpause(int game_pause) {
 /* Initialise Game_Over_Size struct with values that scale with resolution */
 struct Size initialise_game_over_size() {
 	struct Size size;
-	size.header_text_size = (float)config.settings.resolutionHeight * 0.3f;
+	size.header_text_size = (float)config.settings.resolutionHeight * 0.2f;
 	size.header_text_width = (float)config.settings.resolutionWidth / 2.75f;
 	size.header_text_height = (float)config.settings.resolutionHeight * 0.45f;
 
@@ -166,7 +166,7 @@ int game_over(int game_pause) {
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
-			game_pause = 0;
+			game_pause = 0;																										// Set to Unpause
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
 		}
 	}
@@ -245,12 +245,12 @@ struct Size initialise_welcome_size() {
 void overlay_welcome() {
 	struct Size size = initialise_welcome_size();
 	char* welcome_text = "Welcome uhh... New Guy, to Seven11! Today will be your first day on the job & we will be watching your every move."
-		"Your job is to move erm... Stuff, around to the designated place & avoid talking to the customers. However, Customers will take every chance they get to talk to you."
-		"If you waste too much time or talk to too many customers, we're afraid we will have to let you go. Yes, you can be fired on your first day!"
-		"So get out there and only move them things. You got everything? Alright, nice talk. Have a pleasant working experience with us.";
+		" Your job is to move erm... Stuff, around to the designated place & avoid talking to the customers. However, Customers will take every chance they get to talk to you."
+		" If you waste too much time or talk to too many customers, we're afraid we will have to let you go. Yes, you can be fired on your first day!"
+		" So get out there and only move them things. You got everything? Alright, nice talk. Have a pleasant working experience with us.";
 
 	char* move_text = "Uhh.. You do know how to move right? Well, if you didn't, and I'm not sure why, use the W, A, S, D keys. We have also given you the Retrace Stone together with your employee handbook."
-		"Simply press U to undo a move & R to reset everything. Be careful as undoing a move will not recover lost time! Now Then, Happy Working!";
+		" Simply press U to undo a move & R to reset everything. Be careful as undoing a move will not recover lost time! Now Then, Happy Working!";
 
 	
 	CP_Settings_NoTint();																										// Clear any Existing Tint
