@@ -6,7 +6,7 @@
 #include "mechanics.h"
 
 extern Config config;
-CP_Image spritesheet;
+CP_Image spritesheet, customer_spritesheet;
 CP_Vector CustomerS[CUSTOMER_MAX],Player,Camera,Offset[3];
 static float move;
 const float frame = 64.0f;
@@ -31,6 +31,7 @@ void init_spritesheet(float* cellSize,int cameratoggle) {
 }
 void load_spritesheet(float* cellSize,int cameratoggle) {
 	spritesheet = CP_Image_Load("./Assets/Spritesheet/spritesheet.png");
+	customer_spritesheet = CP_Image_Load("./Assets/Spritesheet/customer_spritesheet.png");
 	if (spritesheet == NULL) {
 		fprintf(stderr,"Unable to open spritesheet.png\n");
 		CP_Image_Free(&spritesheet);
@@ -173,34 +174,34 @@ void draw_customer(float cellSize,int customerPosX,int customerPosY,int customer
 	case SOKOBAN_DOWN: // down
 		if (CustomerS[i].y < celly) {
 			CustomerS[i].y += move;
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,index*frame,0.f,(index+1)*frame,frame,255);
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,index*frame,0.f,(index+1)*frame,frame,255);
 		} 
 		else
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame,0.f,frame*2.f,frame,255);
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame,0.f,frame*2.f,frame,255);
 		break;
 	case SOKOBAN_UP: // up
 		if (CustomerS[i].y > celly) {
 			CustomerS[i].y -= move;
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,(index+3)*frame,0.f,(index+4)*frame,frame,255);
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,(index+3)*frame,0.f,(index+4)*frame,frame,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame*4.f,0.f,frame*5.f,frame,255);
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame*4.f,0.f,frame*5.f,frame,255);
 		break;
 	case SOKOBAN_LEFT: // left
 		if (CustomerS[i].x > cellx) {
 			CustomerS[i].x -= move;
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,(index+3)*frame,frame,(index+4)*frame,frame*2.f,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame*4.f,frame,frame*5.f,frame*2.f,255); 
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame*4.f,frame,frame*5.f,frame*2.f,255); 
 		break;
 	case SOKOBAN_RIGHT: // right
 		if (CustomerS[i].x < cellx) {
 			CustomerS[i].x += move;
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,index*frame,frame,(index+1)*frame,frame*2.f,255);
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,index*frame,frame,(index+1)*frame,frame*2.f,255);
 		}
 		else
-			CP_Image_DrawSubImage(spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame,frame,frame*2.f,frame*2.f,255);
+			CP_Image_DrawSubImage(customer_spritesheet,CustomerS[i].x,CustomerS[i].y,Offset[0].x,Offset[0].y,frame,frame,frame*2.f,frame*2.f,255);
 		break;
 	}
 	CP_Settings_Translate(-Offset[1].x,-Offset[1].y);
@@ -251,4 +252,5 @@ void world_camera(float cellSize,int playerRow,int playerCol,int face,int camera
 */
 void free_sprite(void) {
 	CP_Image_Free(&spritesheet);
+	CP_Image_Free(&customer_spritesheet);
 }
