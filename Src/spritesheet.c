@@ -4,9 +4,11 @@
 #include "structs.h"
 #include "defines.h"
 #include "mechanics.h"
+#include "spritesheet.h"
 
 extern Config config;
 CP_Image spritesheet, customer_spritesheet;
+CP_Image spritesheet,background;
 CP_Vector CustomerS[CUSTOMER_MAX],Player,Camera,Offset[3];
 static float move;
 const float frame = 64.0f;
@@ -21,7 +23,7 @@ int index,toggled;
 void init_spritesheet(float* cellSize,int cameratoggle) {
 	*cellSize = (float)(config.settings.resolutionHeight/(SOKOBAN_GRID_ROWS/cameratoggle));
 	// Sprite Dimensions - Scale sprite based on cellSize
-	Offset[0] = CP_Vector_Scale(CP_Vector_Set(frame,frame),*cellSize/frame);
+	Offset[0] = CP_Vector_Scale(CP_Vector_Set(frame,frame),*cellSize/(frame));
 	// Offset[1]lation - Align sprite placement to the center of the cell
 	Offset[1] = CP_Vector_Scale(CP_Vector_Set((*cellSize-Offset[0].x),(*cellSize-Offset[0].y)),0.5f);
 	// Camera Translation - Aligns camera to player's position
@@ -30,6 +32,7 @@ void init_spritesheet(float* cellSize,int cameratoggle) {
 	move = (float)((int)*cellSize / (CP_System_GetFrameRate()/3.f));
 }
 void load_spritesheet(float* cellSize,int cameratoggle) {
+	load_background();
 	spritesheet = CP_Image_Load("./Assets/Spritesheet/spritesheet.png");
 	customer_spritesheet = CP_Image_Load("./Assets/Spritesheet/customer_spritesheet.png");
 	if (spritesheet == NULL) {
@@ -49,6 +52,15 @@ void load_spritesheet(float* cellSize,int cameratoggle) {
 		init_spritesheet(cellSize,cameratoggle);	// Separated initialisation to allow camera toggle
 	}
 		
+}
+void load_background(void) {
+	background = CP_Image_Load("./Assets/backgroundEmpty.png");
+	if (background == NULL) {
+		fprintf(stderr, "Unable to open backgroundEmpty.png\n");
+		CP_Image_Free(&spritesheet);
+		exit(1);
+	}
+	CP_Settings_ImageMode(CP_POSITION_CORNER);
 }
 
 /* cellx and celly scales off player's position x and y. allows for a more accurate animation when moving the player
@@ -132,7 +144,7 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 		break;
 	}
 	//CP_Settings_NoTint();
-	CP_Settings_Translate(-Offset[1].x, -Offset[1].y);
+	CP_Settings_Translate(-Offset[1].x,-Offset[1].y);
 
 	return isAnimating;
 }
@@ -248,9 +260,20 @@ void world_camera(float cellSize,int playerRow,int playerCol,int face,int camera
 	}
 	CP_Settings_Translate(-Camera.x,-Camera.y);
 }
+void revert_world_camera(void) {
+	CP_Settings_Translate(Camera.x,Camera.y);
+}
 /* frees all assets from memory when called
 */
+void draw_background(void) {
+	CP_Graphics_ClearBackground(CLEAR);
+	CP_Image_Draw(background,0.f,0.f,(float)config.settings.resolutionWidth,(float)config.settings.resolutionHeight,255);
+}
 void free_sprite(void) {
 	CP_Image_Free(&spritesheet);
 	CP_Image_Free(&customer_spritesheet);
+	free_background();
+}
+void free_background(void) {
+	CP_Image_Free(&background);
 }
