@@ -148,7 +148,7 @@ void base_Update(void) {
 		}
 
 		/* Lose Condition */
-		if (clock == 0) {
+		if (clock <= 0) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			is_game_over = 1;
 			game_pause = 1;
