@@ -10,10 +10,13 @@
 extern Config config;
 extern Customer customer[CUSTOMER_MAX];
 extern Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
+extern int time_lost,ignore_penalty;
 
+UniqueCards UM;
+CardPosition pos;
 rect card,text;
-float size1,size2;
-int cards[MAX_DECK],size,pos,pos2,infected[CUSTOMER_MAX+1],teleporter[SETTINGS];
+float textsizeheader,textsizedesc;
+int infected[CUSTOMER_MAX + 1], teleporter[SETTINGS];
 
 char* negcards[] = {
     "Contagious","Some of the customers are infectious! Talking to them will spread its germs to you, causing you to periodically stand in place and let out a cough",
@@ -29,7 +32,7 @@ char* poscards[] = {
     "Upgrade!","Your boss invested in technology to aid his employees. Receive a pair of teleporting pads for instantaneous travel across the store",
     "Intuitive","You read the customers like a book! Lower the duration the customer is engaged with you, as you answer their questions before they could even ask",
     "Abundant supplies","The shelves are well-stocked before you start your shift. Lucky for you, that means lesser packages that you have to unpack for the day",
-    "Elusive","Your display of work ethic deters customers from approaching you as they see that you're busy. Well, so long as you're by a package that is"
+    "Elusive","Shrug off your responsibilites once a day. You act as if nothing happened when you get distracted, while avoiding the time penalty"
 };
 
 void card_init(void) {
@@ -42,117 +45,230 @@ void card_init(void) {
     text.center_y = card.center_y-card.height*0.5f;
     text.width = (float)config.settings.resolutionWidth/7.f;
     text.height = card.height*0.2f;
-    size1 = (float)config.settings.resolutionHeight*0.04f;
-    size2 = (float)config.settings.resolutionHeight*0.025f;
+    textsizeheader = (float)config.settings.resolutionHeight*0.04f;
+    textsizedesc = (float)config.settings.resolutionHeight*0.025f;
     
-    /*Initialization*/
-    size = 5;
-    for (int i=0;i<SETTINGS;i++)
-        teleporter[i] = 0;
-    for (int i=0;i<MAX_DECK;i++) // set array to 0 (called cause last value has to be 0 as a buffer)
-        cards[i] = 0;
-    for (int i=0;i<=size;i++) // set all but last value to the card number
-        cards[i] = 2*i;
-    for (int i=0;i<=CUSTOMER_MAX;i++)
-        infected[i] = 0;
-    pos = CP_Random_RangeInt(0,size); 
+    /*Initialization if not in config.dat*/
+    UM.flags = 0;
+    UM.selectedflag = 0;
+    UM.negdecksize = 5;
+    UM.posdecksize = 5;
+    for (int i = 0; i <= UM.negdecksize; i++) { // set all but last value to the card number
+        UM.negcards[i] = 2 * i;                 // {0,2,4,6,8,10,0}
+        if (i == UM.negdecksize)                // the even numbers are the position of char* negcards[]
+            UM.negcards[i+1] = 0;               // set last array value as buffer  
+    }
+    for (int j = 0; j <= UM.posdecksize; j++) { // initialised separately in case there's more cards
+        UM.poscards[j] = 2 * j;
+        if (j == UM.posdecksize)
+            UM.poscards[j + 1] = 0;
+    }
+
+    /*Other initialization not dependant on saves*/
+    // shuffles left and right cards so they random selection won't be the same
+    pos.neg1 = CP_Random_RangeInt(0, UM.negdecksize);
     do {
-        pos2 = CP_Random_RangeInt(0,size);
-    } while (pos2==pos);
+        pos.neg2 = CP_Random_RangeInt(0, UM.negdecksize);
+    } while (pos.neg2 == pos.neg1);
+    // shuffles for positive cards
+    pos.pos1 = CP_Random_RangeInt(0, UM.posdecksize);
+    do {
+        pos.pos2 = CP_Random_RangeInt(0, UM.posdecksize);
+    } while (pos.pos2 == pos.pos1);
+    // array for infected mechanics
+    for (int i = 0; i <= CUSTOMER_MAX; i++)
+        infected[i] = 0;
+    teleporter[0] = 0;  // disables teleporter
 }
-void card_deck(int* POS,int cards[], int* size) {
+void mechanic_flags(void) {
+    /*Unique mechanics Initialisation*/
+    // affects time_lost
+    time_lost = 45;				// default time lost if distracted
+    if (UM.flags & 64)
+        time_lost += 15;		// lose 60 seconds if negative card is picked
+    if (UM.flags & 128)
+        time_lost -= 15;		// lose 30 seconds if positive card is picked
+    // affects duration
+    if (UM.flags & 2)	// checks if time extension UM card is selected
+        duration += 60;
+    if (UM.flags & 1024)
+        duration -= 60;	// checks if time reduction UM card is selected
+    // affects customer infection status
+    if (UM.flags & 1)
+        customer_status(customer);
+    // affects wetsign placement
+    if (UM.flags & 4)
+        wetsign_UM();
+    // affect teleport enabler
+    if (UM.flags & 32)
+        teleport_UM();
+    // affects ignore time penalty
+    ignore_penalty = 0;         // default initialise ignore_penalty to 0
+    if (UM.flags & 2048)
+        ignore_penalty = 1;     // only change to 1 if flag is active
+    // affects customer generation
+    if (global_level != 1) {
+        int CustomerBackup[2][3] = { 0 };							// removes 2 customer per stage by default
+        for (int i = 0, total = 0; i <= CUSTOMER_MAX; i++) {
+            if (customer[i].isActive && CP_Random_GetBool() == YES && total < 2) {
+                CustomerBackup[total][0] = customer[i].ogCusRow;	// save original position
+                CustomerBackup[total][1] = customer[i].ogCusCol;
+                CustomerBackup[total][2] = i;						// save customer index
+                customer[i].cusRow = 0;								// zeros both row/col to disable
+                customer[i].cusCol = 0;
+                total++;											// counter to remove maximum of 2 customers
+            }
+        }
+        if (UM.flags & 16)	// check if more customer card is selected
+            for (int i = 0; i <= CUSTOMER_MAX; i++) {
+                if (i == CustomerBackup[0][2]) {					// restores back the removed customer
+                    customer[i].cusRow = CustomerBackup[0][0];
+                    customer[i].cusCol = CustomerBackup[0][1];
+                }
+                else if (i == CustomerBackup[1][2]) {
+                    customer[i].cusRow = CustomerBackup[1][0];
+                    customer[i].cusCol = CustomerBackup[1][1];
+                }
+            }
+        if (UM.flags & 8)	// check if lesser customer card is selected
+            for (int i = 0, total = 0; i <= CUSTOMER_MAX; i++) {	// removes 2 more customers
+                if (customer[i].isActive && CP_Random_GetBool() == YES && total < 2) {
+                    customer[i].cusRow = 0;							// zeros both row/col to disable
+                    customer[i].cusCol = 0;
+                    total++;										// counter to remove maximum of 2 customers
+                }
+            }
+    }
+    // affect box generation
+    if (global_level != 1) {
+        int BoxBackup[2][3] = { 0 };
+        int KeyBackup[2][3] = { 0 };
+        for (int row = 0, totalbox = 0, totalkey = 0; row < SOKOBAN_GRID_ROWS; row++)
+            for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
+                if (grid[row][col].box && CP_Random_GetBool() == YES && totalbox < 2) {
+                    BoxBackup[totalbox][0] = row;						// save box row position
+                    BoxBackup[totalbox][1] = col;
+                    BoxBackup[totalbox][2] = grid[row][col].box;		// save box id that's being removed
+                    grid[row][col].box = 0;								// zeros the box to disable
+                    totalbox++;											// counter to remove maximum of 2 boxes
+                }
+                else if (grid[row][col].key && CP_Random_GetBool() == YES && totalkey < 2) {
+                    KeyBackup[totalkey][0] = row;
+                    KeyBackup[totalkey][1] = col;
+                    KeyBackup[totalkey][2] = grid[row][col].key;		// save key id that's being removed
+                    grid[row][col].key = 0;								// zeros the key to disable
+                    totalkey++;											// counter to remove maximum of 2 keyes
+                }
+            }
+
+        if (UM.flags & 256)
+            for (int row = 0; row < SOKOBAN_GRID_ROWS; row++)
+                for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
+                    if (row == BoxBackup[0][0] && col == BoxBackup[0][1])		// Box[0][0] -> row, Box[0][1] -> col of first box
+                        grid[row][col].box = BoxBackup[0][2];					// Restore Box ID from Box[0][2]
+                    else if (row == BoxBackup[1][0] && col == BoxBackup[1][1])
+                        grid[row][col].box = BoxBackup[1][2];
+                    else if (row == KeyBackup[0][0] && col == KeyBackup[0][1])
+                        grid[row][col].key = KeyBackup[0][2];
+                    else if (row == KeyBackup[1][0] && col == KeyBackup[1][1])
+                        grid[row][col].key = KeyBackup[1][2];
+                }
+
+
+        if (UM.flags & 512)
+            for (int row = 0, totalbox = 0, totalkey = 0; row < SOKOBAN_GRID_ROWS; row++)
+                for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
+                    if (grid[row][col].box && CP_Random_GetBool() == YES && totalbox < 2) {
+                        grid[row][col].box = 0;
+                        totalbox++;
+                    }
+                    else if (grid[row][col].key && CP_Random_GetBool() == YES && totalkey < 2) {
+                        grid[row][col].key = 0;
+                        totalkey++;
+                    }
+                }
+    }
+}
+void card_deck(int* selectedpos, int* notselectedpos, int cards[], int* size) {
     if (*size != 1){
-        for (int i=*POS;i<=*size;i++)
+        for (int i=*selectedpos;i<=*size;i++)
             cards[i] = cards[i+1];
-        *POS = CP_Random_RangeInt(0,--*size);
-        if (POS == &pos){
-            do {
-                pos2 = CP_Random_RangeInt(0,*size);
-            } while (pos2 == *POS);
-        }
-        else if (POS == &pos2){
-            do {
-                pos = CP_Random_RangeInt(0,*size);
-            } while (pos == *POS);
-        }
+        *selectedpos = CP_Random_RangeInt(0,--*size);
+        do {
+            *notselectedpos = CP_Random_RangeInt(0,*size);
+        } while (*notselectedpos == *selectedpos);
+    }
+    for (int i = 2; i < 10; i++) {
+        if (global_level == i)
+            UM.selectedflag |= (2 << (i - 2));
     }
 }
 void card_selection(int stage, int* selected) {
-    if (*selected == 0) {
-        char* pickcard[12] = { '\0' };
-        for (int i = 0; i < 12; i++)
-            pickcard[i] = (stage == 1) ? negcards[i] : poscards[i];
+    if (*selected == 0) {   // flag that removes card display on selection
+        char* pickcard[12] = { '\0' };  // pickcard/cardpos1/cardpos2 are variables that gets assigned negative/postive based on level
+        for (int i = 0; i < 12; i++)    // stage is a flag that is either 1 or 0 when called in level_transition.c
+            pickcard[i] = (stage == 1) ? negcards[i] : poscards[i]; // if stage == 1, negcards is selected for level 2,4,6,8
+        int* cardpos1 = (stage == 1) ? &pos.neg1 : &pos.pos1;
+        int* cardpos2 = (stage == 1) ? &pos.neg2 : &pos.pos2;
+        int* decksize = (stage == 1) ? &UM.negdecksize : &UM.posdecksize;
+        int* carddeck = (stage == 1) ? UM.negcards : UM.poscards;
+
+        /*Rendering of cards*/
         CP_Settings_RectMode(CP_POSITION_CENTER);
         CP_Settings_Fill(BLUEGRAY);
-        CP_Graphics_DrawRect(card.center_x, card.center_y, card.width, card.height);                                       // Card selection 1
-        CP_Graphics_DrawRect(card.center_x + card.center_x, card.center_y, card.width, card.height);                         // Card selection 2
+        CP_Graphics_DrawRect(card.center_x, card.center_y, card.width, card.height);                                                        // Left card selection
+        CP_Graphics_DrawRect(card.center_x + card.center_x, card.center_y, card.width, card.height);                                        // Right card selection
         CP_Settings_Fill(BLACK);
         CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);
-        CP_Settings_TextSize(size1);
-        CP_Font_DrawTextBox(pickcard[cards[pos]], text.center_x, text.center_y + text.height, text.width);                   // Card selection 1
-        CP_Font_DrawTextBox(pickcard[cards[pos2]], text.center_x + card.center_x, text.center_y + text.height, text.width);    // Card selection 2
-        CP_Settings_TextSize(size2);
-        CP_Font_DrawTextBox(pickcard[cards[pos] + 1], text.center_x, text.center_y + 2 * text.height, text.width);               // Card selection 1
-        CP_Font_DrawTextBox(pickcard[cards[pos2] + 1], text.center_x + card.center_x, text.center_y + 2 * text.height, text.width);// Card selection 2
+        CP_Settings_TextSize(textsizeheader);
+        CP_Font_DrawTextBox(pickcard[carddeck[*cardpos1]], text.center_x, text.center_y + text.height, text.width);                         // Left card selection
+        CP_Font_DrawTextBox(pickcard[carddeck[*cardpos2]], text.center_x + card.center_x, text.center_y + text.height, text.width);         // Right card selection
+        CP_Settings_TextSize(textsizedesc);
+        CP_Font_DrawTextBox(pickcard[carddeck[*cardpos1] + 1], text.center_x, text.center_y + 2 * text.height, text.width);                 // Left card selection
+        CP_Font_DrawTextBox(pickcard[carddeck[*cardpos2] + 1], text.center_x + card.center_x, text.center_y + 2 * text.height, text.width); // Right card selection
 
         if (CP_Input_MouseClicked()) {
             if (IsAreaClicked(card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-                card_effect(pos, cards);
-                card_deck(&pos, cards, &size);
+                card_effect(*cardpos1, carddeck, stage);
+                card_deck(cardpos1,cardpos2, carddeck, decksize);
                 *selected = 1;
             }
             else if (IsAreaClicked(card.center_x + card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-                card_effect(pos2, cards);
-                card_deck(&pos2, cards, &size);
+                card_effect(*cardpos2, carddeck, stage);
+                card_deck(cardpos2,cardpos1, carddeck, decksize);
                 *selected = 1;
             }
         }
     }
 }
-void card_effect(int pos,int cards[]) {
+void card_effect(int pos,int cards[],int stage) {
     switch (cards[pos]) {
     case 0: // Card 0 : Contagious || Card 0 : Overtime
-        if (global_level==4||global_level==8||global_level==12)
-            customer_status(customer);
-        else
-            duration = 70;
-        break;
+        UM.flags |= (stage == 1) ? 1 : 2;       // UM.flags & 1     -> customer_status(customer);
+        break;                                  // UM.flags & 2     -> duration += 30;
     case 2: // Card 2 : Leakage || Card 2 : It's a slow day
-        if (global_level==4||global_level==8||global_level==12)
-            wetsign_UM();
-        else
-            // customer_number--
-        break;
+        UM.flags |= (stage == 1) ? 4 : 8;       // UM.flags & 4     -> wetsign_UM();
+        break;                                  // UM.flags & 8     -> // customer_number--;
     case 4: // Card 4 : Holiday sales || Card 4 : Upgrade!
-        //if (level==4||level==8||level==12)
-            // customer_number++
-        //else 
-            teleport_UM();
-        break;
+        UM.flags |= (stage == 1) ? 16 : 32;     // UM.flags & 16    -> // customer_number++
+        break;                                  // UM.flags & 32    -> teleport_UM();
     case 6: // Card 6 : Blabbermouth || Card 6 : Intuitive
-        if (global_level==4||global_level==8||global_level==12)
-            lockTimer = 4.f;
-        else 
-            lockTimer = 1.5f;
-        break;
+        UM.flags |= (stage == 1) ? 64 : 128;    // UM.flags & 64    -> //time_lost += 15.f;
+        break;                                  // UM.flags & 128   -> //time_lost -= 15.f;
     case 8: // Card 8 : Bulk order || Card 8 : Abundant supplies
-        //if (level==4||level==8||level==12)
-            // number of boxes ++
-        //else
-            // number of boxes --
-        break;
+        UM.flags |= (stage == 1) ? 256 : 512;   // UM.flags & 256   -> // number of boxes ++
+        break;                                  // UM.flags & 512   -> // number of boxes --
     case 10: // Card 10 : Half shift || Card 10 : Elusive
-        if (global_level==4||global_level==8||global_level==12)
-            duration = 50;
-        else
-            // todo
-        break;
+        UM.flags |= (stage == 1) ? 1024 : 2048; // UM.flags & 1024  -> // duration -= 30;
+        break;                                  // UM.flags & 2048  -> // elusive
     }
 }
 void customer_status(Customer customer[CUSTOMER_MAX]) {
     int total = 0;
+    for (int i = 0; i <= CUSTOMER_MAX; i++)
+        infected[i] = 0;     // resets to 0 to affect different customers each stage
     for (int i = 0; i < CUSTOMER_MAX; i++) 
-        if (customer[i].isActive) {
+        if (customer[i].isActive && CP_Random_GetBool() == YES) {
             infected[i] = 1; // to be used in customer.c -> customerLock()
             total++;
             if (total == 3)
@@ -173,24 +289,6 @@ int player_status(int* isLocked) {
 void teleport_UM(void) {
     teleporter[0] = 1;      // Teleporter Enabler, 1 is on, 0 is off
     teleporter[1] = 0;      // Teleporter Cooldown
-
-    //printf("Teleporter 1 is located in %d, %d\n", teleporter[1], teleporter[2]);
-    // initialize teleport_UM array
-    //int rows = 0, cols = 0, i = 0, set_teleporter_row = 0, set_teleporter_col = 0;
-    //for (rows = 0; rows < SOKOBAN_GRID_ROWS; rows++) {
-    //    for (cols = 0; cols < SOKOBAN_GRID_COLS; cols++) {
-    //        for (i = 1; i < 9; i++) {
-    //            set_teleporter_row = i * 2 - 1;
-    //            set_teleporter_col = i + i;
-    //            if (grid[rows][cols].tele == i) {
-    //                teleporter[0] = 1;                              // Teleporter Enabler
-    //                teleporter[set_teleporter_row] = rows;          // Teleporter Row
-    //                teleporter[set_teleporter_col] = cols;          // Teleporter Column
-    //                teleporter[17] = 0;                             // Cooldown                
-    //            }
-    //        }
-    //    }
-    //}
 }
 void wetsign_UM(void) {
     int total = 0;
