@@ -36,7 +36,7 @@ void Level_Select_Update()
 	CP_Settings_NoTint();
 
 	// Header Text
-	CP_Settings_TextSize(windowwidth * .15f);
+	CP_Settings_TextSize(windowwidth * .10f);
 	drawAlignedText(WHITE, CENTER, "Select Level", windowwidth / 2, windowheight / 5);
 
 	/* For-Loop to Draw Rectangles/Buttons for multiple Levels */

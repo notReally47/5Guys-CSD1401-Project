@@ -1,28 +1,41 @@
-#include "CProcessing.h"
+#include "cprocessing.h"
 #include "mainmenu.h"
 #include "utils.h"
 #include "defines.h"
 #include "easydraw.h"
 
-float windowsWidth, windowsHeight, textSize, btnWidth, btnHeight;
+float windowWidth, windowHeight, textSize, btnWidth, btnHeight, staticX, dynamicY[16];
 CP_Sound click;
 Button back;
 
 void Credits_Init() {
 	/*INITIALISE VARIABLES*/
 	float imgSize = (float)(CP_System_GetWindowHeight() / 20.0f);
-	windowsWidth = (float)CP_System_GetWindowWidth();
-	windowsHeight = (float)CP_System_GetWindowHeight();
-	textSize = windowsHeight / 20.0f;
-	btnWidth = windowsWidth * 0.2f;
-	btnHeight = windowsHeight * 1.f / 12.f;
+	windowWidth = (float)CP_System_GetWindowWidth();
+	windowHeight = (float)CP_System_GetWindowHeight();
+	textSize = windowHeight / 20.f;
+	btnWidth = windowWidth * 0.2f;
+	btnHeight = windowHeight * 1.f / 12.f;
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
+	staticX = windowWidth / 2;
+	float yPos = 2.5f * textSize;
+	float temp = textSize;
+	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++, temp += textSize) {
+		dynamicY[i] = yPos + temp;
+	}
 }
 
 void Credits_Update() {
 	/*INITIALISE VARIABLES*/
-	CP_Vector highestPos = CP_Vector_Set(windowsWidth / 2, 3 * textSize);
+	float speed = 100.f * CP_System_GetDt();
+	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++) {
+		dynamicY[i] -= speed;
+		if (dynamicY[i] <= 0) {
+			dynamicY[i] = windowHeight;
+		}
+	}
+
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
 	/*INPUTS*/
@@ -35,7 +48,6 @@ void Credits_Update() {
 	}
 
 	/*DRAWING*/
-
 	/*Clear Background & Tint*/
 	CP_Graphics_ClearBackground(GRAY);
 	CP_Settings_NoTint();
@@ -44,25 +56,26 @@ void Credits_Update() {
 	CP_Settings_Fill(WHITE);
 	CP_Settings_Stroke(WHITE);
 	CP_Settings_TextSize(.75f * textSize);
-	drawAlignedText(BLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", highestPos.x, highestPos.y + textSize);
-	drawAlignedText(BLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", highestPos.x, highestPos.y + 2 * textSize);
-	drawAlignedText(BLACK, CENTER, "Ian Chua Rong Bin", highestPos.x, highestPos.y + 3 * textSize);
-	drawAlignedText(BLACK, CENTER, "Jerell Tan Jian Yu", highestPos.x, highestPos.y + 4 * textSize);
-	drawAlignedText(BLACK, CENTER, "Guo Yiming", highestPos.x, highestPos.y + 5 * textSize);
-	drawAlignedText(BLACK, CENTER, "Ding Xiang Cheng", highestPos.x, highestPos.y + 7 * textSize);
-	drawAlignedText(BLACK, CENTER, "Gerald Wong", highestPos.x, highestPos.y + 8 * textSize);
-	drawAlignedText(BLACK, CENTER, "Claude Comair", highestPos.x, highestPos.y + 10 * textSize);
-	drawAlignedText(WHITE, CENTER, "BGM: Pixelland by Kevin MacLeod | https://incompetech.com/", highestPos.x, highestPos.y + 11 * textSize);
-	drawAlignedText(WHITE, CENTER, "Music promoted by https://www.chosic.com/free-music/all/", highestPos.x, highestPos.y + 12 * textSize);
-	drawAlignedText(WHITE, CENTER, "Creative Commons CC BY 3.0", highestPos.x, highestPos.y + 13 * textSize);
-	drawAlignedText(WHITE, CENTER, "https://creativecommons.org/licenses/by/3.0/", highestPos.x, highestPos.y + 14 * textSize);
-	drawAlignedText(BLACK, CENTER, "All content (c) 2021 DigiPen Institute of Technology Singapore, all rights reserved.", highestPos.x, highestPos.y + 15 * textSize);
+	drawAlignedText(BLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticX, dynamicY[1]);
+	drawAlignedText(BLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticX, dynamicY[2]);
+	drawAlignedText(BLACK, CENTER, "Ian Chua Rong Bin", staticX, dynamicY[3]);
+	drawAlignedText(BLACK, CENTER, "Jerell Tan Jian Yu", staticX, dynamicY[4]);
+	drawAlignedText(BLACK, CENTER, "Guo Yiming", staticX, dynamicY[5]);
+	drawAlignedText(BLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
+	drawAlignedText(BLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
+	drawAlignedText(BLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
+	drawAlignedText(WHITE, CENTER, "BGM: Pixelland by Kevin MacLeod | https://incompetech.com/", staticX, dynamicY[11]);
+	drawAlignedText(WHITE, CENTER, "Music promoted by https://www.chosic.com/free-music/all/", staticX, dynamicY[12]);
+	drawAlignedText(WHITE, CENTER, "Creative Commons CC BY 3.0", staticX, dynamicY[13]);
+	drawAlignedText(WHITE, CENTER, "https://creativecommons.org/licenses/by/3.0/", staticX, dynamicY[14]);
+	drawAlignedText(WHITE, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[15]);
+	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + 1, dynamicY[15]);
 
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);
-	drawAlignedText(WHITE, CENTER, "TEAM MEMBERS:", highestPos.x, highestPos.y);
-	drawAlignedText(WHITE, CENTER, "INSTRUCTORS:", highestPos.x, highestPos.y + 6 * textSize);
-	drawAlignedText(WHITE, CENTER, "PRESIDENT:", highestPos.x, highestPos.y + 9 * textSize);
+	drawAlignedText(WHITE, CENTER, "TEAM MEMBERS:", staticX, dynamicY[0]);
+	drawAlignedText(WHITE, CENTER, "INSTRUCTORS:", staticX, dynamicY[6]);
+	drawAlignedText(WHITE, CENTER, "PRESIDENT:", staticX, dynamicY[9]);
 
 	/*Draw Back Button*/
 	drawButton(back);

@@ -108,7 +108,8 @@ void drawHeader(const char* stringArr[], int size) {
 	float textX = PADDING, textSize = CP_System_GetWindowHeight() / 20, textY = textSize + 2 * PADDING;
 	float divY = 2 * PADDING + textSize + textSize / 2 + 0.6 * textSize;
 	for (int i = 0; i < size; i++, textY += PADDING + textSize) {
-		drawAlignedText(BLACK, LEFT, stringArr[i], textX, textY);
+		drawAlignedText(WHITE, LEFT, stringArr[i], textX, textY);
+		drawAlignedText(BLACK, LEFT, stringArr[i], textX + 1, textY);
 		if (!(i % 2)) {
 			drawDivider(divY);
 			divY += 0.9 * textSize + 1.5 * PADDING;
