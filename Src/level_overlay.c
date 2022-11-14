@@ -142,7 +142,6 @@ struct Size initialise_game_over_size() {
 
 /* Renders Game_Over overlay */
 void overlay_game_over() {
-	global_level = 1;																								// Set Level to 1 when Game Over
 	struct Size size = initialise_game_over_size();																	// Initialise size Struct with initialise_game_over_size
 
 	CP_Settings_NoTint();																							// Clear any Existing Tint
@@ -167,6 +166,7 @@ int game_over(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			global_level = 1;																						// Set Level to 1 when Game Over
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);											// Play Clicking SFX
 			game_pause = 0;																							// Set to Unpause
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);							// Load Main Menu when MAIN MENU is Clicked
