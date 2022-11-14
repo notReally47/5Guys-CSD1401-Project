@@ -1,5 +1,5 @@
-#define _CRT_SECURE_NO_WARNINGS		// Needed to use fopen & fscanf instead of fopen_s & fscanf_s
-#define _CRT_SECURE_NO_DEPRECATE	// Needed to use fopen & fscanf instead of fopen_s & fscanf_s
+#define _CRT_SECURE_NO_WARNINGS		// Needed to use sprintf, fopen & fscanf instead of sprintf_s, fopen_s & fscanf_s
+#define _CRT_SECURE_NO_DEPRECATE	// Needed to use sprintf, fopen & fscanf instead of sprintf_s, fopen_s & fscanf_s
 #include "utils.h"					// Needed for Global Extern duration
 #include "structs.h"				// Needed for Grid and Customer Structs
 #include "defines.h"				// Needed for define values
@@ -10,8 +10,6 @@
 
 /* Parse CSV file to initialise grid array at the start of every stage/level */
 void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
-	
-	printf("In setMap! \n");
 
 	/* Initialise variables to 0 */
 	int row = 0, col = 0, read = 0, line = 0;

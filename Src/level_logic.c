@@ -1,10 +1,9 @@
-#include <stdio.h>	// Needed for printf
 
 /* Global Variable 'level' initialised to 0 whenever New Game */
 extern int global_level;
-/*debug
-* int global_level = whatever level
-*/
+//debug
+//int global_level = 6;
+
 
 /* Local File Variable 'temp_level' initialised to 0. 
 To be used when Selecting Level from Level Select Screen */
@@ -24,6 +23,5 @@ void set_temp_level(int lvl) {
 
 /* Increments 'level' to allow transition to the Next Level */
 void next_level() {
-	printf("Next Level: %d\n", global_level+1);
 	++global_level;
 }
