@@ -30,7 +30,7 @@ float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, ca
 
 int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome, duration_lost;
 
-CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL;
+CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL, levelBGM = NULL, gameMusic;
 
 /*Gif*/
 static float gifElasped;
@@ -82,15 +82,15 @@ void base_Init(void) {
 	gifElasped = 0.f;
 
 	/* SFX */
-	// Set all audio in SFX group in accordance to the audio settings
+	CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
+	levelBGM = CP_Sound_Load("./Assets/Sound/Level_BGM.wav");
 	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");
 	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
-	//teleport = CP_Sound_Load();
+	CP_Sound_PlayAdvanced(levelBGM, 0.5, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+
 	card_init();
 	teleport_UM();
-
-	
 }
 
 void base_Update(void) {
@@ -396,6 +396,8 @@ void base_Exit(void) {
 	CP_Sound_Free(&fail);
 	CP_Sound_Free(&push);
 	CP_Sound_Free(&success);
+	CP_Sound_Free(&levelBGM);
+	CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
 	//CP_Image_Free(&speechSprite);

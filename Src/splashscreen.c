@@ -22,7 +22,7 @@ void splash_screen_init(void)
     config = readFile();
     global_level = config.save.lastLevelPlayed;
 
-    gameMusic = CP_Sound_Load("./Assets/Sound/BGM.mp3");
+    gameMusic = CP_Sound_Load("./Assets/Sound/MainMenu_BGM.wav");
     gameFont = CP_Font_Load("./Assets/Font/VT323-Regular.ttf");
     CP_Font_Set(gameFont);
     img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
@@ -59,6 +59,6 @@ void splash_screen_exit(void)
 {
     CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
     CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, config.settings.audio / 100.f);
-    CP_Sound_PlayAdvanced(gameMusic, 1, 1, YES, CP_SOUND_GROUP_MUSIC);
+    CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
     CP_Image_Free(&img); // unload the img
 }

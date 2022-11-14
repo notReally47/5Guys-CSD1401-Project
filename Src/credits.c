@@ -64,10 +64,6 @@ void Credits_Update() {
 	drawAlignedText(BLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
 	drawAlignedText(BLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
 	drawAlignedText(BLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
-	drawAlignedText(WHITE, CENTER, "BGM: Pixelland by Kevin MacLeod | https://incompetech.com/", staticX, dynamicY[11]);
-	drawAlignedText(WHITE, CENTER, "Music promoted by https://www.chosic.com/free-music/all/", staticX, dynamicY[12]);
-	drawAlignedText(WHITE, CENTER, "Creative Commons CC BY 3.0", staticX, dynamicY[13]);
-	drawAlignedText(WHITE, CENTER, "https://creativecommons.org/licenses/by/3.0/", staticX, dynamicY[14]);
 	drawAlignedText(WHITE, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[15]);
 	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + 1, dynamicY[15]);
 

@@ -10,7 +10,7 @@
 
 extern Config config;
 float windowwidth, windowheight;
-CP_Sound click = NULL;
+CP_Sound click = NULL, gameMusic;
 
 rect buttons;
 
@@ -57,6 +57,8 @@ void Main_Menu_Update()
 		}
 		else if (IsAreaClicked(buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Sound_Free(&click);
+			CP_Sound_Free(&gameMusic);
 			CP_Engine_Terminate(); // quit the program
 		}
 	}
