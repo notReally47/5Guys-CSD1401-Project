@@ -101,3 +101,19 @@ typedef struct GIF {
 	int				currCol;
 	int				imgIndex;
 } GIF;
+
+typedef struct UniqueCards {		// struct to be saved in config.dat
+	int				negcards[7];	// holds {0,2,4,6,8,10,0} which is the relative position of the cards
+	int				poscards[7];
+	int				negdecksize;	// deck size decrements each selection
+	int				posdecksize;
+	unsigned int	flags;			// flag enabler for unique mechanics
+	unsigned char	selectedflag;	// flag to check if a card is selected for that particular level
+} UniqueCards;
+
+typedef struct CardPosition {
+	int				neg1;	// negative card position of left card
+	int				neg2;	// negative card position of right card
+	int				pos1;	// positive card position of left card
+	int				pos2;	// positive card position of right card
+} CardPosition;	// position is varied from 0 to 5 for the cards array

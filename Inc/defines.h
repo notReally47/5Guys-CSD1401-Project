@@ -5,13 +5,17 @@
 #define GRAY		CP_Color_Create(150, 150, 150, 255)
 #define DARKGRAY	CP_Color_Create(80, 80, 80, 100) // Tint
 #define BLACK		CP_Color_Create(0, 0, 0, 255)
-#define RED			CP_Color_Create(255, 0, 0, 255)
+#define FAINTBLACK	CP_Color_Create(0, 0, 0, 200)
+#define FADEBLACK	CP_Color_Create(0, 0, 0, 170)
+#define FADERBLACK	CP_Color_Create(0, 0, 0, 140)
+#define RED			CP_Color_Create(255, 0, 0, 200)
 #define GREEN		CP_Color_Create(0, 255, 0, 255)
 #define YELLOW		CP_Color_Create(255, 255, 0, 255)
 #define BLUEGRAY	CP_Color_Create(136, 176, 215, 255)
 #define BROWN		CP_Color_Create(165, 42, 42, 255)
 #define VIOLET		CP_Color_Create(144, 70, 132, 255)
 #define ORANGE		CP_Color_Create(226, 82, 47, 255)
+#define CLEAR		CP_Color_Create(0, 0, 0, 0)
 
 // Customer Colours
 #define NEON_PINK	CP_Color_Create(255, 0, 127, 255)	// Moving Up
