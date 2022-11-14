@@ -69,19 +69,19 @@ void Main_Menu_Update()
 	drawAlignedText(WHITE, CENTER, "Seven11", windowwidth / 2, windowheight / 5);
 
 	/*BUTTONS*/
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width,  buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 3.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 4.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(WHITE, buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width,  buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 3.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 4.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
 
 	/*TEXT*/
 	CP_Settings_TextSize(windowwidth * 0.025f);
-	global_level > 1 ? drawAlignedText(BLACK, CENTER, "Continue", buttons.center_x, buttons.center_y) : drawAlignedText(BLACK, CENTER, "Play", buttons.center_x, buttons.center_y);
-	drawAlignedText(BLACK, CENTER, "Select Level", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
-	drawAlignedText(BLACK, CENTER, "Options", buttons.center_x, buttons.center_y + buttons.height * 3.f);
-	drawAlignedText(BLACK, CENTER, "Credits", buttons.center_x, buttons.center_y + buttons.height * 4.5f);
-	drawAlignedText(BLACK, CENTER, "Quit", buttons.center_x, buttons.center_y + buttons.height * 6.f);
+	global_level > 1 ? drawAlignedText(WHITE, CENTER, "Continue", buttons.center_x, buttons.center_y) : drawAlignedText(WHITE, CENTER, "Play", buttons.center_x, buttons.center_y);
+	drawAlignedText(WHITE, CENTER, "Select Level", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
+	drawAlignedText(WHITE, CENTER, "Options", buttons.center_x, buttons.center_y + buttons.height * 3.f);
+	drawAlignedText(WHITE, CENTER, "Credits", buttons.center_x, buttons.center_y + buttons.height * 4.5f);
+	drawAlignedText(WHITE, CENTER, "Quit", buttons.center_x, buttons.center_y + buttons.height * 6.f);
 }
 
 void Main_Menu_Exit()

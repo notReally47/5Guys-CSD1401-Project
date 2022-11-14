@@ -43,16 +43,16 @@ void Level_Select_Update()
 	for (col = 0; col < 2; col++, column += .5f) {
 		for (; row < row_limit; row++, height += 1.5f) {
 			if ((row + 1) <= global_level) {
-				btnColor = WHITE;
+				btnColor = RED;
 			}
 			else {
-				btnColor = GRAY;
+				btnColor = DARKGRAY;
 			}
 			drawTintedButton(btnColor, buttons.center_x * column, buttons.center_y + buttons.height * height, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
 
 			sprintf(level_char, "%d", (row + 1));	// To be set as Text for Level Number
 			CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f); // Set Text Size scaling to Window Height
-			drawAlignedText(BLACK, CENTER, level_char, buttons.center_x * column, buttons.center_y + buttons.height * height);
+			drawAlignedText(WHITE, CENTER, level_char, buttons.center_x * column, buttons.center_y + buttons.height * height);
 		}
 		row_limit += 5;
 		height = 0.f;

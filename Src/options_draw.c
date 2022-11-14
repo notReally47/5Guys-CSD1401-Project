@@ -36,11 +36,12 @@ void setGIF(GIF* gif, const char* spritesheet, int rows, int cols, float x, floa
 }
 
 void drawTintedButton(CP_Color color, float x, float y, float w, float h, float mouse_x, float mouse_y, Flag isDDL) {
-	float strokeWeight = isDDL ? 0.0f : 3.0f;
+	float strokeWeight = isDDL ? 0.0f : 1.0f;
 	IsAreaClicked(x, y, w, h, mouse_x, mouse_y) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
 	CP_Settings_Fill(color);
 	CP_Settings_StrokeWeight(strokeWeight);
 	CP_Graphics_DrawRect(x, y, w, h);
+	CP_Settings_NoTint();
 }
 
 void drawAlignedText(CP_Color color, int alignment, const char* text, float x, float y) {

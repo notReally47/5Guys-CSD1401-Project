@@ -2,6 +2,7 @@
 #include "utils.h"			// Needed for IsAreaClicked() Function
 #include "level_logic.h"	// Needed for global extern variable 'global_level'
 #include "mainmenu.h"		// Needed to transition back to Main Menu
+#include "options_draw.h"
 
 extern Config config;		// For Resolution Settings
 CP_Sound click;				// Clicking SFX
@@ -72,19 +73,18 @@ void overlay_pause() {
 	struct Size size = initialise_pause_reset_size();
 
 	CP_Settings_NoTint();																										// Clear any Existing Tint
-	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
-	CP_Font_DrawText("PAUSE", size.header_text_width, size.header_text_height);													// Draw PAUSE Text
+	
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-	CP_Settings_Fill(RED);																										// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'Resume' Buttom
-	CP_Graphics_DrawRect(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height);	// Place Holder for 'Main Menu' Button
+	CP_Settings_TextSize(size.header_text_size);
+	drawAlignedText(WHITE, CENTER, "PAUSED", size.header_text_width, .75f * size.header_text_height);
 
-	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
-	CP_Font_DrawText("RESUME", size.button_01_position_x, size.button_01_position_y);											// Draw RESUME Text
-	CP_Font_DrawText("MAIN MENU", size.button_02_position_x, size.button_02_position_y);										// Draw MAIN MENUU Text
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
+
+	CP_Settings_TextSize(size.button_text_size);
+	drawAlignedText(WHITE, CENTER, "RESUME", size.button_01_position_x, size.button_01_position_y);
+	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_02_position_x, size.button_02_position_y);
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
@@ -143,18 +143,17 @@ void overlay_game_over() {
 	global_level = 1;
 	struct Size size = initialise_game_over_size();
 
-	CP_Settings_NoTint();																										// Clear any Existing Tint
-	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
-	CP_Font_DrawText("YOU'RE FIRED!", size.header_text_width, size.header_text_height);											// Draw "YOU'RE FIRED!" Text
+	CP_Settings_NoTint();
+	
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	CP_Settings_TextSize(size.header_text_size);
+	drawAlignedText(WHITE, CENTER, "YOU'RE FIRED!", size.header_text_width, .75f * size.header_text_height);
 
-	CP_Settings_Fill(RED);																										// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'Main Menu' Button
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
 
-	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
-	CP_Font_DrawText("MAIN MENU", size.button_01_position_x, size.button_01_position_y);										// Draw MAIN MENU Text
+	CP_Settings_TextSize(size.button_text_size);
+	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_01_position_x, size.button_01_position_y);
+	
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
@@ -179,18 +178,17 @@ void overlay_reset() {
 
 	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
-	CP_Font_DrawText("RESET MAP?", size.header_text_width, size.header_text_height);											// Draw RESET MAP? Text
+		
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	CP_Settings_TextSize(size.header_text_size);
+	drawAlignedText(WHITE, CENTER, "RESET MAP?", size.header_text_width, .75f * size.header_text_height);
+	
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
 
-	CP_Settings_Fill(RED);																										// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'YES' Buttom
-	CP_Graphics_DrawRect(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height);	// Place Holder for 'NO' Button
-
-	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
-	CP_Font_DrawText("YES", size.button_01_position_x, size.button_01_position_y);												// Draw YES Text
-	CP_Font_DrawText("NO", size.button_02_position_x, size.button_02_position_y);												// Draw NO Text
+	CP_Settings_TextSize(size.button_text_size);
+	drawAlignedText(WHITE, CENTER, "YES	", size.button_01_position_x, size.button_01_position_y);
+	drawAlignedText(WHITE, CENTER, "NO", size.button_02_position_x, size.button_02_position_y);
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
@@ -255,20 +253,21 @@ void overlay_welcome() {
 	
 	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Middle
-	CP_Settings_TextSize(size.header_text_size);																				// Set Font Size
-	CP_Font_DrawText("WELCOME!", size.header_text_width, size.header_text_height);												// Draw WELCOME Text
+		
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	CP_Settings_TextSize(size.header_text_size);
+	drawAlignedText(WHITE, CENTER, "WELCOME!", size.header_text_width, .75f * size.header_text_height);
 
-	CP_Settings_Fill(RED);																										// Set Button Colour to RED
-	CP_Graphics_DrawRect(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height);	// Place Holder for 'Let's Work' Buttom
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
 
-	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
-	CP_Settings_TextSize(size.button_text_size);																				// Set Font Size
-	CP_Font_DrawText("Let's Work", size.button_01_position_x, size.button_01_position_y);										// Draw Let's Work Text
-
+	CP_Settings_TextSize(size.button_text_size);
+	drawAlignedText(WHITE, CENTER, "Let's Work", size.button_01_position_x, size.button_01_position_y);
+	
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);
 	CP_Settings_TextSize(size.text_box_text_size);
 	CP_Font_DrawTextBox(welcome_text, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width);				// Welcome Message
 	CP_Font_DrawTextBox(move_text, size.text_box_position_x, size.text_box_position_y * 2.5f, size.text_box_row_width);			// Welcome Message
+	
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
 
