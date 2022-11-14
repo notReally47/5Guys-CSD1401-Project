@@ -49,42 +49,43 @@ void customerLogic(int cusNum, int cusRow, int cusCol, int prevCusRow, int prevC
 void customerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
 	static float delay = 0.f;
 	delay += CP_System_GetDt();
+
+	// Check if 1.5 seconds have pass before customer will move again
 	if (delay > 1.5f) {
 		for (int i = 0; i < CUSTOMER_MAX; i++) {
+			// Customers moving in a fixed path are those who are active, not idle and not random
 			if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
 				int cusRow = customer[i].cusRow;
 				int cusCol = customer[i].cusCol;
 				int curr = path[cusRow][cusCol];
 			
 				delay = 0.f;
+				
+				// If there if no path detected by the customer, it will continue to move in the direction it is facing
 				if (!curr) {
 					curr = customer[i].direction;
 				}
 				else {
 					customer[i].direction = curr;
 				}
+
 				switch (curr) {
-					// Move Up
 				case SOKOBAN_UP:
 					cusRow--;
 					customerLogic(i, cusRow, cusCol, cusRow + 1, cusCol, curr, grid, customer);
 					break;
-					// Move Left
 				case SOKOBAN_LEFT:
 					cusCol--;
 					customerLogic(i, cusRow, cusCol, cusRow, cusCol + 1, curr, grid, customer);
 					break;
-					// Move Down
 				case SOKOBAN_DOWN:
 					cusRow++;
 					customerLogic(i, cusRow, cusCol, cusRow - 1, cusCol, curr, grid, customer);
 					break;
-					// Move Right
 				case SOKOBAN_RIGHT:
 					cusCol++;
 					customerLogic(i, cusRow, cusCol, cusRow, cusCol - 1, curr, grid, customer);
 					break;
-					// Default case (if any)
 				default:
 					break;
 				}
@@ -105,10 +106,12 @@ void randomCustomerMovement(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cus
 			int state = CP_Random_RangeInt(SOKOBAN_UP, SOKOBAN_FACE_RIGHT);
 			static float delay = 0.f;
 			delay += CP_System_GetDt();
+
+			// Customer will only change state every 1.5 seconds
 			if (delay > 1.5f) {
 				delay = 0.f;
 				switch (state) {
-				case SOKOBAN_UP:
+				case SOKOBAN_UP:	// Customer Moves up
 					cusRow--;
 					customerLogic(i, cusRow, cusCol, cusRow + 1, cusCol, SOKOBAN_UP, grid, customer);
 					break;
@@ -177,6 +180,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face up */
 			case SOKOBAN_UP:
 				for (int x = 1; x <= customer[i].range; x++) {
+					// Checks if there is any obstacle blocking the customer LOS
 					if (grid[cusRow - x][cusCol].box || grid[cusRow - x][cusCol].shelf) {
 						break;
 					}
@@ -196,6 +200,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face left */
 			case SOKOBAN_LEFT:
 				for (int x = 1; x <= customer[i].range; x++) {
+					// Checks if there is any obstacle blocking the customer LOS
 					if (grid[cusRow][cusCol - x].box || grid[cusRow][cusCol - x].shelf) {
 						break;
 					}
@@ -214,6 +219,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face down */
 			case SOKOBAN_DOWN:
 				for (int x = 1; x <= customer[i].range; x++) {
+					// Checks if there is any obstacle blocking the customer LOS
 					if (grid[cusRow + x][cusCol].box || grid[cusRow + x][cusCol].shelf) {
 						break;
 					}
@@ -232,6 +238,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 				/* Face right */
 			case SOKOBAN_RIGHT:
 				for (int x = 1; x <= customer[i].range; x++) {
+					// Checks if there is any obstacle blocking the customer LOS
 					if (grid[cusRow][cusCol + x].box || grid[cusRow][cusCol + x].shelf) {
 						break;
 					}
