@@ -4,7 +4,7 @@
 #include "defines.h"
 #include "easydraw.h"
 
-float windowWidth, windowHeight, textSize, btnWidth, btnHeight, staticX, dynamicY[16];
+float windowWidth, windowHeight, textSize, btnWidth, btnHeight, staticX, dynamicY[12];
 CP_Sound click;
 Button back;
 
@@ -13,13 +13,13 @@ void Credits_Init() {
 	float imgSize = (float)(CP_System_GetWindowHeight() / 20.0f);
 	windowWidth = (float)CP_System_GetWindowWidth();
 	windowHeight = (float)CP_System_GetWindowHeight();
-	textSize = windowHeight / 20.f;
+	textSize = windowHeight / 15.f;
 	btnWidth = windowWidth * 0.2f;
 	btnHeight = windowHeight * 1.f / 12.f;
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
 	staticX = windowWidth / 2;
-	float yPos = 2.5f * textSize;
+	float yPos = .75f * textSize;
 	float temp = textSize;
 	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++, temp += textSize) {
 		dynamicY[i] = yPos + temp;
@@ -64,8 +64,8 @@ void Credits_Update() {
 	drawAlignedText(BLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
 	drawAlignedText(BLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
 	drawAlignedText(BLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
-	drawAlignedText(WHITE, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[15]);
-	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + 1, dynamicY[15]);
+	drawAlignedText(WHITE, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[11]);
+	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + 1, dynamicY[11]);
 
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);
