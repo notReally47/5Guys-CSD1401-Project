@@ -174,7 +174,6 @@ void mechanic_flags(void) {
                         grid[row][col].key = KeyBackup[1][2];
                 }
 
-
         if (UM.flags & 512)
             for (int row = 0, totalbox = 0, totalkey = 0; row < SOKOBAN_GRID_ROWS; row++)
                 for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -207,11 +206,11 @@ void card_selection(int stage, int* selected) {
     if (*selected == 0) {   // flag that removes card display on selection
         char* pickcard[12] = { '\0' };  // pickcard/cardpos1/cardpos2 are variables that gets assigned negative/postive based on level
         for (int i = 0; i < 12; i++)    // stage is a flag that is either 1 or 0 when called in level_transition.c
-            pickcard[i] = (stage == 1) ? negcards[i] : poscards[i]; // if stage == 1, negcards is selected for level 2,4,6,8
-        int* cardpos1 = (stage == 1) ? &pos.neg1 : &pos.pos1;
-        int* cardpos2 = (stage == 1) ? &pos.neg2 : &pos.pos2;
-        int* decksize = (stage == 1) ? &UM.negdecksize : &UM.posdecksize;
-        int* carddeck = (stage == 1) ? UM.negcards : UM.poscards;
+            pickcard[i] = (stage == 0) ? negcards[i] : poscards[i]; // if stage == 1, negcards is selected for level 2,4,6,8
+        int* cardpos1 = (stage == 0) ? &pos.neg1 : &pos.pos1;
+        int* cardpos2 = (stage == 0) ? &pos.neg2 : &pos.pos2;
+        int* decksize = (stage == 0) ? &UM.negdecksize : &UM.posdecksize;
+        int* carddeck = (stage == 0) ? UM.negcards : UM.poscards;
 
         /*Rendering of cards*/
         CP_Settings_RectMode(CP_POSITION_CENTER);
