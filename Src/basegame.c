@@ -28,7 +28,7 @@ char* stat[4];
 
 float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown, cusDelay;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome, duration_lost;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome, duration_lost, time_lost, ignore_penalty;
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL, levelBGM = NULL, gameMusic;
 
@@ -76,7 +76,11 @@ void base_Init(void) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
 		}
 	}
-
+	/*Unique mechanics Initialisation*/
+	// to force mechanic enabler check card_effect() for flag details
+	// UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
+	mechanic_flags(); // Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+	
 	/*GIF*/
 	setGIF(&speechSprite, "./Assets/Spritesheet/speech.png", 1, 4, 0, 0, cellSize);
 	gifElasped = 0.f;
@@ -88,14 +92,12 @@ void base_Init(void) {
 	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
 	CP_Sound_PlayAdvanced(levelBGM, 0.5, 1, TRUE, CP_SOUND_GROUP_MUSIC);
-
-	card_init();
-	teleport_UM();
 }
 
 void base_Update(void) {
 	int playerRow, playerCol, isCompleted = 0, set_teleporter_row = 0, set_teleporter_col = 0;
 	float currentElapsedTime = CP_System_GetDt();
+	
 
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
 		game_pause = !game_pause;
@@ -153,6 +155,7 @@ void base_Update(void) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			is_game_over = 1;
 			game_pause = 1;
+			card_init();	// resets all card selection/flags
 		}
 
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
@@ -173,9 +176,13 @@ void base_Update(void) {
 				/*Reset timer and turn customer inactive*/
 				elapsedLock = 0;
 				isLocked = 0;
-				duration -= 50;
-				duration_lost += 50;
-				times_distracted++;
+				if (ignore_penalty == 0) {		// UM Elusive card. Ignore time penalty once per stage
+					duration -= time_lost;
+					duration_lost += time_lost;
+					times_distracted++;
+				}
+				else if(ignore_penalty == 1) 
+					ignore_penalty = 0;		// Disables flag after getting distracted once
 				printf("Unlocked.\n");
 			}
 		}
@@ -259,8 +266,7 @@ void base_Update(void) {
 	}
 
 	/*Rendering*/
-	CP_Graphics_ClearBackground(BLUEGRAY);
-
+	draw_background(); // clears and draw background art
 	if (cameratoggle == 2)
 		world_camera(cellSize, playerRow, playerCol, face, cameratoggle);
 
@@ -331,16 +337,17 @@ void base_Update(void) {
 		}
 	}
 
+	
+	if (cameratoggle == 2)
+		revert_world_camera();
 
 	if (game_pause) {
-
 		/* Welcome Message at Level 01 */
 		if (global_level == 1 && is_welcome && !is_game_over) {
 			overlay_welcome();									// Rednders Welcome Message
 			is_welcome = welcome_done(game_pause);				// Remove is_welcome flag
 			game_pause = welcome_done(game_pause);				// Unpause game
 		}
-
 		/* Resetting Map Overlay */
 		else if (reset_triggered && clock > 0 && !is_game_over) {
 			overlay_reset();									// Renders Reset Confirmation Overlay
@@ -378,16 +385,16 @@ void base_Update(void) {
 	}
 
 	/* Show Timer */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize, stat[0], clock);
+	show_stats(cellSize, stat[0], clock, cameratoggle, 1.f);
 
 	/* Show Move Count */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 3.f, stat[1], (global_move - 1));
+	show_stats(cellSize, stat[1], global_move, cameratoggle, 2.f);
 
 	/* Show Distracted Count */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 5.f, stat[2], times_distracted);
+	show_stats(cellSize, stat[2], times_distracted, cameratoggle, 3.f);
 
 	/* Show Duration Lost */
-	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 7.f, stat[3], duration_lost);
+	show_stats(cellSize, stat[3], duration_lost, cameratoggle, 4.f);
 
 }
 
