@@ -11,7 +11,6 @@ void saveMove(Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell g
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			moves[global_move][row][col].player = grid[row][col].player;
 			moves[global_move][row][col].box = grid[row][col].box;
-			moves[global_move][row][col].customer = grid[row][col].customer;
 		}
 	}
 }
@@ -23,7 +22,6 @@ void undoMove(Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell g
 			for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 				grid[row][col].player = moves[global_move - 1][row][col].player;
 				grid[row][col].box = moves[global_move - 1][row][col].box;
-				grid[row][col].customer = moves[global_move - 1][row][col].customer;
 				moves[global_move - 1][row][col].player = 0;
 				moves[global_move - 1][row][col].box = 0;
 			}

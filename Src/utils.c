@@ -233,7 +233,7 @@ void show_stats(float text_size, float cell_size_x, float cell_size_h, char* sta
 			}
 		}
 		
-		(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d/4", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
+		(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
 		strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
 	}
 	strcat(line, buffer);																															// Concatenate line with buffer

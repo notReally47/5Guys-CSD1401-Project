@@ -1,4 +1,4 @@
-Level Duration is 2000
+Level Duration is 450
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border

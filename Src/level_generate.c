@@ -1,13 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS		// Needed to use sprintf, fopen & fscanf instead of sprintf_s, fopen_s & fscanf_s
 #define _CRT_SECURE_NO_DEPRECATE	// Needed to use sprintf, fopen & fscanf instead of sprintf_s, fopen_s & fscanf_s
 #include "utils.h"					// Needed for Global Extern duration
-#include "structs.h"				// Needed for Grid and Customer Structs
+#include "structs.h"				// Needed for Grid, Customer & Teleporter Structs
 #include "defines.h"				// Needed for define values
 #include "level_logic.h"			// Needed to use Global Extern Variable 'level'
 #include <stdio.h>					// Needed for parsing CSV file
 #include <stdlib.h>					// Needed for exit() function
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
-#include "mechanics.h"
 
 /* Parse CSV file to initialise grid array at the start of every stage/level */
 void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
@@ -16,7 +15,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 	int row = 0, col = 0, read = 0, line = 0;
 
 	/* Declare & initialise Local Customer Properties to 0 */
-	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0, teleporter_index = 0, set_teleporter_row = 0, set_teleporter_col = 0;
+	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0, teleporter_index = 0;
 
 	/* For-Loop to clear all customers first (Prevent carry-over from previous levels) */
 	for (int i = 0; i < CUSTOMER_MAX; i++) {
@@ -103,7 +102,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 
 			/* If Teleporter Exists, Initialise Teleporter Struct Property Values, with Teleporter Number ,Row and Column */
 			if (grid[row][col].tele != 0) {
-				teleporter_index = grid[row][col].tele - 1;
+				teleporter_index = grid[row][col].tele - 1;									//Decrement grid[row][col].tele value as element starts from 0
 				teleporters[teleporter_index].teleporter_number = grid[row][col].tele;
 				teleporters[teleporter_index].posX = col;
 				teleporters[teleporter_index].posY = row;

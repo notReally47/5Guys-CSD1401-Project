@@ -1,8 +1,7 @@
 
 /* Global Variable 'level' initialised to 0 whenever New Game */
 extern int global_level;
-//debug
-//int global_level = 6;
+//int global_level = 6;		// To Debug Level
 
 
 /* Local File Variable 'temp_level' initialised to 0. 
