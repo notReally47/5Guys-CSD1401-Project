@@ -325,7 +325,7 @@ void base_Update(void) {
 	if (game_pause) {
 
 		/* Welcome Message at Level 01 */
-		if (global_level == 1 && is_welcome && !game_over) {
+		if (global_level == 1 && is_welcome && !is_game_over) {
 			overlay_welcome();									// Rednders Welcome Message
 			is_welcome = welcome_done(game_pause);				// Remove is_welcome flag
 			game_pause = welcome_done(game_pause);				// Unpause game
