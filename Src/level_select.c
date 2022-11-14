@@ -7,18 +7,19 @@
 #include "level_logic.h"			// Needed to use Global Extern Variable 'level'
 #include "basegame.h"				// Needed to transit into Game Levels
 #include "easydraw.h"				// Needed for Tinted Buttons
+#include "spritesheet.h"			// Needed for background art
 #include <stdio.h>
 
 extern Config config;
-float windowwidth, windowheight;
-extern rect buttons;
+rect buttons;
 CP_Sound click;
 Button back;
 
 void Level_Select_Init()
 {
 	/*INITIALISE*/
-	float imgSize = (float)(CP_System_GetWindowHeight() / 20.0f);
+	load_background();
+	float imgSize = (float)config.settings.resolutionHeight/20.0f;
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
 }
 
@@ -32,12 +33,12 @@ void Level_Select_Update()
 	char level_char[3] = {'\0'};
 	int row = 0, col = 0, row_limit = 5;
 
-	CP_Graphics_ClearBackground(GRAY);
+	draw_background();
 	CP_Settings_NoTint();
 
 	// Header Text
-	CP_Settings_TextSize(windowwidth * .10f);
-	drawAlignedText(WHITE, CENTER, "Select Level", windowwidth / 2, windowheight / 5);
+	CP_Settings_TextSize((float)config.settings.resolutionHeight * .10f);
+	drawAlignedText(BLACK, CENTER, "Select Level", (float)config.settings.resolutionWidth / 2, (float)config.settings.resolutionHeight / 5);
 
 	/* For-Loop to Draw Rectangles/Buttons for multiple Levels */
 	for (col = 0; col < 2; col++, column += .5f) {
@@ -101,4 +102,5 @@ void Level_Select_Update()
 void Level_Select_Exit()
 {
 	CP_Image_Free(&back.img);
+	free_background();
 }

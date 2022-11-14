@@ -2,37 +2,39 @@
 #include "mainmenu.h"
 #include "utils.h"
 #include "defines.h"
+#include "spritesheet.h"
 #include "easydraw.h"
 
-float windowWidth, windowHeight, textSize, btnWidth, btnHeight, staticX, dynamicY[12];
+float textSize, btnWidth, btnHeight, staticX, dynamicY[12];
 CP_Sound click;
 Button back;
 
+extern Config config;
+
 void Credits_Init() {
 	/*INITIALISE VARIABLES*/
-	float imgSize = (float)(CP_System_GetWindowHeight() / 20.0f);
-	windowWidth = (float)CP_System_GetWindowWidth();
-	windowHeight = (float)CP_System_GetWindowHeight();
-	textSize = windowHeight / 15.f;
-	btnWidth = windowWidth * 0.2f;
-	btnHeight = windowHeight * 1.f / 12.f;
+	float imgSize = (float)config.settings.resolutionHeight / 20.0f;
+	textSize = (float)config.settings.resolutionHeight / 15.f;
+	btnWidth = (float)config.settings.resolutionWidth * 0.2f;
+	btnHeight = (float)config.settings.resolutionHeight * 1.f / 12.f;
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
-	staticX = windowWidth / 2;
+	staticX = (float)config.settings.resolutionWidth / 2;
 	float yPos = .75f * textSize;
 	float temp = textSize;
 	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++, temp += textSize) {
 		dynamicY[i] = yPos + temp;
 	}
+	load_background();
+	CP_Settings_ImageMode(CP_POSITION_CORNER);
 }
-
 void Credits_Update() {
 	/*INITIALISE VARIABLES*/
 	float speed = 100.f * CP_System_GetDt();
 	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++) {
 		dynamicY[i] -= speed;
 		if (dynamicY[i] <= 0) {
-			dynamicY[i] = windowHeight;
+			dynamicY[i] = (float)config.settings.resolutionHeight;
 		}
 	}
 
@@ -48,14 +50,14 @@ void Credits_Update() {
 	}
 
 	/*DRAWING*/
-	/*Clear Background & Tint*/
-	CP_Graphics_ClearBackground(GRAY);
+	/*Clear Background/Tint & Draws Background art*/
+	draw_background();
 	CP_Settings_NoTint();
 	
 	/*Credits*/
 	CP_Settings_Fill(WHITE);
 	CP_Settings_Stroke(WHITE);
-	CP_Settings_TextSize(.75f * textSize);
+	CP_Settings_TextSize(.50f * textSize);
 	drawAlignedText(BLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticX, dynamicY[1]);
 	drawAlignedText(BLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticX, dynamicY[2]);
 	drawAlignedText(BLACK, CENTER, "Ian Chua Rong Bin", staticX, dynamicY[3]);
@@ -64,14 +66,14 @@ void Credits_Update() {
 	drawAlignedText(BLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
 	drawAlignedText(BLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
 	drawAlignedText(BLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
-	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[11]);
-	drawAlignedText(WHITE, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + .075f * textSize, dynamicY[11]);
+	drawAlignedText(FADEBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[11]);
+	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + .035f * textSize, dynamicY[11]);
 
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);
-	drawAlignedText(WHITE, CENTER, "TEAM MEMBERS:", staticX, dynamicY[0]);
-	drawAlignedText(WHITE, CENTER, "INSTRUCTORS:", staticX, dynamicY[6]);
-	drawAlignedText(WHITE, CENTER, "PRESIDENT:", staticX, dynamicY[9]);
+	drawAlignedText(BLACK, CENTER, "TEAM MEMBERS:", staticX, dynamicY[0]);
+	drawAlignedText(BLACK, CENTER, "INSTRUCTORS:", staticX, dynamicY[6]);
+	drawAlignedText(BLACK, CENTER, "PRESIDENT:", staticX, dynamicY[9]);
 
 	/*Draw Back Button*/
 	drawButton(back);
@@ -79,4 +81,5 @@ void Credits_Update() {
 
 void Credits_Exit() {
 	CP_Image_Free(&back.img);
+	free_background();
 }

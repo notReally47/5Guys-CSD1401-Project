@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "defines.h"
 #include "settings.h"
+#include "mechanics.h"
 // declare global variables: img,fade,x,y,width,height
 CP_Image img;
 int fade, global_level;
@@ -35,7 +36,7 @@ void splash_screen_init(void)
     else {
         CP_System_Fullscreen();
     }
-
+    card_init(); // Initialise Card Mechanic at the start of the program
     fade = 0;
     x = CP_System_GetWindowWidth()>>1;
     y = CP_System_GetWindowHeight()>>1;

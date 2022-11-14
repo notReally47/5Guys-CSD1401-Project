@@ -6,26 +6,25 @@
 #include "options.h"
 #include "level_logic.h"
 #include "level_select.h"
+#include "spritesheet.h"
 #include "easydraw.h"
 
 extern Config config;
-float windowwidth, windowheight;
 CP_Sound click = NULL, gameMusic;
 
 rect buttons;
 
 void Main_Menu_Init()
 {
-	// declare/define window width/height
-	windowwidth = (float)CP_System_GetWindowWidth();
-	windowheight = (float)CP_System_GetWindowHeight();
-	CP_Settings_Stroke(BLACK);
 	CP_Settings_RectMode(CP_POSITION_CENTER); // align rectangle to the center position (else it defaults to top left corner)
+	CP_Settings_Stroke(BLACK); // black border around the rectangle
 	// define buttons
-	buttons.center_x = windowwidth * 0.5f;
-	buttons.center_y = windowheight * 0.4f;
-	buttons.width = windowwidth * 0.15f;
-	buttons.height = windowheight * 1.f / 12.f;
+	buttons.center_x = (float)config.settings.resolutionWidth * 0.5f;
+	buttons.center_y = (float)config.settings.resolutionHeight * 0.4f;
+	buttons.width = (float)config.settings.resolutionWidth * 0.1f;
+	buttons.height = (float)config.settings.resolutionHeight * 1.f / 15.f;
+
+	load_background();
 
 	// SFX
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
@@ -64,12 +63,12 @@ void Main_Menu_Update()
 	}
 
 	/*DRAWING*/
+	draw_background(); //Clear background and draws background art
 	CP_Settings_NoTint(); //Clear Tint
-	CP_Graphics_ClearBackground(GRAY); // set background to dark grey
 
-	CP_Settings_TextSize(windowwidth * .15f);
-	drawAlignedText(BLACK, CENTER, "Seven11", windowwidth / 2, windowheight / 5);
-	drawAlignedText(WHITE, CENTER, "Seven11", (windowwidth / 2) + .05f * (windowwidth * .15f), windowheight / 5);
+	CP_Settings_TextSize((float)config.settings.resolutionHeight * .15f);
+	drawAlignedText(FADEBLACK, CENTER, "Seven11", (float)config.settings.resolutionWidth / 2, (float)config.settings.resolutionHeight / 5);
+	drawAlignedText(BLACK, CENTER, "Seven11", ((float)config.settings.resolutionWidth / 2) + .05f * ((float)config.settings.resolutionWidth * .15f), (float)config.settings.resolutionHeight / 5);
 
 	/*BUTTONS*/
 	drawTintedButton(RED, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
@@ -79,7 +78,7 @@ void Main_Menu_Update()
 	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
 
 	/*TEXT*/
-	CP_Settings_TextSize(windowwidth * 0.025f);
+	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
 	global_level > 1 ? drawAlignedText(WHITE, CENTER, "Continue", buttons.center_x, buttons.center_y) : drawAlignedText(WHITE, CENTER, "Play", buttons.center_x, buttons.center_y);
 	drawAlignedText(WHITE, CENTER, "Select Level", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
 	drawAlignedText(WHITE, CENTER, "Options", buttons.center_x, buttons.center_y + buttons.height * 3.f);
@@ -89,5 +88,5 @@ void Main_Menu_Update()
 
 void Main_Menu_Exit()
 {
-
+	free_background();
 }

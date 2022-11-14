@@ -6,6 +6,7 @@
 #include "easydraw.h"
 #include "settings.h"
 #include "options.h"
+#include "spritesheet.h" // for background art
 #include <stdio.h> // sprintf_s()
 #include <stdlib.h> //_countof()
 #include <string.h> // strlen()
@@ -95,16 +96,17 @@ void Options_Init() {
 	/*GIF*/
 	timeElapsed = 0.0f;
 	setGIF(&gameplay, "./Assets/Spritesheet/gameplay_white.png", 5, 9, window.x - PADDING - imgSize * 10, up.position.y - up.btnHeight / 2, imgSize * 10);
+	
+	/*Background art*/
+	load_background();
 	/*-----------------------------------*/
-
 }
 
 void Options_Update() {
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
-	CP_Color currentResColor = ddlClicked ? DARKGRAY : GRAY;
+	CP_Color currentResColor = ddlClicked ? FADEBLACK : FADERBLACK;
 	timeElapsed += CP_System_GetDt();
 	CP_Settings_NoTint();
-	CP_Graphics_ClearBackground(GRAY);
 
 	/*INPUT*/
 
@@ -220,6 +222,9 @@ void Options_Update() {
 
 	/*RENDER*/
 
+	/*Clears and draws background art*/
+	draw_background();
+
 	/*Resolution text*/
 	const char* resList[3];
 	char halfscreenWRes[25] = { 0 };
@@ -277,18 +282,18 @@ void Options_Update() {
 	drawGIF(&gameplay, &timeElapsed, displayDuration, YES, NO);
 	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
 		drawButton(controls[i]);
-		drawAlignedText(WHITE, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y - y);
+		drawAlignedText(BLACK, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y - y);
 	}
 
 	/*Draw Resolution dropdown-list*/
 	drawTintedButton(currentResColor, currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y, YES);
-	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+	drawAlignedText(WHITE, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 
 	if (ddlClicked) {
 		float textX = window.x - 2 * PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.button.btnHeight;
 		for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++, textY += currentRes.button.btnHeight) {
-			drawTintedButton(GRAY, resolution[i].button.position.x, resolution[i].button.position.y, resolution[i].button.btnWidth, resolution[i].button.btnHeight, mouse.x, mouse.y, YES);
-			drawAlignedText(BLACK, RIGHT, resList[i], textX, textY);
+			drawTintedButton(FAINTBLACK, resolution[i].button.position.x, resolution[i].button.position.y, resolution[i].button.btnWidth, resolution[i].button.btnHeight, mouse.x, mouse.y, YES);
+			drawAlignedText(WHITE, RIGHT, resList[i], textX, textY);
 		}
 		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 	}
@@ -297,4 +302,5 @@ void Options_Update() {
 void Options_Exit() {
 	freeButtonImg(btns, 14);
 	CP_Image_Free(&gameplay.spritesheet);
+	free_background();
 }
