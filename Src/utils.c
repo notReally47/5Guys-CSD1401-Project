@@ -115,21 +115,21 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 		grid[prevPosX][prevPosY].player = 0;
 
 		if (teleporter[0] == 1 && grid[*posX][*posY].tele != 0) {
-			int tele = grid[*posX][*posY].tele - 1;
-			if ((grid[*posX][*posY].tele % 2) == 1) {
-				if (*posX == teleporters[tele].posY && *posY == teleporters[tele].posX) {
-					CP_Sound_PlayAdvanced(teleport_sound, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
-					*posX = teleporters[tele + 1].posY + (*posX - prevPosX);
-					*posY = teleporters[tele + 1].posX + (*posY - prevPosY);
-					teleporter[1] = 1;
+			int tele = grid[*posX][*posY].tele - 1;												// Teleporter Number is one more than the array element
+			if ((grid[*posX][*posY].tele % 2) == 1) {											// If The Teleporter Number is an Odd Number
+				if (*posX == teleporters[tele].posY && *posY == teleporters[tele].posX) {		// If Next Position matches the Teleporter Position
+					CP_Sound_PlayAdvanced(teleport_sound, 1, 1, FALSE, CP_SOUND_GROUP_SFX);		// Play Teleporter Sound Effect
+					*posX = teleporters[tele + 1].posY + (*posX - prevPosX);					// Move Player row to the Next Even Numbered Teleporter Row
+					*posY = teleporters[tele + 1].posX + (*posY - prevPosY);					// Move Player col to the Next Even Numbered Teleporter col
+					teleporter[1] = 1;															// Set Teleporter Cooldown to 1
 				}
 			}
-			else {
-				if (*posX == teleporters[tele].posY && *posY == teleporters[tele].posX) {
-					CP_Sound_PlayAdvanced(teleport_sound, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
-					*posX = teleporters[tele - 1].posY + (*posX - prevPosX);
-					*posY = teleporters[tele - 1].posX + (*posY - prevPosY);
-					teleporter[1] = 1;
+			else {																				// Else if Teleporter Number is an Even Number
+				if (*posX == teleporters[tele].posY && *posY == teleporters[tele].posX) {		// If Next Position matches the Teleporter Position
+					CP_Sound_PlayAdvanced(teleport_sound, 1, 1, FALSE, CP_SOUND_GROUP_SFX);		// Play Teleporter Sound Effect
+					*posX = teleporters[tele - 1].posY + (*posX - prevPosX);					// Move Player row to the Previous Odd Numbered Teleporter Row
+					*posY = teleporters[tele - 1].posX + (*posY - prevPosY);					// Move Player row to the Previous Odd Numbered Teleporter Row
+					teleporter[1] = 1;															// Set Teleporter Cooldown to 1
 				}
 				CP_Sound_Free(&teleport_sound);
 			}

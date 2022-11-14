@@ -31,6 +31,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 		customer[i].isRandom = customer_random;
 	}
 
+	/* For-Loop to clear all Teleporter first (Prevent carry-over from previous levels) */
 	for (int i = 0; i < TELEPORTER_NUMBER; i++) {
 		teleporters[i].teleporter_number = 0;
 		teleporters[i].posX = 0;
@@ -100,15 +101,9 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 					customer[customer_number].direction, customer[customer_number].range, customer[customer_number].isActive);
 			}
 
+			/* If Teleporter Exists, Initialise Teleporter Struct Property Values, with Teleporter Number ,Row and Column */
 			if (grid[row][col].tele != 0) {
 				teleporter_index = grid[row][col].tele - 1;
-				//set_teleporter_row = grid[row][col].tele * 2 - 1;
-				//set_teleporter_col = grid[row][col].tele + grid[row][col].tele;
-				////teleporter[0] = 1;                              // Teleporter Enabler
-				//teleporter[set_teleporter_row] = row;          // Teleporter Row
-				//teleporter[set_teleporter_col] = col;          // Teleporter Column
-				////teleporter[17] = 0;                             // Cooldown
-
 				teleporters[teleporter_index].teleporter_number = grid[row][col].tele;
 				teleporters[teleporter_index].posX = col;
 				teleporters[teleporter_index].posY = row;
