@@ -2,7 +2,7 @@
 #include "utils.h"			// Needed for IsAreaClicked() Function
 #include "level_logic.h"	// Needed for global extern variable 'global_level'
 #include "mainmenu.h"		// Needed to transition back to Main Menu
-#include "easydraw.h"
+#include "easydraw.h"		// Needed for Tinted Buttons
 
 extern Config config;		// For Resolution Settings
 CP_Sound click;				// Clicking SFX
@@ -70,22 +70,24 @@ struct Size initialise_pause_reset_size() {
 
 /* Render Pause Overlay */
 void overlay_pause() {
-	struct Size size = initialise_pause_reset_size();
+	struct Size size = initialise_pause_reset_size();																// Initialise size struct from initialise_pause_rest_size
 
-	CP_Settings_NoTint();																										// Clear any Existing Tint
+	CP_Settings_NoTint();																							// Clear any Existing Tint
 	
-	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());									// Set Mouse Poistions into a Vector
 
-	CP_Settings_TextSize(size.header_text_size);
-	drawAlignedText(WHITE, CENTER, "PAUSED", size.header_text_width, .75f * size.header_text_height);
+	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
+	drawAlignedText(WHITE, CENTER, "PAUSED", size.header_text_width, .75f * size.header_text_height);				// Draw Header Text
 
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Resume' Button
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y,										// Draw 'Main Menu' Button			
+		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
 
-	CP_Settings_TextSize(size.button_text_size);
-	drawAlignedText(WHITE, CENTER, "RESUME", size.button_01_position_x, size.button_01_position_y);
-	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_02_position_x, size.button_02_position_y);
-	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
+	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
+	drawAlignedText(WHITE, CENTER, "RESUME", size.button_01_position_x, size.button_01_position_y);					// Draw 'Resume' Text
+	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_02_position_x, size.button_02_position_y);				// Draw 'Main Menu' Text
+	CP_Settings_Tint(DARKGRAY);																						// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Unpause Logic, whether Resume Game or return to Main Menu */
@@ -95,13 +97,13 @@ int unpause(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
-			game_pause = 0;																										// Resume Game is Resume Button Clicked
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);											// Play Clicking SFX
+			game_pause = 0;																							// Resume Game is Resume Button Clicked
 		}
 		else if (IsAreaClicked(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);											// Play Clicking SFX
 			game_pause = 0;
-			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);							// Load Main Menu when MAIN MENU is Clicked
 		}
 	}
 	return game_pause;
@@ -140,21 +142,22 @@ struct Size initialise_game_over_size() {
 
 /* Renders Game_Over overlay */
 void overlay_game_over() {
-	global_level = 1;
-	struct Size size = initialise_game_over_size();
+	global_level = 1;																								// Set Level to 1 when Game Over
+	struct Size size = initialise_game_over_size();																	// Initialise size Struct with initialise_game_over_size
 
-	CP_Settings_NoTint();
+	CP_Settings_NoTint();																							// Clear any Existing Tint
 	
-	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	CP_Settings_TextSize(size.header_text_size);
-	drawAlignedText(WHITE, CENTER, "YOU'RE FIRED!", size.header_text_width, .75f * size.header_text_height);
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());									// Set Mouse Position into a Vector
+	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
+	drawAlignedText(WHITE, CENTER, "YOU'RE FIRED!", size.header_text_width, .75f * size.header_text_height);		// Draw Header Text
 
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Main Menu' Button
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
 
-	CP_Settings_TextSize(size.button_text_size);
-	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_01_position_x, size.button_01_position_y);
+	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
+	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_01_position_x, size.button_01_position_y);				// Draw 'Main Menu' Text
 	
-	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
+	CP_Settings_Tint(DARKGRAY);																						// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Game Over Logic, returns to Main Menu only */
@@ -164,9 +167,9 @@ int game_over(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Clicking SFX
-			game_pause = 0;																										// Set to Unpause
-			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when MAIN MENU is Clicked
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);											// Play Clicking SFX
+			game_pause = 0;																							// Set to Unpause
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);							// Load Main Menu when MAIN MENU is Clicked
 		}
 	}
 	return game_pause;
@@ -174,22 +177,24 @@ int game_over(int game_pause) {
 
 /* Render Reset Overlay */
 void overlay_reset() {
-	struct Size size = initialise_pause_reset_size();
+	struct Size size = initialise_pause_reset_size();																// Initialise size Struct with initialise_pause_reset_size
 
-	CP_Settings_NoTint();																										// Clear any Existing Tint
-	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+	CP_Settings_NoTint();																							// Clear any Existing Tint
+	CP_Settings_Fill(WHITE);																						// Set Font to WHITE
 		
-	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	CP_Settings_TextSize(size.header_text_size);
-	drawAlignedText(WHITE, CENTER, "RESET MAP?", size.header_text_width, .75f * size.header_text_height);
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());									// Set Mouse Position into a Vector
+	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
+	drawAlignedText(WHITE, CENTER, "RESET MAP?", size.header_text_width, .75f * size.header_text_height);			// Draw Header Text
 	
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Yes' Button
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y,										// Draw 'No' Button
+		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
 
-	CP_Settings_TextSize(size.button_text_size);
-	drawAlignedText(WHITE, CENTER, "YES	", size.button_01_position_x, size.button_01_position_y);
-	drawAlignedText(WHITE, CENTER, "NO", size.button_02_position_x, size.button_02_position_y);
-	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
+	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
+	drawAlignedText(WHITE, CENTER, "YES	", size.button_01_position_x, size.button_01_position_y);					// Draw 'Yes' Text
+	drawAlignedText(WHITE, CENTER, "NO", size.button_02_position_x, size.button_02_position_y);						// Draw 'No' Text
+	CP_Settings_Tint(DARKGRAY);																						// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Reset Map if Yes, return to Game if No */
@@ -199,12 +204,12 @@ int reset_check(int reset_confirmed) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
-			reset_confirmed = 1;																										
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);											// Play Click Sound
+			reset_confirmed = 1;																					// Confirm Reset													
 		}
 		else if (IsAreaClicked(size.button_02_position_x, size.button_02_position_y, size.button_02_width, size.button_02_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
-			reset_confirmed = 2;
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);											// Play Click Sound
+			reset_confirmed = 2;																					// Reset Cancelled
 		}
 	}
 	return reset_confirmed;
@@ -254,19 +259,20 @@ void overlay_welcome() {
 	CP_Settings_NoTint();																										// Clear any Existing Tint
 	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
 		
-	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	CP_Settings_TextSize(size.header_text_size);
-	drawAlignedText(WHITE, CENTER, "WELCOME!", size.header_text_width, .75f * size.header_text_height);
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());												// Set Mouse Position into a Vector
+	CP_Settings_TextSize(size.header_text_size);																				// Set Header Text Size
+	drawAlignedText(WHITE, CENTER, "WELCOME!", size.header_text_width, .75f * size.header_text_height);							// Draw Header Text
 
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,													// Draw 'Let's Work!' Button		
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
 
-	CP_Settings_TextSize(size.button_text_size);
-	drawAlignedText(WHITE, CENTER, "Let's Work", size.button_01_position_x, size.button_01_position_y);
+	CP_Settings_TextSize(size.button_text_size);																				// Set Button Text Size
+	drawAlignedText(WHITE, CENTER, "Let's Work", size.button_01_position_x, size.button_01_position_y);							// Draw 'Let's Work!' Text
 	
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);
-	CP_Settings_TextSize(size.text_box_text_size);
-	CP_Font_DrawTextBox(welcome_text, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width);				// Welcome Message
-	CP_Font_DrawTextBox(move_text, size.text_box_position_x, size.text_box_position_y * 2.5f, size.text_box_row_width);			// Welcome Message
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Center
+	CP_Settings_TextSize(size.text_box_text_size);																				// Set Welcome Message Text Size
+	CP_Font_DrawTextBox(welcome_text, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width);				// Draw Welcome Message
+	CP_Font_DrawTextBox(move_text, size.text_box_position_x, size.text_box_position_y * 2.5f, size.text_box_row_width);			// Draw Welcome Message Cont'd
 	
 	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
 }
@@ -277,7 +283,7 @@ int welcome_done(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Click Sound
 			game_pause = 0;																										// Unpause & Start Game
 		}
 	}

@@ -24,11 +24,11 @@ Customer customer[CUSTOMER_MAX];
 Teleporter teleporters[TELEPORTER_NUMBER];
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
-char* stat[3];
+char* stat[4];
 
 float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown;
 
-int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome;
+int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome, duration_lost;
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL;
 
@@ -59,15 +59,17 @@ void base_Init(void) {
 	reset_triggered = 0;
 	reset_confirmed = 0;
 	times_distracted = 0;
+	duration_lost = 0;
 	is_welcome = 1;
 	stat[0] = "Time Left: ";
 	stat[1] = "Move: ";
 	stat[2] = "Times Distracted: ";
+	stat[3] = "Time Wasted: ";
 
 	load_spritesheet(&cellSize, cameratoggle);
 	setMap(grid, customer, path, teleporters);				// Initialise Map
-	totalObjs = getObjective(grid);				// Counts number of key objective to meet
-	global_move = 1;							// Initialise move with 1 for rendering purposes*
+	totalObjs = getObjective(grid);							// Counts number of key objective to meet
+	global_move = 1;										// Initialise move with 1 for rendering purposes*
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0, m = 0; col < SOKOBAN_GRID_COLS; col++) {
 			moves[0][row][col].player = 0; //Initialise to 0 for rendering purposes
@@ -146,7 +148,7 @@ void base_Update(void) {
 		}
 
 		/* Lose Condition */
-		if (clock == 0 || times_distracted > 3) {
+		if (clock <= 0) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			is_game_over = 1;
 			game_pause = 1;
@@ -170,6 +172,8 @@ void base_Update(void) {
 				/*Reset timer and turn customer inactive*/
 				elapsedLock = 0;
 				isLocked = 0;
+				duration -= 50;
+				duration_lost += 50;
 				times_distracted++;
 				printf("Unlocked.\n");
 			}
@@ -371,6 +375,9 @@ void base_Update(void) {
 
 	/* Show Distracted Count */
 	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 5.f, stat[2], times_distracted);
+
+	/* Show Duration Lost */
+	show_stats((float)config.settings.resolutionHeight * 0.05f, cellSize * 55.f, cellSize * 7.f, stat[3], duration_lost);
 
 }
 

@@ -1,4 +1,4 @@
-Level Duration is 1500
+Level Duration is 350
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border
@@ -301,7 +301,7 @@ Level Duration is 1500
 [7][12] is Blank
 [7][13] is Blank
 [7][14] is Blank
-[7][15] is Blank
+[7][15] is a Waypoint
 [7][16] is Blank
 [7][17] is a Teleporter
 [7][18] is Blank
