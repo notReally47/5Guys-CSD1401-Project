@@ -12,6 +12,7 @@
 
 int duration = 60;
 float lockTimer = 3.f;
+CP_Sound tele = NULL;
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
@@ -113,13 +114,15 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 	else if (!grid[*posX][*posY].box) {
 		grid[prevPosX][prevPosY].player = 0;
 
-		if (teleporter[0] == 1) {
-			for (int i = 1; i < 9; i++) {
-				int teleporter_stepin_posX = i * 2 - 1, teleporter_stepin_posY = i + i, teleporter_stepout_01_posX = i * 2 + 1, teleporter_stepout_01_posY = i + i + 2,
-					teleporter_stepout_02_posX = i * 2 - 3, teleporter_stepout_02_posY = i + i - 2;
 
+		for (int i = 1; i < 9; i++) {
+			int teleporter_stepin_posX = i * 2 - 1, teleporter_stepin_posY = i + i, teleporter_stepout_01_posX = i * 2 + 1, teleporter_stepout_01_posY = i + i + 2,
+				teleporter_stepout_02_posX = i * 2 - 3, teleporter_stepout_02_posY = i + i - 2;
+			if (teleporter[0] == 1) {
+				tele = CP_Sound_Load("./Assets/Sound/SFX/Teleport.wav");
 				if ((i % 2) == 1) {
 					if (*posX == teleporter[teleporter_stepin_posX] && *posY == teleporter[teleporter_stepin_posY]) {
+						CP_Sound_PlayAdvanced(tele, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 						*posX = teleporter[teleporter_stepout_01_posX] + (*posX - prevPosX);
 						*posY = teleporter[teleporter_stepout_01_posY] + (*posY - prevPosY);
 						teleporter[17] = 1;
@@ -127,12 +130,13 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 				}
 				else {
 					if (*posX == teleporter[teleporter_stepin_posX] && *posY == teleporter[teleporter_stepin_posY]) {
+						CP_Sound_PlayAdvanced(tele, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 						*posX = teleporter[teleporter_stepout_02_posX] + (*posX - prevPosX);
 						*posY = teleporter[teleporter_stepout_02_posY] + (*posY - prevPosY);
 						teleporter[17] = 1;
 					}
 				}
-
+				CP_Sound_Free(&tele);
 			}
 		}
 
@@ -228,6 +232,12 @@ void show_stats(float text_size, float cell_size_x, float cell_size_h, char* sta
 	char buffer[20] = { 0 };																														// Buffer to convert 'value' to text/char/string
 	char line[50] = { 0 };																															// String to be printed
 	if (stat != '\0') {
+		if (stat == "Time Left: ") {
+			if (value <= 30) {
+				(value % 2) ? CP_Settings_Fill(RED) : CP_Settings_Fill(BLACK);
+			}
+		}
+		
 		(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d/4", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
 		strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
 	}
