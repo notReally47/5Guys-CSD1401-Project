@@ -26,7 +26,7 @@ Teleporter teleporters[TELEPORTER_NUMBER];
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 char* stat[4];
 
-float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown;
+float cellSize, cellAlign, sec, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown, cusDelay;
 
 int totalObjs, isLocked, activatedCusX, activatedCusY, face, game_pause, clock, stunner, isAnimating, flip, reset_triggered, reset_confirmed, cameratoggle, times_distracted, is_game_over, is_welcome, duration_lost;
 
@@ -51,6 +51,7 @@ void base_Init(void) {
 	isLocked = 0;
 	totalElapsedTime = 0.f;
 	cameratogglecooldown = 0.f;
+	cusDelay = 1.5f;
 	game_pause = 0;
 	is_game_over = 0;
 	isAnimating = 0;
@@ -209,10 +210,12 @@ void base_Update(void) {
 				pushBox = getCell(&playerRow, &playerCol, dir, grid, teleporters);
 			}
 
+			// Pushing Box around
 			if (pushBox == 1) {
 				CP_Sound_PlayAdvanced(push, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			}
 
+			// Pushing Box into objective
 			if (pushBox == 2) {
 				CP_Sound_PlayAdvanced(success, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			}
@@ -236,14 +239,21 @@ void base_Update(void) {
 			}
 		}
 
-		customerMovement(grid, path, customer);
+		// Customer Logic
+		cusDelay += CP_System_GetDt();
+		if (cusDelay > 1.5f) {
+			cusDelay = 0.f;
+			for (int i = 0; i < CUSTOMER_MAX; i++) {
+				if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
+					customerMovement(i ,grid, path, customer);
+				}
 
-		for (int i = 0; i < CUSTOMER_MAX; i++) {
-			if (customer[i].isIdle) {
-				customerIdle(i, customer);
-			}
-			else if (customer[i].isRandom) {
-				randomCustomerMovement(grid, customer);
+				if (customer[i].isActive && customer[i].isIdle) {
+					customerIdle(i, customer);
+				}
+				else if (customer[i].isActive && customer[i].isRandom) {
+					randomCustomerMovement(i, grid, customer);
+				}
 			}
 		}
 	}
