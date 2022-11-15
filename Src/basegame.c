@@ -35,7 +35,7 @@ game_pause, overlay_function, is_welcome, reset_confirmed,		// Pause/Overlays Lo
 clock, times_distracted, duration_lost,							// Stats Variables
 time_lost, ignore_penalty;										// Unique Mechanic Variables
 
-CP_Sound fail = NULL, success = NULL, push = NULL, teleport = NULL, levelBGM = NULL, gameMusic;
+CP_Sound fail = NULL, success = NULL, push = NULL, teleport_sound = NULL, levelBGM = NULL, gameMusic;
 
 /* GIF */
 static float gifElasped;
@@ -97,6 +97,7 @@ void base_Init(void) {
 	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");
 	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
+	teleport_sound = CP_Sound_Load("./Assets/Sound/SFX/Teleport.wav");
 	CP_Sound_PlayAdvanced(levelBGM, 0.5, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 }
 
@@ -414,6 +415,7 @@ void base_Exit(void) {
 	CP_Sound_Free(&fail);
 	CP_Sound_Free(&push);
 	CP_Sound_Free(&success);
+	CP_Sound_Free(&teleport_sound);
 	CP_Sound_Free(&levelBGM);
 	CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 	free_sprite();

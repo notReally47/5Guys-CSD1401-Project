@@ -18,6 +18,8 @@ rect card,text;
 float textsizeheader,textsizedesc;
 int infected[CUSTOMER_MAX + 1], teleporter[SETTINGS];
 
+CP_Sound click;
+
 char* negcards[] = {
     "Contagious","Some of the customers are infectious! Talking to them will spread its germs to you, causing you to periodically stand in place and let out a cough",
     "Leakage","Oh no! Puddles of water has formed due to faulty air conditioning on the ceiling. Wet floor signs has been put up around the store, blocking certain areas",
@@ -228,11 +230,13 @@ void card_selection(int stage, int* selected) {
 
         if (CP_Input_MouseClicked()) {
             if (IsAreaClicked(card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
                 card_effect(*cardpos1, carddeck, stage);
                 card_deck(cardpos1,cardpos2, carddeck, decksize);
                 *selected = 1;
             }
             else if (IsAreaClicked(card.center_x + card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
                 card_effect(*cardpos2, carddeck, stage);
                 card_deck(cardpos2,cardpos1, carddeck, decksize);
                 *selected = 1;

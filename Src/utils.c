@@ -13,7 +13,7 @@
 extern Config config;
 int duration=0;
 float lockTimer = 3.f;
-CP_Sound teleport_sound = NULL;
+CP_Sound teleport_sound;
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
