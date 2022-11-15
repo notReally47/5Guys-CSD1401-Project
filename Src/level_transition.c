@@ -6,6 +6,7 @@
 #include "mechanics.h"		// Needed for card_selection()
 #include "level_logic.h"	// Needed for level global variable
 #include "spritesheet.h"
+#include "easydraw.h"
 
 extern Config config;
 rect buttons;
@@ -16,8 +17,6 @@ void Level_Transition_Init()
 {
 	// declare/define window width/height
 	CP_Settings_RectMode(CP_POSITION_CENTER); // align rectangle to the center position (else it defaults to top left corner)
-	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255)); // black border around the rectangle
-	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE); // align text to the middle of the rect box
 
 	// Define buttons
 	buttons.center_x = (float)config.settings.resolutionWidth * 0.5f;
@@ -37,6 +36,9 @@ void Level_Transition_Init()
 
 void Level_Transition_Update()
 {
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	//CP_Color btnColor = selected ? PLYRRED : GRAY;
+	CP_Color lvlComplete = !(CP_System_GetFrameCount() % 5) ? PLYRRED : PLYRGRN;	// Change color every 5 frames
 	draw_background(); // clears and draws background
 
 	for (int i = 2; i < 10; i++) {
@@ -50,7 +52,7 @@ void Level_Transition_Update()
 	if (global_level == 1 || global_level == 10)
 		selected = 1;
 	
-	(selected == 0) ? CP_Settings_Fill(GRAY) : CP_Settings_Fill(RED); // Fill Rectangle RED
+	//(selected == 0) ? CP_Settings_Fill(GRAY) : CP_Settings_Fill(RED); // Fill Rectangle RED
 	if (CP_Input_MouseClicked() && selected == 1) { // Check for Mouse Input if Clicked, then checks if the Mouse is within any of the Rectangles
 		if (IsAreaClicked(buttons.center_x, buttons.center_y, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
@@ -61,19 +63,25 @@ void Level_Transition_Update()
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit); // Return to Main Menu
 		}
 	}
-	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y, buttons.width, buttons.height);							// Draw 1st Button as 'Next'
-	CP_Graphics_DrawRect(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height);	// Draw 2nd Button as 'Main Menu'
-	CP_Settings_Fill(BLACK);																							// Set Font to BLACK
+	if (selected) {
+		drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
+		drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
+	}
+	else {
+		CP_Settings_Fill(GRAY);
+		CP_Settings_StrokeWeight(0.0f);
+		CP_Graphics_DrawRect(buttons.center_x, buttons.center_y, buttons.width, buttons.height);
+		CP_Graphics_DrawRect(buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height);
+	}
 
 	// Draw Texts 'Next' & 'Main Menu' on Rectangles
 	CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f);															// Set Text Size scaling to Window Height
-	CP_Font_DrawText("Next", buttons.center_x, buttons.center_y);
-	CP_Font_DrawText("Main Menu", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
-	CP_Settings_Fill(WHITE);																							// Set Font to WHITE
+	drawAlignedText(WHITE, CENTER, "Next", buttons.center_x, buttons.center_y);											// Draw 1st Button as 'Next
+	drawAlignedText(WHITE, CENTER, "Main Menu", buttons.center_x, buttons.center_y + buttons.height * 1.5f);			// Draw 2nd Button as 'Main Menu'
 
 	// Draw Text 'Level Complete!"
-	CP_Settings_TextSize(100.f);
-	CP_Font_DrawText("Level Complete!", (float)CP_System_GetWindowWidth() / 2, 150.f);
+	CP_Settings_TextSize((float)CP_System_GetWindowWidth() * .1f);
+	drawAlignedText(lvlComplete, CENTER, "Level Complete!", (float)CP_System_GetWindowWidth() / 2, (float)config.settings.resolutionHeight / 5);
 }
 
 void Level_Transition_Exit()

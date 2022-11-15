@@ -2,8 +2,13 @@
 
 //Colours
 #define WHITE		CP_Color_Create(255, 255, 255, 255)
+#define	BGLBLUE		CP_Color_Create(207, 239, 252, 255) // Background's Light Blue
+#define	BGDBLUE		CP_Color_Create(183, 231, 250, 255) // Background's Dark Blue
+#define	BGDBLUET	CP_Color_Create(183, 231, 250, 100) // Tint
+#define PLYRGRN		CP_Color_Create(40, 177, 98, 255)	// Player's Dark Green
+#define PLYRRED		CP_Color_Create(231, 76, 60, 255)	// Player's Light Red
 #define GRAY		CP_Color_Create(150, 150, 150, 255)
-#define DARKGRAY	CP_Color_Create(80, 80, 80, 100) // Tint
+#define DARKGRAY	CP_Color_Create(80, 80, 80, 100)	// Tint
 #define BLACK		CP_Color_Create(0, 0, 0, 255)
 #define FAINTBLACK	CP_Color_Create(0, 0, 0, 200)
 #define FADEBLACK	CP_Color_Create(0, 0, 0, 170)

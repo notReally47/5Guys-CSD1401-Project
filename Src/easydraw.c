@@ -36,10 +36,9 @@ void setGIF(GIF* gif, const char* spritesheet, int rows, int cols, float x, floa
 }
 
 void drawTintedButton(CP_Color color, float x, float y, float w, float h, float mouse_x, float mouse_y, Flag isDDL) {
-	float strokeWeight = isDDL ? 0.0f : 1.0f;
-	IsAreaClicked(x, y, w, h, mouse_x, mouse_y) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
+	IsAreaClicked(x, y, w, h, mouse_x, mouse_y) ? isDDL ? CP_Settings_Tint(BGDBLUET) : CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
 	CP_Settings_Fill(color);
-	CP_Settings_StrokeWeight(strokeWeight);
+	CP_Settings_StrokeWeight(0.0f);
 	CP_Graphics_DrawRect(x, y, w, h);
 	CP_Settings_NoTint();
 }
@@ -108,8 +107,8 @@ void drawHeader(const char* stringArr[], int size) {
 	float textX = PADDING, textSize = CP_System_GetWindowHeight() / 20, textY = textSize + 2 * PADDING;
 	float divY = 2 * PADDING + textSize + textSize / 2 + 0.6 * textSize;
 	for (int i = 0; i < size; i++, textY += PADDING + textSize) {
-		drawAlignedText(WHITE, LEFT, stringArr[i], textX, textY);
-		drawAlignedText(BLACK, LEFT, stringArr[i], textX + 1, textY);
+		drawAlignedText(FADERBLACK, LEFT, stringArr[i], textX, textY);
+		drawAlignedText(BLACK, LEFT, stringArr[i], textX + 2, textY);
 		if (!(i % 2)) {
 			drawDivider(divY);
 			divY += 0.9 * textSize + 1.5 * PADDING;

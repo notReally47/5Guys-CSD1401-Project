@@ -104,7 +104,7 @@ void Options_Init() {
 
 void Options_Update() {
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
-	CP_Color currentResColor = ddlClicked ? FADEBLACK : FADERBLACK;
+	CP_Color currentResColor = ddlClicked ? BGDBLUE : BGLBLUE;
 	timeElapsed += CP_System_GetDt();
 	CP_Settings_NoTint();
 
@@ -287,15 +287,15 @@ void Options_Update() {
 
 	/*Draw Resolution dropdown-list*/
 	drawTintedButton(currentResColor, currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y, YES);
-	drawAlignedText(WHITE, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 
 	if (ddlClicked) {
 		float textX = window.x - 2 * PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.button.btnHeight;
 		for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++, textY += currentRes.button.btnHeight) {
-			drawTintedButton(FAINTBLACK, resolution[i].button.position.x, resolution[i].button.position.y, resolution[i].button.btnWidth, resolution[i].button.btnHeight, mouse.x, mouse.y, YES);
-			drawAlignedText(WHITE, RIGHT, resList[i], textX, textY);
+			drawTintedButton(BGLBLUE, resolution[i].button.position.x, resolution[i].button.position.y, resolution[i].button.btnWidth, resolution[i].button.btnHeight, mouse.x, mouse.y, YES);
+			drawAlignedText(BLACK, RIGHT, resList[i], textX, textY);
 		}
-		CP_Font_DrawText(displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+		//drawAlignedText(WHITE, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 	}
 }
 

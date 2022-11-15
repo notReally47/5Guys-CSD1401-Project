@@ -37,23 +37,23 @@ void Level_Select_Update()
 	CP_Settings_NoTint();
 
 	// Header Text
-	CP_Settings_TextSize((float)config.settings.resolutionHeight * .10f);
+	CP_Settings_TextSize((float)config.settings.resolutionWidth * .1f);
 	drawAlignedText(BLACK, CENTER, "Select Level", (float)config.settings.resolutionWidth / 2, (float)config.settings.resolutionHeight / 5);
 
 	/* For-Loop to Draw Rectangles/Buttons for multiple Levels */
 	for (col = 0; col < 2; col++, column += .5f) {
 		for (; row < row_limit; row++, height += 1.5f) {
 			if ((row + 1) <= global_level) {
-				btnColor = RED;
+				btnColor = PLYRRED;
 			}
 			else {
-				btnColor = DARKGRAY;
+				btnColor = GRAY;
 			}
 			drawTintedButton(btnColor, buttons.center_x * column, buttons.center_y + buttons.height * height,
-				buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+				buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
 
 			sprintf(level_char, "%d", (row + 1));	// To be set as Text for Level Number
-			CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.025f); // Set Text Size scaling to Window Height
+			CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.019f); // Set Text Size scaling to Window Height
 			drawAlignedText(WHITE, CENTER, level_char, buttons.center_x * column, buttons.center_y + buttons.height * height);
 		}
 		row_limit += 5;

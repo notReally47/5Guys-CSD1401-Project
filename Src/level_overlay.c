@@ -79,10 +79,10 @@ void overlay_pause() {
 	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "PAUSED", size.header_text_width, .75f * size.header_text_height);				// Draw Header Text
 
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Resume' Button
-		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y,										// Draw 'Main Menu' Button			
-		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Resume' Button
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
+	drawTintedButton(PLYRRED, size.button_02_position_x, size.button_02_position_y,										// Draw 'Main Menu' Button			
+		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
 	drawAlignedText(WHITE, CENTER, "RESUME", size.button_01_position_x, size.button_01_position_y);					// Draw 'Resume' Text
@@ -150,8 +150,8 @@ void overlay_game_over() {
 	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "YOU'RE FIRED!", size.header_text_width, .75f * size.header_text_height);		// Draw Header Text
 
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Main Menu' Button
-		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Main Menu' Button
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
 	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_01_position_x, size.button_01_position_y);				// Draw 'Main Menu' Text
@@ -186,10 +186,10 @@ void overlay_reset() {
 	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "RESET MAP?", size.header_text_width, .75f * size.header_text_height);			// Draw Header Text
 	
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Yes' Button
-		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, size.button_02_position_x, size.button_02_position_y,										// Draw 'No' Button
-		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Yes' Button
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
+	drawTintedButton(PLYRRED, size.button_02_position_x, size.button_02_position_y,										// Draw 'No' Button
+		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
 	drawAlignedText(WHITE, CENTER, "YES	", size.button_01_position_x, size.button_01_position_y);					// Draw 'Yes' Text
@@ -263,8 +263,8 @@ void overlay_welcome() {
 	CP_Settings_TextSize(size.header_text_size);																				// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "WELCOME!", size.header_text_width, .75f * size.header_text_height);							// Draw Header Text
 
-	drawTintedButton(RED, size.button_01_position_x, size.button_01_position_y,													// Draw 'Let's Work!' Button		
-		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,													// Draw 'Let's Work!' Button		
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																				// Set Button Text Size
 	drawAlignedText(WHITE, CENTER, "Let's Work", size.button_01_position_x, size.button_01_position_y);							// Draw 'Let's Work!' Text
@@ -283,7 +283,7 @@ int welcome_done(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Click Sound
+			CP_Sound_PlayAdvanced(click, .5f, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Click Sound
 			game_pause = 0;																										// Unpause & Start Game
 		}
 	}

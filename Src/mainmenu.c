@@ -66,19 +66,19 @@ void Main_Menu_Update()
 	draw_background(); //Clear background and draws background art
 	CP_Settings_NoTint(); //Clear Tint
 
-	CP_Settings_TextSize((float)config.settings.resolutionHeight * .15f);
+	CP_Settings_TextSize((float)config.settings.resolutionWidth * .15f);
 	drawAlignedText(FADEBLACK, CENTER, "Seven11", (float)config.settings.resolutionWidth / 2, (float)config.settings.resolutionHeight / 5);
-	drawAlignedText(BLACK, CENTER, "Seven11", ((float)config.settings.resolutionWidth / 2) + .05f * ((float)config.settings.resolutionWidth * .15f), (float)config.settings.resolutionHeight / 5);
+	drawAlignedText(PLYRGRN, CENTER, "Seven11", ((float)config.settings.resolutionWidth / 2) + .05f * ((float)config.settings.resolutionWidth * .15f), (float)config.settings.resolutionHeight / 5);
 
 	/*BUTTONS*/
-	drawTintedButton(RED, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width,  buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 3.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 4.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
-	drawTintedButton(RED, buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, mousePos.x, mousePos.y, YES);
+	drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
+	drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width,  buttons.height, mousePos.x, mousePos.y, NO);
+	drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y + buttons.height * 3.f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
+	drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y + buttons.height * 4.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
+	drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y + buttons.height * 6.f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
 
 	/*TEXT*/
-	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
+	CP_Settings_TextSize((float)config.settings.resolutionWidth * 0.019f);
 	global_level > 1 ? drawAlignedText(WHITE, CENTER, "Continue", buttons.center_x, buttons.center_y) : drawAlignedText(WHITE, CENTER, "Play", buttons.center_x, buttons.center_y);
 	drawAlignedText(WHITE, CENTER, "Select Level", buttons.center_x, buttons.center_y + buttons.height * 1.5f);
 	drawAlignedText(WHITE, CENTER, "Options", buttons.center_x, buttons.center_y + buttons.height * 3.f);
