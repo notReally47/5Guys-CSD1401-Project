@@ -79,7 +79,7 @@ Level Duration is 350
 [1][36] is Blank
 [1][37] is a Key
 [1][38] is Blank
-[1][39] is Blank
+[1][39] is a Key
 [1][40] is a Border
 [2][0] is a Border
 [2][1] is a Shelf
@@ -187,7 +187,7 @@ Level Duration is 350
 [4][21] is Blank
 [4][22] is Blank
 [4][23] is Blank
-[4][24] is Blank
+[4][24] is a Customer
 [4][25] is Blank
 [4][26] is Blank
 [4][27] is Blank
@@ -503,7 +503,7 @@ Level Duration is 350
 [12][9] is Blank
 [12][10] is Blank
 [12][11] is Blank
-[12][12] is Blank
+[12][12] is a Box
 [12][13] is Blank
 [12][14] is a Waypoint
 [12][15] is Blank
@@ -1022,7 +1022,7 @@ Level Duration is 350
 [24][36] is Blank
 [24][37] is Blank
 [24][38] is Blank
-[24][39] is Blank
+[24][39] is a Key
 [24][40] is a Border
 [25][0] is a Border
 [25][1] is a Key
@@ -1080,7 +1080,7 @@ Level Duration is 350
 [26][12] is a Shelf
 [26][13] is Blank
 [26][14] is Blank
-[26][15] is Blank
+[26][15] is a Customer
 [26][16] is Blank
 [26][17] is Blank
 [26][18] is Blank
@@ -1097,7 +1097,7 @@ Level Duration is 350
 [26][29] is Blank
 [26][30] is Blank
 [26][31] is Blank
-[26][32] is Blank
+[26][32] is a Waypoint
 [26][33] is Blank
 [26][34] is a Shelf
 [26][35] is Blank
@@ -1180,7 +1180,7 @@ Level Duration is 350
 [28][30] is Blank
 [28][31] is Blank
 [28][32] is Blank
-[28][33] is Blank
+[28][33] is a Box
 [28][34] is a Shelf
 [28][35] is Blank
 [28][36] is Blank

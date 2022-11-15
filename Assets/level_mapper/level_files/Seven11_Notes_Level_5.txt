@@ -1,4 +1,4 @@
-Level Duration is 450
+Level Duration is 550
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border
@@ -336,7 +336,7 @@ Level Duration is 450
 [8][6] is Blank
 [8][7] is Blank
 [8][8] is Blank
-[8][9] is Blank
+[8][9] is a Box
 [8][10] is Blank
 [8][11] is a Shelf
 [8][12] is Blank
@@ -388,7 +388,7 @@ Level Duration is 450
 [9][17] is Blank
 [9][18] is Blank
 [9][19] is Blank
-[9][20] is Blank
+[9][20] is a Key
 [9][21] is Blank
 [9][22] is Blank
 [9][23] is Blank
@@ -399,7 +399,7 @@ Level Duration is 450
 [9][28] is Blank
 [9][29] is Blank
 [9][30] is Blank
-[9][31] is Blank
+[9][31] is a Box
 [9][32] is Blank
 [9][33] is Blank
 [9][34] is Blank
@@ -628,7 +628,7 @@ Level Duration is 450
 [15][11] is a Shelf
 [15][12] is a Shelf
 [15][13] is a Shelf
-[15][14] is Blank
+[15][14] is a Key
 [15][15] is a Shelf
 [15][16] is Blank
 [15][17] is Blank
@@ -640,7 +640,7 @@ Level Duration is 450
 [15][23] is Blank
 [15][24] is Blank
 [15][25] is a Shelf
-[15][26] is Blank
+[15][26] is a Key
 [15][27] is a Shelf
 [15][28] is a Shelf
 [15][29] is a Shelf
@@ -880,7 +880,7 @@ Level Duration is 450
 [21][17] is Blank
 [21][18] is Blank
 [21][19] is Blank
-[21][20] is Blank
+[21][20] is a Key
 [21][21] is Blank
 [21][22] is Blank
 [21][23] is Blank
@@ -1111,7 +1111,7 @@ Level Duration is 450
 [27][2] is Blank
 [27][3] is Blank
 [27][4] is Blank
-[27][5] is Blank
+[27][5] is a Box
 [27][6] is Blank
 [27][7] is Blank
 [27][8] is Blank
@@ -1143,7 +1143,7 @@ Level Duration is 450
 [27][34] is Blank
 [27][35] is Blank
 [27][36] is Blank
-[27][37] is Blank
+[27][37] is a Box
 [27][38] is Blank
 [27][39] is Blank
 [27][40] is a Border

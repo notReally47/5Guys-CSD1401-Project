@@ -85,7 +85,7 @@ void base_Init(void) {
 	/*Unique mechanics Initialisation*/
 	// to force mechanic enabler check card_effect() for flag details
 	// UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
-	mechanic_flags(); // Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+	//mechanic_flags(); // Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
 	total_objectives = getObjective(grid);
 	
 	/*GIF*/
