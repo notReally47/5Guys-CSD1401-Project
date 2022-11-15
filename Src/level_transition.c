@@ -7,6 +7,7 @@
 #include "level_logic.h"	// Needed for level global variable
 #include "spritesheet.h"
 #include "easydraw.h"
+#include "settings.h"
 
 extern Config config;
 rect buttons;
@@ -43,8 +44,11 @@ void Level_Transition_Update()
 
 	for (int i = 2; i < 10; i++) {
 		if (global_level == i) {
-			if (!(UM.selectedflag & 2 << (i - 2)))
+			if (!(UM.selectedflag & 2 << (i - 2))) {
 				card_selection(i%2, &applied);
+				config.UM = UM;
+				writeConfig(config);
+			}
 			else
 				applied = YES;
 		}

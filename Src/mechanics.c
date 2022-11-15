@@ -54,21 +54,27 @@ void card_init(void) {
     textsizeheader = (float)config.settings.resolutionHeight*0.04f;
     textsizedesc = (float)config.settings.resolutionHeight*0.025f;
     
+    if (global_level <= 1) {
     /*Initialization if not in config.dat*/
-    UM.flags = 0;
-    UM.selectedflag = 0;
-    UM.negdecksize = 5;
-    UM.posdecksize = 5;
-    for (int i = 0; i <= UM.negdecksize; i++) { // set all but last value to the card number
-        UM.negcards[i] = 2 * i;                 // {0,2,4,6,8,10,0}
-        if (i == UM.negdecksize)                // the even numbers are the position of char* negcards[]
-            UM.negcards[i+1] = 0;               // set last array value as buffer  
+        UM.flags = 0;
+        UM.selectedflag = 0;
+        UM.negdecksize = 5;
+        UM.posdecksize = 5;
+        for (int i = 0; i <= UM.negdecksize; i++) { // set all but last value to the card number
+            UM.negcards[i] = 2 * i;                 // {0,2,4,6,8,10,0}
+            if (i == UM.negdecksize)                // the even numbers are the position of char* negcards[]
+                UM.negcards[i+1] = 0;               // set last array value as buffer  
+        }
+        for (int j = 0; j <= UM.posdecksize; j++) { // initialised separately in case there's more cards
+            UM.poscards[j] = 2 * j;
+            if (j == UM.posdecksize)
+                UM.poscards[j + 1] = 0;
+        }
     }
-    for (int j = 0; j <= UM.posdecksize; j++) { // initialised separately in case there's more cards
-        UM.poscards[j] = 2 * j;
-        if (j == UM.posdecksize)
-            UM.poscards[j + 1] = 0;
+    else {
+        UM = config.UM;
     }
+    
 
     /*Other initialization not dependant on saves*/
     // shuffles left and right cards so they random selection won't be the same

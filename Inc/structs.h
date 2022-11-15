@@ -14,20 +14,19 @@ typedef struct Settings {
 	unsigned int	resolutionHeight; /*540, 1080*/
 } Settings;
 
-typedef struct Keybinds {
-	CP_KEY			moveUp;
-	CP_KEY			moveLeft;
-	CP_KEY			moveDown;
-	CP_KEY			moveRight;
-	CP_KEY			undoMove;
-	CP_KEY			resetMap;
-	CP_KEY			exitGame;
-} Keybinds;
+typedef struct UniqueCards {		// struct to be saved in config.dat
+	int				negcards[7];	// holds {0,2,4,6,8,10,0} which is the relative position of the cards
+	int				poscards[7];
+	int				negdecksize;	// deck size decrements each selection
+	int				posdecksize;
+	unsigned int	flags;			// flag enabler for unique mechanics
+	unsigned char	selectedflag;	// flag to check if a card is selected for that particular level
+} UniqueCards;
 
 typedef struct Config {
 	Save			save;
 	Settings		settings;
-	Keybinds		keybinds;
+	UniqueCards		UM;
 } Config;
 
 typedef struct Customer {
@@ -101,15 +100,6 @@ typedef struct GIF {
 	int				currCol;
 	int				imgIndex;
 } GIF;
-
-typedef struct UniqueCards {		// struct to be saved in config.dat
-	int				negcards[7];	// holds {0,2,4,6,8,10,0} which is the relative position of the cards
-	int				poscards[7];
-	int				negdecksize;	// deck size decrements each selection
-	int				posdecksize;
-	unsigned int	flags;			// flag enabler for unique mechanics
-	unsigned char	selectedflag;	// flag to check if a card is selected for that particular level
-} UniqueCards;
 
 typedef struct CardPosition {
 	int				neg1;	// negative card position of left card

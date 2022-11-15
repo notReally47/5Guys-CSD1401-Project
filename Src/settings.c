@@ -16,12 +16,6 @@ Config readFile() {
 	.settings.audio = 50,
 	.settings.resolutionWidth = (unsigned int)(GetSystemMetrics(SM_CXSCREEN) / 2),
 	.settings.resolutionHeight = (unsigned int) (GetSystemMetrics(SM_CYSCREEN) / 2),
-	.keybinds.moveUp = 'W',
-	.keybinds.moveLeft = 'A',
-	.keybinds.moveDown = 'S',
-	.keybinds.moveRight = 'D',
-	.keybinds.undoMove = 'U',
-	.keybinds.resetMap = 'R'
 	};
 
 	FILE* file;
