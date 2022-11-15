@@ -1,6 +1,6 @@
 #include "cprocessing.h"			// Needed for C Processing Functions
 #include "structs.h"				// Needed for Game Asset Structs
-#include "customer.h"
+#include "customer.h"				
 #include "utils.h"
 #include "defines.h"				// Needed for Defined Values
 #include "settings.h"
@@ -9,7 +9,7 @@
 #include "mainmenu.h"
 #include "movement.h"				// Needed for saveMove(), undoMove() & resetMap() functions
 #include "level_logic.h"			// Needed for extern global_level and leveling logic
-#include "level_generate.h"			// Needed to Generate Game Map
+#include "level_generate.h"			// Needed for set_map();
 #include "level_transition.h"		// Needed to transit to Level Transition state
 #include "level_overlay.h"			// Needed for Overlays during Welcome, Pause, Reset or Game Over
 #include "easydraw.h"
@@ -76,8 +76,7 @@ void base_Init(void) {
 	stat[3] = "Time Wasted: ";										// Text Stat to print for Time Wasted Getting Distracted
 
 	load_spritesheet(&cellSize, cameratoggle);
-	setMap(grid, customer, path, teleporters);						// Initialise Map
-	//total_objectives = getObjective(grid);							// Counts number of key objective to meet
+	set_map(grid, customer, path, teleporters);						// Initialise Map
 	global_move = 1;												// Initialise move with 1 for rendering purposes*
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0, m = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -239,7 +238,7 @@ void base_Update(void) {
 			/*If there is movement.*/
 			int pushBox = 0;
 			if (dir > 0) {
-				saveMove(moves, grid);
+				save_move(moves, grid);
 				pushBox = getCell(&playerRow, &playerCol, dir, grid, teleporters);
 			}
 
@@ -255,7 +254,7 @@ void base_Update(void) {
 
 			/* Undo Move */
 			if (CP_Input_KeyTriggered(KEY_U) && global_move > 1) {
-				undoMove(moves, grid);
+				undo_move(moves, grid);
 				face = 0;
 			}
 
@@ -385,7 +384,7 @@ void base_Update(void) {
 
 			/* If 'YES' was Clicked */
 			if (reset_confirmed == 1) {
-				resetMap(moves, grid, customer, path, teleporters);			// Resets grid to the initial values based on the CSV file
+				reset_map(moves, grid, customer, path, teleporters);			// Resets grid to the initial values based on the CSV file
 				totalElapsedTime = 0;										// Reset Timer
 				face = 0;													// Reset Player Direcction
 				reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
@@ -419,7 +418,7 @@ void base_Update(void) {
 
 	/* Show Stats */
 	show_stats(cellSize, stat[0], clock, cameratoggle, 1.f);				// Show Timer
-	show_stats(cellSize, stat[1], global_move, cameratoggle, 2.f);			// Show Move Count
+	show_stats(cellSize, stat[1], global_move - 1, cameratoggle, 2.f);		// Show Move Count
 	show_stats(cellSize, stat[2], times_distracted, cameratoggle, 3.f);		// Show Number of Times Distracted Count
 	show_stats(cellSize, stat[3], duration_lost, cameratoggle, 4.f);		// Show Duration Lost
 
