@@ -10,7 +10,7 @@
 
 extern Config config;
 rect buttons;
-int selected;
+Flag applied;
 CP_Sound nextLvl = NULL, click;
 
 void Level_Transition_Init()
@@ -24,7 +24,7 @@ void Level_Transition_Init()
 	buttons.width = (float)config.settings.resolutionWidth * 0.1f;
 	buttons.height = (float)config.settings.resolutionHeight * 1.f / 12.f;
 
-	selected = 0;
+	applied = NO;
 
 	// Level Complete SFX
 	nextLvl = CP_Sound_Load("./Assets/Sound/SFX/Level.wav");
@@ -44,16 +44,15 @@ void Level_Transition_Update()
 	for (int i = 2; i < 10; i++) {
 		if (global_level == i) {
 			if (!(UM.selectedflag & 2 << (i - 2)))
-				card_selection(i%2, &selected);
+				card_selection(i%2, &applied);
 			else
-				selected = 1;
+				applied = YES;
 		}
 	}
 	if (global_level == 1 || global_level == 10)
-		selected = 1;
+		applied = YES;
 	
-	//(selected == 0) ? CP_Settings_Fill(GRAY) : CP_Settings_Fill(RED); // Fill Rectangle RED
-	if (CP_Input_MouseClicked() && selected == 1) { // Check for Mouse Input if Clicked, then checks if the Mouse is within any of the Rectangles
+	if (CP_Input_MouseClicked() && applied) { // Check for Mouse Input if Clicked, then checks if the Mouse is within any of the Rectangles
 		if (IsAreaClicked(buttons.center_x, buttons.center_y, buttons.width, buttons.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Engine_SetNextGameState(base_Init, base_Update, base_Exit); // Go to the Next Level
@@ -63,7 +62,7 @@ void Level_Transition_Update()
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit); // Return to Main Menu
 		}
 	}
-	if (selected) {
+	if (applied) {
 		drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
 		drawTintedButton(PLYRRED, buttons.center_x, buttons.center_y + buttons.height * 1.5f, buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
 	}
@@ -86,6 +85,7 @@ void Level_Transition_Update()
 
 void Level_Transition_Exit()
 {
+	free_buttons();
 	free_background();
 	CP_Sound_Free(&nextLvl);
 }

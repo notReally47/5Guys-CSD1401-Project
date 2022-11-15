@@ -6,6 +6,7 @@
 #include "basegame.h"       // for base game state
 #include "mechanics.h"      // to call function
 #include "level_generate.h"
+#include "easydraw.h"
 
 extern Config config;
 extern Customer customer[CUSTOMER_MAX];
@@ -14,9 +15,12 @@ extern int time_lost,ignore_penalty;
 
 UniqueCards UM;
 CardPosition pos;
+Button apply, discard;
 rect card,text;
 float textsizeheader,textsizedesc;
 int infected[CUSTOMER_MAX + 1], teleporter[SETTINGS];
+Flag selected = NO;
+int cardChosen = 0;
 
 CP_Sound click;
 
@@ -204,8 +208,14 @@ void card_deck(int* selectedpos, int* notselectedpos, int cards[], int* size) {
             UM.selectedflag |= (2 << (i - 2));
     }
 }
-void card_selection(int stage, int* selected) {
-    if (*selected == 0) {   // flag that removes card display on selection
+void card_selection(int stage, int* applied) {
+    /*Initialise Apply and Discard Buttons*/
+    CP_Vector window = CP_Vector_Set((float)CP_System_GetWindowWidth(), (float)(CP_System_GetWindowHeight()));
+    float imgSize = window.y / 20.f;
+    setButton(&apply, "./Assets/UI/Apply.png", window.x / 2.f - .75f * imgSize, window.y - (window.y / 5.f), imgSize, imgSize, YES);
+    setButton(&discard, "./Assets/UI/Discard.png", window.x / 2.f + .75f * imgSize, window.y - (window.y / 5.f), imgSize, imgSize, YES);
+
+    if (*applied == 0) {   // flag that removes card display on selection
         char* pickcard[12] = { '\0' };  // pickcard/cardpos1/cardpos2 are variables that gets assigned negative/postive based on level
         for (int i = 0; i < 12; i++)    // stage is a flag that is either 1 or 0 when called in level_transition.c
             pickcard[i] = (stage == 0) ? negcards[i] : poscards[i]; // if stage == 1, negcards is selected for level 2,4,6,8
@@ -213,6 +223,15 @@ void card_selection(int stage, int* selected) {
         int* cardpos2 = (stage == 0) ? &pos.neg2 : &pos.pos2;
         int* decksize = (stage == 0) ? &UM.negdecksize : &UM.posdecksize;
         int* carddeck = (stage == 0) ? UM.negcards : UM.poscards;
+
+        if (cardChosen == 1) {
+            CP_Settings_Fill(VIOLET);
+            CP_Graphics_DrawRect(card.center_x, card.center_y, card.width + 0.01f * (float)CP_System_GetWindowWidth(), card.height + 0.01f * (float)CP_System_GetWindowWidth());
+        }
+        else if (cardChosen == 2) {
+            CP_Settings_Fill(VIOLET);
+            CP_Graphics_DrawRect(card.center_x + card.center_x, card.center_y, card.width + 0.01f * (float)CP_System_GetWindowWidth(), card.height + 0.01f * (float)CP_System_GetWindowWidth());
+        }
 
         /*Rendering of cards*/
         CP_Settings_RectMode(CP_POSITION_CENTER);
@@ -227,19 +246,53 @@ void card_selection(int stage, int* selected) {
         CP_Settings_TextSize(textsizedesc);
         CP_Font_DrawTextBox(pickcard[carddeck[*cardpos1] + 1], text.center_x, text.center_y + 2 * text.height, text.width);                 // Left card selection
         CP_Font_DrawTextBox(pickcard[carddeck[*cardpos2] + 1], text.center_x + card.center_x, text.center_y + 2 * text.height, text.width); // Right card selection
+        
+        /*Draw Apply and Discard Buttons*/
+        if (selected) {
+            drawButton(apply);
+            drawButton(discard);
+        }
 
         if (CP_Input_MouseClicked()) {
+            /*Choose Card No. 1*/
             if (IsAreaClicked(card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                selected = YES;
+                cardChosen = 1;
                 CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
-                card_effect(*cardpos1, carddeck, stage);
-                card_deck(cardpos1,cardpos2, carddeck, decksize);
-                *selected = 1;
             }
+            /*Choose Card No. 2*/
             else if (IsAreaClicked(card.center_x + card.center_x, card.center_y, card.width, card.height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                selected = YES;
+                cardChosen = 2;
                 CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
-                card_effect(*cardpos2, carddeck, stage);
-                card_deck(cardpos2,cardpos1, carddeck, decksize);
-                *selected = 1;
+            }
+            if (selected) {
+                /*Apply card*/
+                if (IsAreaClicked(apply.position.x, apply.position.y, apply.btnWidth, apply.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                    /*Apply card No. 1*/
+                    if (cardChosen == 1) {
+                        card_effect(*cardpos1, carddeck, stage);
+                        card_deck(cardpos1, cardpos2, carddeck, decksize);
+                        *applied = YES;
+                        selected = NO;
+                        cardChosen = 0;
+                    }
+                    /*Apply card No. 2*/
+                    else if (cardChosen == 2) {
+                        card_effect(*cardpos2, carddeck, stage);
+                        card_deck(cardpos2, cardpos1, carddeck, decksize);
+                        *applied = YES;
+                        selected = NO;
+                        cardChosen = 0;
+                    }
+                    CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
+                }
+                /*Discard card*/
+                else if (IsAreaClicked(discard.position.x, discard.position.y, discard.btnWidth, discard.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+                    selected = NO;
+                    cardChosen = 0;
+                    CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
+                }
             }
         }
     }
@@ -335,3 +388,7 @@ void wetsign_UM(void) {
             }
 }
 
+void free_buttons(void) {
+    CP_Image_Free(&apply.img);
+    CP_Image_Free(&discard.img);
+}
