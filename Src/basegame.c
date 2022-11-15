@@ -75,7 +75,7 @@ void base_Init(void) {
 
 	load_spritesheet(&cellSize, cameratoggle);
 	setMap(grid, customer, path, teleporters);						// Initialise Map
-	total_objectives = getObjective(grid);							// Counts number of key objective to meet
+	//total_objectives = getObjective(grid);							// Counts number of key objective to meet
 	global_move = 1;												// Initialise move with 1 for rendering purposes*
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0, m = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -86,6 +86,7 @@ void base_Init(void) {
 	// to force mechanic enabler check card_effect() for flag details
 	// UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
 	mechanic_flags(); // Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+	total_objectives = getObjective(grid);
 	
 	/*GIF*/
 	setGIF(&speechSprite, "./Assets/Spritesheet/speech.png", 1, 4, 0, 0, cellSize);
@@ -156,6 +157,7 @@ void base_Update(void) {
 		}
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
+		printf("%d / %d\n", isCompleted, total_objectives);
 		if (isCompleted == total_objectives) {
 			next_level();
 			config.save.lastLevelPlayed = global_level;
@@ -332,21 +334,21 @@ void base_Update(void) {
 		if (flip) {
 			if (face == 2 || face == 3) {
 				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol + 1), cellSize * (float)(playerRow - 1));
-				drawGIF(&speechSprite, &gifElasped, 0.1, NO, NO);
+				drawGIF(&speechSprite, &gifElasped, 0.1f, NO, NO);
 			}
 			else {
 				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol - 1), cellSize * (float)(playerRow - 1));
-				drawGIF(&speechSprite, &gifElasped, 0.1, YES, NO);
+				drawGIF(&speechSprite, &gifElasped, 0.1f, YES, NO);
 			}
 		}
 		if (!flip) {
 			if (customer[stunner].direction == 2 || customer[stunner].direction == 3) {
 				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol + 1), cellSize * (float)(customer[stunner].cusRow - 1));
-				drawGIF(&speechSprite, &gifElasped, 0.1, NO, NO);
+				drawGIF(&speechSprite, &gifElasped, 0.1f, NO, NO);
 			}
 			else {
 				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol - 1), cellSize * (float)(customer[stunner].cusRow - 1));
-				drawGIF(&speechSprite, &gifElasped, 0.1, YES, NO);
+				drawGIF(&speechSprite, &gifElasped, 0.1f, YES, NO);
 			}
 		}
 	}
