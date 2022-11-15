@@ -30,13 +30,13 @@ void Credits_Init() {
 }
 void Credits_Update() {
 	/*INITIALISE VARIABLES*/
-	float speed = 100.f * CP_System_GetDt();
+	/*float speed = 100.f * CP_System_GetDt();
 	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++) {
 		dynamicY[i] -= speed;
 		if (dynamicY[i] <= 0) {
 			dynamicY[i] = (float)config.settings.resolutionHeight;
 		}
-	}
+	}*/
 
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
@@ -58,25 +58,23 @@ void Credits_Update() {
 	CP_Settings_NoTint();
 	
 	/*Credits*/
-	CP_Settings_Fill(WHITE);
-	CP_Settings_Stroke(WHITE);
-	CP_Settings_TextSize(.50f * textSize);
-	drawAlignedText(BLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticX, dynamicY[1]);
-	drawAlignedText(BLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticX, dynamicY[2]);
-	drawAlignedText(BLACK, CENTER, "Jerell Tan Jian Yu", staticX, dynamicY[3]);
-	drawAlignedText(BLACK, CENTER, "Ian Chua Rong Bin", staticX, dynamicY[4]);
-	drawAlignedText(BLACK, CENTER, "Guo Yiming", staticX, dynamicY[5]);
-	drawAlignedText(BLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
-	drawAlignedText(BLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
-	drawAlignedText(BLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
+	CP_Settings_TextSize(.5f * textSize);
+	drawAlignedText(FADERBLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticX, dynamicY[1]);
+	drawAlignedText(FADERBLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticX, dynamicY[2]);
+	drawAlignedText(FADERBLACK, CENTER, "Jerell Tan Jian Yu", staticX, dynamicY[3]);
+	drawAlignedText(FADERBLACK, CENTER, "Ian Chua Rong Bin", staticX, dynamicY[4]);
+	drawAlignedText(FADERBLACK, CENTER, "Guo Yiming", staticX, dynamicY[5]);
+	drawAlignedText(FADERBLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
+	drawAlignedText(FADERBLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
+	drawAlignedText(FADERBLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
 	drawAlignedText(FADEBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[11]);
 	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + .035f * textSize, dynamicY[11]);
 
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);
-	drawAlignedText(BLACK, CENTER, "TEAM MEMBERS:", staticX, dynamicY[0]);
-	drawAlignedText(BLACK, CENTER, "INSTRUCTORS:", staticX, dynamicY[6]);
-	drawAlignedText(BLACK, CENTER, "PRESIDENT:", staticX, dynamicY[9]);
+	drawAlignedText(BLACK, CENTER, "TEAM MEMBERS", staticX, dynamicY[0]);
+	drawAlignedText(BLACK, CENTER, "INSTRUCTORS", staticX, dynamicY[6]);
+	drawAlignedText(BLACK, CENTER, "PRESIDENT", staticX, dynamicY[9]);
 
 	/*Draw Back Button*/
 	drawButton(back);
