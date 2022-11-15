@@ -33,9 +33,10 @@ isLocked, activatedCusX, activatedCusY, stunner,				// Stunner/Customer Logic Va
 face, isAnimating, flip, cameratoggle,							// Drawing/Animation Logic Variables/Flags
 game_pause, overlay_function, is_welcome, reset_confirmed,		// Pause/Overlays Logic Variables/Flags
 clock, times_distracted, duration_lost,							// Stats Variables
-time_lost, ignore_penalty;										// Unique Mechanic Variables
+time_lost, ignore_penalty,										// Unique Mechanic Variables
+play30;															// SFX Flag
 
-CP_Sound fail = NULL, success = NULL, push = NULL, teleport_sound = NULL, levelBGM = NULL, gameMusic;
+CP_Sound fail = NULL, success = NULL, push = NULL, teleport_sound = NULL, levelBGM = NULL, level30BGM = NULL, gameMusic;
 
 /* GIF */
 static float gifElasped;
@@ -62,6 +63,7 @@ void base_Init(void) {
 	isAnimating = 0;
 	flip = 0;
 	oneSecondFlip = 0;
+	play30 = 0;
 	game_pause = 0;													// Flag whether game is Paused/Not, Set to 0 for Unpause
 	reset_confirmed = 0;											// Flag to Check whether Resetting the map confirmed, 0 for no Reset
 	times_distracted = 0;											// Stat for Number of Times Distracted, 0 at Level Load
@@ -95,6 +97,7 @@ void base_Init(void) {
 	/* SFX */
 	CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
 	levelBGM = CP_Sound_Load("./Assets/Sound/Level_BGM.wav");
+	level30BGM = CP_Sound_Load("./Assets/Sound/Level_BGM_30s.wav");
 	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");
 	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
 	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
@@ -157,7 +160,6 @@ void base_Update(void) {
 		}
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
-		printf("%d / %d\n", isCompleted, total_objectives);
 		if (isCompleted == total_objectives) {
 			next_level();
 			config.save.lastLevelPlayed = global_level;
@@ -168,9 +170,18 @@ void base_Update(void) {
 		/* Lose Condition, When Time's Up */
 		if (clock <= 0) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
+			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 			overlay_function = 4;												// 4 for Game Over Overlay
 			game_pause = 1;
 			card_init();	// resets all card selection/flags
+		}
+
+		// Play less than 30 second BGM
+		if (clock <= 30 && !play30) {
+			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
+			play30 = 1;
+			CP_Sound_PlayAdvanced(level30BGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 		}
 
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
@@ -421,6 +432,7 @@ void base_Exit(void) {
 	CP_Sound_Free(&success);
 	CP_Sound_Free(&teleport_sound);
 	CP_Sound_Free(&levelBGM);
+	CP_Sound_Free(&level30BGM);
 	CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
