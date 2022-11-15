@@ -21,7 +21,7 @@ void splash_screen_init(void)
 {
     /*Initalize config by reading from file, or creating the file if it does not exist.*/
     config = readFile();
-    //global_level = config.save.lastLevelPlayed;
+    global_level = config.save.lastLevelPlayed;
 
     gameMusic = CP_Sound_Load("./Assets/Sound/MainMenu_BGM.wav");
     gameFont = CP_Font_Load("./Assets/Font/VT323-Regular.ttf");
