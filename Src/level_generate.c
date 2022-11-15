@@ -9,25 +9,37 @@
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
 
 /* Parse CSV file to initialise grid array at the start of every stage/level */
-void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
+void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
 
-	/* Initialise variables to 0 */
-	int row = 0, col = 0, read = 0, line = 0;
+	int row = 0, col = 0, read = 0, line = 0, teleporter_index = 0,								// row & col for grid array, teleporter_index for teleporter array, line for lines in CSV File
+		customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0,		// Local Customer variables to 0
+		customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0;		// Local Customer variables to 0
 
-	/* Declare & initialise Local Customer Properties to 0 */
-	int customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0, customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0, teleporter_index = 0;
-
+	/* For-Loop to clear out the Map First (Prevent carry-over from previous levels) */
+	for (int i = 0; i < SOKOBAN_GRID_ROWS; i++) {
+		for (int j = 0; j < SOKOBAN_GRID_COLS; j++) {
+			grid[i][j].player = 0;
+			grid[i][j].key = 0;
+			grid[i][j].box = 0;
+			grid[i][j].tele = 0;
+			grid[i][j].boarder = 0;
+			grid[i][j].shelf = 0;
+			grid[i][j].mecha = 0;
+			grid[i][j].customer = 0;
+			path[i][j] = 0;
+		}
+	}
 	/* For-Loop to clear all customers first (Prevent carry-over from previous levels) */
 	for (int i = 0; i < CUSTOMER_MAX; i++) {
-		customer[i].cusCol = customer_posX;
-		customer[i].cusRow = customer_posY;
-		customer[i].ogCusCol = customer_posX;
-		customer[i].ogCusRow = customer_posY;
-		customer[i].direction = customer_direction;
-		customer[i].range = customer_range;
-		customer[i].isActive = customer_active;
-		customer[i].isIdle = customer_idle;
-		customer[i].isRandom = customer_random;
+		customer[i].cusCol = 0;
+		customer[i].cusRow = 0;
+		customer[i].ogCusCol = 0;
+		customer[i].ogCusRow = 0;
+		customer[i].direction = 0;
+		customer[i].range = 0;
+		customer[i].isActive = 0;
+		customer[i].isIdle = 0;
+		customer[i].isRandom = 0;
 	}
 
 	/* For-Loop to clear all Teleporter first (Prevent carry-over from previous levels) */
@@ -37,54 +49,44 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 		teleporters[i].posY = 0;
 	}
 
-	// File Pointer of CSV File
-	FILE* csv_file;
-
-	// CSV File name & CSV Extension
-	char csv_file_name[64] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";
-	char level_char[3], csv_ext[5] = ".csv";
-
-	// Convert Level Number to char to be used to append to csv_file_name
-	sprintf(level_char, "%d", global_level);
-
-	/* Append Level Number & 'csv_ext' to 'csv_file_name' */
-	strcat(csv_file_name, level_char);
-	strcat(csv_file_name, csv_ext);
-	
-
-	// Open 'csv_file_name' in read mode
-	csv_file = fopen(csv_file_name, "r");
+	FILE* csv_file;																				// File Pointer of CSV File
+	char csv_file_name[64] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";		// Beginning part of the CSV File name w/o level number and extension
+	char level_char[3], csv_ext[5] = ".csv";													// Level Number & .csv Extension
+	sprintf(level_char, "%d", global_level);													// Convert Level Number to char to be used to append to csv_file_name
+	strcat(csv_file_name, level_char);															// Append Level Number
+	strcat(csv_file_name, csv_ext);																// Append .csv extension
+	csv_file = fopen(csv_file_name, "r");														// Open csv_file_name in read mode
 
 	/* If file does not exist & fails to open, print error and Exit program */
 	if (NULL == csv_file) {
-		printf("%s \n", &csv_file_name);
 		printf("Error : errno='%s'.\n", strerror(errno));
 		printf("File Opening Failed!\n");
 		exit(EXIT_FAILURE);
 	}
 
+	/* Loop Each Line of the CSV File */
 	do {
 		/* Goes to Next Row of the Grid once Column reaches the end */
 		if (col == SOKOBAN_GRID_COLS) {
 			row++;
 			col = 0;
 		}
-		if (line == 0) {
-			read = fscanf(csv_file, "%d", &duration);
-			if (read == 1) line++;
+		if (line == 0) {																		// First Line of the CSV file is the Level Duration
+			read = fscanf(csv_file, "%d", &duration);											// Scan and store to global variable 'duration'
+			if (read == 1) line++;																// Increment line so that function will not read for duration again
 		}
 		else {
 			/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties */
 			read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-				&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].tele, &grid[row][col].boarder, &grid[row][col].shelf, &grid[row][col].mecha,
-				&grid[row][col].customer, &customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range,
+				&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].tele, &grid[row][col].boarder, &grid[row][col].shelf,
+				&grid[row][col].mecha, &grid[row][col].customer, &customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range,
 				&customer_active, &customer_idle, &customer_random, &path[row][col]);
 
 			/* If Customer Exists */
-			if (customer_number != 0 && grid[row][col].customer) {
-				customer_number--; // Decrement Customer Number value as element starts from 0
+			if (customer_number != 0 && grid[row][col].customer) {								// If Customer is not 0 (Exists)
+				customer_number--;																// Decrement Customer Number value as element starts from 0
 
-				/* Initialise values of properties of Customer Struct with values from CSV File that was first stored in Local Customer Properties*/
+				/* Initialise values of properties of Customer Struct with values from CSV File that was first stored in Local Customer Properties */
 				customer[customer_number].cusCol = customer_posX;
 				customer[customer_number].cusRow = customer_posY;
 				customer[customer_number].ogCusCol = customer_posX;
@@ -102,7 +104,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 
 			/* If Teleporter Exists, Initialise Teleporter Struct Property Values, with Teleporter Number ,Row and Column */
 			if (grid[row][col].tele != 0) {
-				teleporter_index = grid[row][col].tele - 1;									//Decrement grid[row][col].tele value as element starts from 0
+				teleporter_index = grid[row][col].tele - 1;										// Decrement grid[row][col].tele value as element starts from 0
 				teleporters[teleporter_index].teleporter_number = grid[row][col].tele;
 				teleporters[teleporter_index].posX = col;
 				teleporters[teleporter_index].posY = row;
@@ -110,7 +112,7 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 				printf("Teleporter %d, is at row %d & column %d \n", grid[row][col].tele, teleporters[teleporter_index].posY, teleporters[teleporter_index].posX);
 			}
 
-			// Increments 'col' when the correct number of values were scanned
+			// Increments 'col' & 'line' when the correct number of values were scanned
 			if (read == 17) {
 				col++;
 				line++;
@@ -121,4 +123,5 @@ void setMap(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[C
 
 	// Close CSV File
 	fclose(csv_file);
+
 }
