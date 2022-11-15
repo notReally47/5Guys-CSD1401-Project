@@ -325,8 +325,10 @@ void base_Update(void) {
 		}
 	}
 
-	for (int i = 0; i < CUSTOMER_MAX; i++)
-		draw_customer(cellSize, customer[i].cusRow, customer[i].cusCol, customer[i].direction, i, cameratoggle);
+	for (int i = 0; i < CUSTOMER_MAX; i++) {
+		if (grid[customer[i].cusRow][customer[i].cusCol].customer)
+			draw_customer(cellSize, customer[i].cusRow, customer[i].cusCol, customer[i].direction, i, cameratoggle);
+	}
 
 	isAnimating = draw_player(cellSize, playerRow, playerCol, face, cameratoggle);
 
