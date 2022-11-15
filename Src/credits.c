@@ -42,6 +42,9 @@ void Credits_Update() {
 
 	/*INPUTS*/
 	/*Return to Main Menu*/
+	if (CP_Input_KeyTriggered(KEY_ESCAPE)) {
+		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
+	}
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(back.position.x, back.position.y, back.btnWidth, back.btnHeight, mousePos.x, mousePos.y)) {
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
@@ -58,10 +61,10 @@ void Credits_Update() {
 	CP_Settings_Fill(WHITE);
 	CP_Settings_Stroke(WHITE);
 	CP_Settings_TextSize(.50f * textSize);
-	drawAlignedText(BLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticX, dynamicY[1]);
-	drawAlignedText(BLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticX, dynamicY[2]);
-	drawAlignedText(BLACK, CENTER, "Ian Chua Rong Bin", staticX, dynamicY[3]);
-	drawAlignedText(BLACK, CENTER, "Jerell Tan Jian Yu", staticX, dynamicY[4]);
+	drawAlignedText(BLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticX, dynamicY[1]);
+	drawAlignedText(BLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticX, dynamicY[2]);
+	drawAlignedText(BLACK, CENTER, "Jerell Tan Jian Yu", staticX, dynamicY[3]);
+	drawAlignedText(BLACK, CENTER, "Ian Chua Rong Bin", staticX, dynamicY[4]);
 	drawAlignedText(BLACK, CENTER, "Guo Yiming", staticX, dynamicY[5]);
 	drawAlignedText(BLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
 	drawAlignedText(BLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
