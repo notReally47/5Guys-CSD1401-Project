@@ -361,14 +361,14 @@ void base_Update(void) {
 
 	if (game_pause) {
 		/* Welcome Message at Level 01 */
-		if (global_level == 1 && overlay_function == 1) {					// If Level is 1, is_welcome flag triggered & Not yet Game Over
+		if (global_level == 1 && overlay_function == 1) {					// If Level is 1 & overlay_function is 1
 			overlay_welcome();												// Rednders Welcome Message
 			is_welcome = welcome_done(game_pause);							// Remove is_welcome flag
-			overlay_function = welcome_done(game_pause);
+			overlay_function = welcome_done(game_pause);					// Remove Overlays
 			game_pause = welcome_done(game_pause);							// Unpause game
 		}
 		/* Resetting Map Overlay */
-		else if (overlay_function == 2) {			// Else If reset_triggered flag is trigggered, There is still time & Not yet Game Over
+		else if (overlay_function == 2) {									// Else If overlay_function is 2
 			overlay_reset();												// Renders Reset Confirmation Overlay
 			reset_confirmed = reset_check(reset_confirmed);					// Check Whether 'YES' or 'NO' was Clicked
 
@@ -387,19 +387,19 @@ void base_Update(void) {
 			/* If 'NO' was Clicked */
 			else if (reset_confirmed == 2) {
 				reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
-				overlay_function = 0;
+				overlay_function = 0;										// Remove overlays
 				game_pause = 0;												// Set game_pause to 0 to resume game
 			}
 		}
 
 		/* Pause Overlay */
-		else if (overlay_function == 3) {									// Else If 
+		else if (overlay_function == 3) {									// Else If  ovarlay_function is 3
 			overlay_pause();												// Renders Pause Overlay
 			game_pause = unpause(game_pause);								// game_pause will trigger unpause function to either return to game or Main Menu
 		}
 
 		/* Game Over Overlay */
-		else if (overlay_function == 4) {
+		else if (overlay_function == 4) {									// Else if overlay_function is 4
 			overlay_game_over();											// Renders Game Over Overlay
 			game_pause = game_over(game_pause);								// game_pause will trigger to return to Main Menu
 		}
