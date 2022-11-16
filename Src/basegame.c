@@ -367,21 +367,21 @@ void base_Update(void) {
 	if (isLocked && !isAnimating) {
 		if (flip) {
 			if (face == 2 || face == 3) {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol + 1), cellSize * (float)(playerRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol), cellSize * (float)(playerRow - 1));
 				drawGIF(&speechSprite, &gifElasped, 0.1f, NO, NO);
 			}
 			else {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol - 1), cellSize * (float)(playerRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol - 2), cellSize * (float)(playerRow - 1));
 				drawGIF(&speechSprite, &gifElasped, 0.1f, YES, NO);
 			}
 		}
 		if (!flip) {
 			if (customer[stunner].direction == 2 || customer[stunner].direction == 3) {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol + 1), cellSize * (float)(customer[stunner].cusRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol), cellSize * (float)(customer[stunner].cusRow - 1));
 				drawGIF(&speechSprite, &gifElasped, 0.1f, NO, NO);
 			}
 			else {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol - 1), cellSize * (float)(customer[stunner].cusRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol - 2), cellSize * (float)(customer[stunner].cusRow - 1));
 				drawGIF(&speechSprite, &gifElasped, 0.1f, YES, NO);
 			}
 		}
