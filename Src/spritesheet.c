@@ -165,7 +165,7 @@ void draw_key_in_box(float cellX,float cellY,float cellSize){
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,frame*2.f,128.f,frame*3.f,192.f,255);
 }
 void draw_floor(float cellX,float cellY,float cellSize){
-	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,0.f,128.f,64.f,192.f,250);
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize + (cellSize / (frame)), cellSize + (cellSize / (frame)), 0.f, 128.f, 64.f, 192.f, 250);
 }
 /* moves the whole canvas with the player when moving. allow for a zoom-in side scrolling effect
 */
