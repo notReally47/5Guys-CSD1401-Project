@@ -10,6 +10,7 @@
 #define GRAY		CP_Color_Create(150, 150, 150, 255)
 #define DARKGRAY	CP_Color_Create(80, 80, 80, 100)	// Tint
 #define BLACK		CP_Color_Create(0, 0, 0, 255)
+#define ABITBLACK	CP_Color_Create(0, 0, 0, 210)
 #define FAINTBLACK	CP_Color_Create(0, 0, 0, 200)
 #define FADEBLACK	CP_Color_Create(0, 0, 0, 170)
 #define FADERBLACK	CP_Color_Create(0, 0, 0, 140)
