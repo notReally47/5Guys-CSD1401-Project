@@ -243,7 +243,7 @@ void draw_customer(float cellSize,float cellAlign,int customerPosX,int customerP
 	//CP_Settings_NoTint();
 }
 void draw_mecha(float cellX,float cellY,float cellSize) {
-	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,256.f,128.f,320.f,192.f,240); 
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,257.f,128.f,319.f,192.f,240); 
 }
 void draw_shelf(float cellX, float cellY, float cellSize,int index) {
 	if (index==1)

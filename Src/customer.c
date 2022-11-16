@@ -164,7 +164,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_UP:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow - x][cusCol].box || grid[cusRow - x][cusCol].shelf) {
+					if (grid[cusRow - x][cusCol].box || grid[cusRow - x][cusCol].shelf || grid[cusRow - x][cusCol].mecha) {
 						break;
 					}
 
@@ -184,7 +184,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_LEFT:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow][cusCol - x].box || grid[cusRow][cusCol - x].shelf) {
+					if (grid[cusRow][cusCol - x].box || grid[cusRow][cusCol - x].shelf || grid[cusRow][cusCol-x].mecha) {
 						break;
 					}
 
@@ -203,7 +203,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_DOWN:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow + x][cusCol].box || grid[cusRow + x][cusCol].shelf) {
+					if (grid[cusRow + x][cusCol].box || grid[cusRow + x][cusCol].shelf|| grid[cusRow + x][cusCol].mecha) {
 						break;
 					}
 
@@ -222,7 +222,7 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_RIGHT:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow][cusCol + x].box || grid[cusRow][cusCol + x].shelf) {
+					if (grid[cusRow][cusCol + x].box || grid[cusRow][cusCol + x].shelf|| grid[cusRow][cusCol+x].mecha) {
 						break;
 					}
 
