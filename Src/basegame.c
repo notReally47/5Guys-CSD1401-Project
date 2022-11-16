@@ -32,7 +32,7 @@ float cellSize, cellAlign, elapsedLock, totalElapsedTime, oneSecondFlip, camerat
 int total_objectives,													// Objectives to Meet
 isLocked, activatedCusX, activatedCusY, stunner,						// Stunner/Customer Logic Variables/Flags
 face, isAnimating, flip, cameratoggle,									// Drawing/Animation Logic Variables/Flags
-game_pause, overlay_function, is_welcome, reset_confirmed, gameover,		// Pause/Overlays Logic Variables/Flags
+game_pause, overlay_function, is_welcome, reset_confirmed, gameover,	// Pause/Overlays Logic Variables/Flags
 clock, times_distracted, duration_lost,									// Stats Variables
 time_lost, ignore_penalty,												// Unique Mechanic Variables
 play30;																	// SFX Flag
@@ -91,7 +91,7 @@ void base_Init(void) {
 
 	/*Unique mechanics Initialisation*/
 	// to force mechanic enabler check card_effect() for flag details
-	// UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
+	//UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
 	//UM.flags |= 4;
 	mechanic_flags();												// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
 	total_objectives = get_objectives(grid);						// Get Number of Objectives to meet (Number of Keys)
@@ -285,7 +285,7 @@ void base_Update(void) {
 			}
 
 			else if (CP_Input_KeyTriggered(KEY_R)) {
-				overlay_function = 2;
+				overlay_function = 2;											// 2 for Reset Overlay
 				game_pause = 1;
 			}
 		}
