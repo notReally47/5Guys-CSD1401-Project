@@ -11,7 +11,7 @@ CP_Image spritesheet, customer_spritesheet;
 CP_Image spritesheet,background;
 CP_Vector CustomerS[CUSTOMER_MAX],Player,Camera,Offset[3];
 static float move;
-const float frame = 64.0f;
+const float frame = 63.0f;
 int index,toggled;
 
 /* loads all assets using spritesheet

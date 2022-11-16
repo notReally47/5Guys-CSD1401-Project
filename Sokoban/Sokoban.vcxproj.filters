@@ -1,129 +1,146 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\Src\basegame.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\credits.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Src\customer.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\level_generate.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\level_logic.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\level_select.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\level_transition.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\mainmenu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\movement.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\options.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\settings.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\splashscreen.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\spritesheet.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Src\utils.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Functions</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\easydraw.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Functions</Filter>
     </ClCompile>
-    <ClCompile Include="..\Src\mechanics.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Src\level_generate.c">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\level_logic.c">
+      <Filter>Source Files\Functions</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\level_overlay.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\mechanics.c">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\movement.c">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\spritesheet.c">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\utils.c">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\settings.c">
+      <Filter>Source Files\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\basegame.c">
+      <Filter>Source Files\Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\credits.c">
+      <Filter>Source Files\Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\level_select.c">
+      <Filter>Source Files\Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\level_transition.c">
+      <Filter>Source Files\Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\main.c">
+      <Filter>Source Files\Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\mainmenu.c">
+      <Filter>Source Files\Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\options.c">
+      <Filter>Source Files\Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\splashscreen.c">
+      <Filter>Source Files\Game States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Inc\basegame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\credits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\customer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Inc\defines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\level_generate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\level_logic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\level_select.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\level_transition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\mainmenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\movement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\options.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\splashscreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\spritesheet.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Convenient</Filter>
     </ClInclude>
     <ClInclude Include="..\Inc\structs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Convenient</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\Inc\basegame.h">
+      <Filter>Header Files\Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\credits.h">
+      <Filter>Header Files\Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\level_select.h">
+      <Filter>Header Files\Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\level_transition.h">
+      <Filter>Header Files\Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\mainmenu.h">
+      <Filter>Header Files\Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\options.h">
+      <Filter>Header Files\Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\splashscreen.h">
+      <Filter>Header Files\Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\customer.h">
+      <Filter>Header Files\Functions</Filter>
     </ClInclude>
     <ClInclude Include="..\Inc\easydraw.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Functions</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\mechanics.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\Inc\level_generate.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\level_logic.h">
+      <Filter>Header Files\Functions</Filter>
     </ClInclude>
     <ClInclude Include="..\Inc\level_overlay.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\mechanics.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\movement.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\settings.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\spritesheet.h">
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\utils.h">
+      <Filter>Header Files\Functions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
       <UniqueIdentifier>{038877c7-6952-489d-ae5b-8e190e108e01}</UniqueIdentifier>
+      <Extensions>.h;</Extensions>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{c78fc57c-4f25-4914-ad3b-1c9a9af0612e}</UniqueIdentifier>
+      <Extensions>.c;</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{77913d83-1b65-4be1-999f-7d891658ddb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Functions">
+      <UniqueIdentifier>{14c682a6-98ea-4eed-9a64-ebb7f83e6fb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game States">
+      <UniqueIdentifier>{142b2b6e-41b4-4801-8feb-08f5dd8596b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Functions">
+      <UniqueIdentifier>{f66e1b64-4c49-4e7b-829f-38c2cc160fba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game States">
+      <UniqueIdentifier>{26ea9da5-d1d2-484e-9403-de81ed3ba96f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Convenient">
+      <UniqueIdentifier>{92c6e1ca-ffa2-48da-b117-f1c94bcaf8df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
