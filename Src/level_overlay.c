@@ -128,7 +128,7 @@ struct Size initialise_game_over_size() {
 	size.button_02_width = 0.f;
 	size.button_02_height = 0.f;
 
-	size.text_box_text_size = 0.f;
+	size.text_box_text_size = (float)config.settings.resolutionHeight * 0.04f;
 	size.text_box_position_x = 0.f;
 	size.text_box_position_y = 0.f;
 	size.text_box_row_width = 0.f;
@@ -141,16 +141,25 @@ struct Size initialise_game_over_size() {
 }
 
 /* Renders Game_Over overlay */
-void overlay_game_over() {
+void overlay_game_over(int gameover) {
 	struct Size size = initialise_game_over_size();																	// Initialise size Struct with initialise_game_over_size
+
+	char* fail_text[] = {
+		"You were too slow in completing your tasks...",
+		"Why do you insist on speaking with every customer???",
+		"Why do you just keep wandering around..."
+	};
 
 	CP_Settings_NoTint();																							// Clear any Existing Tint
 	
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());									// Set Mouse Position into a Vector
 	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "YOU'RE FIRED!", size.header_text_width, .75f * size.header_text_height);		// Draw Header Text
+	
+	CP_Settings_TextSize(size.text_box_text_size);																	
+	drawAlignedText(WHITE, CENTER, fail_text[gameover], size.header_text_width, 1.f * size.header_text_height);		// Draw Reason for failure
 
-	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Main Menu' Button
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,									// Draw 'Main Menu' Button
 		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
@@ -263,7 +272,7 @@ void overlay_welcome() {
 	CP_Settings_TextSize(size.header_text_size);																				// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "WELCOME!", size.header_text_width, .75f * size.header_text_height);							// Draw Header Text
 
-	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,													// Draw 'Let's Work!' Button		
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,												// Draw 'Let's Work!' Button		
 		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																				// Set Button Text Size
@@ -274,7 +283,7 @@ void overlay_welcome() {
 	CP_Font_DrawTextBox(welcome_text, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width);				// Draw Welcome Message
 	CP_Font_DrawTextBox(move_text, size.text_box_position_x, size.text_box_position_y * 2.5f, size.text_box_row_width);			// Draw Welcome Message Cont'd
 	
-	CP_Settings_Tint(ABITBLACK);																									// Tint the Overlay Transparent DARKGRAY
+	CP_Settings_Tint(ABITBLACK);																								// Tint the Overlay Transparent DARKGRAY
 }
 
 int welcome_done(int game_pause) {
