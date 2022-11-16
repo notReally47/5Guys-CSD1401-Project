@@ -27,14 +27,14 @@ int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 char* stat[4];
 
 float cellSize, cellAlign, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown, cusDelay;
-
-int total_objectives,											// Objectives to Meet
-isLocked, activatedCusX, activatedCusY, stunner,				// Stunner/Customer Logic Variables/Flags
-face, isAnimating, flip, cameratoggle,							// Drawing/Animation Logic Variables/Flags
-game_pause, overlay_function, is_welcome, reset_confirmed,		// Pause/Overlays Logic Variables/Flags
-clock, times_distracted, duration_lost,							// Stats Variables
-time_lost, ignore_penalty,										// Unique Mechanic Variables
-play30;															// SFX Flag
+	
+int total_objectives,													// Objectives to Meet
+isLocked, activatedCusX, activatedCusY, stunner,						// Stunner/Customer Logic Variables/Flags
+face, isAnimating, flip, cameratoggle,									// Drawing/Animation Logic Variables/Flags
+game_pause, overlay_function, is_welcome, reset_confirmed, gameover,		// Pause/Overlays Logic Variables/Flags
+clock, times_distracted, duration_lost,									// Stats Variables
+time_lost, ignore_penalty,												// Unique Mechanic Variables
+play30;																	// SFX Flag
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport_sound = NULL, levelBGM = NULL, level30BGM = NULL, gameMusic;
 
@@ -70,6 +70,7 @@ void base_Init(void) {
 	duration_lost = 0;												// Stat for Duration Lost getting distracted, 0 at Level Load
 	is_welcome = 1;													// Set to 1 To start off Level 1 with a Welcome Message
 	overlay_function = 0;											// 1 for Welcome Message, 2 for Reset, 3 for Pause, 4 for Game Over
+	gameover = 0;													// 1 for Time Limit, 2 for Customer, 3 for Move Limit
 	stat[0] = "Time Left: ";										// Text Stat to Print for Time Left
 	stat[1] = "Move: ";												// Text Stat to Print for Move Count
 	stat[2] = "Times Distracted: ";									// Text Stat to Print for Number of Times Distracted
@@ -169,11 +170,23 @@ void base_Update(void) {
 		}
 
 		/* Lose Condition, When Time's Up */
-		if (clock <= 0 || ((global_move - 1) >= move_limit)) {
+		if (clock <= 0) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
 			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
-			overlay_function = 4;												// 4 for Game Over Overlay
+			overlay_function = 4;	// 4 for Game Over Overlay
+			gameover = 1;		// 1 for Time limit
+			game_pause = 1;
+			card_init();	// resets all card selection/flags
+		}
+
+		// Lose Condition, Move Limit Reached
+		if (((global_move - 1) >= move_limit)) {
+			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
+			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+			overlay_function = 4;	// 4 for Game Over Overlay
+			gameover = 3;		// 3 for Move Limit
 			game_pause = 1;
 			card_init();	// resets all card selection/flags
 		}
@@ -412,7 +425,7 @@ void base_Update(void) {
 
 		/* Game Over Overlay */
 		else if (overlay_function == 4) {									// Else if overlay_function is 4
-			overlay_game_over();											// Renders Game Over Overlay
+			overlay_game_over(gameover - 1);								// Renders Game Over Overlay
 			game_pause = game_over(game_pause);								// game_pause will trigger to return to Main Menu
 		}
 
