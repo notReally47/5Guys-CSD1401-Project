@@ -41,6 +41,7 @@ void splash_screen_init(void)
     y = CP_System_GetWindowHeight()>>1;
     width = (float)CP_System_GetWindowWidth()*0.8f;
     height = (float)CP_System_GetWindowHeight()*0.4f;
+    card_init(); // Initialise Card Mechanic at the start of the program
 }
 
 void splash_screen_update(void)

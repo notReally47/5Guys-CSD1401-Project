@@ -29,7 +29,7 @@ void Main_Menu_Init()
 
 	// SFX
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
-	card_init(); // Initialise Card Mechanic at the start of the program
+	
 }
 
 void Main_Menu_Update()

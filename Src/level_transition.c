@@ -33,6 +33,7 @@ void Level_Transition_Init()
 
 	// Load background art
 	load_background();
+	card_settings();
 }
 
 void Level_Transition_Update()

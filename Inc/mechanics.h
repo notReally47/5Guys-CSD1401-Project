@@ -3,6 +3,7 @@
 extern int infected[CUSTOMER_MAX+1], teleporter[SETTINGS];
 extern UniqueCards UM;
 
+void card_settings(void);
 void card_init(void);
 void card_selection(int stage, int *applied);
 void customer_status(Customer customer[CUSTOMER_MAX]);

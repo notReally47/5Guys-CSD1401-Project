@@ -10,7 +10,7 @@ extern Config config;
 CP_Image spritesheet, customer_spritesheet;
 CP_Image spritesheet,background;
 CP_Vector CustomerS[CUSTOMER_MAX],Player,Camera,Offset[3];
-static float move;
+static float move,corneroffset;
 const float frame = 63.0f;
 int index,toggled;
 
@@ -21,13 +21,14 @@ int index,toggled;
 * 
 */
 void init_spritesheet(float* cellSize,int cameratoggle) {
-	*cellSize = (float)(config.settings.resolutionHeight/(SOKOBAN_GRID_ROWS/cameratoggle));
+	*cellSize = (float)(config.settings.resolutionHeight/((SOKOBAN_GRID_ROWS-1)/cameratoggle));
 	// Sprite Dimensions - Scale sprite based on cellSize
 	Offset[0] = CP_Vector_Scale(CP_Vector_Set(frame,frame),*cellSize/(frame));
 	// Offset[1]lation - Align sprite placement to the center of the cell
 	Offset[1] = CP_Vector_Scale(CP_Vector_Set((*cellSize-Offset[0].x),(*cellSize-Offset[0].y)),0.5f);
 	// Camera Translation - Aligns camera to player's position
 	Offset[2] = CP_Vector_Set((float)(SOKOBAN_GRID_COLS/(cameratoggle*2)),(float)(SOKOBAN_GRID_ROWS/(cameratoggle*2)));
+	corneroffset=*cellSize*(18.f/64.f);
 	
 	move = (float)((int)*cellSize / (CP_System_GetFrameRate()/3.f));
 }
@@ -68,7 +69,7 @@ void load_background(void) {
 * 
 */
 int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int cameratoggle) {
-	float cellx = cellSize*(float)playerPosY;
+	float cellx = cellSize*(float)playerPosY-cellSize;
 	float celly = cellSize*(float)playerPosX;
 	int isAnimating = 0;
 	static float elapsed = 0.f;
@@ -118,7 +119,7 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 		break;
 	case SOKOBAN_LEFT:
 		if (teleporter[1] == 1) {
-			Player = CP_Vector_Set(cellSize*(float)(playerPosY+1),celly);
+			Player = CP_Vector_Set(cellSize*(float)(playerPosY+1)-cellSize,celly);
 			teleporter[1] = 0;
 		}
 		if (Player.x > cellx) {
@@ -131,7 +132,7 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 		break;
 	case SOKOBAN_RIGHT:
 		if (teleporter[1] == 1) {
-			Player = CP_Vector_Set(cellSize*(float)(playerPosY-1),celly);
+			Player = CP_Vector_Set(cellSize*(float)(playerPosY-1)-cellSize,celly);
 			teleporter[1] = 0;
 		}
 		if (Player.x < cellx) {
@@ -149,17 +150,39 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 	return isAnimating;
 }
 
-void draw_boarder(float cellX, float cellY, float cellSize) {
-	//if (cellY == 0.f || cellY*SOKOBAN_GRID_ROWS)
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,240);
-	//else if (cellX == 0.f || cellX*SOKOBAN_GRID_COLS)
-		//CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,255);
+void draw_boarder(float cellX, float cellY, float cellSize, int row, int col) {
+	if (row==0 && col==0){ // top left corner
+		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize,0.f,256.f,18.f,320.f,240);
+		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY-corneroffset,corneroffset,cellSize,36.f,256.f,54.f,320.f,240); 
+	}
+	else if (row==0 && col==SOKOBAN_GRID_COLS-1){ // top right corner
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize,64.f,256.f,82.f,320.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,corneroffset,cellSize,100.f,256.f,118.f,320.f,240);
+	}
+	else if (col==0 && row==SOKOBAN_GRID_ROWS-1) // bottom left corner
+		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY-cellSize+corneroffset,corneroffset,cellSize,18.f,256.f,36.f,320.f,240);
+	else if (col==SOKOBAN_GRID_COLS-1 && row==SOKOBAN_GRID_ROWS-1) // bottom right corner
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-cellSize+corneroffset,corneroffset,cellSize,82.f,256.f,100.f,320.f,240);
+	else if (col==0) // left row
+		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize,0.f,256.f,18.f,320.f,240); 
+	else if (row==0 && col>=SOKOBAN_GRID_COLS/3 && col<=SOKOBAN_GRID_COLS*2/3){ // top row fridge
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize,corneroffset,320.f,192.f,384.f,210.f,240);
+	}
+	else if (row==0){ // top row wallpaper
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,256.f,192.f,320.f,256.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize,corneroffset,320.f,192.f,384.f,210.f,240);
+	}
+	else if (row==SOKOBAN_GRID_ROWS-1) // bottom row
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,corneroffset,320.f,238.f,384.f,256.f,240); 
+	else if (col==SOKOBAN_GRID_COLS-1) // right row
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize,64.f,256.f,82.f,320.f,240); 
 }
 void draw_box(float cellX,float cellY,float cellSize){
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,64.f,128.f,128.f,192.f,255);
 }
 void draw_key(float cellX,float cellY,float cellSize){
-	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,256.f,128.f,320.f,192.f,255);
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,192.f,128.f,256.f,192.f,255);
 }
 void draw_key_in_box(float cellX,float cellY,float cellSize){
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,frame*2.f,128.f,frame*3.f,192.f,255);
@@ -171,7 +194,7 @@ void draw_floor(float cellX,float cellY,float cellSize){
 */
 
 void draw_customer(float cellSize,int customerPosX,int customerPosY,int customerdirection,int customernumber,int cameratoggle) {
-	float cellx = cellSize*(float)customerPosY;
+	float cellx = cellSize*(float)customerPosY-cellSize;
 	float celly = cellSize*(float)customerPosX;
 
 	// cellSize is for when the customer moves
@@ -219,14 +242,20 @@ void draw_customer(float cellSize,int customerPosX,int customerPosY,int customer
 	CP_Settings_Translate(-Offset[1].x,-Offset[1].y);
 	//CP_Settings_NoTint();
 }
-void draw_mecha(void) {
-	// to do
+void draw_mecha(float cellX,float cellY,float cellSize) {
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,256.f,128.f,320.f,192.f,240); 
 }
-void draw_teleporter(void) {
-	// to do
+void draw_shelf(float cellX, float cellY, float cellSize,int index) {
+	if (index==1)
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,128.f,256.f,192.f,320.f,250);
+	else 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,192.f,256.f,256.f,320.f,250);
+}
+void draw_teleporter(float cellX,float cellY,float cellSize) {
+	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,index*frame,frame*3.f,(index+1)*frame,frame*4.f,255);
 }
 void world_camera(float cellSize,int playerRow,int playerCol,int face,int cameratoggle) {
-	float cellx = cellSize*(float)playerCol;
+	float cellx = cellSize*(float)playerCol-cellSize;
 	float celly = cellSize*(float)playerRow;
 	int xoffset = playerCol-Offset[2].x;
 	int yoffset = playerRow-Offset[2].y;

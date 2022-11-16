@@ -75,6 +75,7 @@ void base_Init(void) {
 	stat[1] = "Move: ";												// Text Stat to Print for Move Count
 	stat[2] = "Times Distracted: ";									// Text Stat to Print for Number of Times Distracted
 	stat[3] = "Time Wasted: ";										// Text Stat to print for Time Wasted Getting Distracted
+	time_lost = 45;													// default time lost if distracted
 
 	load_spritesheet(&cellSize, cameratoggle);
 	set_map(grid, customer, path, teleporters);						// Initialise Map
@@ -89,9 +90,10 @@ void base_Init(void) {
 	/*Unique mechanics Initialisation*/
 	// to force mechanic enabler check card_effect() for flag details
 	// UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
-	//mechanic_flags(); // Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+	mechanic_flags();												// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
 	total_objectives = get_objectives(grid);						// Get Number of Objectives to meet (Number of Keys)
-	
+	// If mechanic_flags is enabled, make sure it is also enabled in RESET
+
 	/* GIF */
 	setGIF(&speechSprite, "./Assets/Spritesheet/speech.png", 1, 4, 0, 0, cellSize);
 	gifElasped = 0.f;
@@ -316,15 +318,16 @@ void base_Update(void) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			Cell currCell = grid[row][col];
 
-			float cellX = cellSize * (float)col;
+			float cellX = cellSize * (float)col - cellSize;
 			float cellY = cellSize * (float)row;
 
-			draw_floor(cellX, cellY, cellSize);
+			if (!currCell.boarder) draw_floor(cellX, cellY, cellSize);
 
 			if (currCell.boarder || currCell.box || currCell.key || currCell.player || currCell.shelf || moves[global_move - 1][row][col].player ||
 				currCell.mecha || teleporter[0] == 1 && currCell.tele != 0) {
+
 				if (currCell.boarder)
-					draw_boarder(cellX, cellY, cellSize);
+					draw_boarder(cellX, cellY, cellSize, row, col);
 
 				else if (currCell.key && currCell.box)
 					draw_key_in_box(cellX, cellY, cellSize);
@@ -333,17 +336,21 @@ void base_Update(void) {
 					draw_key(cellX, cellY, cellSize);
 
 				else if (currCell.mecha)
-					draw_boarder(cellX, cellY, cellSize); // draw_mecha();
+					draw_mecha(cellX, cellY, cellSize);
 
 				else if (currCell.box)
 					draw_box(cellX, cellY, cellSize);
 
-				else if (currCell.shelf)
-					draw_boarder(cellX, cellY, cellSize);
+				else if (currCell.shelf) {
+					if (row % 2 || col % 2)
+						draw_shelf(cellX, cellY, cellSize, 1);
+					else
+						draw_shelf(cellX, cellY, cellSize, 2);
+				}
 
 				else if (teleporter[0] == 1 && currCell.tele != 0) {
 						if ((row == teleporters[currCell.tele-1].posY) && col == teleporters[currCell.tele-1].posX) {
-							draw_boarder(cellX, cellY, cellSize); // draw_tele();
+							draw_teleporter(cellX,cellY,cellSize);
 						}
 				}
 			}
@@ -407,6 +414,8 @@ void base_Update(void) {
 				duration_lost = 0;											// Reset the display of duration lost due to distractions
 				overlay_function = 0;
 				game_pause = 0;												// Set game_pause to 0 to resume game
+				mechanic_flags();											// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+				total_objectives = get_objectives(grid);					// Get Number of Objectives to meet (Number of Keys)
 			}
 
 			/* If 'NO' was Clicked */

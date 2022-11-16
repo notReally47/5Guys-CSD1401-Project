@@ -40,8 +40,7 @@ char* poscards[] = {
     "Abundant supplies","The shelves are well-stocked before you start your shift. Lucky for you, that means lesser packages that you have to unpack for the day",
     "Elusive","Shrug off your responsibilites once a day. You act as if nothing happened when you get distracted, while avoiding the time penalty"
 };
-
-void card_init(void) {
+void card_settings(void) {
     /*Settings*/
     card.center_x = (float)config.settings.resolutionWidth/3.f;
     card.center_y = (float)config.settings.resolutionHeight*0.5f;
@@ -53,7 +52,9 @@ void card_init(void) {
     text.height = card.height*0.2f;
     textsizeheader = (float)config.settings.resolutionHeight*0.04f;
     textsizedesc = (float)config.settings.resolutionHeight*0.025f;
-    
+}
+
+void card_init(void) {
     if (global_level <= 1) {
     /*Initialization if not in config.dat*/
         UM.flags = 0;
@@ -95,7 +96,6 @@ void card_init(void) {
 void mechanic_flags(void) {
     /*Unique mechanics Initialisation*/
     // affects time_lost
-    time_lost = 45;				// default time lost if distracted
     if (UM.flags & 64)
         time_lost += 15;		// lose 60 seconds if negative card is picked
     if (UM.flags & 128)
@@ -118,16 +118,18 @@ void mechanic_flags(void) {
     ignore_penalty = 0;         // default initialise ignore_penalty to 0
     if (UM.flags & 2048)
         ignore_penalty = 1;     // only change to 1 if flag is active
+
     // affects customer generation
     if (global_level != 1) {
         int CustomerBackup[2][3] = { 0 };							// removes 2 customer per stage by default
         for (int i = 0, total = 0; i <= CUSTOMER_MAX; i++) {
-            if (customer[i].isActive && CP_Random_GetBool() == YES && total < 2) {
+            if (customer[i].isActive && total < 2) {
                 CustomerBackup[total][0] = customer[i].ogCusRow;	// save original position
                 CustomerBackup[total][1] = customer[i].ogCusCol;
                 CustomerBackup[total][2] = i;						// save customer index
                 customer[i].cusRow = 0;								// zeros both row/col to disable
                 customer[i].cusCol = 0;
+                customer[i].isActive = 0;
                 total++;											// counter to remove maximum of 2 customers
             }
         }
@@ -136,10 +138,12 @@ void mechanic_flags(void) {
                 if (i == CustomerBackup[0][2]) {					// restores back the removed customer
                     customer[i].cusRow = CustomerBackup[0][0];
                     customer[i].cusCol = CustomerBackup[0][1];
+                    customer[i].isActive = 1;
                 }
                 else if (i == CustomerBackup[1][2]) {
                     customer[i].cusRow = CustomerBackup[1][0];
                     customer[i].cusCol = CustomerBackup[1][1];
+                    customer[i].isActive = 1;
                 }
             }
         if (UM.flags & 8)	// check if lesser customer card is selected
@@ -147,6 +151,7 @@ void mechanic_flags(void) {
                 if (customer[i].isActive && CP_Random_GetBool() == YES && total < 2) {
                     customer[i].cusRow = 0;							// zeros both row/col to disable
                     customer[i].cusCol = 0;
+                    customer[i].isActive = 0;
                     total++;										// counter to remove maximum of 2 customers
                 }
             }
@@ -157,14 +162,14 @@ void mechanic_flags(void) {
         int KeyBackup[2][3] = { 0 };
         for (int row = 0, totalbox = 0, totalkey = 0; row < SOKOBAN_GRID_ROWS; row++)
             for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
-                if (grid[row][col].box && CP_Random_GetBool() == YES && totalbox < 2) {
+                if (grid[row][col].box == 1 || grid[row][col].box == 2) {
                     BoxBackup[totalbox][0] = row;						// save box row position
                     BoxBackup[totalbox][1] = col;
                     BoxBackup[totalbox][2] = grid[row][col].box;		// save box id that's being removed
                     grid[row][col].box = 0;								// zeros the box to disable
                     totalbox++;											// counter to remove maximum of 2 boxes
                 }
-                else if (grid[row][col].key && CP_Random_GetBool() == YES && totalkey < 2) {
+                else if (grid[row][col].key == 1 || grid[row][col].key == 2) {
                     KeyBackup[totalkey][0] = row;
                     KeyBackup[totalkey][1] = col;
                     KeyBackup[totalkey][2] = grid[row][col].key;		// save key id that's being removed
