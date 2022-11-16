@@ -9,7 +9,7 @@ Run level_generate_CSV.exe in cmd or wsl:
 ./level_generate_CSV.exe
 
 Or feed in the Input File:
-./level_generate_CSV.exe < Seven11_Level_2_Input.txt
+./level_generate_CSV.exe < level_inputs/Seven11_Level_2_Input.txt
 
 The program will ask for different inputs. Please read and follow the input format correctly.
 
@@ -19,7 +19,7 @@ IMPORTANT!!
 Please do not edit the csv in Excel/Sheets and save, for some reason this will change the format
 of the CSV file and hang the game when loading the newly-saved CSV File!!
 
-If messed up, rename the main CSV file & remove '_bak' from the bacakup CSV File.
+If messed up, rename the main CSV file & remove '_bak' from the backup CSV File.
 
 If need to edit, please use notepad++ and use the csv file & notes file side by side as reference to the cell.
 e.g:

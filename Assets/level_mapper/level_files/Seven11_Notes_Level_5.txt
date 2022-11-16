@@ -1,4 +1,5 @@
-Level Duration is 550
+Level Duration is 575
+Level Move Limit is 850
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border

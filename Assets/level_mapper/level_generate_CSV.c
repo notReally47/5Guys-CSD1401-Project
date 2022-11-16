@@ -86,6 +86,20 @@ int set_duration() {
     }
 }
 
+/* Set Move Limit of Level */
+int set_move_limit() {
+    int move_limit = 0, read = 0;
+    printf("Please indicate the Move Count Limit for this level:\n");
+    read = scanf("%d", &move_limit);
+    if(read == 1) {
+        return move_limit;
+    }
+    else {
+        printf("Please indicate in the correct format! Exiting...\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
 /* Set position of Player (row, column) */
 void set_player(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     int set_row = 0, set_col = 0, read = 0;
@@ -145,7 +159,7 @@ void set_box_key(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
 void set_teleporter(Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS]) {
     int set_row = 0, set_col = 0, read = 0, add_tele = 0, counter = 0;
     char choice = '\0';
-    printf("Does this level have Teleporters:\n");
+    printf("Does this level have Teleporters (Y/N):\n");
     scanf(" %c", &choice);
     if(choice == 'Y' || choice == 'y') {
         printf("Please indicate the sets of number of Teleporters: \n");
@@ -276,7 +290,7 @@ int main(void) {
     Cell grid[SOKOBAN_ROWS][SOKOBAN_COLS];
 
     /* Declare & Initialise read to 0 & boolean checks of different properties to 0 */
-    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_border = 0, is_shelf = 0, is_tele = 0, is_waypoint = 0, duration = 0, level;
+    int read = 0, is_player = 0, is_box = 0, is_key = 0, is_customer = 0, is_border = 0, is_shelf = 0, is_tele = 0, is_waypoint = 0, duration = 0, move_limit = 0, level;
 
     /* Initialise file name without the level number and extension name */
     char csv_file_name[33] = "level_files/Seven11_Level_", reference_file_name[39] = "level_files/Seven11_Notes_Level_", level_str[3], 
@@ -314,6 +328,7 @@ int main(void) {
 
         // Sets all settings
         duration = set_duration();
+        move_limit = set_move_limit();
         empty_grid(grid);
         set_player(grid);
         set_box_key(grid);
@@ -326,6 +341,10 @@ int main(void) {
         fprintf(csv_file, "%d\n", duration);
         fprintf(csv_bak, "%d\n", duration);
         fprintf(array_reference, "Level Duration is %d\n", duration);
+        fprintf(csv_file, "%d\n", move_limit);
+        fprintf(csv_bak, "%d\n", move_limit);
+        fprintf(array_reference, "Level Move Limit is %d\n", move_limit);
+        
         // Prints all the values for the CSV File & Reference File
         for (int row = 0; row < SOKOBAN_ROWS; row++) {
             for (int col = 0; col < SOKOBAN_COLS; col++) {
