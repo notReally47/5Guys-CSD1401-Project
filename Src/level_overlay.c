@@ -79,9 +79,9 @@ void overlay_pause() {
 	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "PAUSED", size.header_text_width, .75f * size.header_text_height);				// Draw Header Text
 
-	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Resume' Button
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,									// Draw 'Resume' Button
 		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
-	drawTintedButton(PLYRRED, size.button_02_position_x, size.button_02_position_y,										// Draw 'Main Menu' Button			
+	drawTintedButton(PLYRRED, size.button_02_position_x, size.button_02_position_y,									// Draw 'Main Menu' Button			
 		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
@@ -176,6 +176,8 @@ int game_over(int game_pause) {
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 			global_level = 1;																						// Set Level to 1 when Game Over
+			config.save.lastLevelPlayed = global_level;
+			writeConfig(config);
 			CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);											// Play Clicking SFX
 			game_pause = 0;																							// Set to Unpause
 			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);							// Load Main Menu when MAIN MENU is Clicked
@@ -195,9 +197,9 @@ void overlay_reset() {
 	CP_Settings_TextSize(size.header_text_size);																	// Set Header Text Size
 	drawAlignedText(WHITE, CENTER, "RESET MAP?", size.header_text_width, .75f * size.header_text_height);			// Draw Header Text
 	
-	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,										// Draw 'Yes' Button
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,									// Draw 'Yes' Button
 		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
-	drawTintedButton(PLYRRED, size.button_02_position_x, size.button_02_position_y,										// Draw 'No' Button
+	drawTintedButton(PLYRRED, size.button_02_position_x, size.button_02_position_y,									// Draw 'No' Button
 		size.button_02_width, size.button_02_height, mousePos.x, mousePos.y, NO);
 
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
@@ -292,7 +294,7 @@ int welcome_done(int game_pause) {
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
 		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-			CP_Sound_PlayAdvanced(click, .5f, 2, FALSE, CP_SOUND_GROUP_SFX);														// Play Click Sound
+			CP_Sound_PlayAdvanced(click, .5f, 2, FALSE, CP_SOUND_GROUP_SFX);													// Play Click Sound
 			game_pause = 0;																										// Unpause & Start Game
 		}
 	}
