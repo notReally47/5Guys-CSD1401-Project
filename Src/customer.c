@@ -15,7 +15,15 @@
 * Customer customer: Customer stats.
 */
 void customerLogic(int cusNum, int cusRow, int cusCol, int prevCusRow, int prevCusCol, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
-	if (!grid[cusRow][cusCol].shelf && !grid[cusRow][cusCol].boarder && !grid[cusRow][cusCol].box && !grid[cusRow][cusCol].customer && !grid[cusRow][cusCol].key && !grid[cusRow][cusCol].player && !grid[cusRow][cusCol].mecha && !grid[cusRow][cusCol].tele) {
+	if (!grid[cusRow][cusCol].shelf &&						// Collision check for shelf
+		!grid[cusRow][cusCol].boarder &&					// Collision check for border
+		!grid[cusRow][cusCol].box &&						// Collision check for box
+		!grid[cusRow][cusCol].customer &&					// Collision check for customer
+		!grid[cusRow][cusCol].key &&						// Collision check for key
+		!grid[cusRow][cusCol].player &&						// Collision check for player
+		!grid[cusRow][cusCol].mecha &&						// Collision check for wet signboard
+		!grid[cusRow][cusCol].tele)							// Collision check for teleporter
+	{
 		if (customer[cusNum].isRandom) {
 			/*Limit customer random movement within 5x5 grid*/
 			if ((customer[cusNum].ogCusCol - 2 <= cusCol && cusCol <= customer[cusNum].ogCusCol + 2) &&
@@ -164,7 +172,11 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_UP:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow - x][cusCol].box || grid[cusRow - x][cusCol].shelf || grid[cusRow - x][cusCol].mecha || grid[cusRow - x][cusCol].tele) {
+					if (grid[cusRow - x][cusCol].box ||
+						grid[cusRow - x][cusCol].shelf ||
+						grid[cusRow - x][cusCol].mecha ||
+						grid[cusRow - x][cusCol].tele) 
+					{
 						break;
 					}
 
@@ -184,7 +196,11 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_LEFT:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow][cusCol - x].box || grid[cusRow][cusCol - x].shelf || grid[cusRow][cusCol - x].mecha || grid[cusRow][cusCol - x].tele) {
+					if (grid[cusRow][cusCol - x].box ||
+						grid[cusRow][cusCol - x].shelf ||
+						grid[cusRow][cusCol - x].mecha ||
+						grid[cusRow][cusCol - x].tele) 
+					{
 						break;
 					}
 
@@ -203,7 +219,11 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_DOWN:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow + x][cusCol].box || grid[cusRow + x][cusCol].shelf || grid[cusRow + x][cusCol].mecha || grid[cusRow + x][cusCol].tele) {
+					if (grid[cusRow + x][cusCol].box ||
+						grid[cusRow + x][cusCol].shelf ||
+						grid[cusRow + x][cusCol].mecha ||
+						grid[cusRow + x][cusCol].tele) 
+					{
 						break;
 					}
 
@@ -222,7 +242,11 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 			case SOKOBAN_RIGHT:
 				for (int x = 1; x <= customer[i].range; x++) {
 					// Checks if there is any obstacle blocking the customer LOS
-					if (grid[cusRow][cusCol + x].box || grid[cusRow][cusCol + x].shelf || grid[cusRow][cusCol + x].mecha || grid[cusRow][cusCol + x].tele) {
+					if (grid[cusRow][cusCol + x].box ||
+						grid[cusRow][cusCol + x].shelf ||
+						grid[cusRow][cusCol + x].mecha ||
+						grid[cusRow][cusCol + x].tele) 
+					{
 						break;
 					}
 
