@@ -152,11 +152,11 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 
 void draw_boarder(float cellX, float cellY, float cellSize, int row, int col) {
 	if (row==0 && col==0){ // top left corner
-		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize,0.f,256.f,18.f,320.f,240);
+		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize+corneroffset,0.f,256.f,18.f,320.f,240);
 		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY-corneroffset,corneroffset,cellSize,36.f,256.f,54.f,320.f,240); 
 	}
 	else if (row==0 && col==SOKOBAN_GRID_COLS-1){ // top right corner
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize,64.f,256.f,82.f,320.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize+corneroffset,64.f,256.f,82.f,320.f,240);
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,corneroffset,cellSize,100.f,256.f,118.f,320.f,240);
 	}
 	else if (col==0 && row==SOKOBAN_GRID_ROWS-1) // bottom left corner
@@ -164,19 +164,19 @@ void draw_boarder(float cellX, float cellY, float cellSize, int row, int col) {
 	else if (col==SOKOBAN_GRID_COLS-1 && row==SOKOBAN_GRID_ROWS-1) // bottom right corner
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY-cellSize+corneroffset,corneroffset,cellSize,82.f,256.f,100.f,320.f,240);
 	else if (col==0) // left row
-		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize,0.f,256.f,18.f,320.f,240); 
+		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize+corneroffset,0.f,256.f,18.f,320.f,240); 
 	else if (row==0 && col>=SOKOBAN_GRID_COLS/3 && col<=SOKOBAN_GRID_COLS*2/3){ // top row fridge
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,240); 
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize,corneroffset,320.f,192.f,384.f,210.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize+corneroffset,corneroffset,320.f,192.f,384.f,210.f,240);
 	}
 	else if (row==0){ // top row wallpaper
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,256.f,192.f,320.f,256.f,240); 
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize,corneroffset,320.f,192.f,384.f,210.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize+corneroffset,corneroffset,320.f,192.f,384.f,210.f,240);
 	}
 	else if (row==SOKOBAN_GRID_ROWS-1) // bottom row
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,corneroffset,320.f,238.f,384.f,256.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize+corneroffset,corneroffset,320.f,238.f,384.f,256.f,240); 
 	else if (col==SOKOBAN_GRID_COLS-1) // right row
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize,64.f,256.f,82.f,320.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize+corneroffset,64.f,256.f,82.f,320.f,240); 
 }
 void draw_box(float cellX,float cellY,float cellSize){
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,64.f,128.f,128.f,192.f,255);
