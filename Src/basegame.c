@@ -349,9 +349,9 @@ void base_Update(void) {
 				}
 
 				else if (teleporter[0] == 1 && currCell.tele != 0) {
-						if ((row == teleporters[currCell.tele-1].posY) && col == teleporters[currCell.tele-1].posX) {
-							draw_teleporter(cellX,cellY,cellSize);
-						}
+					if ((row == teleporters[currCell.tele-1].posY) && col == teleporters[currCell.tele-1].posX) {
+						draw_teleporter(cellX,cellY,cellSize);
+					}
 				}
 			}
 		}

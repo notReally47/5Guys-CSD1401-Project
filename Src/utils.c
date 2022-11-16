@@ -133,7 +133,6 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 					*posY = teleporters[tele - 1].posX + (*posY - prevPosY);					// Move Player row to the Previous Odd Numbered Teleporter Row
 					teleporter[1] = 1;															// Set Teleporter Cooldown to 1
 				}
-				CP_Sound_Free(&teleport_sound);
 			}
 		}
 
