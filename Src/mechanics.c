@@ -130,6 +130,7 @@ void mechanic_flags(void) {
                 customer[i].cusRow = 0;								// zeros both row/col to disable
                 customer[i].cusCol = 0;
                 customer[i].isActive = 0;
+                grid[customer[i].cusRow][customer[i].cusCol].customer = 0;
                 total++;											// counter to remove maximum of 2 customers
             }
         }
@@ -139,16 +140,19 @@ void mechanic_flags(void) {
                     customer[i].cusRow = CustomerBackup[0][0];
                     customer[i].cusCol = CustomerBackup[0][1];
                     customer[i].isActive = 1;
+                    grid[customer[i].cusRow][customer[i].cusCol].customer = 1;
                 }
                 else if (i == CustomerBackup[1][2]) {
                     customer[i].cusRow = CustomerBackup[1][0];
                     customer[i].cusCol = CustomerBackup[1][1];
                     customer[i].isActive = 1;
+                    grid[customer[i].cusRow][customer[i].cusCol].customer = 1;
                 }
             }
         if (UM.flags & 8)	// check if lesser customer card is selected
             for (int i = 0, total = 0; i <= CUSTOMER_MAX; i++) {	// removes 2 more customers
                 if (customer[i].isActive && CP_Random_GetBool() == YES && total < 2) {
+                    grid[customer[i].cusRow][customer[i].cusCol].customer = 0;
                     customer[i].cusRow = 0;							// zeros both row/col to disable
                     customer[i].cusCol = 0;
                     customer[i].isActive = 0;
