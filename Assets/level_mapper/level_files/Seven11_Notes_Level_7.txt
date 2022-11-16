@@ -1,4 +1,5 @@
-Level Duration is 30
+Level Duration is 50
+Level Move Limit is 300
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border
@@ -84,11 +85,11 @@ Level Duration is 30
 [2][0] is a Border
 [2][1] is Blank
 [2][2] is Blank
-[2][3] is Player
-[2][4] is a Box
-[2][5] is a Box
-[2][6] is a Key
-[2][7] is a Key
+[2][3] is Blank
+[2][4] is Blank
+[2][5] is Blank
+[2][6] is Blank
+[2][7] is Blank
 [2][8] is Blank
 [2][9] is Blank
 [2][10] is Blank
@@ -128,7 +129,7 @@ Level Duration is 30
 [3][3] is Blank
 [3][4] is Blank
 [3][5] is Blank
-[3][6] is Blank
+[3][6] is Player
 [3][7] is Blank
 [3][8] is Blank
 [3][9] is Blank
@@ -209,11 +210,11 @@ Level Duration is 30
 [5][2] is Blank
 [5][3] is Blank
 [5][4] is Blank
-[5][5] is a Customer
-[5][6] is Blank
+[5][5] is Blank
+[5][6] is a Box
 [5][7] is Blank
 [5][8] is Blank
-[5][9] is Blank
+[5][9] is a Key
 [5][10] is Blank
 [5][11] is Blank
 [5][12] is Blank
