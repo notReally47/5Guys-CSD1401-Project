@@ -69,21 +69,32 @@ int collisionCheck(int posX, int posY, int moveX, int moveY, Cell grid[SOKOBAN_G
 	if (!grid[newPosX][newPosY].boarder &&
 		!grid[newPosX][newPosY].customer &&
 		!grid[newPosX][newPosY].shelf &&
-		!grid[newPosX][newPosY].mecha &&
-		!grid[newPosX][newPosY].tele)
+		!grid[newPosX][newPosY].mecha)
 	{
 		/*If player is pushing a box, check if theres anything occupying the tile after*/
 		if (grid[newPosX][newPosY].box) {
 			int nextPosX = newPosX + moveX, nextPosY = newPosY + moveY;
 
-			if (!grid[nextPosX][nextPosY].box &&
-				!grid[nextPosX][nextPosY].boarder &&
-				!grid[nextPosX][nextPosY].customer &&
-				!grid[nextPosX][nextPosY].shelf &&
-				!grid[nextPosX][nextPosY].mecha &&
-				!grid[nextPosX][nextPosY].tele)
-			{
-				return TRUE;
+			if (!teleporter[0]) {
+				if (!grid[nextPosX][nextPosY].box &&
+					!grid[nextPosX][nextPosY].boarder &&
+					!grid[nextPosX][nextPosY].customer &&
+					!grid[nextPosX][nextPosY].shelf &&
+					!grid[nextPosX][nextPosY].mecha)
+				{
+					return TRUE;
+				}
+			}
+			else {
+				if (!grid[nextPosX][nextPosY].box &&
+					!grid[nextPosX][nextPosY].boarder &&
+					!grid[nextPosX][nextPosY].customer &&
+					!grid[nextPosX][nextPosY].shelf &&
+					!grid[nextPosX][nextPosY].mecha &&
+					!grid[nextPosX][nextPosY].tele)
+				{
+					return TRUE;
+				}
 			}
 		}
 		/*Player is not pushing a box*/
