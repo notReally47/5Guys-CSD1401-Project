@@ -128,10 +128,11 @@ void mechanic_flags(void) {
                 CustomerBackup[total][0] = customer[i].ogCusRow;	// save original position
                 CustomerBackup[total][1] = customer[i].ogCusCol;
                 CustomerBackup[total][2] = i;						// save customer index
+                grid[customer[i].cusRow][customer[i].cusCol].customer = 0;
                 customer[i].cusRow = 0;								// zeros both row/col to disable
                 customer[i].cusCol = 0;
                 customer[i].isActive = 0;
-                grid[customer[i].cusRow][customer[i].cusCol].customer = 0;
+                
                 total++;											// counter to remove maximum of 2 customers
             }
         }
@@ -178,7 +179,6 @@ void mechanic_flags(void) {
                     customer[i].cusCol = 0;
                     customer[i].isActive = 0;
                     customer_number[total] = i;
-                    grid[customer[i].cusRow][customer[i].cusCol].customer = 0;
                     total++;										// counter to remove maximum of 2 customers
                 }
             }
