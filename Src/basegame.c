@@ -13,6 +13,7 @@
 #include "level_transition.h"		// Needed to transit to Level Transition state
 #include "level_overlay.h"			// Needed for Overlays during Welcome, Pause, Reset or Game Over
 #include "easydraw.h"
+#include "basegame.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -91,6 +92,7 @@ void base_Init(void) {
 	/*Unique mechanics Initialisation*/
 	// to force mechanic enabler check card_effect() for flag details
 	// UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
+	//UM.flags |= 4;
 	mechanic_flags();												// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
 	total_objectives = get_objectives(grid);						// Get Number of Objectives to meet (Number of Keys)
 	// If mechanic_flags is enabled, make sure it is also enabled in RESET
@@ -407,16 +409,17 @@ void base_Update(void) {
 
 			/* If 'YES' was Clicked */
 			if (reset_confirmed == 1) {
-				reset_map(moves, grid, customer, path, teleporters);		// Resets grid to the initial values based on the CSV file
-				totalElapsedTime = 0;										// Reset Timer
-				face = 0;													// Reset Player Direcction
-				reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
-				times_distracted = 0;										// Reset the display of number of timesdistracted
-				duration_lost = 0;											// Reset the display of duration lost due to distractions
-				overlay_function = 0;
-				game_pause = 0;												// Set game_pause to 0 to resume game
-				mechanic_flags();											// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
-				total_objectives = get_objectives(grid);					// Get Number of Objectives to meet (Number of Keys)
+				//reset_map(moves, grid, customer, path, teleporters);		// Resets grid to the initial values based on the CSV file
+				//totalElapsedTime = 0;										// Reset Timer
+				//face = 0;													// Reset Player Direcction
+				//reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
+				//times_distracted = 0;										// Reset the display of number of timesdistracted
+				//duration_lost = 0;											// Reset the display of duration lost due to distractions
+				//overlay_function = 0;
+				//game_pause = 0;												// Set game_pause to 0 to resume game
+				//mechanic_flags();											// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+				//total_objectives = get_objectives(grid);					// Get Number of Objectives to meet (Number of Keys)
+				CP_Engine_SetNextGameStateForced(base_Init, base_Update, base_Exit);
 			}
 
 			/* If 'NO' was Clicked */
