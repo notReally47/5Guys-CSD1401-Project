@@ -4,7 +4,7 @@
 #include "level_generate.h"		// Needed for set_map() function
 #include <stdio.h>				// Needed for printf()
 
-int global_move;				// The global variable for move counting, to be used for different funtions & logics
+int global_move, move_limit;		// The global variable for move counting & move limit, to be used for different funtions & logics
 
 /* Counts the number of moves and saves the previous state of the grid to a new array 'moves' */
 void save_move(Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {

@@ -7,7 +7,7 @@
 #include "spritesheet.h"
 #include "mechanics.h"
 #include "mainmenu.h"
-#include "movement.h"				// Needed for saveMove(), undoMove() & resetMap() functions
+#include "movement.h"				// Needed for save_move(), undo_move() & reset_map() functions
 #include "level_logic.h"			// Needed for extern global_level and leveling logic
 #include "level_generate.h"			// Needed for set_map();
 #include "level_transition.h"		// Needed to transit to Level Transition state
@@ -46,7 +46,7 @@ GIF speechSprite;
 void base_Init(void) {
 
 	/* Settings */
-	CP_Settings_StrokeWeight(0.5f);
+	CP_Settings_StrokeWeight(0.5f);								// Stroke thickness between Cells
 
 	// for clock settings
 	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
@@ -77,19 +77,21 @@ void base_Init(void) {
 
 	load_spritesheet(&cellSize, cameratoggle);
 	set_map(grid, customer, path, teleporters);						// Initialise Map
-	global_move = 1;												// Initialise move with 1 for rendering purposes*
+	global_move = 1;												// Initialise move with 1 for rendering purposes
+
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
-		for (int col = 0, m = 0; col < SOKOBAN_GRID_COLS; col++) {
+		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			moves[0][row][col].player = 0;							//Initialise to 0 for rendering purposes
 		}
 	}
+
 	/*Unique mechanics Initialisation*/
 	// to force mechanic enabler check card_effect() for flag details
 	// UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
 	//mechanic_flags(); // Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
-	total_objectives = getObjective(grid);
+	total_objectives = get_objectives(grid);						// Get Number of Objectives to meet (Number of Keys)
 	
-	/*GIF*/
+	/* GIF */
 	setGIF(&speechSprite, "./Assets/Spritesheet/speech.png", 1, 4, 0, 0, cellSize);
 	gifElasped = 0.f;
 
@@ -117,14 +119,14 @@ void base_Update(void) {
 		game_pause = !game_pause;												// Toggle Pause State
 	}
 
-	/*Read grid*/
+	/* Read Grid */
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
-			/*Check if all objectives has been reached*/
+			/* Check if all objectives has been reached */
 			if (grid[row][col].key && grid[row][col].box)
 				isCompleted++;
 
-			/*Get position of player*/
+			/* Get position of player */
 			if (grid[row][col].player) {
 				playerRow = row;
 				playerCol = col;
@@ -167,7 +169,7 @@ void base_Update(void) {
 		}
 
 		/* Lose Condition, When Time's Up */
-		if (clock <= 0) {
+		if (clock <= 0 || ((global_move - 1) >= move_limit)) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
 			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
 			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
@@ -219,26 +221,26 @@ void base_Update(void) {
 			/*Check for input and get the direction of the input*/
 			int dir = getDirection();
 
-			/*Set direction that the player is facing.*/
+			/* Set direction that the player is facing */
 			switch (dir) {
-			case 1: // up
+			case 1:																// FACE UP
 				face = 1;
 				break;
-			case 2: // left
+			case 2:																// FACE LEFT
 				face = 2;
 				break;
-			case 3: // down
+			case 3:																// FACE DOWN
 				face = 3;
 				break;
-			case 4: // right
+			case 4:																// FACE RIGHT
 				face = 4;
 				break;
 			}
 
-			/*If there is movement.*/
+			/* If there is Movement */
 			int pushBox = 0;
 			if (dir > 0) {
-				save_move(moves, grid);
+				save_move(moves, grid);											// Save previous grid state
 				pushBox = getCell(&playerRow, &playerCol, dir, grid, teleporters);
 			}
 
@@ -254,8 +256,8 @@ void base_Update(void) {
 
 			/* Undo Move */
 			if (CP_Input_KeyTriggered(KEY_U) && global_move > 1) {
-				undo_move(moves, grid);
-				face = 0;
+				undo_move(moves, grid);											// Undo Move by loading previous grid state
+				face = 0;														// Reset Direction
 			}
 
 			else if (CP_Input_KeyTriggered(KEY_C) && cameratogglecooldown > 0.5f) {
@@ -384,7 +386,7 @@ void base_Update(void) {
 
 			/* If 'YES' was Clicked */
 			if (reset_confirmed == 1) {
-				reset_map(moves, grid, customer, path, teleporters);			// Resets grid to the initial values based on the CSV file
+				reset_map(moves, grid, customer, path, teleporters);		// Resets grid to the initial values based on the CSV file
 				totalElapsedTime = 0;										// Reset Timer
 				face = 0;													// Reset Player Direcction
 				reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
@@ -425,6 +427,8 @@ void base_Update(void) {
 }
 
 void base_Exit(void) {
+
+	/* Free Assets */
 	CP_Image_Free(speechSprite.spritesheet);
 	CP_Sound_Free(&fail);
 	CP_Sound_Free(&push);

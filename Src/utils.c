@@ -107,6 +107,7 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 		grid[nextPosX][nextPosY].box = grid[*posX][*posY].box;
 		grid[*posX][*posY].box = 0;
 		global_move++;
+		//move_limit--;
 		printf("Current Moves: %d\n", global_move - 1);
 		return grid[nextPosX][nextPosY].key ? 2 : 1;
 	}
@@ -136,20 +137,9 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 			}
 		}
 
-		//if (teleporter[0] == 1) {
-		//	if (*posX == teleporter[1] && *posY == teleporter[2]) {
-		//		*posX = teleporter[3] + (*posX - prevPosX);
-		//		*posY = teleporter[4] + (*posY - prevPosY);
-		//		teleporter[9] = 1;
-		//	}
-		//	else if (*posX == teleporter[3] && *posY == teleporter[4]) {
-		//		*posX = teleporter[1] + (*posX - prevPosX);
-		//		*posY = teleporter[2] + (*posY - prevPosY);
-		//		teleporter[9] = 1;
-		//	}
-		//}
 		grid[*posX][*posY].player = 1;
 		global_move++;
+		//move_limit--;
 		return 0;
 		printf("Current Moves: %d\n", global_move - 1);
 	}
@@ -209,7 +199,7 @@ int timer(int duration, float startTime) {
 }
 
 /*Counts the number of key objective points in the grid and returns it*/
-int getObjective(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
+int get_objectives(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]) {
 	int objective = 0;
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
@@ -237,6 +227,10 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 		strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
 	}
 	strcat(line, buffer);																															// Concatenate line with buffer
+	if (stat == "Move: ") {
+		sprintf_s(buffer, _countof(buffer), "/%d", move_limit);
+		strcat(line, buffer);
+	}
 
 	if (cameratoggle == 2) {
 		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_TOP);	// Align Text Left and Top

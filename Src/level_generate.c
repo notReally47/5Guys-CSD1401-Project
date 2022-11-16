@@ -4,6 +4,7 @@
 #include "structs.h"				// Needed for Grid, Customer & Teleporter Structs
 #include "defines.h"				// Needed for define values
 #include "level_logic.h"			// Needed to use Global Extern Variable 'level'
+#include "movement.h"				// Needed for Global Extern move_limit
 #include <stdio.h>					// Needed for parsing CSV file
 #include <stdlib.h>					// Needed for exit() function
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
@@ -73,6 +74,10 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 		}
 		if (line == 0) {																		// First Line of the CSV file is the Level Duration
 			read = fscanf(csv_file, "%d", &duration);											// Scan and store to global variable 'duration'
+			if (read == 1) line++;																// Increment line so that function will not read for duration again
+		}
+		else if (line == 1) {																	// Second Line of the CSV file is the Level Duration
+			read = fscanf(csv_file, "%d", &move_limit);											// Scan and store to global variable 'move_limit'
 			if (read == 1) line++;																// Increment line so that function will not read for duration again
 		}
 		else {
