@@ -231,9 +231,6 @@ void Options_Update() {
 
 	/*Clears and draws background art*/
 	draw_background();
-	char buf[25] = { 0 };
-	sprintf_s(buf, _countof(buf), "Taskbar Height : %d", getTaskBarHeight());
-	drawAlignedText(RED, CENTER, buf, window.x / 2, window.y - (window.y / 4));
 
 	/*Resolution text*/
 	const char* resList[3];

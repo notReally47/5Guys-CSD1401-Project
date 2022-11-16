@@ -15,7 +15,7 @@ Config readFile() {
 	.settings.windowed = 1,
 	.settings.audio = 50,
 	.settings.resolutionWidth = (unsigned int)(GetSystemMetrics(SM_CXSCREEN) / 2),
-	.settings.resolutionHeight = (unsigned int) (GetSystemMetrics(SM_CYSCREEN) / 2),
+	.settings.resolutionHeight = (unsigned int)(GetSystemMetrics(SM_CYSCREEN) / 2),
 	};
 
 	FILE* file;
