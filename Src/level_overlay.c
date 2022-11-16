@@ -274,7 +274,7 @@ void overlay_welcome() {
 	CP_Font_DrawTextBox(welcome_text, size.text_box_position_x, size.text_box_position_y, size.text_box_row_width);				// Draw Welcome Message
 	CP_Font_DrawTextBox(move_text, size.text_box_position_x, size.text_box_position_y * 2.5f, size.text_box_row_width);			// Draw Welcome Message Cont'd
 	
-	CP_Settings_Tint(DARKGRAY);																									// Tint the Overlay Transparent DARKGRAY
+	CP_Settings_Tint(ABITBLACK);																									// Tint the Overlay Transparent DARKGRAY
 }
 
 int welcome_done(int game_pause) {
