@@ -8,6 +8,7 @@
 #include "level_select.h"
 #include "spritesheet.h"
 #include "easydraw.h"
+#include "mechanics.h"
 
 extern Config config;
 CP_Sound click = NULL, gameMusic;
@@ -28,6 +29,7 @@ void Main_Menu_Init()
 
 	// SFX
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
+	card_init(); // Initialise Card Mechanic at the start of the program
 }
 
 void Main_Menu_Update()

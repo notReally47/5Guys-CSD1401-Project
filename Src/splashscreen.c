@@ -36,7 +36,6 @@ void splash_screen_init(void)
     else {
         CP_System_Fullscreen();
     }
-    card_init(); // Initialise Card Mechanic at the start of the program
     fade = 0;
     x = CP_System_GetWindowWidth()>>1;
     y = CP_System_GetWindowHeight()>>1;
