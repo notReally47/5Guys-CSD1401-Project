@@ -113,7 +113,7 @@ Level Move Limit is 850
 [2][28] is Blank
 [2][29] is Blank
 [2][30] is Blank
-[2][31] is Blank
+[2][31] is a Customer
 [2][32] is Blank
 [2][33] is Blank
 [2][34] is Blank
@@ -134,14 +134,14 @@ Level Move Limit is 850
 [3][8] is Blank
 [3][9] is a Shelf
 [3][10] is Blank
-[3][11] is Blank
+[3][11] is a Customer
 [3][12] is Blank
 [3][13] is Blank
 [3][14] is Blank
 [3][15] is Blank
 [3][16] is Blank
 [3][17] is Blank
-[3][18] is Blank
+[3][18] is a Waypoint
 [3][19] is Blank
 [3][20] is Blank
 [3][21] is Blank
@@ -1070,7 +1070,7 @@ Level Move Limit is 850
 [26][1] is Blank
 [26][2] is Blank
 [26][3] is Blank
-[26][4] is Blank
+[26][4] is a Customer
 [26][5] is Blank
 [26][6] is Blank
 [26][7] is Blank
@@ -1178,12 +1178,12 @@ Level Move Limit is 850
 [28][27] is Blank
 [28][28] is a Shelf
 [28][29] is Blank
-[28][30] is Blank
+[28][30] is a Customer
 [28][31] is Blank
 [28][32] is Blank
 [28][33] is Blank
 [28][34] is Blank
-[28][35] is Blank
+[28][35] is a Waypoint
 [28][36] is Blank
 [28][37] is Blank
 [28][38] is a Teleporter

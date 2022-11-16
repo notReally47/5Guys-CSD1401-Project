@@ -125,7 +125,7 @@ Level Move Limit is 900
 [2][40] is a Border
 [3][0] is a Border
 [3][1] is Blank
-[3][2] is Blank
+[3][2] is a Customer
 [3][3] is Blank
 [3][4] is a Box
 [3][5] is Blank
@@ -1181,7 +1181,7 @@ Level Move Limit is 900
 [28][30] is a Shelf
 [28][31] is Blank
 [28][32] is Blank
-[28][33] is Blank
+[28][33] is a Customer
 [28][34] is Blank
 [28][35] is Blank
 [28][36] is Blank
