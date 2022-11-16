@@ -248,3 +248,31 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 		CP_Font_DrawText(line, (float)config.settings.resolutionWidth - cellSize, cellSize * index);	// Draw Text 'line' on the Game
 	}
 }
+
+/*Check if Taskbar is visible or not*/
+BOOL IsTaskbarWndVisible(void) {
+	HWND hTaskbarWnd = FindWindow("Shell_TrayWnd", NULL);
+	HMONITOR hMonitor = MonitorFromWindow(hTaskbarWnd, MONITOR_DEFAULTTONEAREST);
+	MONITORINFO info = { sizeof(MONITORINFO) };
+	if (GetMonitorInfo(hMonitor, &info))
+	{
+		RECT rect;
+		GetWindowRect(hTaskbarWnd, &rect);
+		if ((rect.top >= info.rcMonitor.bottom - 4) ||
+			(rect.right <= 2) ||
+			(rect.bottom <= 4) ||
+			(rect.left >= info.rcMonitor.right - 2))
+			return FALSE;
+
+		return TRUE;
+	}
+}
+
+int getTaskBarHeight(void)
+{
+	RECT rect;
+	HWND taskBar = FindWindow("Shell_traywnd", NULL);
+	if (taskBar && GetWindowRect(taskBar, &rect)) {
+		return rect.bottom - rect.top;
+	}
+}

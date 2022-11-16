@@ -10,6 +10,7 @@
 #include <stdio.h> // sprintf_s()
 #include <stdlib.h> //_countof()
 #include <string.h> // strlen()
+#include "utils.h"
 
 extern Config config;
 Config newConfig;
@@ -73,6 +74,7 @@ void Options_Init() {
 	/*Create Dropdown List*/
 	setDropDownList(&currentRes, newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight, newConfig.settings.windowed, window.x - (MAX_LENGTH * textSize / 2 + PADDING) / 2 - PADDING, 2 * PADDING + back.btnHeight + textSize / 2, MAX_LENGTH * textSize / 2 + PADDING, textSize);
 	setDropDownList(&halfscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth() / 2), (unsigned int)(CP_System_GetDisplayHeight() / 2), YES, currentRes.button.position.x, currentRes.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
+	IsTaskbarWndVisible() ? setDropDownList(&fullscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight() - getTaskBarHeight()), YES, halfscreenWindowed.button.position.x, halfscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight) :
 	setDropDownList(&fullscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight()), YES, halfscreenWindowed.button.position.x, halfscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
 	setDropDownList(&fullscreen, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight()), NO, fullscreenWindowed.button.position.x, fullscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
 	resolution[0] = halfscreenWindowed, resolution[1] = fullscreenWindowed, resolution[2] = fullscreen;
@@ -181,6 +183,12 @@ void Options_Update() {
 				/*Apply*/
 				if (IsAreaClicked(apply.position.x, apply.position.y, apply.btnWidth, apply.btnHeight, mouse.x, mouse.y)) {
 					CP_Sound_PlayAdvanced(click, newConfig.settings.audio / 100.f, 2, FALSE, CP_SOUND_GROUP_SFX);
+					if (resSelected->actHeight == fullscreenWindowed.actHeight && resSelected->actWidth == fullscreenWindowed.actWidth) {
+						CP_System_SetWindowPosition(0, 0);
+					}
+					else {
+						CP_System_SetWindowPosition(window.x / 4, window.y / 4);
+					}
 					newConfig.settings.resolutionWidth = resSelected->actWidth;
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
 					newConfig.settings.windowed = resSelected->windowed;
@@ -227,6 +235,9 @@ void Options_Update() {
 
 	/*Clears and draws background art*/
 	draw_background();
+	char buf[25] = { 0 };
+	sprintf_s(buf, _countof(buf), "Taskbar Height : %d", getTaskBarHeight());
+	drawAlignedText(RED, CENTER, buf, window.x / 2, window.y - (window.y / 4));
 
 	/*Resolution text*/
 	const char* resList[3];

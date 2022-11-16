@@ -13,3 +13,5 @@ int gameLogic(int *posX, int *posY, int nextPosX, int nextPosY, int prevPosX, in
 int timer(int duration, float startTime);
 int get_objectives(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS]);
 void show_stats(float cellSize, char* stat, int value, int cameratoggle, float index);
+BOOL IsTaskbarWndVisible(void);
+int getTaskBarHeight(void);
