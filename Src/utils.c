@@ -69,7 +69,8 @@ int collisionCheck(int posX, int posY, int moveX, int moveY, Cell grid[SOKOBAN_G
 	if (!grid[newPosX][newPosY].boarder &&
 		!grid[newPosX][newPosY].customer &&
 		!grid[newPosX][newPosY].shelf &&
-		!grid[newPosX][newPosY].mecha)
+		!grid[newPosX][newPosY].mecha &&
+		!grid[newPosX][newPosY].tele)
 	{
 		/*If player is pushing a box, check if theres anything occupying the tile after*/
 		if (grid[newPosX][newPosY].box) {
@@ -79,7 +80,8 @@ int collisionCheck(int posX, int posY, int moveX, int moveY, Cell grid[SOKOBAN_G
 				!grid[nextPosX][nextPosY].boarder &&
 				!grid[nextPosX][nextPosY].customer &&
 				!grid[nextPosX][nextPosY].shelf &&
-				!grid[nextPosX][nextPosY].mecha)
+				!grid[nextPosX][nextPosY].mecha &&
+				!grid[nextPosX][nextPosY].tele)
 			{
 				return TRUE;
 			}
