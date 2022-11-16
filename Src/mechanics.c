@@ -230,12 +230,13 @@ void card_selection(int stage, int* applied) {
         int* decksize = (stage == 0) ? &UM.negdecksize : &UM.posdecksize;
         int* carddeck = (stage == 0) ? UM.negcards : UM.poscards;
 
+        CP_Settings_StrokeWeight(0.0f);
         if (cardChosen == 1) {
-            CP_Settings_Fill(VIOLET);
+            CP_Settings_Fill(NEON_PINK);
             CP_Graphics_DrawRect(card.center_x, card.center_y, card.width + 0.01f * (float)CP_System_GetWindowWidth(), card.height + 0.01f * (float)CP_System_GetWindowWidth());
         }
         else if (cardChosen == 2) {
-            CP_Settings_Fill(VIOLET);
+            CP_Settings_Fill(NEON_PINK);
             CP_Graphics_DrawRect(card.center_x + card.center_x, card.center_y, card.width + 0.01f * (float)CP_System_GetWindowWidth(), card.height + 0.01f * (float)CP_System_GetWindowWidth());
         }
 
