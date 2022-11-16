@@ -1,4 +1,5 @@
-Level Duration is 60
+Level Duration is 20
+Level Move Limit is 10
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border
@@ -125,11 +126,11 @@ Level Duration is 60
 [3][0] is a Border
 [3][1] is Blank
 [3][2] is Blank
-[3][3] is Blank
+[3][3] is Player
 [3][4] is Blank
-[3][5] is Blank
+[3][5] is a Box
 [3][6] is Blank
-[3][7] is Blank
+[3][7] is a Key
 [3][8] is Blank
 [3][9] is Blank
 [3][10] is Blank
@@ -335,15 +336,15 @@ Level Duration is 60
 [8][5] is Blank
 [8][6] is Blank
 [8][7] is Blank
-[8][8] is Player
-[8][9] is a Box
-[8][10] is a Box
-[8][11] is a Box
-[8][12] is a Box
-[8][13] is a Key
-[8][14] is a Key
-[8][15] is a Key
-[8][16] is a Key
+[8][8] is Blank
+[8][9] is Blank
+[8][10] is Blank
+[8][11] is Blank
+[8][12] is Blank
+[8][13] is Blank
+[8][14] is Blank
+[8][15] is Blank
+[8][16] is Blank
 [8][17] is Blank
 [8][18] is Blank
 [8][19] is Blank
