@@ -21,14 +21,14 @@ int index,toggled;
 * 
 */
 void init_spritesheet(float* cellSize,int cameratoggle) {
-	*cellSize = (float)(config.settings.resolutionHeight/((SOKOBAN_GRID_ROWS-1)/cameratoggle));
+	*cellSize = (float)(config.settings.resolutionHeight/((SOKOBAN_GRID_ROWS)/cameratoggle));
 	// Sprite Dimensions - Scale sprite based on cellSize
 	Offset[0] = CP_Vector_Scale(CP_Vector_Set(frame,frame),*cellSize/(frame));
 	// Offset[1]lation - Align sprite placement to the center of the cell
 	Offset[1] = CP_Vector_Scale(CP_Vector_Set((*cellSize-Offset[0].x),(*cellSize-Offset[0].y)),0.5f);
 	// Camera Translation - Aligns camera to player's position
 	Offset[2] = CP_Vector_Set((float)(SOKOBAN_GRID_COLS/(cameratoggle*2)),(float)(SOKOBAN_GRID_ROWS/(cameratoggle*2)));
-	corneroffset=*cellSize*(18.f/64.f);
+	corneroffset=*cellSize*(17.f/64.f);
 	
 	move = (float)((int)*cellSize / (CP_System_GetFrameRate()/3.f));
 }
@@ -68,9 +68,9 @@ void load_background(void) {
 * when variable face is 0, the player will re-initialise its position. this is called at the start and whenever player undo their move
 * 
 */
-int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int cameratoggle) {
-	float cellx = cellSize*(float)playerPosY-cellSize;
-	float celly = cellSize*(float)playerPosX;
+int draw_player(float cellSize,float cellAlign,int playerPosX,int playerPosY,int face,int cameratoggle) {
+	float cellx = cellSize*(float)playerPosY+cellAlign;
+	float celly = cellSize*(float)playerPosX+cellSize*0.85f;
 	int isAnimating = 0;
 	static float elapsed = 0.f;
 	elapsed += CP_System_GetDt();
@@ -93,7 +93,7 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 		Player = CP_Vector_Set(cellx,celly);
 	case SOKOBAN_DOWN:
 		if (teleporter[1] == 1) {
-			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX-1));
+			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX-1)+cellSize*0.85f);
 			teleporter[1] = 0;
 		}
 		if (Player.y < celly) {
@@ -106,7 +106,7 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 		break;
 	case SOKOBAN_UP:
 		if (teleporter[1] == 1) {
-			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX+1));
+			Player = CP_Vector_Set(cellx,cellSize*(float)(playerPosX+1)+cellSize*0.85f);
 			teleporter[1] = 0;
 		}
 		if (Player.y > celly) {
@@ -119,7 +119,7 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 		break;
 	case SOKOBAN_LEFT:
 		if (teleporter[1] == 1) {
-			Player = CP_Vector_Set(cellSize*(float)(playerPosY+1)-cellSize,celly);
+			Player = CP_Vector_Set(cellSize*(float)(playerPosY+1)+cellAlign,celly);
 			teleporter[1] = 0;
 		}
 		if (Player.x > cellx) {
@@ -132,7 +132,7 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 		break;
 	case SOKOBAN_RIGHT:
 		if (teleporter[1] == 1) {
-			Player = CP_Vector_Set(cellSize*(float)(playerPosY-1)-cellSize,celly);
+			Player = CP_Vector_Set(cellSize*(float)(playerPosY-1)+cellAlign,celly);
 			teleporter[1] = 0;
 		}
 		if (Player.x < cellx) {
@@ -152,31 +152,31 @@ int draw_player(float cellSize,int playerPosX,int playerPosY,int face,int camera
 
 void draw_boarder(float cellX, float cellY, float cellSize, int row, int col) {
 	if (row==0 && col==0){ // top left corner
-		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize+corneroffset,0.f,256.f,18.f,320.f,240);
-		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY-corneroffset,corneroffset,cellSize,36.f,256.f,54.f,320.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX+cellSize-corneroffset,cellY,corneroffset,cellSize+corneroffset,0.f,256.f,18.f,320.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX+cellSize-corneroffset,cellY-corneroffset,corneroffset,cellSize,36.f,256.f,54.f,320.f,240); 
 	}
 	else if (row==0 && col==SOKOBAN_GRID_COLS-1){ // top right corner
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize+corneroffset,64.f,256.f,82.f,320.f,240);
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,corneroffset,cellSize,100.f,256.f,118.f,320.f,240);
 	}
 	else if (col==0 && row==SOKOBAN_GRID_ROWS-1) // bottom left corner
-		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY-cellSize+corneroffset,corneroffset,cellSize,18.f,256.f,36.f,320.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX+cellSize-corneroffset,cellY-cellSize+corneroffset,corneroffset,cellSize,18.f,256.f,36.f,320.f,240);
 	else if (col==SOKOBAN_GRID_COLS-1 && row==SOKOBAN_GRID_ROWS-1) // bottom right corner
 		CP_Image_DrawSubImage(spritesheet,cellX,cellY-cellSize+corneroffset,corneroffset,cellSize,82.f,256.f,100.f,320.f,240);
 	else if (col==0) // left row
-		CP_Image_DrawSubImage(spritesheet,-corneroffset,cellY,corneroffset,cellSize+corneroffset,0.f,256.f,18.f,320.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX+cellSize-corneroffset,cellY,corneroffset,cellSize+ (cellSize / (frame)),0.f,256.f,18.f,320.f,240); 
 	else if (row==0 && col>=SOKOBAN_GRID_COLS/3 && col<=SOKOBAN_GRID_COLS*2/3){ // top row fridge
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,320.f,128.f,384.f,192.f,240); 
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize+corneroffset,corneroffset,320.f,192.f,384.f,210.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize+ (cellSize / (frame)),cellSize,320.f,128.f,384.f,192.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize + (cellSize / (frame)),corneroffset,320.f,192.f,384.f,210.f,240);
 	}
 	else if (row==0){ // top row wallpaper
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,256.f,192.f,320.f,256.f,240); 
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize+corneroffset,corneroffset,320.f,192.f,384.f,210.f,240);
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize+ (cellSize / (frame)),cellSize,256.f,192.f,320.f,256.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY-corneroffset,cellSize+ (cellSize / (frame)),corneroffset,320.f,192.f,384.f,210.f,240);
 	}
 	else if (row==SOKOBAN_GRID_ROWS-1) // bottom row
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize+corneroffset,corneroffset,320.f,238.f,384.f,256.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize + (cellSize / (frame)),corneroffset,320.f,238.f,384.f,256.f,240);
 	else if (col==SOKOBAN_GRID_COLS-1) // right row
-		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize+corneroffset,64.f,256.f,82.f,320.f,240); 
+		CP_Image_DrawSubImage(spritesheet,cellX,cellY,corneroffset,cellSize + (cellSize / (frame)),64.f,256.f,82.f,320.f,240);
 }
 void draw_box(float cellX,float cellY,float cellSize){
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,64.f,128.f,128.f,192.f,255);
@@ -193,9 +193,9 @@ void draw_floor(float cellX,float cellY,float cellSize){
 /* moves the whole canvas with the player when moving. allow for a zoom-in side scrolling effect
 */
 
-void draw_customer(float cellSize,int customerPosX,int customerPosY,int customerdirection,int customernumber,int cameratoggle) {
-	float cellx = cellSize*(float)customerPosY-cellSize;
-	float celly = cellSize*(float)customerPosX;
+void draw_customer(float cellSize,float cellAlign,int customerPosX,int customerPosY,int customerdirection,int customernumber,int cameratoggle) {
+	float cellx = cellSize*(float)customerPosY+cellAlign;
+	float celly = cellSize*(float)customerPosX+cellSize*0.85f;
 
 	// cellSize is for when the customer moves
 	int i = customernumber;
@@ -254,9 +254,9 @@ void draw_shelf(float cellX, float cellY, float cellSize,int index) {
 void draw_teleporter(float cellX,float cellY,float cellSize) {
 	CP_Image_DrawSubImage(spritesheet,cellX,cellY,cellSize,cellSize,index*frame,frame*3.f,(index+1)*frame,frame*4.f,255);
 }
-void world_camera(float cellSize,int playerRow,int playerCol,int face,int cameratoggle) {
-	float cellx = cellSize*(float)playerCol-cellSize;
-	float celly = cellSize*(float)playerRow;
+void world_camera(float cellSize,float cellAlign,int playerRow,int playerCol,int face,int cameratoggle) {
+	float cellx = cellSize*(float)playerCol+cellAlign;
+	float celly = cellSize*(float)playerRow+cellSize*0.85f;
 	int xoffset = playerCol-Offset[2].x;
 	int yoffset = playerRow-Offset[2].y;
 	if (cameratoggle==(toggled+1))

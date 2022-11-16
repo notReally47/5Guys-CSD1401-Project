@@ -78,6 +78,7 @@ void base_Init(void) {
 	time_lost = 45;													// default time lost if distracted
 
 	load_spritesheet(&cellSize, cameratoggle);
+	cellAlign = (float)((config.settings.resolutionWidth-(int)cellSize*SOKOBAN_GRID_COLS)/2);
 	set_map(grid, customer, path, teleporters);						// Initialise Map
 	global_move = 1;												// Initialise move with 1 for rendering purposes
 
@@ -311,15 +312,15 @@ void base_Update(void) {
 	draw_background(); // clears and draw background art
 
 	if (cameratoggle == 2)
-		world_camera(cellSize, playerRow, playerCol, face, cameratoggle);
+		world_camera(cellSize, cellAlign, playerRow, playerCol, face, cameratoggle);
 
 	/* Map Rendering */
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			Cell currCell = grid[row][col];
 
-			float cellX = cellSize * (float)col - cellSize;
-			float cellY = cellSize * (float)row;
+			float cellX = cellSize * (float)col+ cellAlign;
+			float cellY = cellSize * (float)row + cellSize*0.85f;
 
 			if (!currCell.boarder) draw_floor(cellX, cellY, cellSize);
 
@@ -359,29 +360,29 @@ void base_Update(void) {
 
 	for (int i = 0; i < CUSTOMER_MAX; i++) {
 		if (grid[customer[i].cusRow][customer[i].cusCol].customer)
-			draw_customer(cellSize, customer[i].cusRow, customer[i].cusCol, customer[i].direction, i, cameratoggle);
+			draw_customer(cellSize,cellAlign,customer[i].cusRow, customer[i].cusCol, customer[i].direction, i, cameratoggle);
 	}
 
-	isAnimating = draw_player(cellSize, playerRow, playerCol, face, cameratoggle);
+	isAnimating = draw_player(cellSize,cellAlign, playerRow, playerCol, face, cameratoggle);
 
 	if (isLocked && !isAnimating) {
 		if (flip) {
 			if (face == 2 || face == 3) {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol), cellSize * (float)(playerRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol)+cellAlign, cellSize * (float)(playerRow - 1) + cellSize * 0.85f);
 				drawGIF(&speechSprite, &gifElasped, 0.1f, NO, NO);
 			}
 			else {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol - 2), cellSize * (float)(playerRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(playerCol - 2) + cellAlign, cellSize * (float)(playerRow - 1) + cellSize * 0.85f);
 				drawGIF(&speechSprite, &gifElasped, 0.1f, YES, NO);
 			}
 		}
 		if (!flip) {
 			if (customer[stunner].direction == 2 || customer[stunner].direction == 3) {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol), cellSize * (float)(customer[stunner].cusRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol) + cellAlign, cellSize * (float)(customer[stunner].cusRow - 1) + cellSize * 0.85f);
 				drawGIF(&speechSprite, &gifElasped, 0.1f, NO, NO);
 			}
 			else {
-				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol - 2), cellSize * (float)(customer[stunner].cusRow - 1));
+				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol - 2) + cellAlign, cellSize * (float)(customer[stunner].cusRow - 1) + cellSize * 0.85f);
 				drawGIF(&speechSprite, &gifElasped, 0.1f, YES, NO);
 			}
 		}
