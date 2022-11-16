@@ -183,12 +183,8 @@ void Options_Update() {
 				/*Apply*/
 				if (IsAreaClicked(apply.position.x, apply.position.y, apply.btnWidth, apply.btnHeight, mouse.x, mouse.y)) {
 					CP_Sound_PlayAdvanced(click, newConfig.settings.audio / 100.f, 2, FALSE, CP_SOUND_GROUP_SFX);
-					if (resSelected->actHeight == fullscreenWindowed.actHeight && resSelected->actWidth == fullscreenWindowed.actWidth) {
-						CP_System_SetWindowPosition(0, 0);
-					}
-					else {
+					(resSelected->actHeight == fullscreenWindowed.actHeight && resSelected->actWidth == fullscreenWindowed.actWidth) ? CP_System_SetWindowPosition(0, 0) :
 						CP_System_SetWindowPosition(window.x / 4, window.y / 4);
-					}
 					newConfig.settings.resolutionWidth = resSelected->actWidth;
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
 					newConfig.settings.windowed = resSelected->windowed;
