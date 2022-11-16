@@ -12,6 +12,7 @@ extern Config config;
 extern Customer customer[CUSTOMER_MAX];
 extern Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 extern int time_lost,ignore_penalty;
+extern int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 UniqueCards UM;
 CardPosition pos;
@@ -134,7 +135,16 @@ void mechanic_flags(void) {
                 total++;											// counter to remove maximum of 2 customers
             }
         }
-        if (UM.flags & 16)	// check if more customer card is selected
+        /*
+        for (int row = 0; row < SOKOBAN_GRID_ROWS; row++)
+            for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
+                if (row == customer[0].cusRow && col == customer[0].cusCol)
+                    grid[row][col].customer = 0;
+                else if (row == customer[1].cusRow && col == customer[1].cusCol)
+                    grid[row][col].customer = 0;
+            }
+            */
+        if (UM.flags & 16) {	// check if more customer card is selected
             for (int i = 0; i <= CUSTOMER_MAX; i++) {
                 if (i == CustomerBackup[0][2]) {					// restores back the removed customer
                     customer[i].cusRow = CustomerBackup[0][0];
@@ -149,16 +159,39 @@ void mechanic_flags(void) {
                     grid[customer[i].cusRow][customer[i].cusCol].customer = 1;
                 }
             }
-        if (UM.flags & 8)	// check if lesser customer card is selected
+            /*
+            for (int row = 0; row < SOKOBAN_GRID_ROWS; row++)
+                for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
+                    if (row == customer[0].cusRow && col == customer[0].cusCol)
+                        grid[row][col].customer = 1;
+                    else if (row == customer[1].cusRow && col == customer[1].cusCol)
+                        grid[row][col].customer = 1;
+                }
+                */
+        }
+        if (UM.flags & 8) {	// check if lesser customer card is selected
+            int customer_number[2] = { 0 };
             for (int i = 0, total = 0; i <= CUSTOMER_MAX; i++) {	// removes 2 more customers
                 if (customer[i].isActive && CP_Random_GetBool() == YES && total < 2) {
                     grid[customer[i].cusRow][customer[i].cusCol].customer = 0;
                     customer[i].cusRow = 0;							// zeros both row/col to disable
                     customer[i].cusCol = 0;
                     customer[i].isActive = 0;
+                    customer_number[total] = i;
+                    grid[customer[i].cusRow][customer[i].cusCol].customer = 0;
                     total++;										// counter to remove maximum of 2 customers
                 }
             }
+            /*
+            for (int row = 0; row < SOKOBAN_GRID_ROWS; row++)
+                for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
+                    if (row == customer[customer_number[0]].cusRow && col == customer[customer_number[0]].cusCol)
+                        grid[row][col].customer = 0;
+                    else if (row == customer[customer_number[1]].cusRow && col == customer[customer_number[1]].cusCol)
+                        grid[row][col].customer = 0;
+                }
+                */
+        }
     }
     // affect box generation
     if (global_level != 1) {
@@ -364,13 +397,14 @@ void teleport_UM(void) {
 }
 void wetsign_UM(void) {
     int total = 0;
-    for (int row = 1; row < SOKOBAN_GRID_ROWS-1; row++){
-        for (int col = 1; col < SOKOBAN_GRID_COLS-1; col++){
+    for (int row = 2; row < SOKOBAN_GRID_ROWS-1; row++){
+        for (int col = 2; col < SOKOBAN_GRID_COLS-1; col++){
             int counter = 0;
-            for (int neighbour=0;neighbour<9;neighbour++) { // create a 5x5 grid //, nrow2 = row+((neighbour%5)-2), ncol2=col+((neighbour/5)-2)
-                int nrow = row+((neighbour%3)-1), ncol=col+((neighbour/3)-1); // nrow/ncol is the updated row/col by adding -1,0,1. this is formed by using %3-1 and /3-1
-                if (grid[nrow][ncol].player || grid[nrow][ncol].box || grid[nrow][ncol].shelf || grid[nrow][ncol].key || grid[nrow][ncol].boarder || grid[nrow][ncol].customer || grid[nrow][ncol].mecha)
-                    counter += (nrow>=0 && nrow<SOKOBAN_GRID_ROWS && ncol>=0 && ncol<SOKOBAN_GRID_COLS) ? 1 : 0; // filter out-of-bounds array, and add the grid value
+            for (int neighbour=0;neighbour<25;neighbour++) { // create a 5x5 grid //, nrow2 = row+((neighbour%5)-2), ncol2=col+((neighbour/5)-2)
+                int nrow = row+((neighbour%3)-1), ncol=col+((neighbour/3)-1), nrow2 = row+((neighbour%5)-2), ncol2=col+((neighbour/5)-2); // nrow/ncol is the updated row/col by adding -1,0,1. this is formed by using %3-1 and /3-1
+                if (grid[nrow][ncol].player || grid[nrow][ncol].box || grid[nrow][ncol].shelf || grid[nrow][ncol].key || grid[nrow][ncol].boarder || grid[nrow][ncol].customer || grid[nrow][ncol].mecha ||
+                    grid[nrow][ncol].tele || grid[nrow2][ncol2].box || grid[nrow2][ncol2].key || path[nrow][ncol]) // || grid[nrow2][ncol2].player || grid[nrow2][ncol2].box || grid[nrow2][ncol2].shelf || grid[nrow2][ncol2].key || grid[nrow2][ncol2].boarder || grid[nrow2][ncol2].customer || grid[nrow2][ncol2].mecha || grid[nrow2][ncol2].tele
+                    counter += 1; // filter out-of-bounds array, and add the grid value // (nrow>=0 && nrow<SOKOBAN_GRID_ROWS && ncol>=0 && ncol<SOKOBAN_GRID_COLS && nrow2 >= 0 && nrow2 < SOKOBAN_GRID_ROWS&& ncol2 >= 0 && ncol2 < SOKOBAN_GRID_COLS) ? 1 : 0
             }
             if (counter == 0) {
                 grid[row][col].mecha = 1;
