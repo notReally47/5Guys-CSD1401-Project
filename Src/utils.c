@@ -215,22 +215,7 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.03f);  // Set Font Size
 	char buffer[20] = { 0 };												// Buffer to convert 'value' to text/char/string
 	sprintf_s(buffer, _countof(buffer), "%d", value);						// Converting 'value' to text/char/string
-	char line[50] = { 0 };													// String to be printed
-
-	if (stat != '\0') {
-		if (stat == "Time Left: ") {
-			if (value <= 30) {
-				(value % 2) ? CP_Settings_Fill(RED) : CP_Settings_Fill(BLACK);
-			}
-		}
-		(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
-		strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
-	}
-	strcat(line, buffer);																															// Concatenate line with buffer
-	if (stat == "Move: ") {
-		sprintf_s(buffer, _countof(buffer), "/%d", move_limit);
-		strcat(line, buffer);
-	}
+	char line[50] = { 0 };													// String to be printed																														// Concatenate line with buffer
 
 	if (cameratoggle == 2) {
 		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_TOP);	// Align Text Left and Top
@@ -240,11 +225,43 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 			CP_Graphics_DrawRect(0.f, 0.f, (float)config.settings.resolutionWidth * 2, (float)config.settings.resolutionHeight / 15);
 		}
 		CP_Settings_Fill(WHITE);
+
+		if (stat != '\0') {
+			if (stat == "Time Left: ") {
+				if (value <= 30) {
+					(value % 2) ? CP_Settings_Fill(RED) : CP_Settings_Fill(WHITE);
+				}
+			}
+			(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
+			strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
+		}
+		strcat(line, buffer);
+		if (stat == "Move: ") {
+			sprintf_s(buffer, _countof(buffer), "/%d", move_limit);
+			strcat(line, buffer);
+		}
+
 		CP_Font_DrawText(line, ((float)config.settings.resolutionWidth/5)*index, 0.f);
 	}
 	else {
 		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_RIGHT, CP_TEXT_ALIGN_V_TOP);							// Align Text Right and Top		
 		CP_Settings_Fill(BLACK);																		// Set Font to BLACK
+
+		if (stat != '\0') {
+			if (stat == "Time Left: ") {
+				if (value <= 30) {
+					(value % 2) ? CP_Settings_Fill(RED) : CP_Settings_Fill(BLACK);
+				}
+			}
+			(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
+			strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
+		}
+		strcat(line, buffer);
+		if (stat == "Move: ") {
+			sprintf_s(buffer, _countof(buffer), "/%d", move_limit);
+			strcat(line, buffer);
+		}
+
 		CP_Font_DrawText(line, (float)config.settings.resolutionWidth - cellSize, cellSize * index);	// Draw Text 'line' on the Game
 	}
 }
