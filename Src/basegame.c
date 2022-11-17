@@ -113,8 +113,8 @@ void base_Init(void) {
 }
 
 void base_Update(void) {
-	int playerRow, playerCol, isCompleted = 0, set_teleporter_row = 0, set_teleporter_col = 0;
-	float current_elapsed_time = CP_System_GetDt();
+	int playerRow, playerCol, is_completed = 0;									// Declare & initialise needed
+	float current_elapsed_time = CP_System_GetDt();								// Get Time Pass per frame
 
 	/* When ESC/P Key pressed, pause/unpause the game */
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
@@ -130,7 +130,7 @@ void base_Update(void) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			/* Check if all objectives has been reached */
 			if (grid[row][col].key && grid[row][col].box)
-				isCompleted++;
+				is_completed++;
 
 			/* Get position of player */
 			if (grid[row][col].player) {
@@ -143,7 +143,7 @@ void base_Update(void) {
 	/* Display Welcome Message at the start of Level 1 */
 	if (global_level == 1 && is_welcome == 1) {
 		overlay_function = 1;													// 1 for Welcome Message Overlay
-		game_pause = 1;
+		game_pause = 1;															// Enter Pause State
 	}
 
 	if (!game_pause) {
@@ -166,7 +166,7 @@ void base_Update(void) {
 		}
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
-		if (isCompleted == total_objectives) {
+		if (is_completed == total_objectives) {
 			next_level();														// Increment global_level
 			config.save.lastLevelPlayed = global_level;
 			writeConfig(config);
@@ -175,27 +175,27 @@ void base_Update(void) {
 
 		/* Lose Condition, When Time's Up */
 		if (clock <= 0) {
-			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);		// Play Game Over SFX
 			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
 			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
-			overlay_function = 4;	// 4 for Game Over Overlay
-			gameover = 1;		// 1 for Time limit
-			game_pause = 1;
-			card_init();	// resets all card selection/flags
+			overlay_function = 4;												// 4 for Game Over Overlay
+			gameover = 1;														// 1 for Time limit Lose Condition Message
+			game_pause = 1;														// Enter Pause State
+			card_init();														// Resets all card selection/flags
 		}
 
-		// Lose Condition, Move Limit Reached
+		/* Lose Condition, Move Limit Reached */
 		if (((global_move - 1) >= move_limit)) {
-			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);		// Play Game Over SFX
 			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
 			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
-			overlay_function = 4;	// 4 for Game Over Overlay
-			gameover = 3;		// 3 for Move Limit
-			game_pause = 1;
-			card_init();	// resets all card selection/flags
+			overlay_function = 4;												// 4 for Game Over Overlay
+			gameover = 3;														// 3 for Move Limit Lose Condition Message
+			game_pause = 1;														// Enter Paause State
+			card_init();														// Resets all card selection/flags
 		}
 
-		// Play less than 30 second BGM
+		/* Play less than 30 second BGM */
 		if (clock <= 30 && !play30) {
 			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
 			play30 = 1;
