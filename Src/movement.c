@@ -36,21 +36,3 @@ void undo_move(Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell 
 	}
 
 }
-
-/* Resets grid to the initial state based on the CSV, resets move to 0 */
-void reset_map(Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
-	
-	for (int map = 0; map < global_move; map++) {
-		for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
-			for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
-				moves[global_move][row][col].player = 0;
-				moves[global_move][row][col].box = 0;
-			}
-		}
-	}
-
-	/*Call setMap() to reset the map to original state*/
-	set_map(grid, customer, path, teleporters);
-	global_move = 1;
-
-}
