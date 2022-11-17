@@ -27,7 +27,7 @@ Teleporter teleporters[TELEPORTER_NUMBER];
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 char* stat[4];
 
-float cellSize, cellAlign, elapsedLock, totalElapsedTime, oneSecondFlip, cameratogglecooldown, cusDelay;
+float cellSize, cellAlign, elapsedLock, total_elapsed_time, oneSecondFlip, cameratogglecooldown, cusDelay;
 	
 int total_objectives,													// Objectives to Meet
 isLocked, activatedCusX, activatedCusY, stunner,						// Stunner/Customer Logic Variables/Flags
@@ -47,7 +47,7 @@ GIF speechSprite;
 void base_Init(void) {
 
 	/* Settings */
-	CP_Settings_StrokeWeight(0.5f);								// Stroke thickness between Cells
+	CP_Settings_StrokeWeight(0.5f);									// Stroke thickness between Cells
 
 	// for clock settings
 	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
@@ -58,7 +58,7 @@ void base_Init(void) {
 	face = 0;
 	elapsedLock = 0.f;
 	isLocked = 0;
-	totalElapsedTime = 0.f;
+	total_elapsed_time = 0.f;
 	cameratogglecooldown = 0.f;
 	cusDelay = 1.5f;
 	isAnimating = 0;
@@ -93,8 +93,8 @@ void base_Init(void) {
 	// to force mechanic enabler check card_effect() for flag details
 	//UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
 	//UM.flags |= 4;
-	mechanic_flags();												// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
-	total_objectives = get_objectives(grid);						// Get Number of Objectives to meet (Number of Keys)
+	mechanic_flags();												// Needs to be after set_map() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+	total_objectives = get_objectives(grid);						// Needs to be after set_map() & mechanic_flags() | Get Number of Objectives to meet (Number of Keys)
 	// If mechanic_flags is enabled, make sure it is also enabled in RESET
 
 	/* GIF */
@@ -103,18 +103,18 @@ void base_Init(void) {
 
 	/* SFX */
 	CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
-	levelBGM = CP_Sound_Load("./Assets/Sound/Level_BGM.wav");
-	level30BGM = CP_Sound_Load("./Assets/Sound/Level_BGM_30s.wav");
-	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");
-	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");
-	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");
-	teleport_sound = CP_Sound_Load("./Assets/Sound/SFX/Teleport.wav");
+	levelBGM = CP_Sound_Load("./Assets/Sound/Level_BGM.wav");					// Level Background Music
+	level30BGM = CP_Sound_Load("./Assets/Sound/Level_BGM_30s.wav");				// Level Background Music when 30 seconds left
+	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");						// Fail SFX
+	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");					// Successs/Level Clear SFX
+	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");						// Box Pushing SFX
+	teleport_sound = CP_Sound_Load("./Assets/Sound/SFX/Teleport.wav");			// Teleporting SFX
 	CP_Sound_PlayAdvanced(levelBGM, 0.5, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 }
 
 void base_Update(void) {
 	int playerRow, playerCol, isCompleted = 0, set_teleporter_row = 0, set_teleporter_col = 0;
-	float currentElapsedTime = CP_System_GetDt();
+	float current_elapsed_time = CP_System_GetDt();
 
 	/* When ESC/P Key pressed, pause/unpause the game */
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
@@ -153,14 +153,13 @@ void base_Update(void) {
 			stunner = temp - 1;
 		}
 
-		/*Clear Tint*/
-		CP_Settings_NoTint();
-		totalElapsedTime += currentElapsedTime;
-		cameratogglecooldown += currentElapsedTime;
-		clock = duration - (int)totalElapsedTime;
+		CP_Settings_NoTint();													// Clear Any Existing Tint
+		total_elapsed_time += current_elapsed_time;								// Total time pass is the summation of current time pass each frame
+		cameratogglecooldown += current_elapsed_time;
+		clock = duration - (int)total_elapsed_time;								// Remaining time displayed
 		gifElasped += CP_System_GetDt();
 
-		oneSecondFlip += currentElapsedTime;
+		oneSecondFlip += current_elapsed_time;
 		if (oneSecondFlip >= 1.f) {
 			flip = !flip;
 			oneSecondFlip = 0;
@@ -168,10 +167,10 @@ void base_Update(void) {
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (isCompleted == total_objectives) {
-			next_level();
+			next_level();														// Increment global_level
 			config.save.lastLevelPlayed = global_level;
 			writeConfig(config);
-			CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);
+			CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);	// Transit to level_transition state
 		}
 
 		/* Lose Condition, When Time's Up */
@@ -214,7 +213,7 @@ void base_Update(void) {
 
 			/*Check if 3 seconds has passed*/
 			if (elapsedLock <= lockTimer) {
-				elapsedLock += currentElapsedTime;
+				elapsedLock += current_elapsed_time;
 				printf("Locked!\n");
 			}
 			else {
@@ -409,17 +408,7 @@ void base_Update(void) {
 
 			/* If 'YES' was Clicked */
 			if (reset_confirmed == 1) {
-				//reset_map(moves, grid, customer, path, teleporters);		// Resets grid to the initial values based on the CSV file
-				//totalElapsedTime = 0;										// Reset Timer
-				//face = 0;													// Reset Player Direcction
-				//reset_confirmed = 0;										// Set reset_confirmed to 0 so that will stop rendering Reset Overlay
-				//times_distracted = 0;										// Reset the display of number of timesdistracted
-				//duration_lost = 0;											// Reset the display of duration lost due to distractions
-				//overlay_function = 0;
-				//game_pause = 0;												// Set game_pause to 0 to resume game
-				//mechanic_flags();											// Needs to be after setMap() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
-				//total_objectives = get_objectives(grid);					// Get Number of Objectives to meet (Number of Keys)
-				CP_Engine_SetNextGameStateForced(base_Init, base_Update, base_Exit);
+				CP_Engine_SetNextGameStateForced(base_Init, base_Update, base_Exit);	// Force load basegame.c/basegame state
 			}
 
 			/* If 'NO' was Clicked */
