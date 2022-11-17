@@ -1,5 +1,5 @@
-Level Duration is 50
-Level Move Limit is 300
+Level Duration is 800
+Level Move Limit is 1200
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border
@@ -50,9 +50,9 @@ Level Move Limit is 300
 [1][6] is Blank
 [1][7] is Blank
 [1][8] is Blank
-[1][9] is Blank
-[1][10] is Blank
-[1][11] is Blank
+[1][9] is a Key
+[1][10] is a Shelf
+[1][11] is a Shelf
 [1][12] is Blank
 [1][13] is Blank
 [1][14] is Blank
@@ -61,7 +61,7 @@ Level Move Limit is 300
 [1][17] is Blank
 [1][18] is Blank
 [1][19] is Blank
-[1][20] is Blank
+[1][20] is a Shelf
 [1][21] is Blank
 [1][22] is Blank
 [1][23] is Blank
@@ -70,7 +70,7 @@ Level Move Limit is 300
 [1][26] is Blank
 [1][27] is Blank
 [1][28] is Blank
-[1][29] is Blank
+[1][29] is a Shelf
 [1][30] is Blank
 [1][31] is Blank
 [1][32] is Blank
@@ -94,24 +94,24 @@ Level Move Limit is 300
 [2][9] is Blank
 [2][10] is Blank
 [2][11] is Blank
-[2][12] is Blank
+[2][12] is a Customer
 [2][13] is Blank
 [2][14] is Blank
 [2][15] is Blank
 [2][16] is Blank
 [2][17] is Blank
-[2][18] is Blank
+[2][18] is a Waypoint
 [2][19] is Blank
-[2][20] is Blank
+[2][20] is a Shelf
 [2][21] is Blank
-[2][22] is Blank
+[2][22] is a Waypoint
 [2][23] is Blank
 [2][24] is Blank
 [2][25] is Blank
 [2][26] is Blank
 [2][27] is Blank
-[2][28] is Blank
-[2][29] is Blank
+[2][28] is a Waypoint
+[2][29] is a Shelf
 [2][30] is Blank
 [2][31] is Blank
 [2][32] is Blank
@@ -124,16 +124,16 @@ Level Move Limit is 300
 [2][39] is Blank
 [2][40] is a Border
 [3][0] is a Border
-[3][1] is Blank
-[3][2] is Blank
-[3][3] is Blank
-[3][4] is Blank
-[3][5] is Blank
-[3][6] is Player
-[3][7] is Blank
+[3][1] is a Shelf
+[3][2] is a Shelf
+[3][3] is a Shelf
+[3][4] is a Shelf
+[3][5] is a Shelf
+[3][6] is Blank
+[3][7] is a Shelf
 [3][8] is Blank
-[3][9] is Blank
-[3][10] is Blank
+[3][9] is a Shelf
+[3][10] is a Shelf
 [3][11] is Blank
 [3][12] is Blank
 [3][13] is Blank
@@ -173,9 +173,9 @@ Level Move Limit is 300
 [4][6] is Blank
 [4][7] is Blank
 [4][8] is Blank
-[4][9] is Blank
-[4][10] is Blank
-[4][11] is Blank
+[4][9] is a Key
+[4][10] is a Shelf
+[4][11] is a Teleporter
 [4][12] is Blank
 [4][13] is Blank
 [4][14] is Blank
@@ -197,13 +197,13 @@ Level Move Limit is 300
 [4][30] is Blank
 [4][31] is Blank
 [4][32] is Blank
-[4][33] is Blank
+[4][33] is a Box
 [4][34] is Blank
 [4][35] is Blank
 [4][36] is Blank
 [4][37] is Blank
 [4][38] is Blank
-[4][39] is Blank
+[4][39] is a Teleporter
 [4][40] is a Border
 [5][0] is a Border
 [5][1] is Blank
@@ -211,16 +211,16 @@ Level Move Limit is 300
 [5][3] is Blank
 [5][4] is Blank
 [5][5] is Blank
-[5][6] is a Box
+[5][6] is Blank
 [5][7] is Blank
 [5][8] is Blank
-[5][9] is a Key
-[5][10] is Blank
+[5][9] is a Shelf
+[5][10] is a Shelf
 [5][11] is Blank
 [5][12] is Blank
 [5][13] is Blank
 [5][14] is Blank
-[5][15] is Blank
+[5][15] is a Shelf
 [5][16] is Blank
 [5][17] is Blank
 [5][18] is Blank
@@ -230,7 +230,7 @@ Level Move Limit is 300
 [5][22] is Blank
 [5][23] is Blank
 [5][24] is Blank
-[5][25] is Blank
+[5][25] is a Shelf
 [5][26] is Blank
 [5][27] is Blank
 [5][28] is Blank
@@ -238,8 +238,8 @@ Level Move Limit is 300
 [5][30] is Blank
 [5][31] is Blank
 [5][32] is Blank
-[5][33] is Blank
-[5][34] is Blank
+[5][33] is a Box
+[5][34] is a Box
 [5][35] is Blank
 [5][36] is Blank
 [5][37] is Blank
@@ -248,12 +248,12 @@ Level Move Limit is 300
 [5][40] is a Border
 [6][0] is a Border
 [6][1] is Blank
-[6][2] is Blank
+[6][2] is a Customer
 [6][3] is Blank
-[6][4] is Blank
+[6][4] is a Waypoint
 [6][5] is Blank
 [6][6] is Blank
-[6][7] is Blank
+[6][7] is a Shelf
 [6][8] is Blank
 [6][9] is Blank
 [6][10] is Blank
@@ -280,7 +280,7 @@ Level Move Limit is 300
 [6][31] is Blank
 [6][32] is Blank
 [6][33] is Blank
-[6][34] is Blank
+[6][34] is a Box
 [6][35] is Blank
 [6][36] is Blank
 [6][37] is Blank
@@ -296,8 +296,8 @@ Level Move Limit is 300
 [7][6] is Blank
 [7][7] is Blank
 [7][8] is Blank
-[7][9] is Blank
-[7][10] is Blank
+[7][9] is a Shelf
+[7][10] is a Shelf
 [7][11] is Blank
 [7][12] is Blank
 [7][13] is Blank
@@ -316,7 +316,7 @@ Level Move Limit is 300
 [7][26] is Blank
 [7][27] is Blank
 [7][28] is Blank
-[7][29] is Blank
+[7][29] is a Shelf
 [7][30] is Blank
 [7][31] is Blank
 [7][32] is Blank
@@ -337,27 +337,27 @@ Level Move Limit is 300
 [8][6] is Blank
 [8][7] is Blank
 [8][8] is Blank
-[8][9] is Blank
-[8][10] is Blank
+[8][9] is a Key
+[8][10] is a Shelf
 [8][11] is Blank
-[8][12] is Blank
+[8][12] is a Waypoint
 [8][13] is Blank
 [8][14] is Blank
 [8][15] is Blank
 [8][16] is Blank
 [8][17] is Blank
-[8][18] is Blank
+[8][18] is a Waypoint
 [8][19] is Blank
-[8][20] is Blank
+[8][20] is a Shelf
 [8][21] is Blank
-[8][22] is Blank
+[8][22] is a Waypoint
 [8][23] is Blank
 [8][24] is Blank
 [8][25] is Blank
 [8][26] is Blank
 [8][27] is Blank
-[8][28] is Blank
-[8][29] is Blank
+[8][28] is a Customer
+[8][29] is a Shelf
 [8][30] is Blank
 [8][31] is Blank
 [8][32] is Blank
@@ -370,26 +370,26 @@ Level Move Limit is 300
 [8][39] is Blank
 [8][40] is a Border
 [9][0] is a Border
-[9][1] is Blank
-[9][2] is Blank
-[9][3] is Blank
-[9][4] is Blank
+[9][1] is a Shelf
+[9][2] is a Shelf
+[9][3] is a Shelf
+[9][4] is a Teleporter
 [9][5] is Blank
 [9][6] is Blank
-[9][7] is Blank
+[9][7] is a Shelf
 [9][8] is Blank
-[9][9] is Blank
-[9][10] is Blank
+[9][9] is a Shelf
+[9][10] is a Shelf
 [9][11] is Blank
 [9][12] is Blank
 [9][13] is Blank
-[9][14] is Blank
-[9][15] is Blank
+[9][14] is a Teleporter
+[9][15] is a Shelf
 [9][16] is Blank
 [9][17] is Blank
 [9][18] is Blank
 [9][19] is Blank
-[9][20] is Blank
+[9][20] is a Shelf
 [9][21] is Blank
 [9][22] is Blank
 [9][23] is Blank
@@ -398,7 +398,7 @@ Level Move Limit is 300
 [9][26] is Blank
 [9][27] is Blank
 [9][28] is Blank
-[9][29] is Blank
+[9][29] is a Shelf
 [9][30] is Blank
 [9][31] is Blank
 [9][32] is Blank
@@ -419,8 +419,8 @@ Level Move Limit is 300
 [10][6] is Blank
 [10][7] is Blank
 [10][8] is Blank
-[10][9] is Blank
-[10][10] is Blank
+[10][9] is a Key
+[10][10] is a Shelf
 [10][11] is Blank
 [10][12] is Blank
 [10][13] is Blank
@@ -430,7 +430,7 @@ Level Move Limit is 300
 [10][17] is Blank
 [10][18] is Blank
 [10][19] is Blank
-[10][20] is Blank
+[10][20] is a Shelf
 [10][21] is Blank
 [10][22] is Blank
 [10][23] is Blank
@@ -460,8 +460,8 @@ Level Move Limit is 300
 [11][6] is Blank
 [11][7] is Blank
 [11][8] is Blank
-[11][9] is Blank
-[11][10] is Blank
+[11][9] is a Shelf
+[11][10] is a Shelf
 [11][11] is Blank
 [11][12] is Blank
 [11][13] is Blank
@@ -471,7 +471,7 @@ Level Move Limit is 300
 [11][17] is Blank
 [11][18] is Blank
 [11][19] is Blank
-[11][20] is Blank
+[11][20] is a Shelf
 [11][21] is Blank
 [11][22] is Blank
 [11][23] is Blank
@@ -480,12 +480,12 @@ Level Move Limit is 300
 [11][26] is Blank
 [11][27] is Blank
 [11][28] is Blank
-[11][29] is Blank
+[11][29] is a Customer
 [11][30] is Blank
 [11][31] is Blank
 [11][32] is Blank
 [11][33] is Blank
-[11][34] is Blank
+[11][34] is a Customer
 [11][35] is Blank
 [11][36] is Blank
 [11][37] is Blank
@@ -499,8 +499,8 @@ Level Move Limit is 300
 [12][4] is Blank
 [12][5] is Blank
 [12][6] is Blank
-[12][7] is Blank
-[12][8] is Blank
+[12][7] is a Shelf
+[12][8] is a Key
 [12][9] is Blank
 [12][10] is Blank
 [12][11] is Blank
@@ -512,16 +512,16 @@ Level Move Limit is 300
 [12][17] is Blank
 [12][18] is Blank
 [12][19] is Blank
-[12][20] is Blank
+[12][20] is a Shelf
 [12][21] is Blank
 [12][22] is Blank
-[12][23] is Blank
+[12][23] is a Customer
 [12][24] is Blank
 [12][25] is Blank
 [12][26] is Blank
 [12][27] is Blank
 [12][28] is Blank
-[12][29] is Blank
+[12][29] is a Shelf
 [12][30] is Blank
 [12][31] is Blank
 [12][32] is Blank
@@ -542,8 +542,8 @@ Level Move Limit is 300
 [13][6] is Blank
 [13][7] is Blank
 [13][8] is Blank
-[13][9] is Blank
-[13][10] is Blank
+[13][9] is a Shelf
+[13][10] is a Shelf
 [13][11] is Blank
 [13][12] is Blank
 [13][13] is Blank
@@ -553,7 +553,7 @@ Level Move Limit is 300
 [13][17] is Blank
 [13][18] is Blank
 [13][19] is Blank
-[13][20] is Blank
+[13][20] is a Shelf
 [13][21] is Blank
 [13][22] is Blank
 [13][23] is Blank
@@ -562,7 +562,7 @@ Level Move Limit is 300
 [13][26] is Blank
 [13][27] is Blank
 [13][28] is Blank
-[13][29] is Blank
+[13][29] is a Shelf
 [13][30] is Blank
 [13][31] is Blank
 [13][32] is Blank
@@ -571,7 +571,7 @@ Level Move Limit is 300
 [13][35] is Blank
 [13][36] is Blank
 [13][37] is Blank
-[13][38] is Blank
+[13][38] is Player
 [13][39] is Blank
 [13][40] is a Border
 [14][0] is a Border
@@ -583,8 +583,8 @@ Level Move Limit is 300
 [14][6] is Blank
 [14][7] is Blank
 [14][8] is Blank
-[14][9] is Blank
-[14][10] is Blank
+[14][9] is a Key
+[14][10] is a Shelf
 [14][11] is Blank
 [14][12] is Blank
 [14][13] is Blank
@@ -594,12 +594,12 @@ Level Move Limit is 300
 [14][17] is Blank
 [14][18] is Blank
 [14][19] is Blank
-[14][20] is Blank
-[14][21] is Blank
+[14][20] is a Shelf
+[14][21] is a Customer
 [14][22] is Blank
 [14][23] is Blank
 [14][24] is Blank
-[14][25] is Blank
+[14][25] is a Shelf
 [14][26] is Blank
 [14][27] is Blank
 [14][28] is Blank
@@ -616,31 +616,31 @@ Level Move Limit is 300
 [14][39] is Blank
 [14][40] is a Border
 [15][0] is a Border
-[15][1] is Blank
-[15][2] is Blank
-[15][3] is Blank
-[15][4] is Blank
+[15][1] is a Shelf
+[15][2] is a Shelf
+[15][3] is a Shelf
+[15][4] is a Shelf
 [15][5] is Blank
 [15][6] is Blank
-[15][7] is Blank
+[15][7] is a Shelf
 [15][8] is Blank
-[15][9] is Blank
-[15][10] is Blank
+[15][9] is a Shelf
+[15][10] is a Shelf
 [15][11] is Blank
 [15][12] is Blank
 [15][13] is Blank
 [15][14] is Blank
-[15][15] is Blank
+[15][15] is a Shelf
 [15][16] is Blank
 [15][17] is Blank
 [15][18] is Blank
 [15][19] is Blank
-[15][20] is Blank
+[15][20] is a Shelf
 [15][21] is Blank
 [15][22] is Blank
 [15][23] is Blank
 [15][24] is Blank
-[15][25] is Blank
+[15][25] is a Shelf
 [15][26] is Blank
 [15][27] is Blank
 [15][28] is Blank
@@ -665,8 +665,8 @@ Level Move Limit is 300
 [16][6] is Blank
 [16][7] is Blank
 [16][8] is Blank
-[16][9] is Blank
-[16][10] is Blank
+[16][9] is a Key
+[16][10] is a Shelf
 [16][11] is Blank
 [16][12] is Blank
 [16][13] is Blank
@@ -689,8 +689,8 @@ Level Move Limit is 300
 [16][30] is Blank
 [16][31] is Blank
 [16][32] is Blank
-[16][33] is Blank
-[16][34] is Blank
+[16][33] is a Box
+[16][34] is a Box
 [16][35] is Blank
 [16][36] is Blank
 [16][37] is Blank
@@ -706,8 +706,8 @@ Level Move Limit is 300
 [17][6] is Blank
 [17][7] is Blank
 [17][8] is Blank
-[17][9] is Blank
-[17][10] is Blank
+[17][9] is a Shelf
+[17][10] is a Shelf
 [17][11] is Blank
 [17][12] is Blank
 [17][13] is Blank
@@ -717,12 +717,12 @@ Level Move Limit is 300
 [17][17] is Blank
 [17][18] is Blank
 [17][19] is Blank
-[17][20] is Blank
-[17][21] is Blank
+[17][20] is a Shelf
+[17][21] is a Teleporter
 [17][22] is Blank
 [17][23] is Blank
 [17][24] is Blank
-[17][25] is Blank
+[17][25] is a Shelf
 [17][26] is Blank
 [17][27] is Blank
 [17][28] is Blank
@@ -732,11 +732,11 @@ Level Move Limit is 300
 [17][32] is Blank
 [17][33] is Blank
 [17][34] is Blank
-[17][35] is Blank
-[17][36] is Blank
+[17][35] is a Box
+[17][36] is a Box
 [17][37] is Blank
 [17][38] is Blank
-[17][39] is Blank
+[17][39] is a Teleporter
 [17][40] is a Border
 [18][0] is a Border
 [18][1] is Blank
@@ -745,8 +745,8 @@ Level Move Limit is 300
 [18][4] is Blank
 [18][5] is Blank
 [18][6] is Blank
-[18][7] is Blank
-[18][8] is Blank
+[18][7] is a Shelf
+[18][8] is a Key
 [18][9] is Blank
 [18][10] is Blank
 [18][11] is Blank
@@ -757,13 +757,13 @@ Level Move Limit is 300
 [18][16] is Blank
 [18][17] is Blank
 [18][18] is Blank
-[18][19] is Blank
-[18][20] is Blank
+[18][19] is a Customer
+[18][20] is a Shelf
 [18][21] is Blank
 [18][22] is Blank
 [18][23] is Blank
 [18][24] is Blank
-[18][25] is Blank
+[18][25] is a Shelf
 [18][26] is Blank
 [18][27] is Blank
 [18][28] is Blank
@@ -771,8 +771,8 @@ Level Move Limit is 300
 [18][30] is Blank
 [18][31] is Blank
 [18][32] is Blank
-[18][33] is Blank
-[18][34] is Blank
+[18][33] is a Box
+[18][34] is a Box
 [18][35] is Blank
 [18][36] is Blank
 [18][37] is Blank
@@ -788,8 +788,8 @@ Level Move Limit is 300
 [19][6] is Blank
 [19][7] is Blank
 [19][8] is Blank
-[19][9] is Blank
-[19][10] is Blank
+[19][9] is a Shelf
+[19][10] is a Shelf
 [19][11] is Blank
 [19][12] is Blank
 [19][13] is Blank
@@ -799,7 +799,7 @@ Level Move Limit is 300
 [19][17] is Blank
 [19][18] is Blank
 [19][19] is Blank
-[19][20] is Blank
+[19][20] is a Shelf
 [19][21] is Blank
 [19][22] is Blank
 [19][23] is Blank
@@ -808,14 +808,14 @@ Level Move Limit is 300
 [19][26] is Blank
 [19][27] is Blank
 [19][28] is Blank
-[19][29] is Blank
+[19][29] is a Shelf
 [19][30] is Blank
 [19][31] is Blank
 [19][32] is Blank
 [19][33] is Blank
 [19][34] is Blank
-[19][35] is Blank
-[19][36] is Blank
+[19][35] is a Box
+[19][36] is a Box
 [19][37] is Blank
 [19][38] is Blank
 [19][39] is Blank
@@ -829,8 +829,8 @@ Level Move Limit is 300
 [20][6] is Blank
 [20][7] is Blank
 [20][8] is Blank
-[20][9] is Blank
-[20][10] is Blank
+[20][9] is a Key
+[20][10] is a Shelf
 [20][11] is Blank
 [20][12] is Blank
 [20][13] is Blank
@@ -840,16 +840,16 @@ Level Move Limit is 300
 [20][17] is Blank
 [20][18] is Blank
 [20][19] is Blank
-[20][20] is Blank
+[20][20] is a Shelf
 [20][21] is Blank
 [20][22] is Blank
-[20][23] is Blank
+[20][23] is a Waypoint
 [20][24] is Blank
 [20][25] is Blank
 [20][26] is Blank
 [20][27] is Blank
 [20][28] is Blank
-[20][29] is Blank
+[20][29] is a Shelf
 [20][30] is Blank
 [20][31] is Blank
 [20][32] is Blank
@@ -862,35 +862,35 @@ Level Move Limit is 300
 [20][39] is Blank
 [20][40] is a Border
 [21][0] is a Border
-[21][1] is Blank
-[21][2] is Blank
-[21][3] is Blank
-[21][4] is Blank
+[21][1] is a Shelf
+[21][2] is a Shelf
+[21][3] is a Shelf
+[21][4] is a Teleporter
 [21][5] is Blank
 [21][6] is Blank
-[21][7] is Blank
+[21][7] is a Shelf
 [21][8] is Blank
-[21][9] is Blank
-[21][10] is Blank
+[21][9] is a Shelf
+[21][10] is a Shelf
 [21][11] is Blank
 [21][12] is Blank
 [21][13] is Blank
-[21][14] is Blank
-[21][15] is Blank
+[21][14] is a Teleporter
+[21][15] is a Shelf
 [21][16] is Blank
 [21][17] is Blank
 [21][18] is Blank
 [21][19] is Blank
-[21][20] is Blank
+[21][20] is a Shelf
 [21][21] is Blank
 [21][22] is Blank
-[21][23] is Blank
+[21][23] is a Waypoint
 [21][24] is Blank
 [21][25] is Blank
 [21][26] is Blank
 [21][27] is Blank
 [21][28] is Blank
-[21][29] is Blank
+[21][29] is a Customer
 [21][30] is Blank
 [21][31] is Blank
 [21][32] is Blank
@@ -911,8 +911,8 @@ Level Move Limit is 300
 [22][6] is Blank
 [22][7] is Blank
 [22][8] is Blank
-[22][9] is Blank
-[22][10] is Blank
+[22][9] is a Key
+[22][10] is a Shelf
 [22][11] is Blank
 [22][12] is Blank
 [22][13] is Blank
@@ -922,7 +922,7 @@ Level Move Limit is 300
 [22][17] is Blank
 [22][18] is Blank
 [22][19] is Blank
-[22][20] is Blank
+[22][20] is a Shelf
 [22][21] is Blank
 [22][22] is Blank
 [22][23] is Blank
@@ -952,8 +952,8 @@ Level Move Limit is 300
 [23][6] is Blank
 [23][7] is Blank
 [23][8] is Blank
-[23][9] is Blank
-[23][10] is Blank
+[23][9] is a Shelf
+[23][10] is a Shelf
 [23][11] is Blank
 [23][12] is Blank
 [23][13] is Blank
@@ -963,7 +963,7 @@ Level Move Limit is 300
 [23][17] is Blank
 [23][18] is Blank
 [23][19] is Blank
-[23][20] is Blank
+[23][20] is a Shelf
 [23][21] is Blank
 [23][22] is Blank
 [23][23] is Blank
@@ -972,7 +972,7 @@ Level Move Limit is 300
 [23][26] is Blank
 [23][27] is Blank
 [23][28] is Blank
-[23][29] is Blank
+[23][29] is a Shelf
 [23][30] is Blank
 [23][31] is Blank
 [23][32] is Blank
@@ -986,12 +986,12 @@ Level Move Limit is 300
 [23][40] is a Border
 [24][0] is a Border
 [24][1] is Blank
-[24][2] is Blank
+[24][2] is a Customer
 [24][3] is Blank
-[24][4] is Blank
+[24][4] is a Waypoint
 [24][5] is Blank
 [24][6] is Blank
-[24][7] is Blank
+[24][7] is a Shelf
 [24][8] is Blank
 [24][9] is Blank
 [24][10] is Blank
@@ -1004,7 +1004,7 @@ Level Move Limit is 300
 [24][17] is Blank
 [24][18] is Blank
 [24][19] is Blank
-[24][20] is Blank
+[24][20] is a Shelf
 [24][21] is Blank
 [24][22] is Blank
 [24][23] is Blank
@@ -1013,7 +1013,7 @@ Level Move Limit is 300
 [24][26] is Blank
 [24][27] is Blank
 [24][28] is Blank
-[24][29] is Blank
+[24][29] is a Shelf
 [24][30] is Blank
 [24][31] is Blank
 [24][32] is Blank
@@ -1034,8 +1034,8 @@ Level Move Limit is 300
 [25][6] is Blank
 [25][7] is Blank
 [25][8] is Blank
-[25][9] is Blank
-[25][10] is Blank
+[25][9] is a Shelf
+[25][10] is a Shelf
 [25][11] is Blank
 [25][12] is Blank
 [25][13] is Blank
@@ -1075,8 +1075,8 @@ Level Move Limit is 300
 [26][6] is Blank
 [26][7] is Blank
 [26][8] is Blank
-[26][9] is Blank
-[26][10] is Blank
+[26][9] is a Key
+[26][10] is a Shelf
 [26][11] is Blank
 [26][12] is Blank
 [26][13] is Blank
@@ -1086,7 +1086,7 @@ Level Move Limit is 300
 [26][17] is Blank
 [26][18] is Blank
 [26][19] is Blank
-[26][20] is Blank
+[26][20] is a Shelf
 [26][21] is Blank
 [26][22] is Blank
 [26][23] is Blank
@@ -1108,26 +1108,26 @@ Level Move Limit is 300
 [26][39] is Blank
 [26][40] is a Border
 [27][0] is a Border
-[27][1] is Blank
-[27][2] is Blank
-[27][3] is Blank
-[27][4] is Blank
-[27][5] is Blank
+[27][1] is a Shelf
+[27][2] is a Shelf
+[27][3] is a Shelf
+[27][4] is a Shelf
+[27][5] is a Shelf
 [27][6] is Blank
-[27][7] is Blank
+[27][7] is a Shelf
 [27][8] is Blank
-[27][9] is Blank
-[27][10] is Blank
+[27][9] is a Shelf
+[27][10] is a Shelf
 [27][11] is Blank
 [27][12] is Blank
 [27][13] is Blank
 [27][14] is Blank
 [27][15] is Blank
 [27][16] is Blank
-[27][17] is Blank
+[27][17] is a Customer
 [27][18] is Blank
 [27][19] is Blank
-[27][20] is Blank
+[27][20] is a Shelf
 [27][21] is Blank
 [27][22] is Blank
 [27][23] is Blank
@@ -1144,7 +1144,7 @@ Level Move Limit is 300
 [27][34] is Blank
 [27][35] is Blank
 [27][36] is Blank
-[27][37] is Blank
+[27][37] is a Customer
 [27][38] is Blank
 [27][39] is Blank
 [27][40] is a Border
@@ -1168,7 +1168,7 @@ Level Move Limit is 300
 [28][17] is Blank
 [28][18] is Blank
 [28][19] is Blank
-[28][20] is Blank
+[28][20] is a Shelf
 [28][21] is Blank
 [28][22] is Blank
 [28][23] is Blank
@@ -1177,7 +1177,7 @@ Level Move Limit is 300
 [28][26] is Blank
 [28][27] is Blank
 [28][28] is Blank
-[28][29] is Blank
+[28][29] is a Shelf
 [28][30] is Blank
 [28][31] is Blank
 [28][32] is Blank
@@ -1198,9 +1198,9 @@ Level Move Limit is 300
 [29][6] is Blank
 [29][7] is Blank
 [29][8] is Blank
-[29][9] is Blank
-[29][10] is Blank
-[29][11] is Blank
+[29][9] is a Key
+[29][10] is a Shelf
+[29][11] is a Shelf
 [29][12] is Blank
 [29][13] is Blank
 [29][14] is Blank
@@ -1209,16 +1209,16 @@ Level Move Limit is 300
 [29][17] is Blank
 [29][18] is Blank
 [29][19] is Blank
-[29][20] is Blank
+[29][20] is a Shelf
 [29][21] is Blank
 [29][22] is Blank
-[29][23] is Blank
+[29][23] is a Customer
 [29][24] is Blank
 [29][25] is Blank
 [29][26] is Blank
 [29][27] is Blank
 [29][28] is Blank
-[29][29] is Blank
+[29][29] is a Shelf
 [29][30] is Blank
 [29][31] is Blank
 [29][32] is Blank
