@@ -29,7 +29,6 @@ Config readFile() {
 		/*If file does not exist, create file with default settings.*/
 		if (err == ENOENT) {
 			writeConfig(gameConfig);
-			TitleBarHeight = getTitleBarHeight();
 		}
 		else {
 			fprintf(stderr, "Error opening file.\n");
