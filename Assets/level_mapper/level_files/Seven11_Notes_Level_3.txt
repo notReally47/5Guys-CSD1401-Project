@@ -497,11 +497,11 @@ Level Move Limit is 900
 [12][2] is a Key
 [12][3] is Blank
 [12][4] is Blank
-[12][5] is Blank
+[12][5] is a Waypoint
 [12][6] is Blank
 [12][7] is Blank
 [12][8] is Blank
-[12][9] is Blank
+[12][9] is a Waypoint
 [12][10] is Blank
 [12][11] is Blank
 [12][12] is Blank
@@ -661,11 +661,11 @@ Level Move Limit is 900
 [16][2] is a Box
 [16][3] is Blank
 [16][4] is Blank
-[16][5] is Blank
+[16][5] is a Waypoint
 [16][6] is Blank
 [16][7] is Blank
 [16][8] is Blank
-[16][9] is Blank
+[16][9] is a Waypoint
 [16][10] is Blank
 [16][11] is Blank
 [16][12] is Blank
@@ -825,11 +825,11 @@ Level Move Limit is 900
 [20][2] is a Key
 [20][3] is Blank
 [20][4] is Blank
-[20][5] is Blank
+[20][5] is a Waypoint
 [20][6] is Blank
 [20][7] is Blank
 [20][8] is Blank
-[20][9] is Blank
+[20][9] is a Waypoint
 [20][10] is Blank
 [20][11] is Blank
 [20][12] is Blank
@@ -989,11 +989,11 @@ Level Move Limit is 900
 [24][2] is a Box
 [24][3] is Blank
 [24][4] is Blank
-[24][5] is Blank
+[24][5] is a Waypoint
 [24][6] is Blank
 [24][7] is Blank
 [24][8] is Blank
-[24][9] is Blank
+[24][9] is a Waypoint
 [24][10] is Blank
 [24][11] is Blank
 [24][12] is Blank
@@ -1153,11 +1153,11 @@ Level Move Limit is 900
 [28][2] is a Key
 [28][3] is Blank
 [28][4] is Blank
-[28][5] is Blank
+[28][5] is a Waypoint
 [28][6] is Blank
 [28][7] is Blank
 [28][8] is Blank
-[28][9] is Blank
+[28][9] is a Waypoint
 [28][10] is Blank
 [28][11] is Blank
 [28][12] is Blank

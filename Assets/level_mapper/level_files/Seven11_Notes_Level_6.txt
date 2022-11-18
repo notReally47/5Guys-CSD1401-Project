@@ -381,8 +381,8 @@ Level Move Limit is 1275
 [9][9] is a Shelf
 [9][10] is Blank
 [9][11] is Blank
-[9][12] is Blank
-[9][13] is Blank
+[9][12] is a Shelf
+[9][13] is a Shelf
 [9][14] is Blank
 [9][15] is Blank
 [9][16] is Blank
@@ -396,8 +396,8 @@ Level Move Limit is 1275
 [9][24] is Blank
 [9][25] is Blank
 [9][26] is Blank
-[9][27] is Blank
-[9][28] is Blank
+[9][27] is a Shelf
+[9][28] is a Shelf
 [9][29] is Blank
 [9][30] is Blank
 [9][31] is a Shelf
@@ -420,10 +420,10 @@ Level Move Limit is 1275
 [10][7] is Blank
 [10][8] is Blank
 [10][9] is Blank
-[10][10] is a Shelf
+[10][10] is Blank
 [10][11] is Blank
 [10][12] is a Teleporter
-[10][13] is Blank
+[10][13] is a Shelf
 [10][14] is Blank
 [10][15] is Blank
 [10][16] is Blank
@@ -437,10 +437,10 @@ Level Move Limit is 1275
 [10][24] is Blank
 [10][25] is Blank
 [10][26] is Blank
-[10][27] is Blank
+[10][27] is a Shelf
 [10][28] is a Teleporter
 [10][29] is Blank
-[10][30] is a Shelf
+[10][30] is Blank
 [10][31] is Blank
 [10][32] is Blank
 [10][33] is Blank
@@ -462,7 +462,7 @@ Level Move Limit is 1275
 [11][8] is Blank
 [11][9] is Blank
 [11][10] is Blank
-[11][11] is a Shelf
+[11][11] is Blank
 [11][12] is Blank
 [11][13] is Blank
 [11][14] is Blank
@@ -480,7 +480,7 @@ Level Move Limit is 1275
 [11][26] is Blank
 [11][27] is Blank
 [11][28] is Blank
-[11][29] is a Shelf
+[11][29] is Blank
 [11][30] is Blank
 [11][31] is Blank
 [11][32] is Blank
@@ -1160,7 +1160,7 @@ Level Move Limit is 1275
 [28][9] is Blank
 [28][10] is Blank
 [28][11] is Blank
-[28][12] is a Teleporter
+[28][12] is Blank
 [28][13] is Blank
 [28][14] is a Shelf
 [28][15] is Blank
@@ -1176,7 +1176,7 @@ Level Move Limit is 1275
 [28][25] is Blank
 [28][26] is a Shelf
 [28][27] is Blank
-[28][28] is a Teleporter
+[28][28] is Blank
 [28][29] is Blank
 [28][30] is Blank
 [28][31] is Blank
@@ -1202,7 +1202,7 @@ Level Move Limit is 1275
 [29][10] is Blank
 [29][11] is Blank
 [29][12] is Blank
-[29][13] is Blank
+[29][13] is a Teleporter
 [29][14] is a Shelf
 [29][15] is Blank
 [29][16] is a Key
@@ -1216,7 +1216,7 @@ Level Move Limit is 1275
 [29][24] is a Key
 [29][25] is Blank
 [29][26] is a Shelf
-[29][27] is Blank
+[29][27] is a Teleporter
 [29][28] is Blank
 [29][29] is Blank
 [29][30] is Blank

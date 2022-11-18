@@ -12,7 +12,6 @@ extern Config config;
 extern Customer customer[CUSTOMER_MAX];
 extern Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 extern int time_lost,ignore_penalty;
-extern int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 
 UniqueCards UM;
 CardPosition pos;
