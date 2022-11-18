@@ -7,9 +7,7 @@
 #include "cprocessing.h"
 #include "utils.h"
 
-int TitleBarHeight;
-
-/*Reads config.ini*/
+/*Reads config.dat*/
 Config readFile() {
 	/*Default settings if anything goes wrong. Will return this if anything goes wrong with reading.*/
 	Config gameConfig = {
@@ -31,7 +29,6 @@ Config readFile() {
 		/*If file does not exist, create file with default settings.*/
 		if (err == ENOENT) {
 			writeConfig(gameConfig);
-			TitleBarHeight = getTitleBarHeight();
 		}
 		else {
 			fprintf(stderr, "Error opening file.\n");
