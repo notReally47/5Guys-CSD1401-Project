@@ -8,6 +8,7 @@ typedef struct Save {
 } Save;
 
 typedef struct Settings {
+	int				titleBarHeight;
 	int				audio;					// 0 - 100
 	int				windowed;				// windowed: 1, fullscreen: 0
 	unsigned int	resolutionWidth;		// 960, 1920

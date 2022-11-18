@@ -305,3 +305,22 @@ int getTaskBarHeight(void)
 		return rect.bottom - rect.top;
 	}
 }
+
+int getTitleBarHeight(void) {
+	HWND gameWindow = GetActiveWindow();
+	RECT wrect;
+	GetWindowRect(gameWindow, &wrect);
+	RECT crect;
+	GetClientRect(gameWindow, &crect);
+	POINT lefttop = { crect.left, crect.top }; // Practicaly both are 0
+	ClientToScreen(gameWindow, &lefttop);
+	POINT rightbottom = { crect.right, crect.bottom };
+	ClientToScreen(gameWindow, &rightbottom);
+
+	int left_border = lefttop.x - wrect.left; // Windows 10: includes transparent part
+	int right_border = wrect.right - rightbottom.x; // As above
+	int bottom_border = wrect.bottom - rightbottom.y; // As above
+	int top_border_with_title_bar = lefttop.y - wrect.top; // There is no transparent part
+
+	return top_border_with_title_bar;
+}

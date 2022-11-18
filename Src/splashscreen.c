@@ -27,7 +27,7 @@ void splash_screen_init(void)
     gameFont = CP_Font_Load("./Assets/Font/VT323-Regular.ttf");
     CP_Font_Set(gameFont);
     img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
-    config.settings.resolutionWidth == CP_System_GetDisplayWidth() ? CP_System_SetWindowPosition(0, 0) :
+    config.settings.resolutionWidth == CP_System_GetDisplayWidth() ? CP_System_SetWindowPosition(0, config.settings.titleBarHeight) :
         CP_System_SetWindowPosition(CP_System_GetDisplayWidth() / 4, CP_System_GetDisplayHeight() / 4);
     CP_System_SetWindowTitle("SevenTree");
     if (config.settings.windowed) {

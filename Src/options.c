@@ -10,7 +10,7 @@
 #include <stdio.h> // sprintf_s()
 #include <stdlib.h> //_countof()
 #include <string.h> // strlen()
-#include "utils.h"
+#include "utils.h" // IsTaskbarWndVisible & getTaskBarHeight
 
 extern Config config;
 Config newConfig;
@@ -26,7 +26,6 @@ CP_Vector window;
 Flag ddlClicked, volChanged, resChanged, configChanged, resUnmatch;
 float textSize, imgSize;
 int displayVol;
-
 
 CP_Sound click;
 
@@ -74,7 +73,7 @@ void Options_Init() {
 	/*Create Dropdown List*/
 	setDropDownList(&currentRes, newConfig.settings.resolutionWidth, newConfig.settings.resolutionHeight, newConfig.settings.windowed, window.x - (MAX_LENGTH * textSize / 2 + PADDING) / 2 - PADDING, 2 * PADDING + back.btnHeight + textSize / 2, MAX_LENGTH * textSize / 2 + PADDING, textSize);
 	setDropDownList(&halfscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth() / 2), (unsigned int)(CP_System_GetDisplayHeight() / 2), YES, currentRes.button.position.x, currentRes.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
-	IsTaskbarWndVisible() ? setDropDownList(&fullscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight() - getTaskBarHeight()), YES, halfscreenWindowed.button.position.x, halfscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight) :
+	IsTaskbarWndVisible() ? setDropDownList(&fullscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight() - getTaskBarHeight() - newConfig.settings.titleBarHeight), YES, halfscreenWindowed.button.position.x, halfscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight) :
 	setDropDownList(&fullscreenWindowed, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight()), YES, halfscreenWindowed.button.position.x, halfscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
 	setDropDownList(&fullscreen, (unsigned int)(CP_System_GetDisplayWidth()), (unsigned int)(CP_System_GetDisplayHeight()), NO, fullscreenWindowed.button.position.x, fullscreenWindowed.button.position.y + currentRes.button.btnHeight, currentRes.button.btnWidth, currentRes.button.btnHeight);
 	resolution[0] = halfscreenWindowed, resolution[1] = fullscreenWindowed, resolution[2] = fullscreen;
@@ -125,7 +124,7 @@ void Options_Update() {
 					resolution[i].selected = YES;
 					ddlClicked = NO;
 					resChanged = (resolution[i].actWidth == currentRes.actWidth && resolution[i].actHeight == currentRes.actHeight && resolution[i].windowed == currentRes.windowed) ? NO : YES;
-					configChanged = resChanged || volChanged ? 1 : 0;
+					configChanged = resChanged || volChanged ? YES : NO;
 				}
 				else resolution[i].selected = NO;
 			}
@@ -147,16 +146,16 @@ void Options_Update() {
 					if (displayVol > 0) {
 						CP_Sound_PlayAdvanced(click, --displayVol / 100.f, 2, NO, CP_SOUND_GROUP_2);
 					}
-					volChanged = displayVol == newConfig.settings.audio ? 0 : 1;
-					configChanged = resChanged || volChanged ? 1 : 0;
+					volChanged = displayVol == newConfig.settings.audio ? NO : YES;
+					configChanged = resChanged || volChanged ? YES : NO;
 				}
 				/*Vol up*/
 				else if (IsAreaClicked(volumeUp.position.x, volumeUp.position.y, volumeUp.btnWidth, volumeUp.btnHeight, mouse.x, mouse.y)) {
 					if (displayVol < 100) {
 						CP_Sound_PlayAdvanced(click, ++displayVol / 100.f, 2, NO, CP_SOUND_GROUP_2);
 					}
-					volChanged = displayVol == newConfig.settings.audio ? 0 : 1;
-					configChanged = resChanged || volChanged ? 1 : 0;
+					volChanged = displayVol == newConfig.settings.audio ? NO : YES;
+					configChanged = resChanged || volChanged ? YES : NO;
 				}
 			}
 		}
@@ -183,7 +182,7 @@ void Options_Update() {
 				/*Apply*/
 				if (IsAreaClicked(apply.position.x, apply.position.y, apply.btnWidth, apply.btnHeight, mouse.x, mouse.y)) {
 					CP_Sound_PlayAdvanced(click, newConfig.settings.audio / 100.f, 2, FALSE, CP_SOUND_GROUP_SFX);
-					(resSelected->actHeight == fullscreenWindowed.actHeight && resSelected->actWidth == fullscreenWindowed.actWidth) ? CP_System_SetWindowPosition(0, 0) :
+					(resSelected->actHeight == fullscreenWindowed.actHeight && resSelected->actWidth == fullscreenWindowed.actWidth) ? CP_System_SetWindowPosition(0, newConfig.settings.titleBarHeight) :
 						CP_System_SetWindowPosition(window.x / 4, window.y / 4);
 					newConfig.settings.resolutionWidth = resSelected->actWidth;
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
@@ -208,7 +207,7 @@ void Options_Update() {
 					CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 					displayVol = newConfig.settings.audio;
 					for (int i = 0; i < sizeof(resolution) / sizeof(DropDownList); i++) {
-						resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? 1 : 0;
+						resolution[i].selected = (resolution[i].actWidth == config.settings.resolutionWidth && resolution[i].actHeight == config.settings.resolutionHeight && resolution[i].windowed == config.settings.windowed) ? YES : NO;
 					}
 					configChanged = NO;
 					resChanged = NO;
@@ -231,6 +230,9 @@ void Options_Update() {
 
 	/*Clears and draws background art*/
 	draw_background();
+	/*char buff[25] = { 0 };
+	sprintf_s(buff, _countof(buff), "Height of Title Bar: %d", newConfig.settings.titleBarHeight);
+	drawAlignedText(RED, CENTER, buff, window.x / 2, window.y - window.y / 4);*/
 
 	/*Resolution text*/
 	const char* resList[3];
@@ -269,14 +271,16 @@ void Options_Update() {
 
 	char displayRes[25] = { 0 };
 
-	if ((resUnmatch && !resChanged)) {
-		config.settings.windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", config.settings.resolutionWidth, config.settings.resolutionHeight) :
-			sprintf_s(displayRes, _countof(displayRes), "%d x %d (fullscreen)", config.settings.resolutionWidth, config.settings.resolutionHeight);
-	}
-	else {
-		resSelected->windowed ? sprintf_s(displayRes, _countof(displayRes), "%d x %d (windowed)", resSelected->actWidth, resSelected->actHeight) :
-			sprintf_s(displayRes, _countof(displayRes), "%d x %d (fullscreen)", resSelected->actWidth, resSelected->actHeight);
-	}	
+	sprintf_s(displayRes, _countof(displayRes), "%d x %d (%s)",
+		resUnmatch && !resChanged ? config.settings.resolutionWidth : resSelected->actWidth,
+		resUnmatch && !resChanged ? config.settings.resolutionHeight : resSelected->actHeight,
+		resUnmatch && !resChanged ? config.settings.windowed ? "windowed" : "fullscreen" : resSelected->windowed ? "windowed" : "fullscreen");
+
+	/*resUnmatch && !resChanged ?
+		sprintf_s(displayRes, _countof(displayRes), "%d x %d (%s)",
+		config.settings.resolutionWidth, config.settings.resolutionHeight, config.settings.windowed ? "windowed" : "fullscreen") :
+		sprintf_s(displayRes, _countof(displayRes), "%d x %d (%s)",
+			resSelected->actWidth, resSelected->actHeight, resSelected->windowed ? "windowed" : "fullscreen");*/
 
 	/*Draw current volume and the volume up and down buttons*/
 	char currentVol[16] = { 0 };

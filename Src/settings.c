@@ -5,6 +5,9 @@
 #include "defines.h"
 #include "settings.h"
 #include "cprocessing.h"
+#include "utils.h"
+
+int TitleBarHeight;
 
 /*Reads config.ini*/
 Config readFile() {
@@ -12,6 +15,7 @@ Config readFile() {
 	Config gameConfig = {
 	.save.isNewState = 1,
 	.save.lastLevelPlayed = 1,
+	.settings.titleBarHeight = getTitleBarHeight(),
 	.settings.windowed = 1,
 	.settings.audio = 50,
 	.settings.resolutionWidth = (unsigned int)(GetSystemMetrics(SM_CXSCREEN) / 2),
@@ -27,6 +31,7 @@ Config readFile() {
 		/*If file does not exist, create file with default settings.*/
 		if (err == ENOENT) {
 			writeConfig(gameConfig);
+			TitleBarHeight = getTitleBarHeight();
 		}
 		else {
 			fprintf(stderr, "Error opening file.\n");
