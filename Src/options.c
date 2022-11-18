@@ -267,7 +267,7 @@ void Options_Update() {
 	controlDescription[5] = "- Pause game";
 	controlDescription[6] = "- Undo previous move";
 	controlDescription[7] = "- Reset map to initial positions";
-	controlDescription[8] = "- Focus / Unfocus camera on player";
+	controlDescription[8] = "- Camera toggle";
 
 	char displayRes[25] = { 0 };
 
