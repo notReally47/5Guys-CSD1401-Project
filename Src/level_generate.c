@@ -9,12 +9,16 @@
 #include <stdlib.h>					// Needed for exit() function
 #include <errno.h>					// Needed for error handling/checking of parsing CSV file
 
+int original_box_count = 0;
+
 /* Parse CSV file to initialise grid array at the start of every stage/level */
 void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
 
 	int row = 0, col = 0, read = 0, line = 0, teleporter_index = 0,								// row & col for grid array, teleporter_index for teleporter array, line for lines in CSV File
 		customer_number = 0, customer_posX = 0, customer_posY = 0, customer_direction = 0,		// Local Customer variables to 0
 		customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0;		// Local Customer variables to 0
+
+	original_box_count = 0;
 
 	/* For-Loop to clear out the Map First (Prevent carry-over from previous levels) */
 	for (int i = 0; i < SOKOBAN_GRID_ROWS; i++) {
@@ -51,7 +55,8 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 	}
 
 	FILE* csv_file;																				// File Pointer of CSV File
-	char csv_file_name[64] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";		// Beginning part of the CSV File name w/o level number and extension
+	//char csv_file_name[64] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";		// Beginning part of the CSV File name w/o level number and extension
+	char csv_file_name[64] = "./Assets/level_mapper/level_files/Seven11_Level_";
 	char level_char[3], csv_ext[5] = ".csv";													// Level Number & .csv Extension
 	sprintf(level_char, "%d", global_level);													// Convert Level Number to char to be used to append to csv_file_name
 	strcat(csv_file_name, level_char);															// Append Level Number
@@ -116,6 +121,9 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 
 				printf("Teleporter %d, is at row %d & column %d \n", grid[row][col].tele, teleporters[teleporter_index].posY, teleporters[teleporter_index].posX);
 			}
+
+			if (grid[row][col].box)
+				original_box_count++;
 
 			// Increments 'col' & 'line' when the correct number of values were scanned
 			if (read == 17) {

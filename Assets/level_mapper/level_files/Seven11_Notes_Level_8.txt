@@ -1,5 +1,5 @@
-Level Duration is 40
-Level Move Limit is 30
+Level Duration is 20
+Level Move Limit is 10
 [0][0] is a Border
 [0][1] is a Border
 [0][2] is a Border
@@ -85,7 +85,7 @@ Level Move Limit is 30
 [2][0] is a Border
 [2][1] is Blank
 [2][2] is Blank
-[2][3] is a Box
+[2][3] is Blank
 [2][4] is Blank
 [2][5] is Blank
 [2][6] is Blank
@@ -97,7 +97,7 @@ Level Move Limit is 30
 [2][12] is Blank
 [2][13] is Blank
 [2][14] is Blank
-[2][15] is a Key
+[2][15] is Blank
 [2][16] is Blank
 [2][17] is Blank
 [2][18] is Blank
@@ -126,7 +126,7 @@ Level Move Limit is 30
 [3][0] is a Border
 [3][1] is Blank
 [3][2] is Blank
-[3][3] is Blank
+[3][3] is Player
 [3][4] is Blank
 [3][5] is Blank
 [3][6] is Blank
@@ -168,9 +168,9 @@ Level Move Limit is 30
 [4][1] is Blank
 [4][2] is Blank
 [4][3] is Blank
-[4][4] is Blank
+[4][4] is a Box
 [4][5] is Blank
-[4][6] is a Box
+[4][6] is Blank
 [4][7] is Blank
 [4][8] is Blank
 [4][9] is Blank
@@ -184,7 +184,7 @@ Level Move Limit is 30
 [4][17] is Blank
 [4][18] is Blank
 [4][19] is Blank
-[4][20] is a Key
+[4][20] is Blank
 [4][21] is Blank
 [4][22] is Blank
 [4][23] is Blank
@@ -210,7 +210,7 @@ Level Move Limit is 30
 [5][2] is Blank
 [5][3] is Blank
 [5][4] is Blank
-[5][5] is Blank
+[5][5] is a Key
 [5][6] is Blank
 [5][7] is Blank
 [5][8] is Blank
@@ -378,7 +378,7 @@ Level Move Limit is 30
 [9][6] is Blank
 [9][7] is Blank
 [9][8] is Blank
-[9][9] is Player
+[9][9] is Blank
 [9][10] is Blank
 [9][11] is Blank
 [9][12] is Blank
