@@ -92,3 +92,12 @@ void drawHeader(const char* stringArr[], int size);
 * int size: Number of elements in array
 */
 void freeButtonImg(Button btn[], int size);
+
+/* initControls - Initialise control buttons and descriptions */
+void initControls();
+
+/* drawControls - Draw control buttons and descriptions */
+void drawControls();
+
+/* freeControls - Free control button images from memory */
+void freeControls();

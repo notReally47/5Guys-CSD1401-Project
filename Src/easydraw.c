@@ -3,6 +3,9 @@
 #include "structs.h"
 #include "defines.h"
 
+Button controls[9], up, down, left, right, pause, undo, reset, escape, camera;
+float imgSize, textSize;
+
 void setButton(Button* btn, const char* img, float x, float y, float w, float h, Flag tint) {
 	btn->img = CP_Image_Load(img);
 	btn->position = CP_Vector_Set(x, y);
@@ -86,7 +89,10 @@ void drawGIF(GIF* gif, float* timeElapsed, const float displayDuration, Flag fli
 
 void drawButton(Button btn) {
 	CP_Settings_ImageMode(CP_POSITION_CENTER);
-	btn.tint ? IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint() : CP_Settings_NoTint();
+	if (btn.tint) {
+		IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
+	}
+	//btn.tint ? IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint() : CP_Settings_NoTint();
 	CP_Image_Draw(btn.img, btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, 255);
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
 	CP_Settings_NoTint();
@@ -120,4 +126,50 @@ void freeButtonImg(Button btn[], int size) {
 	for (int i = 0; i < size; i++) {
 		CP_Image_Free(&(btn[i].img));
 	}
+}
+
+void initControls() {
+	imgSize = (float)CP_System_GetWindowHeight() / 30.f, textSize = (float)CP_System_GetWindowHeight() / 30.f;
+	setButton(&up, "./Assets/UI/W.png", (float)CP_System_GetWindowHeight() / 40.f, (float)CP_System_GetWindowHeight() / 40.f, imgSize, imgSize, NO);
+	setButton(&left, "./Assets/UI/A.png", up.position.x, up.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&down, "./Assets/UI/S.png", left.position.x, left.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&right, "./Assets/UI/D.png", down.position.x, down.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&pause, "./Assets/UI/P.png", right.position.x, right.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&escape, "./Assets/UI/ESC.png", pause.position.x + imgSize, pause.position.y, imgSize, imgSize, NO);
+	setButton(&undo, "./Assets/UI/U.png", pause.position.x, pause.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&camera, "./Assets/UI/C.png", reset.position.x, reset.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+
+	controls[0] = up;
+	controls[1] = left;
+	controls[2] = down;
+	controls[3] = right;
+	controls[4] = pause;
+	controls[5] = escape;
+	controls[6] = undo;
+	controls[7] = reset;
+	controls[8] = camera;
+}
+
+void drawControls() {
+	const char* controlDescription[sizeof(controls) / sizeof(Button)];
+	controlDescription[0] = "- Move up";
+	controlDescription[1] = "- Move left";
+	controlDescription[2] = "- Move down";
+	controlDescription[3] = "- Move right";
+	controlDescription[4] = "";
+	controlDescription[5] = "- Pause game";
+	controlDescription[6] = "- Undo move";
+	controlDescription[7] = "- Reset map";
+	controlDescription[8] = "- Camera toggle";
+
+	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
+		CP_Image_Draw(controls[i].img, controls[i].position.x, controls[i].position.y, controls[i].btnWidth, controls[i].btnHeight, 255);
+		//drawButton(controls[i]);
+		drawAlignedText(BLACK, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y);
+	}
+}
+
+void freeControls() {
+	freeButtonImg(controls, 9);
 }

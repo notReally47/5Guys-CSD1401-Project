@@ -78,6 +78,8 @@ void base_Init(void) {
 	stat[3] = "Time Wasted: ";										// Text Stat to print for Time Wasted Getting Distracted
 	time_lost = 45;													// default time lost if distracted
 
+	initControls();
+
 	load_spritesheet(&cellSize, cameratoggle);
 	cellAlign = (float)((config.settings.resolutionWidth - (int)cellSize * SOKOBAN_GRID_COLS) / 2);
 	set_map(grid, customer, path, teleporters);						// Initialise Map
@@ -313,6 +315,9 @@ void base_Update(void) {
 	/* Rendering */
 	draw_background(); // clears and draw background art
 
+	/* Draw Controls */
+	drawControls();
+
 	if (cameratoggle == 2)
 		world_camera(cellSize, cellAlign, playerRow, playerCol, face, cameratoggle);
 
@@ -440,7 +445,6 @@ void base_Update(void) {
 	show_stats(cellSize, stat[1], global_move - 1, cameratoggle, 2.f);		// Show Move Count
 	show_stats(cellSize, stat[2], times_distracted, cameratoggle, 3.f);		// Show Number of Times Distracted Count
 	show_stats(cellSize, stat[3], duration_lost, cameratoggle, 4.f);		// Show Duration Lost
-
 }
 
 void base_Exit(void) {
@@ -456,5 +460,6 @@ void base_Exit(void) {
 	CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
+	freeControls();
 	//CP_Image_Free(&speechSprite);
 }
