@@ -11,3 +11,6 @@ void set_temp_level(int lvl);
 
 /* Set Next Level*/
 void next_level();
+
+/* Reset Level When Game Ends */
+void reset_level();

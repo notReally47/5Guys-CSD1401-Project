@@ -24,3 +24,7 @@ void set_temp_level(int lvl) {
 void next_level() {
 	++global_level;
 }
+
+void reset_level() {
+	global_level = 1;
+}

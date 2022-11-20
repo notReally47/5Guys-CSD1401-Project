@@ -95,9 +95,9 @@ void base_Init(void) {
 	/*Unique mechanics Initialisation*/
 	// to force mechanic enabler check card_effect() for flag details
 	//UM.flags = 0;
-	UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
-	UM.flags |= 4;
-	mechanic_flags();												// Needs to be after set_map() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
+	//UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
+	//UM.flags |= 4;
+	//mechanic_flags();												// Needs to be after set_map() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
 	total_objectives = get_objectives(grid);						// Needs to be after set_map() & mechanic_flags() | Get Number of Objectives to meet (Number of Keys)
 	// If mechanic_flags is enabled, make sure it is also enabled in RESET
 
@@ -149,6 +149,9 @@ void base_Update(void) {
 		overlay_function = 1;													// 1 for Welcome Message Overlay
 		game_pause = 1;															// Enter Pause State
 	}
+	else {
+		is_welcome = 0;
+	}
 
 	if (!game_pause) {
 		int temp = 0;
@@ -172,11 +175,12 @@ void base_Update(void) {
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (is_completed == total_objectives) {
 			if (global_level == 10) {
-				game_pause = 1;
+				reset_level();
 				overlay_function = 5;
+				game_pause = 1;
 			}
 			else {
-				next_level();														// Increment global_level
+				next_level();																						// Increment global_level
 				config.save.lastLevelPlayed = global_level;
 				writeConfig(config);
 				CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);	// Transit to level_transition state

@@ -193,7 +193,7 @@ void mechanic_flags(void) {
         }
     }
     // affect box generation
-    if ((global_level != 1) && (original_box_count > 2)) {
+    if ((global_level != 1) && (original_box_count > 2) && (global_level != 10)) {
         int BoxBackup[2][3] = { 0 };
         int KeyBackup[2][3] = { 0 };
         for (int row = 0, totalbox = 0, totalkey = 0; row < SOKOBAN_GRID_ROWS; row++)
