@@ -30,13 +30,13 @@ void Credits_Init() {
 }
 void Credits_Update() {
 	/*INITIALISE VARIABLES*/
-	/*float speed = 100.f * CP_System_GetDt();
+	float speed = 100.f * CP_System_GetDt();
 	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++) {
 		dynamicY[i] -= speed;
 		if (dynamicY[i] <= 0) {
 			dynamicY[i] = (float)config.settings.resolutionHeight;
 		}
-	}*/
+	}
 
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
