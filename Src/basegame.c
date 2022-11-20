@@ -29,13 +29,13 @@ char* stat[4];
 
 float cellSize, cellAlign, elapsedLock, total_elapsed_time, oneSecondFlip, cameratogglecooldown, cusDelay;
 
-int total_objectives,													// Objectives to Meet
-isLocked, activatedCusX, activatedCusY, stunner,						// Stunner/Customer Logic Variables/Flags
-face, isAnimating, flip, cameratoggle,									// Drawing/Animation Logic Variables/Flags
-game_pause, overlay_function, is_welcome, reset_confirmed, gameover,	// Pause/Overlays Logic Variables/Flags
-clock, times_distracted, duration_lost,									// Stats Variables
-time_lost, ignore_penalty,												// Unique Mechanic Variables
-play30;																	// SFX Flag
+int total_objectives,																// Objectives to Meet
+isLocked, activatedCusX, activatedCusY, stunner,									// Stunner/Customer Logic Variables/Flags
+face, isAnimating, flip, cameratoggle,												// Drawing/Animation Logic Variables/Flags
+game_pause, overlay_function, is_welcome, reset_confirmed, gameover, game_end,		// Pause/Overlays Logic Variables/Flags
+clock, times_distracted, duration_lost,												// Stats Variables
+time_lost, ignore_penalty,															// Unique Mechanic Variables
+play30;																				// SFX Flag
 
 CP_Sound fail = NULL, success = NULL, push = NULL, teleport_sound = NULL, levelBGM = NULL, level30BGM = NULL, gameMusic;
 
@@ -70,7 +70,8 @@ void base_Init(void) {
 	times_distracted = 0;											// Stat for Number of Times Distracted, 0 at Level Load
 	duration_lost = 0;												// Stat for Duration Lost getting distracted, 0 at Level Load
 	is_welcome = 1;													// Set to 1 To start off Level 1 with a Welcome Message
-	overlay_function = 0;											// 1 for Welcome Message, 2 for Reset, 3 for Pause, 4 for Game Over
+	game_end = 0;
+	overlay_function = 0;											// 1 for Welcome Message, 2 for Reset, 3 for Pause, 4 for Game Over, 5 for Game End
 	gameover = 0;													// 1 for Time Limit, 2 for Customer, 3 for Move Limit
 	stat[0] = "Time Left: ";										// Text Stat to Print for Time Left
 	stat[1] = "Move: ";												// Text Stat to Print for Move Count
@@ -168,10 +169,16 @@ void base_Update(void) {
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (is_completed == total_objectives) {
-			next_level();														// Increment global_level
-			config.save.lastLevelPlayed = global_level;
-			writeConfig(config);
-			CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);	// Transit to level_transition state
+			if (global_level == 10) {
+				game_pause = 1;
+				overlay_function = 5;
+			}
+			else {
+				next_level();														// Increment global_level
+				config.save.lastLevelPlayed = global_level;
+				writeConfig(config);
+				CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);	// Transit to level_transition state
+			}
 		}
 
 		/* Lose Condition, When Time's Up */
@@ -431,6 +438,11 @@ void base_Update(void) {
 		else if (overlay_function == 4) {									// Else if overlay_function is 4
 			overlay_game_over(gameover - 1);								// Renders Game Over Overlay
 			game_pause = game_over(game_pause);								// game_pause will trigger to return to Main Menu
+		}
+
+		else if (overlay_function == 5) {									// Else of overlay_function is 5
+			overlay_end_game();												// Renders Game End Overlay
+			end_game();
 		}
 
 	}

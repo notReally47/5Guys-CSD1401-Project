@@ -8,3 +8,5 @@ void overlay_reset();
 int reset_check(int reset_confirmed);
 int overlay_welcome();
 int welcome_done(int game_pause);
+void overlay_end_game();
+void end_game();
