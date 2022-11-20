@@ -323,7 +323,9 @@ void base_Update(void) {
 	draw_background(); // clears and draw background art
 
 	/* Draw Controls */
-	drawControls();
+	if (cameratoggle == 1) {
+		drawControls();
+	}
 
 	if (cameratoggle == 2)
 		world_camera(cellSize, cellAlign, playerRow, playerCol, face, cameratoggle);
