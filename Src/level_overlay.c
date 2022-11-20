@@ -226,7 +226,7 @@ int reset_check(int reset_confirmed) {
 	return reset_confirmed;
 }
 
-struct Size initialise_welcome_size() {
+struct Size initialise_welcome_game_end_size() {
 	struct Size size;
 	size.header_text_size = (float)config.settings.resolutionHeight * 0.1f;
 	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
@@ -257,7 +257,7 @@ struct Size initialise_welcome_size() {
 }
 
 void overlay_welcome() {
-	struct Size size = initialise_welcome_size();
+	struct Size size = initialise_welcome_game_end_size();
 	char* welcome_text = "Welcome uhh... New Guy, to Seven11! Today will be your first day on the job & we will be watching your every move."
 		" Your job is to move erm... Stuff, around to the designated place & avoid talking to the customers. However, Customers will take every chance they get to talk to you."
 		" If you waste too much time or talk to too many customers, we're afraid we will have to let you go. Yes, you can be fired on your first day!"
@@ -289,7 +289,7 @@ void overlay_welcome() {
 }
 
 int welcome_done(int game_pause) {
-	struct Size size = initialise_welcome_size();
+	struct Size size = initialise_welcome_game_end_size();
 
 	/* Check for Mouse Click Input */
 	if (CP_Input_MouseClicked()) {
@@ -299,4 +299,47 @@ int welcome_done(int game_pause) {
 		}
 	}
 	return game_pause;
+}
+
+void overlay_end_game(){
+	struct Size size = initialise_welcome_game_end_size();
+	char* game_end_text = "Business has not been so good lately & we're afraid we will have to close down the shop."
+		" You have done a... Great job."
+		" Who knows maybe we wil have a chance to work again in the future...";
+
+	char* thank_you_text = "Thanks For Playing, You can Replay the levels and choose different card effects for the levels!";
+
+	CP_Settings_NoTint();																										// Clear any Existing Tint
+	CP_Settings_Fill(WHITE);																									// Set Font to WHITE
+
+	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());												// Set Mouse Position into a Vector
+	CP_Settings_TextSize(size.header_text_size * 2.0f);																				// Set Header Text Size
+	drawAlignedText(WHITE, CENTER, "THE END!", size.header_text_width, .75f * size.header_text_height*1.0f);					// Draw Header Text
+
+	drawTintedButton(PLYRRED, size.button_01_position_x, size.button_01_position_y,												// Draw 'Oh Well...' Button		
+		size.button_01_width, size.button_01_height, mousePos.x, mousePos.y, NO);
+
+	CP_Settings_TextSize(size.button_text_size);																				// Set Button Text Size
+	drawAlignedText(WHITE, CENTER, "Oh Well...", size.button_01_position_x, size.button_01_position_y);							// Draw 'Oh Well...' Text
+	
+
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_BOTTOM);													// Align Text to Center
+	CP_Settings_TextSize(size.text_box_text_size);																				// Set Welcome Message Text Size
+	CP_Font_DrawTextBox(game_end_text, size.text_box_position_x, size.text_box_position_y * 1.5f, size.text_box_row_width);		// Draw Game End Message
+	CP_Font_DrawTextBox(thank_you_text, size.text_box_position_x, size.text_box_position_y * 2.5f, size.text_box_row_width);	// Draw Thank You Message
+
+	CP_Settings_Tint(ABITBLACK);
+}
+
+void end_game(){
+	struct Size size = initialise_welcome_game_end_size();
+
+	/* Check for Mouse Click Input */
+	if (CP_Input_MouseClicked()) {
+		if (IsAreaClicked(size.button_01_position_x, size.button_01_position_y, size.button_01_width, size.button_01_height, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+			CP_Sound_PlayAdvanced(click, .5f, 2, FALSE, CP_SOUND_GROUP_SFX);													// Play Click Sound
+			CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);										// Load Main Menu when Button is Clicked
+		}
+	}
+
 }
