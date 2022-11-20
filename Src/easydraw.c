@@ -89,10 +89,7 @@ void drawGIF(GIF* gif, float* timeElapsed, const float displayDuration, Flag fli
 
 void drawButton(Button btn) {
 	CP_Settings_ImageMode(CP_POSITION_CENTER);
-	if (btn.tint) {
-		IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint();
-	}
-	//btn.tint ? IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint() : CP_Settings_NoTint();
+	btn.tint ? IsAreaClicked(btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, CP_Input_GetMouseX(), CP_Input_GetMouseY()) ? CP_Settings_Tint(DARKGRAY) : CP_Settings_NoTint() : CP_Settings_NoTint();
 	CP_Image_Draw(btn.img, btn.position.x, btn.position.y, btn.btnWidth, btn.btnHeight, 255);
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
 	CP_Settings_NoTint();
@@ -161,11 +158,10 @@ void drawControls() {
 	controlDescription[5] = "- Pause game";
 	controlDescription[6] = "- Undo move";
 	controlDescription[7] = "- Reset map";
-	controlDescription[8] = "- Camera toggle";
+	controlDescription[8] = "- Zoom in/out";
 
 	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
 		CP_Image_Draw(controls[i].img, controls[i].position.x, controls[i].position.y, controls[i].btnWidth, controls[i].btnHeight, 255);
-		//drawButton(controls[i]);
 		drawAlignedText(BLACK, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y);
 	}
 }

@@ -259,15 +259,15 @@ void Options_Update() {
 	drawHeader(headers, 3);
 
 	const char* controlDescription[sizeof(controls) / sizeof(Button)];
-	controlDescription[0] = "- Move player up";
-	controlDescription[1] = "- Move player left";
-	controlDescription[2] = "- Move player down";
-	controlDescription[3] = "- Move player right";
+	controlDescription[0] = "- Move up";
+	controlDescription[1] = "- Move left";
+	controlDescription[2] = "- Move down";
+	controlDescription[3] = "- Move right";
 	controlDescription[4] = "";
 	controlDescription[5] = "- Pause game";
-	controlDescription[6] = "- Undo previous move";
-	controlDescription[7] = "- Reset map to initial positions";
-	controlDescription[8] = "- Camera toggle";
+	controlDescription[6] = "- Undo move";
+	controlDescription[7] = "- Reset map";
+	controlDescription[8] = "- Zoom in/out";
 
 	char displayRes[25] = { 0 };
 
