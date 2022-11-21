@@ -1,5 +1,6 @@
 #pragma once
 /*
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
 Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
 File	: level_generate.c
 Purpose	: Function to load level csv file to load game map

@@ -1,6 +1,11 @@
 #pragma once
 /*
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
 Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+		  Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
+			- Clicking SFX
+			- Level Complete SFX
+			- Reason for failure
 File	: level_overlay.c
 Purpose	: Render Different OVerlay & implement function/purpose of overlay
 */
@@ -316,7 +321,7 @@ void overlay_end_game(){
 	struct Size size = initialise_welcome_game_end_size();
 	char* game_end_text = "Business has not been so good lately & we're afraid we will have to close down the shop."
 		" You have done a... Great job."
-		" Who knows maybe we wil have a chance to work again in the future...";
+		" Who knows maybe we will have a chance to work again in the future...";
 
 	char* thank_you_text = "Thanks For Playing, You can Replay the levels and choose different card effects for the levels!";
 

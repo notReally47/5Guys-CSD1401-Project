@@ -1,5 +1,9 @@
 /*
-Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
+Authors	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+		  Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
+			- Clicking SFX
+			- Level Complete SFX
 File	: level_transition.c
 Purpose	: State for level complete and transiting to next level & choosing of Buff/Debuff
 */

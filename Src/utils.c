@@ -1,3 +1,13 @@
+/*
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
+Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
+			- teleport SFX
+			- Timer VFX when time left 30s
+File	: utils.c
+Purpose	: 
+*/
+
+
 #define _CRT_SECURE_NO_DEPRECATE	// Needed to use strcpy() and strcat() instead of strcopy_s() & strcat_s()
 #include "cprocessing.h"	
 #include "structs.h"

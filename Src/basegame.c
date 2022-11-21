@@ -1,7 +1,10 @@
 /*
-Author	: All Members
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
+Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu
+		    - Customer Logics
+			- SFXs & BGMs
 File	: basegame.c
-Purpose	: State for Main Gameplay
+Purpose	: Main state for game level.
 */
 
 #include "cprocessing.h"			// Needed for C Processing Functions
@@ -122,14 +125,14 @@ void base_Init(void) {
 	gifElasped = 0.f;
 
 	/* SFX */
-	CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
-	levelBGM = CP_Sound_Load("./Assets/Sound/Level_BGM.wav");					// Level Background Music
-	level30BGM = CP_Sound_Load("./Assets/Sound/Level_BGM_30s.wav");				// Level Background Music when 30 seconds left
-	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");						// Fail SFX
-	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");					// Successs/Level Clear SFX
-	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");						// Box Pushing SFX
-	teleport_sound = CP_Sound_Load("./Assets/Sound/SFX/Teleport.wav");			// Teleporting SFX
-	CP_Sound_PlayAdvanced(levelBGM, 0.5, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+	CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);									// Stop Main Menu BGM
+	levelBGM = CP_Sound_Load("./Assets/Sound/Level_BGM.wav");					// Load Level Background Music
+	level30BGM = CP_Sound_Load("./Assets/Sound/Level_BGM_30s.wav");				// Load Level Background Music when 30 seconds left
+	fail = CP_Sound_Load("./Assets/Sound/SFX/Fail.wav");						// Load Fail SFX
+	success = CP_Sound_Load("./Assets/Sound/SFX/Success.wav");					// Load Successs/Level Clear SFX
+	push = CP_Sound_Load("./Assets/Sound/SFX/Push.wav");						// Load Box Pushing SFX
+	teleport_sound = CP_Sound_Load("./Assets/Sound/SFX/Teleport.wav");			// Load Teleporting SFX
+	CP_Sound_PlayAdvanced(levelBGM, 0.5, 1, TRUE, CP_SOUND_GROUP_MUSIC);		// Play Level BGM upon initilizing
 }
 
 void base_Update(void) {
@@ -212,8 +215,8 @@ void base_Update(void) {
 		/* Lose Condition, When Time's Up */
 		if (clock <= 0) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);		// Play Game Over SFX
-			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
-			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);							// Stop 30s BGM
+			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);	// Play level BGM
 			overlay_function = 4;												// 4 for Game Over Overlay
 			gameover = 1;														// 1 for Time limit Lose Condition Message
 			game_pause = 1;														// Enter Pause State
@@ -223,8 +226,8 @@ void base_Update(void) {
 		/* Lose Condition, Move Limit Reached */
 		if (((global_move - 1) >= move_limit)) {
 			CP_Sound_PlayAdvanced(fail, 1, 1, FALSE, CP_SOUND_GROUP_SFX);		// Play Game Over SFX
-			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
-			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);							// Stop 30s BGM
+			CP_Sound_PlayAdvanced(levelBGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);	// Play Level BGM
 			overlay_function = 4;												// 4 for Game Over Overlay
 			gameover = 3;														// 3 for Move Limit Lose Condition Message
 			game_pause = 1;														// Enter Paause State
@@ -233,9 +236,9 @@ void base_Update(void) {
 
 		/* Play less than 30 second BGM */
 		if (clock <= 30 && !play30) {
-			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);
-			play30 = 1;
-			CP_Sound_PlayAdvanced(level30BGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+			CP_Sound_StopGroup(CP_SOUND_GROUP_MUSIC);								// Stop Level BGM
+			play30 = 1;																// Set 30s flag to true
+			CP_Sound_PlayAdvanced(level30BGM, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);	// Play 30s Remaining BGM
 		}
 
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
@@ -250,7 +253,6 @@ void base_Update(void) {
 			/*Check if 3 seconds has passed*/
 			if (elapsedLock <= lockTimer) {
 				elapsedLock += current_elapsed_time;
-				printf("Locked!\n");
 			}
 			else {
 				/*Reset timer and turn customer inactive*/
@@ -263,7 +265,6 @@ void base_Update(void) {
 				}
 				else if (ignore_penalty == 1)
 					ignore_penalty = 0;		// Disables flag after getting distracted once
-				printf("Unlocked.\n");
 			}
 		}
 
@@ -299,12 +300,12 @@ void base_Update(void) {
 
 			// Pushing Box around
 			if (pushBox == 1) {
-				CP_Sound_PlayAdvanced(push, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+				CP_Sound_PlayAdvanced(push, 1, 1, FALSE, CP_SOUND_GROUP_SFX);		// Plays pushing box SFX
 			}
 
 			// Pushing Box into objective
 			if (pushBox == 2) {
-				CP_Sound_PlayAdvanced(success, 1, 1, FALSE, CP_SOUND_GROUP_SFX);
+				CP_Sound_PlayAdvanced(success, 1, 1, FALSE, CP_SOUND_GROUP_SFX);	// Plays objective SFX
 			}
 
 			/* Undo Move */
@@ -327,18 +328,19 @@ void base_Update(void) {
 
 		// Customer Logic
 		cusDelay += CP_System_GetDt();
-		if (cusDelay > 1.5f) {
-			cusDelay = 0.f;
+		if (cusDelay > 1.5f) {												// Customer will only move every 1.5s
+			cusDelay = 0.f;													// Reset timer
 			for (int i = 0; i < CUSTOMER_MAX; i++) {
-				if (customer[i].isActive && !customer[i].isIdle && !customer[i].isRandom) {
-					customerMovement(i, grid, path, customer);
-				}
-
-				if (customer[i].isActive && customer[i].isIdle) {
-					customerIdle(i, customer);
-				}
-				else if (customer[i].isActive && customer[i].isRandom) {
-					randomCustomerMovement(i, grid, customer);
+				if (customer[i].isActive) {									// Check if customer is still valid for movement
+					if (customer[i].isRandom) {								// Check if customer is moving randomly
+						randomCustomerMovement(i, grid, customer);
+					}
+					else if (customer[i].isIdle) {							// Check if customer is rotating on the spot
+						customerIdle(i, customer);
+					}
+					else {
+						customerMovement(i, grid, path, customer);			// Customer is moving on a fixed path
+					}
 				}
 			}
 		}
@@ -505,13 +507,13 @@ void base_Exit(void) {
 
 	/* Free Assets */
 	CP_Image_Free(speechSprite.spritesheet);
-	CP_Sound_Free(&fail);
-	CP_Sound_Free(&push);
-	CP_Sound_Free(&success);
-	CP_Sound_Free(&teleport_sound);
-	CP_Sound_Free(&levelBGM);
-	CP_Sound_Free(&level30BGM);
-	CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+	CP_Sound_Free(&fail);													// Free fail SFX
+	CP_Sound_Free(&push);													// Free push SFX
+	CP_Sound_Free(&success);												// Free success SFX
+	CP_Sound_Free(&teleport_sound);											// Free teleport SFX
+	CP_Sound_Free(&levelBGM);												// Free level BGM SFX
+	CP_Sound_Free(&level30BGM);												// Free 30s BGM SFX
+	CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);		// Play Main Menu BGM
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
 	freeControls();

@@ -9,6 +9,11 @@ Ian Chua Rong Bin               |   i.chua@digipen.edu
 Jerell Tan Jian Yu              |   jerelljianyu.tan@digipen.edu
 Guo Yiming                      |   yiming.guo@digipen.edu
 
+Gameplay Tips:
+ - Players have to be within 2 cells in the direction the customer is facing to be stunned
+ - Boxes in the objective are still capable of being pushed
+ - Undoing moves will NOT give back the time lost, but will revert the move count
+
 Key Binds:
 W - Moves Forward
 A - Moves Left
