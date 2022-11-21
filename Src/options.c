@@ -42,7 +42,7 @@ int displayVol;
 
 CP_Sound click;
 
-void Options_Init() {
+void Options_Init(void) {
 	/*Initialize config*/
 	newConfig = config;
 	displayVol = newConfig.settings.audio;
@@ -116,7 +116,7 @@ void Options_Init() {
 	/*-----------------------------------*/
 }
 
-void Options_Update() {
+void Options_Update(void) {
 	CP_Vector mouse = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY()); // mouse position
 	CP_Color currentResColor = ddlClicked ? BGDBLUE : BGLBLUE;
 	timeElapsed += CP_System_GetDt();
@@ -323,7 +323,7 @@ void Options_Update() {
 	}
 }
 
-void Options_Exit() {
+void Options_Exit(void) {
 	freeButtonImg(btns, 14);
 	CP_Image_Free(&gameplay.spritesheet);
 	free_background();

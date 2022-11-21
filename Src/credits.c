@@ -21,7 +21,7 @@ Button back;
 
 extern Config config;
 
-void Credits_Init() {
+void Credits_Init(void) {
 	/*INITIALISE VARIABLES*/
 	float imgSize = (float)config.settings.resolutionHeight / 20.0f;
 	textSize = (float)config.settings.resolutionHeight / 15.f;
@@ -43,7 +43,7 @@ void Credits_Init() {
 	load_background();
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
 }
-void Credits_Update() {
+void Credits_Update(void) {
 	/*INITIALISE VARIABLES*/
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
@@ -95,7 +95,7 @@ void Credits_Update() {
 	drawButton(back);
 }
 
-void Credits_Exit() {
+void Credits_Exit(void) {
 	CP_Image_Free(&back.img);
 	free_background();
 }

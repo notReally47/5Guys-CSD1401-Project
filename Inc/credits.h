@@ -1,5 +1,5 @@
 #pragma once
 
-void Credits_Init();
-void Credits_Update();
-void Credits_Exit();
+void Credits_Init(void);
+void Credits_Update(void);
+void Credits_Exit(void);

@@ -514,7 +514,7 @@ void base_Update(void) {
 void base_Exit(void) {
 
 	/* Free Assets */
-	CP_Image_Free(speechSprite.spritesheet);
+	CP_Image_Free(&speechSprite.spritesheet);
 	CP_Sound_Free(&fail);													// Free fail SFX
 	CP_Sound_Free(&push);													// Free push SFX
 	CP_Sound_Free(&success);												// Free success SFX

@@ -51,7 +51,7 @@ typedef struct Size {
 
 /* Initialise Size struct with values that scale with resolution for Pause & Reset Overlay */
 struct Size initialise_pause_reset_size() {
-	struct Size size;
+	struct Size size = { 0 };
 	size.header_text_size = (float)config.settings.resolutionHeight * 0.3f;
 	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
 	size.header_text_height = (float)config.settings.resolutionHeight * 0.45f;
@@ -123,7 +123,7 @@ int unpause(int game_pause) {
 
 /* Initialise Size struct with values that scale with resolution for Game Over Overlay */
 struct Size initialise_game_over_size() {
-	struct Size size;
+	struct Size size = { 0 };
 	size.header_text_size = (float)config.settings.resolutionHeight * 0.2f;
 	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
 	size.header_text_height = (float)config.settings.resolutionHeight * 0.45f;
@@ -240,7 +240,7 @@ int reset_check(int reset_confirmed) {
 
 /* Initialise Size struct with values that scale with resolution for Welcome & Game End Overlay */
 struct Size initialise_welcome_game_end_size() {
-	struct Size size;
+	struct Size size = { 0 };
 	size.header_text_size = (float)config.settings.resolutionHeight * 0.1f;
 	size.header_text_width = (float)config.settings.resolutionWidth / 2.f;
 	size.header_text_height = (float)config.settings.resolutionHeight * 0.15f;

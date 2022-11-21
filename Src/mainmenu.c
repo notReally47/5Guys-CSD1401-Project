@@ -27,7 +27,7 @@ CP_Sound click = NULL, gameMusic;
 
 rect buttons;
 
-void Main_Menu_Init()
+void Main_Menu_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER); // align rectangle to the center position (else it defaults to top left corner)
 	CP_Settings_Stroke(BLACK); // black border around the rectangle
@@ -44,7 +44,7 @@ void Main_Menu_Init()
 	
 }
 
-void Main_Menu_Update()
+void Main_Menu_Update(void)
 {
 	/*INITIALISE*/
 	set_level(); //set to latest unlocked level
@@ -100,7 +100,7 @@ void Main_Menu_Update()
 	drawAlignedText(WHITE, CENTER, "Quit", buttons.center_x, buttons.center_y + buttons.height * 6.f);
 }
 
-void Main_Menu_Exit()
+void Main_Menu_Exit(void)
 {
 	free_background();
 }

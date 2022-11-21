@@ -26,7 +26,7 @@ rect buttons;						// Button size
 Flag applied;						// For Card Check
 CP_Sound nextLvl = NULL, click;		// SFX for Next Level & CLick
 
-void Level_Transition_Init()
+void Level_Transition_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER);										// Align rectangle to the center position (else it defaults to top left corner)
 
@@ -49,7 +49,7 @@ void Level_Transition_Init()
 	card_settings();
 }
 
-void Level_Transition_Update()
+void Level_Transition_Update(void)
 {
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());				// Get Mouse Inputs into a Vector
 	CP_Color lvlComplete = !(CP_System_GetFrameCount() % 5) ? PLYRRED : PLYRGRN;				// Change color every 5 frames (Flashing Text)
@@ -102,7 +102,7 @@ void Level_Transition_Update()
 		(float)CP_System_GetWindowWidth() / 2, (float)config.settings.resolutionHeight / 5);	
 }
 
-void Level_Transition_Exit()
+void Level_Transition_Exit(void)
 {
 	free_buttons();
 	free_background();

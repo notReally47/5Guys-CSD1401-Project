@@ -25,7 +25,7 @@ rect buttons;						// Button size
 CP_Sound click;						// Click SFX
 Button back;						// Customised Back Button Image/Icon
 
-void Level_Select_Init()
+void Level_Select_Init(void)
 {
 	/* INITIALISE */
 	load_background();																											// Load Background Image
@@ -33,7 +33,7 @@ void Level_Select_Init()
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);		// Customised Back Button
 }
 
-void Level_Select_Update()
+void Level_Select_Update(void)
 {
 	/* INITIALISE VARIABLES */
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());												// Get Mouse Inputs into a Vector
@@ -111,7 +111,7 @@ void Level_Select_Update()
 
 }
 
-void Level_Select_Exit()
+void Level_Select_Exit(void)
 {
 	CP_Image_Free(&back.img);																									// Free Back Button Image
 	free_background();																											// Free Background Image
