@@ -1,8 +1,11 @@
 /*
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
-Authors	:
-File	:
-Purpose	:
+Authors	: Ian Chua (i.chua@digipen.edu)
+		    - Read file
+			- Write file
+			- Check if file exists
+File	: settings.c 
+Purpose	: Read and write game information to the file.
 */
 
 #define _CRT_SECURE_NO_DEPRECATE

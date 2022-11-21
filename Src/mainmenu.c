@@ -6,6 +6,8 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 		  Guo Yiming (yiming.guo@digipen.edu)
 			- UI Design
 			- Tinted Buttons
+		  Ian Chua (i.chua@digipen.edu)
+		    - Read config.dat
 File	: mainmenu.c
 Purpose	: Main Menu Page
 */

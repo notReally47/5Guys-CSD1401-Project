@@ -1,6 +1,8 @@
 /*
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
 Authors	: Shafiq Mirza Bin Mohamed Zahid (shafiqmirza.b@digipen.edu)
+		  Ian Chua (i.chua@digipen.edu)
+		    - Read file and set config
 File	: splashscreen.c
 Purpose	: animates digipen logo to fade in/out
 */

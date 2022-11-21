@@ -15,6 +15,10 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 		    - basic teleport logic in game_logic()
 			- revised getDirection() logic
 			- implemented display bar in show_stats() when zoomed in
+		  Ian Chua (i.chua@digipen.edu)
+		    - Revised collision checking
+			- Initial game logic
+			- Initial cell movement
 File	: utils.c
 Purpose	: 
 */

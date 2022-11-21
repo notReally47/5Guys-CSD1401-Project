@@ -7,6 +7,9 @@ Authors	: Guo Yiming (yiming.guo@digipen.edu)
 			- Write resolution/volume changes to config.dat
 		  Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Clicking SFX
+		  Ian Chua (i.chua@digipen.edu)
+		    - Bug fixing for UI
+			- Write updates to file
 File	: options.c
 Purpose	: Setting page for player to change their settings
 */
