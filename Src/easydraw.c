@@ -113,19 +113,19 @@ void drawButton(Button btn) {
 void drawDivider(float y) {
 	CP_Settings_Stroke(WHITE);
 	CP_Settings_StrokeWeight(3.0f);
-	CP_Graphics_DrawLine(PADDING, y, CP_System_GetWindowWidth() - PADDING, y);
+	CP_Graphics_DrawLine(PADDING, y, (float)CP_System_GetWindowWidth() - PADDING, y);
 	CP_Settings_Stroke(BLACK);
 }
 
 void drawHeader(const char* stringArr[], int size) {
-	float textX = PADDING, textSize = CP_System_GetWindowHeight() / 20, textY = textSize + 2 * PADDING;
-	float divY = 2 * PADDING + textSize + textSize / 2 + 0.6 * textSize;
+	float textX = PADDING, textSize = (float)CP_System_GetWindowHeight() / 20.f, textY = textSize + 2 * PADDING;
+	float divY = 2.f * PADDING + textSize + textSize / 2.f + 0.6f * textSize;
 	for (int i = 0; i < size; i++, textY += PADDING + textSize) {
 		drawAlignedText(FADERBLACK, LEFT, stringArr[i], textX, textY);
-		drawAlignedText(BLACK, LEFT, stringArr[i], textX + 2, textY);
+		drawAlignedText(BLACK, LEFT, stringArr[i], textX + 2.f, textY);
 		if (!(i % 2)) {
 			drawDivider(divY);
-			divY += 0.9 * textSize + 1.5 * PADDING;
+			divY += (float)(0.9f * textSize) + (float)(1.5f * PADDING);
 		}
 	}
 }
@@ -139,14 +139,14 @@ void freeButtonImg(Button btn[], int size) {
 void initControls() {
 	imgSize = (float)CP_System_GetWindowHeight() / 30.f, textSize = (float)CP_System_GetWindowHeight() / 30.f;
 	setButton(&up, "./Assets/UI/W.png", (float)CP_System_GetWindowHeight() / 40.f, (float)CP_System_GetWindowHeight() / 40.f, imgSize, imgSize, NO);
-	setButton(&left, "./Assets/UI/A.png", up.position.x, up.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
-	setButton(&down, "./Assets/UI/S.png", left.position.x, left.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
-	setButton(&right, "./Assets/UI/D.png", down.position.x, down.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
-	setButton(&pause, "./Assets/UI/P.png", right.position.x, right.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&left, "./Assets/UI/A.png", up.position.x, up.position.y + 1.5f * imgSize, imgSize, imgSize, NO);
+	setButton(&down, "./Assets/UI/S.png", left.position.x, left.position.y + 1.5f * imgSize, imgSize, imgSize, NO);
+	setButton(&right, "./Assets/UI/D.png", down.position.x, down.position.y + 1.5f * imgSize, imgSize, imgSize, NO);
+	setButton(&pause, "./Assets/UI/P.png", right.position.x, right.position.y + 1.5f * imgSize, imgSize, imgSize, NO);
 	setButton(&escape, "./Assets/UI/ESC.png", pause.position.x + imgSize, pause.position.y, imgSize, imgSize, NO);
-	setButton(&undo, "./Assets/UI/U.png", pause.position.x, pause.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
-	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
-	setButton(&camera, "./Assets/UI/C.png", reset.position.x, reset.position.y + 1.5 * imgSize, imgSize, imgSize, NO);
+	setButton(&undo, "./Assets/UI/U.png", pause.position.x, pause.position.y + 1.5f * imgSize, imgSize, imgSize, NO);
+	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 1.5f * imgSize, imgSize, imgSize, NO);
+	setButton(&camera, "./Assets/UI/C.png", reset.position.x, reset.position.y + 1.5f * imgSize, imgSize, imgSize, NO);
 
 	controls[0] = up;
 	controls[1] = left;
@@ -160,7 +160,7 @@ void initControls() {
 }
 
 void drawControls() {
-	const char* controlDescription[sizeof(controls) / sizeof(Button)];
+	const char* controlDescription[sizeof(controls) / sizeof(Button)] = { 0 };
 	controlDescription[0] = "- Move up";
 	controlDescription[1] = "- Move left";
 	controlDescription[2] = "- Move down";
@@ -170,8 +170,9 @@ void drawControls() {
 	controlDescription[6] = "- Undo move";
 	controlDescription[7] = "- Reset map";
 	controlDescription[8] = "- Zoom in/out";
-
-	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
+	
+	float x = imgSize, y = imgSize / 2.f;
+	for (int i = 0; i < sizeof(controls) / sizeof(Button); i++) {
 		CP_Image_Draw(controls[i].img, controls[i].position.x, controls[i].position.y, controls[i].btnWidth, controls[i].btnHeight, 255);
 		drawAlignedText(BLACK, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y);
 	}

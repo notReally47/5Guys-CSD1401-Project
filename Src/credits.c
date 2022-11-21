@@ -30,8 +30,8 @@ void Credits_Init() {
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
 	staticXleft = (float)config.settings.resolutionWidth / 4;
-	staticXright = (float)config.settings.resolutionWidth - config.settings.resolutionWidth / 4;
-	float yPos = CP_System_GetWindowHeight() / 4;
+	staticXright = (float)config.settings.resolutionWidth - (float)config.settings.resolutionWidth / 4;
+	float yPos = (float)CP_System_GetWindowHeight() / 4;
 	float temp = 0.f;
 	for (int i = 0; i < sizeof(dynamicYleft) / sizeof(dynamicYleft[0]); i++, temp += textSize - textSize / 3) {
 		dynamicYleft[i] = yPos + temp;
@@ -79,10 +79,10 @@ void Credits_Update() {
 	drawAlignedText(FADERBLACK, CENTER, "Prasanna Ghali   John Bauer	Dr. Erik Mohrmann", staticXright, dynamicYright[6]);
 	drawAlignedText(FADERBLACK, CENTER, "Melvin Gonsalvez   Angela Kugler   Dr. Charles Duba", staticXright, dynamicYright[7]);
 	drawAlignedText(FADERBLACK, CENTER, "Ben Ellinger   Johnny Deek", staticXright, dynamicYright[8]);
-	drawAlignedText(BLACK, CENTER, "Created at", CP_System_GetWindowWidth() / 2, CP_System_GetWindowHeight() - 2.f * textSize);
-	drawAlignedText(FADERBLACK, CENTER, "DigiPen Institute of Technology Singapore", CP_System_GetWindowWidth() / 2, CP_System_GetWindowHeight() - 1.5f * textSize);
-	drawAlignedText(FADEBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", CP_System_GetWindowWidth() / 2, CP_System_GetWindowHeight() - textSize / 2);
-	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", CP_System_GetWindowWidth() / 2 + .035f * textSize, CP_System_GetWindowHeight() - textSize / 2);
+	drawAlignedText(BLACK, CENTER, "Created at", (float)CP_System_GetWindowWidth() / 2.f, (float)CP_System_GetWindowHeight() - 2.f * textSize);
+	drawAlignedText(FADERBLACK, CENTER, "DigiPen Institute of Technology Singapore", (float)CP_System_GetWindowWidth() / 2.f, (float)CP_System_GetWindowHeight() - 1.5f * textSize);
+	drawAlignedText(FADEBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", (float)CP_System_GetWindowWidth() / 2.f, (float)CP_System_GetWindowHeight() - textSize / 2);
+	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", (float)CP_System_GetWindowWidth() / 2.f + .035f * textSize, (float)CP_System_GetWindowHeight() - textSize / 2);
 
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);

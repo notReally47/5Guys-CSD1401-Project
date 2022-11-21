@@ -248,7 +248,7 @@ void Options_Update() {
 	drawAlignedText(RED, CENTER, buff, window.x / 2, window.y - window.y / 4);*/
 
 	/*Resolution text*/
-	const char* resList[3];
+	const char* resList[3] = { 0 };
 	char halfscreenWRes[25] = { 0 };
 	sprintf_s(halfscreenWRes, _countof(halfscreenWRes), "%u x %u (windowed)", halfscreenWindowed.actWidth, halfscreenWindowed.actHeight);
 	char fullscreenWRes[25] = { 0 };
@@ -267,11 +267,11 @@ void Options_Update() {
 	drawButton(back);
 
 	/*Draw headers: Resolution, Volume, Tutorial*/
-	const char* headers[3];
+	const char* headers[3] = { 0 };
 	headers[0] = "Resolution", headers[1] = "Volume", headers[2] = "Controls";
 	drawHeader(headers, 3);
 
-	const char* controlDescription[sizeof(controls) / sizeof(Button)];
+	const char* controlDescription[sizeof(controls) / sizeof(Button)] = { 0 };
 	controlDescription[0] = "- Move up";
 	controlDescription[1] = "- Move left";
 	controlDescription[2] = "- Move down";
