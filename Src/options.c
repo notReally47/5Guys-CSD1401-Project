@@ -64,20 +64,20 @@ void Options_Init(void) {
 
 	/*Create Buttons*/
 	setButton(&back, "./Assets/UI/Back.png",	imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING,imgSize, imgSize, YES);
-	setButton(&volumeDown, "./Assets/UI/VolumeDown.png", window.x - 3 * PADDING - 2.5 * textSize, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
-	setButton(&volumeUp, "./Assets/UI/VolumeUp.png",	window.x - PADDING - textSize / 2, imgSize + 3 * PADDING + 1.5 * textSize, imgSize, imgSize, YES);
-	setButton(&apply, "./Assets/UI/Apply.png", window.x - PADDING - 4 * imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
-	setButton(&discard, "./Assets/UI/Discard.png", window.x - PADDING - imgSize, window.y - PADDING - 1.5 * imgSize, 2 * imgSize, 2 * imgSize, YES);
+	setButton(&volumeDown, "./Assets/UI/VolumeDown.png", window.x - 3.f * PADDING - 2.5f * textSize, imgSize + 3.f * PADDING + 1.5f * textSize, imgSize, imgSize, YES);
+	setButton(&volumeUp, "./Assets/UI/VolumeUp.png",	window.x - PADDING - textSize / 2.f, imgSize + 3.f * PADDING + 1.5f * textSize, imgSize, imgSize, YES);
+	setButton(&apply, "./Assets/UI/Apply.png", window.x - PADDING - 4.f * imgSize, window.y - PADDING - 1.5f * imgSize, 2.f * imgSize, 2.f * imgSize, YES);
+	setButton(&discard, "./Assets/UI/Discard.png", window.x - PADDING - imgSize, window.y - PADDING - 1.5f * imgSize, 2 * imgSize, 2.f * imgSize, YES);
 
-	setButton(&up, "./Assets/UI/W.png", PADDING + 0.75 * imgSize, PADDING + imgSize + 5 * textSize, 1.5 * imgSize, 1.5 *imgSize, NO);
-	setButton(&left, "./Assets/UI/A.png", up.position.x + 10 * imgSize, up.position.y , 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&down, "./Assets/UI/S.png", up.position.x, up.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&right, "./Assets/UI/D.png", left.position.x, down.position.y, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&pause, "./Assets/UI/P.png", down.position.x, down.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&escape, "./Assets/UI/ESC.png", pause.position.x + 2 * imgSize, pause.position.y, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&undo, "./Assets/UI/U.png", pause.position.x, pause.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
-	setButton(&camera, "./Assets/UI/C.png", reset.position.x, reset.position.y + 2 * imgSize, 1.5 * imgSize, 1.5 * imgSize, NO);
+	setButton(&up, "./Assets/UI/W.png", PADDING + 0.75f * imgSize, PADDING + imgSize + 5.f * textSize, 1.5f * imgSize, 1.5f *imgSize, NO);
+	setButton(&left, "./Assets/UI/A.png", up.position.x + 10.f * imgSize, up.position.y , 1.5f * imgSize, 1.5f * imgSize, NO);
+	setButton(&down, "./Assets/UI/S.png", up.position.x, up.position.y + 2.f * imgSize, 1.5f * imgSize, 1.5f * imgSize, NO);
+	setButton(&right, "./Assets/UI/D.png", left.position.x, down.position.y, 1.5f * imgSize, 1.5f * imgSize, NO);
+	setButton(&pause, "./Assets/UI/P.png", down.position.x, down.position.y + 2.f * imgSize, 1.5f * imgSize, 1.5f * imgSize, NO);
+	setButton(&escape, "./Assets/UI/ESC.png", pause.position.x + 2.f * imgSize, pause.position.y, 1.5f * imgSize, 1.5f * imgSize, NO);
+	setButton(&undo, "./Assets/UI/U.png", pause.position.x, pause.position.y + 2.f * imgSize, 1.5f * imgSize, 1.5f * imgSize, NO);
+	setButton(&reset, "./Assets/UI/R.png", undo.position.x, undo.position.y + 2.f * imgSize, 1.5f * imgSize, 1.5f * imgSize, NO);
+	setButton(&camera, "./Assets/UI/C.png", reset.position.x, reset.position.y + 2.f * imgSize, 1.5f * imgSize, 1.5f * imgSize, NO);
 
 	controls[0] = up, controls[1] = left, controls[2] = down, controls[3] = right, controls[4] = pause, controls[5] = escape, controls[6] = undo, controls[7] = reset, controls[8] = camera;
 
@@ -196,7 +196,7 @@ void Options_Update(void) {
 				if (IsAreaClicked(apply.position.x, apply.position.y, apply.btnWidth, apply.btnHeight, mouse.x, mouse.y)) {
 					CP_Sound_PlayAdvanced(click, newConfig.settings.audio / 100.f, 2, FALSE, CP_SOUND_GROUP_SFX);
 					(resSelected->actHeight == fullscreenWindowed.actHeight && resSelected->actWidth == fullscreenWindowed.actWidth) ? CP_System_SetWindowPosition(0, newConfig.settings.titleBarHeight) :
-						CP_System_SetWindowPosition(window.x / 4, window.y / 4);
+						CP_System_SetWindowPosition(CP_System_GetWindowWidth() / 4, CP_System_GetWindowHeight() / 4);
 					newConfig.settings.resolutionWidth = resSelected->actWidth;
 					newConfig.settings.resolutionHeight = resSelected->actHeight;
 					newConfig.settings.windowed = resSelected->windowed;
@@ -243,9 +243,6 @@ void Options_Update(void) {
 
 	/*Clears and draws background art*/
 	draw_background();
-	/*char buff[25] = { 0 };
-	sprintf_s(buff, _countof(buff), "Height of Title Bar: %d", newConfig.settings.titleBarHeight);
-	drawAlignedText(RED, CENTER, buff, window.x / 2, window.y - window.y / 4);*/
 
 	/*Resolution text*/
 	const char* resList[3] = { 0 };
@@ -289,29 +286,24 @@ void Options_Update(void) {
 		resUnmatch && !resChanged ? config.settings.resolutionHeight : resSelected->actHeight,
 		resUnmatch && !resChanged ? config.settings.windowed ? "windowed" : "fullscreen" : resSelected->windowed ? "windowed" : "fullscreen");
 
-	/*resUnmatch && !resChanged ?
-		sprintf_s(displayRes, _countof(displayRes), "%d x %d (%s)",
-		config.settings.resolutionWidth, config.settings.resolutionHeight, config.settings.windowed ? "windowed" : "fullscreen") :
-		sprintf_s(displayRes, _countof(displayRes), "%d x %d (%s)",
-			resSelected->actWidth, resSelected->actHeight, resSelected->windowed ? "windowed" : "fullscreen");*/
-
 	/*Draw current volume and the volume up and down buttons*/
 	char currentVol[16] = { 0 };
 	sprintf_s(currentVol, _countof(currentVol), "%d", displayVol);
 	drawButton(volumeUp);
 	drawButton(volumeDown);
-	drawAlignedText(BLACK, CENTER, currentVol, volumeDown.position.x + ((volumeUp.position.x - volumeDown.position.x) / 2), back.btnHeight + 3 * PADDING + 1.5 * textSize);
+	drawAlignedText(BLACK, CENTER, currentVol, volumeDown.position.x + ((volumeUp.position.x - volumeDown.position.x) / 2.f), back.btnHeight + 3.f * PADDING + 1.5f * textSize);
 
 	/*Draw Gameplay GIF & Controls*/
 	drawGIF(&gameplay, &timeElapsed, displayDuration, YES, NO);
-	for (int i = 0, x = imgSize, y = imgSize / 2; i < sizeof(controls) / sizeof(Button); i++) {
+	float x = imgSize, y = imgSize / 2.f;
+	for (int i = 0; i < sizeof(controls) / sizeof(Button); i++) {
 		drawButton(controls[i]);
 		drawAlignedText(BLACK, LEFT, controlDescription[i], controls[i].position.x + x, controls[i].position.y - y);
 	}
 
 	/*Draw Resolution dropdown-list*/
 	drawTintedButton(currentResColor, currentRes.button.position.x, currentRes.button.position.y, currentRes.button.btnWidth, currentRes.button.btnHeight, mouse.x, mouse.y, YES);
-	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
+	drawAlignedText(BLACK, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2.f * PADDING);
 
 	if (ddlClicked) {
 		float textX = window.x - 2 * PADDING, textY = back.btnHeight + 2 * PADDING + currentRes.button.btnHeight;
@@ -319,7 +311,6 @@ void Options_Update(void) {
 			drawTintedButton(BGLBLUE, resolution[i].button.position.x, resolution[i].button.position.y, resolution[i].button.btnWidth, resolution[i].button.btnHeight, mouse.x, mouse.y, YES);
 			drawAlignedText(BLACK, RIGHT, resList[i], textX, textY);
 		}
-		//drawAlignedText(WHITE, RIGHT, displayRes, window.x - PADDING, back.btnHeight + 2 * PADDING);
 	}
 }
 
