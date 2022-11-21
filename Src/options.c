@@ -24,7 +24,7 @@ Purpose	: Setting page for player to change their settings
 #include "options.h"
 #include "spritesheet.h"	// for background art
 #include <stdio.h>			// sprintf_s()
-#include <stdlib.h>			//_countof()
+#include <stdlib.h>			// _countof()
 
 extern Config config;
 Config newConfig;
@@ -166,7 +166,7 @@ void Options_Init(void) {
 	/*Background Art*/
 	load_background();
 
-	/* Click sound*/
+	/*Click sound*/
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
 
 	/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -235,7 +235,8 @@ void Options_Update(void) {
 					CP_Sound_PlayAdvanced(click, 1, 2, FALSE, CP_SOUND_GROUP_SFX);
 					resolution[i].selected = YES;
 					ddlClicked = NO;
-					resChanged = (resolution[i].actWidth == currentRes.actWidth && resolution[i].actHeight == currentRes.actHeight && resolution[i].windowed == currentRes.windowed) ? NO : YES;
+					resChanged = (resolution[i].actWidth == currentRes.actWidth &&
+						resolution[i].actHeight == currentRes.actHeight && resolution[i].windowed == currentRes.windowed) ? NO : YES;
 					configChanged = resChanged || volChanged ? YES : NO;
 				}
 				else resolution[i].selected = NO;
