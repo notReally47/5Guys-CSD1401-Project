@@ -1,4 +1,5 @@
 /*
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
 Author  : Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
 File    : level_generate_CSV.c
 Purpose : To automate CSV Files for Level Generation using Input Files through Console/WSL

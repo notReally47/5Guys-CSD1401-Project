@@ -1,6 +1,6 @@
-Game Name: Seven11 (SevenTree)
-Team Name: 5Guys
-Class: CSD1401 Section A 2022
+Game Name : Seven11 (SevenTree)
+Team Name : 5Guys
+Class     : CSD1401 Section A 2022
 
 Team Member Information:
 Muhammad Faliq Bin Al-Hakim     |   muhammadfaliq.b@digipen.edu

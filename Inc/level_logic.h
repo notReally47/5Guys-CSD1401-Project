@@ -1,5 +1,6 @@
 #pragma once
 /*
+* All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
 Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
 File	: level_logic.h
 Purpose	: Declaration of functions set_level(), set_temp_level(), next_level() & reset_level()
