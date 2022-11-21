@@ -101,3 +101,7 @@ void drawControls();
 
 /* freeControls - Free control button images from memory */
 void freeControls();
+
+void initArrow();
+void drawArrow(float cellSize, float cellAlign, int playerPosX, int playerPosY);
+void freeArrow();

@@ -23,12 +23,14 @@ Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 Customer customer[CUSTOMER_MAX];
 Teleporter teleporters[TELEPORTER_NUMBER];
+Flag keyTriggered;
 
 int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
 char* stat[4];
 
 float cellSize, cellAlign, elapsedLock, total_elapsed_time, oneSecondFlip, cameratogglecooldown, cusDelay;
 
+int arrowPosY;
 int total_objectives,																// Objectives to Meet
 isLocked, activatedCusX, activatedCusY, stunner,									// Stunner/Customer Logic Variables/Flags
 face, isAnimating, flip, cameratoggle,												// Drawing/Animation Logic Variables/Flags
@@ -78,8 +80,10 @@ void base_Init(void) {
 	stat[2] = "Times Distracted: ";									// Text Stat to Print for Number of Times Distracted
 	stat[3] = "Time Wasted: ";										// Text Stat to print for Time Wasted Getting Distracted
 	time_lost = 45;													// default time lost if distracted
+	keyTriggered = NO;
 
 	initControls();
+	initArrow();
 
 	load_spritesheet(&cellSize, cameratoggle);
 	cellAlign = (float)((config.settings.resolutionWidth - (int)cellSize * SOKOBAN_GRID_COLS) / 2);
@@ -89,6 +93,9 @@ void base_Init(void) {
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			moves[0][row][col].player = 0;							//Initialise to 0 for rendering purposes
+			if (grid[row][col].player) {
+				arrowPosY = row - 1;								// Initialise arrow indictor posY to 1 cell above player
+			}
 		}
 	}
 
@@ -119,6 +126,9 @@ void base_Init(void) {
 void base_Update(void) {
 	int playerRow, playerCol, is_completed = 0;									// Declare & initialise needed
 	float current_elapsed_time = CP_System_GetDt();								// Get Time Pass per frame
+	if (CP_Input_KeyTriggered(KEY_ANY)) {
+		keyTriggered = YES;
+	}
 
 	/* When ESC/P Key pressed, pause/unpause the game */
 	if (CP_Input_KeyTriggered(KEY_P) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
@@ -385,6 +395,19 @@ void base_Update(void) {
 
 	isAnimating = draw_player(cellSize, cellAlign, playerRow, playerCol, face, cameratoggle);
 
+	/* Draw Arrow Indicator if no key triggered*/
+	if (!keyTriggered) {
+		if (!(CP_System_GetFrameCount() % 8)) {
+			if (arrowPosY > playerRow - 2) {
+				arrowPosY--;
+			}
+			else if (arrowPosY < playerRow - 1) {
+				arrowPosY++;
+			}
+		}
+		drawArrow(cellSize, cellAlign, arrowPosY, playerCol);
+	}
+
 	if (isLocked && !isAnimating) {
 		speechSprite.gifDimensions = cellSize;
 		if (flip) {
@@ -479,5 +502,6 @@ void base_Exit(void) {
 	free_sprite();
 	CP_Settings_StrokeWeight(3.0f);
 	freeControls();
+	freeArrow();
 	//CP_Image_Free(&speechSprite);
 }

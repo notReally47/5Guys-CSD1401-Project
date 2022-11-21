@@ -5,6 +5,7 @@
 
 Button controls[9], up, down, left, right, pause, undo, reset, escape, camera;
 float imgSize, textSize;
+CP_Image arrowDown;
 
 void setButton(Button* btn, const char* img, float x, float y, float w, float h, Flag tint) {
 	btn->img = CP_Image_Load(img);
@@ -168,4 +169,16 @@ void drawControls() {
 
 void freeControls() {
 	freeButtonImg(controls, 9);
+}
+
+void initArrow() {
+	arrowDown = CP_Image_Load("./Assets/UI/arrowDown.png");
+}
+
+void drawArrow(float cellSize, float cellAlign, int playerPosX, int playerPosY) {
+	CP_Image_Draw(arrowDown, cellSize * (float)playerPosY + cellAlign, cellSize * (float)playerPosX + cellSize * 0.85f, cellSize, cellSize, 255);
+}
+
+void freeArrow() {
+	CP_Image_Free(&arrowDown);
 }
