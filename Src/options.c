@@ -7,6 +7,9 @@ Authors	: Guo Yiming (yiming.guo@digipen.edu)
 			- Write resolution/volume changes to config.dat
 		  Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Clicking SFX
+		  Ian Chua (i.chua@digipen.edu)
+		    - Bug fixing for UI
+			- Write updates to file
 File	: options.c
 Purpose	: Setting page for player to change their settings
 */
@@ -317,5 +320,6 @@ void Options_Update(void) {
 void Options_Exit(void) {
 	freeButtonImg(btns, 14);
 	CP_Image_Free(&gameplay.spritesheet);
+	CP_Sound_Free(&click);
 	free_background();
 }

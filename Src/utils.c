@@ -15,6 +15,10 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 		    - basic teleport logic in game_logic()
 			- revised getDirection() logic
 			- implemented display bar in show_stats() when zoomed in
+		  Ian Chua (i.chua@digipen.edu)
+		    - Revised collision checking
+			- Initial game logic
+			- Initial cell movement
 File	: utils.c
 Purpose	: 
 */
@@ -172,9 +176,11 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 		grid[*posX][*posY].player = 1;
 		global_move++;
 		//move_limit--;
-		return 0;
 		printf("Current Moves: %d\n", global_move - 1);
+
+		return 0;
 	}
+	else return -1;
 }
 
 int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
@@ -325,7 +331,7 @@ int getTaskBarHeight(void)
 	if (taskBar && GetWindowRect(taskBar, &rect)) {
 		return rect.bottom - rect.top;
 	}
-	else return 0;
+	else return -1;
 }
 
 /* Get Height of Titlebar */

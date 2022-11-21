@@ -15,6 +15,16 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 		    - unique mechanic flag logic
 			- rendering of background art, player/customer/environmental sprite assets
 			- world camera logic
+		  Ian Chua (i.chua@digipen.edu)
+		    - Base game
+			- Basic movement
+			- Base render
+			- Base grid reading
+			- Base logic
+			- Customer LOS
+			- Speech bubble rendering
+			- Player stun
+			- Inputs
 File	: basegame.c
 Purpose	: Main state for game level.
 */

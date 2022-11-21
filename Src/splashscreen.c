@@ -1,6 +1,8 @@
 /*
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
 Authors	: Shafiq Mirza Bin Mohamed Zahid (shafiqmirza.b@digipen.edu)
+		  Ian Chua (i.chua@digipen.edu)
+		    - Read file and set config
 File	: splashscreen.c
 Purpose	: animates digipen logo to fade in/out
 */
@@ -14,7 +16,7 @@ Purpose	: animates digipen logo to fade in/out
 // declare global variables: img,fade,x,y,width,height
 CP_Image img;
 int fade, global_level;
-float x,y,width,height;
+float x, y, width, height;
 /*
 * Declare config variable to be used throughout the program.
 * Use 'extern Config config;' to reference global config.
@@ -26,48 +28,49 @@ CP_Font gameFont;
 
 void splash_screen_init(void)
 {
-    /*Initalize config by reading from file, or creating the file if it does not exist.*/
-    config = readFile();
-    global_level = config.save.lastLevelPlayed;
+	/*Initalize config by reading from file, or creating the file if it does not exist.*/
+	config = readFile();
+	global_level = config.save.lastLevelPlayed;
 
-    gameMusic = CP_Sound_Load("./Assets/Sound/MainMenu_BGM.wav");
-    gameFont = CP_Font_Load("./Assets/Font/VT323-Regular.ttf");
-    CP_Font_Set(gameFont);
-    img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
-    config.settings.resolutionWidth == CP_System_GetDisplayWidth() ? CP_System_SetWindowPosition(0, config.settings.titleBarHeight) :
-        CP_System_SetWindowPosition(CP_System_GetDisplayWidth() / 4, CP_System_GetDisplayHeight() / 4);
-    CP_System_SetWindowTitle("SevenTree");
-    if (config.settings.windowed) {
-        CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight); // set window size to half of display height/width
-    }
+	gameMusic = CP_Sound_Load("./Assets/Sound/MainMenu_BGM.wav");
+	gameFont = CP_Font_Load("./Assets/Font/VT323-Regular.ttf");
+	CP_Font_Set(gameFont);
+	img = CP_Image_Load("./Assets/DigiPen_BLACK.png"); // load digipen screen logo png graphics into variable img
+	config.settings.resolutionWidth == CP_System_GetDisplayWidth() ? CP_System_SetWindowPosition(0, config.settings.titleBarHeight) :
+		CP_System_SetWindowPosition(CP_System_GetDisplayWidth() / 4, CP_System_GetDisplayHeight() / 4);
+	CP_System_SetWindowTitle("SevenTree");
+	if (config.settings.windowed) {
+		CP_System_SetWindowSize(config.settings.resolutionWidth, config.settings.resolutionHeight); // set window size to half of display height/width
+	}
 
-    else {
-        CP_System_Fullscreen();
-    }
-    fade = 0;
-    x = (float)(CP_System_GetWindowWidth() >> 1);
-    y = (float)(CP_System_GetWindowHeight() >> 1);
-    width = (float)CP_System_GetWindowWidth()*0.8f;
-    height = (float)CP_System_GetWindowHeight()*0.4f;
-    card_init();        // initialise card mechanic at the start of the program to set or reset flags
+	else {
+		CP_System_Fullscreen();
+	}
+	fade = 0;
+	x = (float)(CP_System_GetWindowWidth() >> 1);
+	y = (float)(CP_System_GetWindowHeight() >> 1);
+	width = (float)CP_System_GetWindowWidth() * 0.8f;
+	height = (float)CP_System_GetWindowHeight() * 0.4f;
+	card_init();        // initialise card mechanic at the start of the program to set or reset flags
 }
 
 void splash_screen_update(void)
 {
-    int timer = CP_System_GetFrameCount()<<2; // <<1 to reach 240 frame in ~4 seconds, <<2 to reach 240 frame in ~2 seconds
-    (timer <= 240) ? // increase alpha while timer is less than 240
-    CP_Image_Draw(img,x,y,width,height,++fade<<2):
-    (timer > 240 && timer < 480) ? // decrease alpha while timer is more than 240, but less than 480
-    CP_Image_Draw(img,x,y,width,height,--fade<<2):
-    (timer >= 480) ? // transition to main menu after fading out
-    CP_Engine_SetNextGameState(Main_Menu_Init,Main_Menu_Update,Main_Menu_Exit):0;
-    CP_Graphics_ClearBackground(CP_Color_Create(0,0,0,255));
+	int timer = CP_System_GetFrameCount() << 2; // <<1 to reach 240 frame in ~4 seconds, <<2 to reach 240 frame in ~2 seconds
+	(timer <= 240) ? // increase alpha while timer is less than 240
+		CP_Image_Draw(img, x, y, width, height, ++fade << 2) :
+		(timer > 240 && timer < 480) ? // decrease alpha while timer is more than 240, but less than 480
+		CP_Image_Draw(img, x, y, width, height, --fade << 2) :
+		(timer >= 480) ? // transition to main menu after fading out
+		CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit) : 0;
+	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 0, 255));
 }
 
 void splash_screen_exit(void)
 {
-    CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
-    CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, config.settings.audio / 100.f);
-    CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
-    CP_Image_Free(&img); // unload the img
+	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_SFX, config.settings.audio / 100.0f);
+	CP_Sound_SetGroupVolume(CP_SOUND_GROUP_MUSIC, config.settings.audio / 100.f);
+	CP_Sound_PlayAdvanced(gameMusic, 1, 1, TRUE, CP_SOUND_GROUP_MUSIC);
+	CP_Image_Free(&img); // unload the img
+	//CP_Sound_Free(&gameMusic);
 }

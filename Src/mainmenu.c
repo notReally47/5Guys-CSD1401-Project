@@ -6,6 +6,8 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 		  Guo Yiming (yiming.guo@digipen.edu)
 			- UI Design
 			- Tinted Buttons
+		  Ian Chua (i.chua@digipen.edu)
+		    - Read config.dat
 File	: mainmenu.c
 Purpose	: Main Menu Page
 */
@@ -102,5 +104,6 @@ void Main_Menu_Update(void)
 
 void Main_Menu_Exit(void)
 {
+	CP_Sound_Free(&click);
 	free_background();
 }

@@ -5,6 +5,7 @@ Author	: Shafiq Mirza Bin Mohamed Zahid (shafiqmirza.b@digipen.edu)
 File	: mechanics.h
 Purpose	: Declaration of functions card_settings, card_init, card_selection, customer_status, card_deck, card_effect, player_status, teleport_UM, wetsign_UM, mechanics_flags, free_buttons
 */
+#include "defines.h"	// For structs used
 
 // allows variables to be called in other source files
 extern int infected[CUSTOMER_MAX+1], teleporter[SETTINGS];
@@ -15,7 +16,7 @@ void card_settings(void);
 // initialise settings for UM.flags and other variables
 void card_init(void);
 // allows player to select between a choice of two cards that's on display
-void card_selection(int stage, int *applied);
+void card_selection(int stage, Flag *applied);
 // unique mechanic related function that 'infects' customer if mechanic flags is true
 void customer_status(Customer customer[CUSTOMER_MAX]);
 // a shuffling deck system that removes the selected card from the deck, and shuffles the next two cards
