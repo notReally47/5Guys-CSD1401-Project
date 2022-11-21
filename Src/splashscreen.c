@@ -1,8 +1,8 @@
 /*
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
-Authors	:
-File	:
-Purpose	:
+Authors	: Shafiq Mirza Bin Mohamed Zahid (shafiqmirza.b@digipen.edu)
+File	: splashscreen.c
+Purpose	: animates digipen logo to fade in/out
 */
 
 #include "cprocessing.h"
@@ -49,7 +49,7 @@ void splash_screen_init(void)
     y = CP_System_GetWindowHeight()>>1;
     width = (float)CP_System_GetWindowWidth()*0.8f;
     height = (float)CP_System_GetWindowHeight()*0.4f;
-    card_init(); // Initialise Card Mechanic at the start of the program
+    card_init();        // initialise card mechanic at the start of the program to set or reset flags
 }
 
 void splash_screen_update(void)

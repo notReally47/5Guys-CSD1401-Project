@@ -99,7 +99,7 @@ void overlay_pause() {
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
 	drawAlignedText(WHITE, CENTER, "RESUME", size.button_01_position_x, size.button_01_position_y);					// Draw 'Resume' Text
 	drawAlignedText(WHITE, CENTER, "MAIN MENU", size.button_02_position_x, size.button_02_position_y);				// Draw 'Main Menu' Text
-	CP_Settings_Tint(DARKGRAY);																						// Tint the Overlay Transparent DARKGRAY
+	CP_Settings_Tint(ABITBLACK);																						// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Unpause Logic, whether Resume Game or return to Main Menu */
@@ -217,7 +217,7 @@ void overlay_reset() {
 	CP_Settings_TextSize(size.button_text_size);																	// Set Button Text Size
 	drawAlignedText(WHITE, CENTER, "YES	", size.button_01_position_x, size.button_01_position_y);					// Draw 'Yes' Text
 	drawAlignedText(WHITE, CENTER, "NO", size.button_02_position_x, size.button_02_position_y);						// Draw 'No' Text
-	CP_Settings_Tint(DARKGRAY);																						// Tint the Overlay Transparent DARKGRAY
+	CP_Settings_Tint(ABITBLACK);																						// Tint the Overlay Transparent DARKGRAY
 }
 
 /* Reset Map if Yes, return to Game if No */

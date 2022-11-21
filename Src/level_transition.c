@@ -6,6 +6,8 @@ Authors	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
 			- Level Complete SFX
 		  Guo Yiming (yiming.guo@digipen.edu)
 			- Tinted Buttons
+		  Shafiq Mirza Bin Mohamed Zahid (shafiqmirza.b@digipen.edu)
+			- integration of card selection from mechanics.c
 File	: level_transition.c
 Purpose	: State for level complete and transiting to next level & choosing of Buff/Debuff
 */

@@ -11,6 +11,10 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Revised Teleport Logic
 			- Started Basic show_stats()
 			- Started Basic gameLogic()
+		  Shafiq Mirza Bin Mohamed Zahid (shafiqmirza.b@digipen.edu)
+		    - basic teleport logic in game_logic()
+			- revised getDirection() logic
+			- implemented display bar in show_stats() when zoomed in
 File	: utils.c
 Purpose	: 
 */
@@ -50,15 +54,16 @@ int getDirection(void) {
 	delay += CP_System_GetDt();
 	switch (CP_Input_KeyDown(KEY_ANY)) {
 	case 3:
-	case 4: // limits key input to 2
-		break; // requires some error catching tests
-	default:
+	case 4:		// limits key input to 2 if player holds down all 4 keys
+		break;	// requires some error catching tests
+	default:	// enables both key trigger and key down input based on player's preference
 		key = (CP_Input_KeyTriggered(KEY_W) || CP_Input_KeyDown(KEY_W) && CP_Input_KeyReleased(KEY_ANY)) ? KEY_W : key; // W
 		key = (CP_Input_KeyTriggered(KEY_A) || CP_Input_KeyDown(KEY_A) && CP_Input_KeyReleased(KEY_ANY)) ? KEY_A : key; // A
 		key = (CP_Input_KeyTriggered(KEY_S) || CP_Input_KeyDown(KEY_S) && CP_Input_KeyReleased(KEY_ANY)) ? KEY_S : key; // S
 		key = (CP_Input_KeyTriggered(KEY_D) || CP_Input_KeyDown(KEY_D) && CP_Input_KeyReleased(KEY_ANY)) ? KEY_D : key; // D
 		break;
 	}
+	// scales delay with frame rate so that if the game runs on a lower fps, the delay would be larger between key presses. this is to avoid sprite animation glitches where the animation is behind
 	if ((CP_Input_KeyDown(key) && delay > (10.f / CP_System_GetFrameRate())) || (CP_Input_KeyTriggered(key) && delay > (10.f / CP_System_GetFrameRate()))) {
 		delay = 0.f;
 		if (CP_Input_KeyDown(key))
@@ -245,14 +250,14 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 	char line[50] = { 0 };													// String to be printed																														// Concatenate line with buffer
 
 	if (cameratoggle == 2) {
+		/* Rendering of black border at the top of the screen if toggled on */
 		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_TOP);	// Align Text Left and Top
 		if (index == 1) {
 			CP_Settings_NoStroke();
 			CP_Settings_Fill(FADEBLACK);
 			CP_Graphics_DrawRect(0.f, 0.f, (float)config.settings.resolutionWidth * 2, (float)config.settings.resolutionHeight / 15);
 		}
-		CP_Settings_Fill(WHITE);
-
+		CP_Settings_Fill(WHITE);	// change text colour to white to contrast the black border
 		if (stat != '\0') {
 			if (stat == "Time Left: ") {
 				if (value <= 30) {
@@ -267,7 +272,6 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 			sprintf_s(buffer, _countof(buffer), "/%d", move_limit);
 			strcat_s(line, 50, buffer);
 		}
-
 		CP_Font_DrawText(line, ((float)config.settings.resolutionWidth/5)*index, 0.f);
 	}
 	else {
