@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS		// Needed to use strcpy() and strcat() instead of strcopy_s() & strcat_s()
 #define _CRT_SECURE_NO_DEPRECATE	// Needed to use strcpy() and strcat() instead of strcopy_s() & strcat_s()
 #include "cprocessing.h"	
 #include "structs.h"
