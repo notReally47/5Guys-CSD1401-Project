@@ -16,7 +16,7 @@ void card_settings(void);
 // initialise settings for UM.flags and other variables
 void card_init(void);
 // allows player to select between a choice of two cards that's on display
-void card_selection(int stage, Flag *applied);
+void card_selection(int stage, int*applied);
 // unique mechanic related function that 'infects' customer if mechanic flags is true
 void customer_status(Customer customer[CUSTOMER_MAX]);
 // a shuffling deck system that removes the selected card from the deck, and shuffles the next two cards

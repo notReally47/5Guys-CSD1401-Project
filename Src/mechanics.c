@@ -247,7 +247,7 @@ void card_deck(int* selectedpos, int* notselectedpos, int cards[], int* size) {
     }
 }
 // card_selection displays 2 cards during the level complete transition screen that loads either negcards[] or poscards[] based on the level
-void card_selection(int stage, Flag *applied) {
+void card_selection(int stage, int *applied) {
     /*Initialise Apply and Discard Buttons*/
     CP_Vector window = CP_Vector_Set((float)CP_System_GetWindowWidth(), (float)(CP_System_GetWindowHeight()));
     float imgSize = window.y / 20.f;
