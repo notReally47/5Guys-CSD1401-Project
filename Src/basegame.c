@@ -1,22 +1,28 @@
+/*
+Author	: All Members
+File	: basegame.c
+Purpose	: State for Main Gameplay
+*/
+
 #include "cprocessing.h"			// Needed for C Processing Functions
 #include "structs.h"				// Needed for Game Asset Structs
-#include "customer.h"				
-#include "utils.h"
+#include "customer.h"				// Needed for Customer Logic Function Calls	
+#include "utils.h"					// Needed for movement/collision Logic Function Calls
 #include "defines.h"				// Needed for Defined Values
-#include "settings.h"
-#include "spritesheet.h"
-#include "mechanics.h"
-#include "mainmenu.h"
-#include "movement.h"				// Needed for save_move(), undo_move() & reset_map() functions
+#include "settings.h"				// Needed for Read/Write to config.dat
+#include "spritesheet.h"			// Needed for Sprite/Art Drawing/Rendering
+#include "mechanics.h"				// Needed for Unique Mechanics Function Calls
+#include "mainmenu.h"				// Needed to Transit Back to Main Menu if needed
+#include "movement.h"				// Needed for save_move() & undo_move() functions
 #include "level_logic.h"			// Needed for extern global_level and leveling logic
-#include "level_generate.h"			// Needed for set_map();
+#include "level_generate.h"			// Needed for set_map() Function
 #include "level_transition.h"		// Needed to transit to Level Transition state
-#include "level_overlay.h"			// Needed for Overlays during Welcome, Pause, Reset or Game Over
-#include "easydraw.h"
-#include "basegame.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include "level_overlay.h"			// Needed for Overlays during Welcome, Pause, Reset, Game Over & Game End
+#include "easydraw.h"				// Needed for Customised Buttons/Texts
+#include "basegame.h"		/* TODO Help State what this is for */
+#include <stdio.h>			/* TODO Help State what this is for */
+#include <stdlib.h>			/* TODO Help State what this is for */
+#include <math.h>			/* TODO Help State what this is for */
 
 extern Config config;
 Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
@@ -25,8 +31,8 @@ Customer customer[CUSTOMER_MAX];
 Teleporter teleporters[TELEPORTER_NUMBER];
 Flag keyTriggered;
 
-int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];
-char* stat[4];
+int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS];										// Array for Waypoints
+char* stat[4];																		// Game Stats to be Displayed/Printed
 
 float cellSize, cellAlign, elapsedLock, total_elapsed_time, oneSecondFlip, cameratogglecooldown, cusDelay;
 
@@ -99,6 +105,9 @@ void base_Init(void) {
 		}
 	}
 
+
+	/* TODO Remove Unnecessary Comments */
+
 	/*Unique mechanics Initialisation*/
 	// to force mechanic enabler check card_effect() for flag details
 	//UM.flags = 0;
@@ -142,7 +151,8 @@ void base_Update(void) {
 	/* Read Grid */
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
-			/* Check if all objectives has been reached */
+
+			/* Increment is_completed when a box is in a key */
 			if (grid[row][col].key && grid[row][col].box)
 				is_completed++;
 
@@ -160,7 +170,7 @@ void base_Update(void) {
 		game_pause = 1;															// Enter Pause State
 	}
 	else {
-		is_welcome = 0;
+		is_welcome = 0;															// Other Levels do not have Welcome Message
 	}
 
 	if (!game_pause) {
@@ -184,15 +194,17 @@ void base_Update(void) {
 
 		/* If all Objectives Met/Level Cleared, Move to Level Transition Screen */
 		if (is_completed == total_objectives) {
-			if (global_level == 10) {
-				reset_level();
-				overlay_function = 5;
-				game_pause = 1;
+			if (global_level == 10) {											// When Game Ends at Level 10
+				reset_level();													// Reset Global_Level back to 1
+				config.save.lastLevelPlayed = global_level;						// Set config.save.lastLevelPlayed to 1	
+				writeConfig(config);											// Save to config.dat
+				overlay_function = 5;											// 5 for Game End Overlay
+				game_pause = 1;													// Enter Pause State
 			}
 			else {
-				next_level();																						// Increment global_level
-				config.save.lastLevelPlayed = global_level;
-				writeConfig(config);
+				next_level();													// Increment global_level
+				config.save.lastLevelPlayed = global_level;						// Set new level into config.dat
+				writeConfig(config);											// Save to config.dat
 				CP_Engine_SetNextGameState(Level_Transition_Init, Level_Transition_Update, Level_Transition_Exit);	// Transit to level_transition state
 			}
 		}
@@ -436,6 +448,7 @@ void base_Update(void) {
 	if (cameratoggle == 2)
 		revert_world_camera();
 
+	/* When in Pause State, Render Different Overlays based on 'overlay_function' */
 	if (game_pause) {
 		/* Welcome Message at Level 01 */
 		if (global_level == 1 && overlay_function == 1) {					// If Level is 1 & overlay_function is 1
@@ -476,7 +489,7 @@ void base_Update(void) {
 
 		else if (overlay_function == 5) {									// Else of overlay_function is 5
 			overlay_end_game();												// Renders Game End Overlay
-			end_game();
+			end_game();														// Returns to Main Menu when Button is Clicked
 		}
 
 	}

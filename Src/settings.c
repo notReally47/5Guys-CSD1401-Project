@@ -14,10 +14,10 @@ Config readFile() {
 	.save.isNewState = 1,
 	.save.lastLevelPlayed = 1,
 	.settings.titleBarHeight = getTitleBarHeight(),
-	.settings.windowed = 1,
+	.settings.windowed = 0,
 	.settings.audio = 50,
-	.settings.resolutionWidth = (unsigned int)(GetSystemMetrics(SM_CXSCREEN) / 2),
-	.settings.resolutionHeight = (unsigned int)(GetSystemMetrics(SM_CYSCREEN) / 2),
+	.settings.resolutionWidth = (unsigned int)GetSystemMetrics(SM_CXSCREEN),
+	.settings.resolutionHeight = (unsigned int)GetSystemMetrics(SM_CYSCREEN),
 	};
 
 	FILE* file;

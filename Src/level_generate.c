@@ -1,4 +1,10 @@
-#define _CRT_SECURE_NO_WARNINGS		// Needed to use sprintf, fopen & fscanf instead of sprintf_s, fopen_s & fscanf_s
+#pragma once
+/*
+Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+File	: level_generate.c
+Purpose	: Function to load level csv file to load game map
+*/
+
 #define _CRT_SECURE_NO_DEPRECATE	// Needed to use sprintf, fopen & fscanf instead of sprintf_s, fopen_s & fscanf_s
 #include "utils.h"					// Needed for Global Extern duration
 #include "structs.h"				// Needed for Grid, Customer & Teleporter Structs
@@ -55,8 +61,7 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 	}
 
 	FILE* csv_file;																				// File Pointer of CSV File
-	//char csv_file_name[64] = "..\\..\\Assets\\level_mapper\\level_files\\Seven11_Level_";		// Beginning part of the CSV File name w/o level number and extension
-	char csv_file_name[64] = "./Assets/level_mapper/level_files/Seven11_Level_";
+	char csv_file_name[64] = "./Assets/level_mapper/level_files/Seven11_Level_";				// Start of the level file name
 	char level_char[3], csv_ext[5] = ".csv";													// Level Number & .csv Extension
 	sprintf(level_char, "%d", global_level);													// Convert Level Number to char to be used to append to csv_file_name
 	strcat(csv_file_name, level_char);															// Append Level Number
@@ -106,10 +111,6 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 				customer[customer_number].isActive = customer_active;
 				customer[customer_number].isIdle = customer_idle;
 				customer[customer_number].isRandom = customer_random;
-
-				printf("Customer Number: %d, PosX: %d, PosY: %d, Direction: %d, Range: %d, Active: %d \n",
-					customer_number, customer[customer_number].cusRow, customer[customer_number].cusCol,
-					customer[customer_number].direction, customer[customer_number].range, customer[customer_number].isActive);
 			}
 
 			/* If Teleporter Exists, Initialise Teleporter Struct Property Values, with Teleporter Number ,Row and Column */
@@ -118,12 +119,10 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 				teleporters[teleporter_index].teleporter_number = grid[row][col].tele;
 				teleporters[teleporter_index].posX = col;
 				teleporters[teleporter_index].posY = row;
-
-				printf("Teleporter %d, is at row %d & column %d \n", grid[row][col].tele, teleporters[teleporter_index].posY, teleporters[teleporter_index].posX);
 			}
 
 			if (grid[row][col].box)
-				original_box_count++;
+				original_box_count++;															// COunts original number of boxes set for each level
 
 			// Increments 'col' & 'line' when the correct number of values were scanned
 			if (read == 17) {

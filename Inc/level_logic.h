@@ -1,4 +1,9 @@
 #pragma once
+/*
+Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+File	: level_logic.h
+Purpose	: Declaration of functions set_level(), set_temp_level(), next_level() & reset_level()
+*/
 
 /* Can call this variable for level related logic(include this Header File to use this variable) */
 extern int global_level;

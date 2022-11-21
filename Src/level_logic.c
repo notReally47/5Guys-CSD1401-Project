@@ -1,8 +1,12 @@
+#pragma once
+/*
+Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+File	: level_logic.c
+Purpose	: Function for level number logics
+*/
 
-/* Global Variable 'level' initialised to 0 whenever New Game */
+/* Use global extern variable global_level */
 extern int global_level;
-//int global_level = 6;		// To Debug Level
-
 
 /* Local File Variable 'temp_level' initialised to 0. 
 To be used when Selecting Level from Level Select Screen */
@@ -25,6 +29,7 @@ void next_level() {
 	++global_level;
 }
 
+/* Resets global_level back to 1 after game ends */
 void reset_level() {
 	global_level = 1;
 }

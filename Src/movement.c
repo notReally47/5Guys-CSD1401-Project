@@ -1,8 +1,12 @@
 #pragma once
-#include "structs.h"			// Needed for Grid and Customer Structs
+/*
+Author	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+File	: movement.c
+Purpose	: Functions to save move states & undo moves
+*/
+
+#include "structs.h"			// Needed for Grid struct
 #include "defines.h"			// Needed for define Values
-#include "level_generate.h"		// Needed for set_map() function
-#include <stdio.h>				// Needed for printf()
 
 int global_move, move_limit;	// The global variable for move counting & move limit, to be used for different funtions & logics
 
@@ -31,8 +35,6 @@ void undo_move(Move moves[MOVE_MAX][SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Cell 
 			}
 		}
 		global_move--; 
-		printf("Undo Move\n");
-		printf("Current Moves: %d\n", global_move-1);
 	}
 
 }
