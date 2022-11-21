@@ -6,7 +6,6 @@ File	: level_generate.c
 Purpose	: Function to load level csv file to load game map
 */
 
-#define _CRT_SECURE_NO_DEPRECATE	// Needed to use sprintf, fopen & fscanf instead of sprintf_s, fopen_s & fscanf_s
 #include "utils.h"					// Needed for Global Extern duration
 #include "structs.h"				// Needed for Grid, Customer & Teleporter Structs
 #include "defines.h"				// Needed for define values
@@ -26,6 +25,8 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 		customer_range = 0, customer_active = 0, customer_idle = 0, customer_random = 0;		// Local Customer variables to 0
 
 	original_box_count = 0;
+
+	errno_t err = 0;
 
 	/* For-Loop to clear out the Map First (Prevent carry-over from previous levels) */
 	for (int i = 0; i < SOKOBAN_GRID_ROWS; i++) {
@@ -64,75 +65,74 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 	FILE* csv_file;																				// File Pointer of CSV File
 	char csv_file_name[64] = "./Assets/level_mapper/level_files/Seven11_Level_";				// Start of the level file name
 	char level_char[3], csv_ext[5] = ".csv";													// Level Number & .csv Extension
-	sprintf(level_char, "%d", global_level);													// Convert Level Number to char to be used to append to csv_file_name
-	strcat(csv_file_name, level_char);															// Append Level Number
-	strcat(csv_file_name, csv_ext);																// Append .csv extension
-	csv_file = fopen(csv_file_name, "r");														// Open csv_file_name in read mode
+	sprintf_s(level_char, 3, "%d", global_level);												// Convert Level Number to char to be used to append to csv_file_name
+	strcat_s(csv_file_name, 64, level_char);													// Append Level Number
+	strcat_s(csv_file_name, 64, csv_ext);														// Append .csv extension
+	err = fopen_s(&csv_file, csv_file_name, "r");
 
-	/* If file does not exist & fails to open, print error and Exit program */
-	if (NULL == csv_file) {
-		printf("Error : errno='%s'.\n", strerror(errno));
+	if (err != 0) {
 		printf("File Opening Failed!\n");
 		exit(EXIT_FAILURE);
 	}
+	else {
+		/* Loop Each Line of the CSV File */
+		do {
+			/* Goes to Next Row of the Grid once Column reaches the end */
+			if (col == SOKOBAN_GRID_COLS) {
+				row++;
+				col = 0;
+			}
+			if (line == 0) {																		// First Line of the CSV file is the Level Duration
+				read = fscanf_s(csv_file, "%d", &duration);											// Scan and store to global variable 'duration'
+				if (read == 1) line++;																// Increment line so that function will not read for duration again
+			}
+			else if (line == 1) {																	// Second Line of the CSV file is the Level Duration
+				read = fscanf_s(csv_file, "%d", &move_limit);											// Scan and store to global variable 'move_limit'
+				if (read == 1) line++;																// Increment line so that function will not read for duration again
+			}
+			else {
+				/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties */
+				read = fscanf_s(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+					&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].tele, &grid[row][col].boarder, &grid[row][col].shelf,
+					&grid[row][col].mecha, &grid[row][col].customer, &customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range,
+					&customer_active, &customer_idle, &customer_random, &path[row][col]);
 
-	/* Loop Each Line of the CSV File */
-	do {
-		/* Goes to Next Row of the Grid once Column reaches the end */
-		if (col == SOKOBAN_GRID_COLS) {
-			row++;
-			col = 0;
-		}
-		if (line == 0) {																		// First Line of the CSV file is the Level Duration
-			read = fscanf(csv_file, "%d", &duration);											// Scan and store to global variable 'duration'
-			if (read == 1) line++;																// Increment line so that function will not read for duration again
-		}
-		else if (line == 1) {																	// Second Line of the CSV file is the Level Duration
-			read = fscanf(csv_file, "%d", &move_limit);											// Scan and store to global variable 'move_limit'
-			if (read == 1) line++;																// Increment line so that function will not read for duration again
-		}
-		else {
-			/* Reads & Stores values from CSV File to Grid Struct & Local Customer Properties */
-			read = fscanf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-				&grid[row][col].player, &grid[row][col].key, &grid[row][col].box, &grid[row][col].tele, &grid[row][col].boarder, &grid[row][col].shelf,
-				&grid[row][col].mecha, &grid[row][col].customer, &customer_number, &customer_posX, &customer_posY, &customer_direction, &customer_range,
-				&customer_active, &customer_idle, &customer_random, &path[row][col]);
+				/* If Customer Exists */
+				if (customer_number != 0 && grid[row][col].customer) {								// If Customer is not 0 (Exists)
+					customer_number--;																// Decrement Customer Number value as element starts from 0
 
-			/* If Customer Exists */
-			if (customer_number != 0 && grid[row][col].customer) {								// If Customer is not 0 (Exists)
-				customer_number--;																// Decrement Customer Number value as element starts from 0
+					/* Initialise values of properties of Customer Struct with values from CSV File that was first stored in Local Customer Properties */
+					customer[customer_number].cusCol = customer_posX;
+					customer[customer_number].cusRow = customer_posY;
+					customer[customer_number].ogCusCol = customer_posX;
+					customer[customer_number].ogCusRow = customer_posY;
+					customer[customer_number].direction = customer_direction;
+					customer[customer_number].range = customer_range;
+					customer[customer_number].isActive = customer_active;
+					customer[customer_number].isIdle = customer_idle;
+					customer[customer_number].isRandom = customer_random;
+				}
 
-				/* Initialise values of properties of Customer Struct with values from CSV File that was first stored in Local Customer Properties */
-				customer[customer_number].cusCol = customer_posX;
-				customer[customer_number].cusRow = customer_posY;
-				customer[customer_number].ogCusCol = customer_posX;
-				customer[customer_number].ogCusRow = customer_posY;
-				customer[customer_number].direction = customer_direction;
-				customer[customer_number].range = customer_range;
-				customer[customer_number].isActive = customer_active;
-				customer[customer_number].isIdle = customer_idle;
-				customer[customer_number].isRandom = customer_random;
+				/* If Teleporter Exists, Initialise Teleporter Struct Property Values, with Teleporter Number ,Row and Column */
+				if (grid[row][col].tele != 0) {
+					teleporter_index = grid[row][col].tele - 1;										// Decrement grid[row][col].tele value as element starts from 0
+					teleporters[teleporter_index].teleporter_number = grid[row][col].tele;
+					teleporters[teleporter_index].posX = col;
+					teleporters[teleporter_index].posY = row;
+				}
+
+				if (grid[row][col].box)
+					original_box_count++;															// COunts original number of boxes set for each level
+
+				// Increments 'col' & 'line' when the correct number of values were scanned
+				if (read == 17) {
+					col++;
+					line++;
+				}
 			}
 
-			/* If Teleporter Exists, Initialise Teleporter Struct Property Values, with Teleporter Number ,Row and Column */
-			if (grid[row][col].tele != 0) {
-				teleporter_index = grid[row][col].tele - 1;										// Decrement grid[row][col].tele value as element starts from 0
-				teleporters[teleporter_index].teleporter_number = grid[row][col].tele;
-				teleporters[teleporter_index].posX = col;
-				teleporters[teleporter_index].posY = row;
-			}
-
-			if (grid[row][col].box)
-				original_box_count++;															// COunts original number of boxes set for each level
-
-			// Increments 'col' & 'line' when the correct number of values were scanned
-			if (read == 17) {
-				col++;
-				line++;
-			}
-		}
-		
-	} while (!feof(csv_file)); // While not End of File
+		} while (!feof(csv_file)); // While not End of File
+	}
 
 	// Close CSV File
 	fclose(csv_file);

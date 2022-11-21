@@ -15,8 +15,6 @@ File	: utils.c
 Purpose	: 
 */
 
-
-#define _CRT_SECURE_NO_DEPRECATE	// Needed to use strcpy() and strcat() instead of strcopy_s() & strcat_s()
 #include "cprocessing.h"	
 #include "structs.h"
 #include "defines.h"
@@ -262,12 +260,12 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 				}
 			}
 			(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
-			strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
+			strcpy_s(line, 50, stat);																															// Copy stat/label that needs to be printed to line
 		}
-		strcat(line, buffer);
+		strcat_s(line, 50, buffer);
 		if (stat == "Move: ") {
 			sprintf_s(buffer, _countof(buffer), "/%d", move_limit);
-			strcat(line, buffer);
+			strcat_s(line, 50, buffer);
 		}
 
 		CP_Font_DrawText(line, ((float)config.settings.resolutionWidth/5)*index, 0.f);
@@ -283,12 +281,12 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 				}
 			}
 			(stat == "Times Distracted: ") ? sprintf_s(buffer, _countof(buffer), "%d", value) : sprintf_s(buffer, _countof(buffer), "%d", value);		// Converting 'value' to text/char/string				
-			strcpy(line, stat);																															// Copy stat/label that needs to be printed to line
+			strcpy_s(line, 50, stat);																															// Copy stat/label that needs to be printed to line
 		}
-		strcat(line, buffer);
+		strcat_s(line, 50, buffer);
 		if (stat == "Move: ") {
 			sprintf_s(buffer, _countof(buffer), "/%d", move_limit);
-			strcat(line, buffer);
+			strcat_s(line, 50, buffer);
 		}
 
 		CP_Font_DrawText(line, (float)config.settings.resolutionWidth - cellSize, cellSize * index);	// Draw Text 'line' on the Game
