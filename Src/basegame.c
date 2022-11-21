@@ -7,10 +7,14 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Random Customer Logic
 			- Display Controls
 			- Player indicator
-		   Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+		  Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
 			- Level Generation Logic
 			- Leveling Logics
 			- Overlay Logics
+		  Shafiq Mirza Bin Mohamed Zahid (shafiqmirza.b@digipen.edu)
+		    - unique mechanic flag logic
+			- rendering of background art, player/customer/environmental sprite assets
+			- world camera logic
 File	: basegame.c
 Purpose	: Main state for game level.
 */
@@ -72,15 +76,15 @@ void base_Init(void) {
 	CP_Settings_TextSize((float)config.settings.resolutionHeight * 0.025f);
 
 	/* Initializations */
-	cameratoggle = 1;
+	cameratoggle = 1;												// flag to check whether zoom-in camera is turned on/off
 	cellSize = 0.f;
 	face = 0;
 	elapsedLock = 0.f;
 	isLocked = 0;
 	total_elapsed_time = 0.f;
-	cameratogglecooldown = 0.f;
+	cameratogglecooldown = 0.f;										// flag to check if player has recently toggled camera (required because spamming toggle causes visual glitches)
 	cusDelay = 1.5f;
-	isAnimating = 0;
+	isAnimating = 0;												// flag to check if player is currently animating
 	flip = 0;
 	oneSecondFlip = 0;
 	play30 = 0;
@@ -96,7 +100,8 @@ void base_Init(void) {
 	stat[1] = "Move: ";												// Text Stat to Print for Move Count
 	stat[2] = "Times Distracted: ";									// Text Stat to Print for Number of Times Distracted
 	stat[3] = "Time Wasted: ";										// Text Stat to print for Time Wasted Getting Distracted
-	time_lost = 45;													// default time lost if distracted
+	time_lost = 45;													// default time that is lost if distracted
+	ignore_penalty = 0;												// flag that defaults to zero unless overwritten by mechanics_flag()
 	keyTriggered = NO;
 
 	initControls();													// Initialise Controls
@@ -109,24 +114,16 @@ void base_Init(void) {
 
 	for (int row = 0; row < SOKOBAN_GRID_ROWS; row++) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
-			moves[0][row][col].player = 0;							//Initialise to 0 for rendering purposes
+			moves[0][row][col].player = 0;							// Initialise to 0 for rendering purposes
 			if (grid[row][col].player) {
 				arrowPosY = row - 1;								// Initialise Arrow Indicator posY to 1 cell above Player
 			}
 		}
 	}
 
-
-	/* TODO Remove Unnecessary Comments */
-
 	/*Unique mechanics Initialisation*/
-	// to force mechanic enabler check card_effect() for flag details
-	//UM.flags = 0;
-	UM.flags |= 32;	// uncomment this line to enable teleporter. cast flags before mechanic_flags()
-	//UM.flags |= 4;
 	mechanic_flags();												// Needs to be after set_map() | Disables 2 customers/boxes/keys every stage by default | Initialise time_lost and ignore_penalty
 	total_objectives = get_objectives(grid);						// Needs to be after set_map() & mechanic_flags() | Get Number of Objectives to meet (Number of Keys)
-	// If mechanic_flags is enabled, make sure it is also enabled in RESET
 
 	/* GIF */
 	setGIF(&speechSprite, "./Assets/Spritesheet/speech.png", 1, 4, 0, 0, cellSize);
@@ -186,6 +183,7 @@ void base_Update(void) {
 
 	if (!game_pause) {
 		int temp = 0;
+		player_status(&isLocked);												// from mechanics.c, placed before customerLock to prevent overwrites
 		if (temp = customerLock(grid, customer)) {
 			isLocked = 1;
 			stunner = temp - 1;
@@ -250,9 +248,9 @@ void base_Update(void) {
 		}
 
 		/*If player is stunlocked by customer, all inputs should be ignored.*/
-		player_status(&isLocked); // UM
+		
 		if (isLocked) {
-			if (!isAnimating) {
+			if (!isAnimating && isLocked == 1) {
 				// Moves the Customer to the player
 				int newDir = customerMoveToPlayer(playerRow, playerCol, stunner, grid, customer);
 				face = newDir > 0 ? newDir : face;
@@ -264,15 +262,15 @@ void base_Update(void) {
 			}
 			else {
 				/*Reset timer and turn customer inactive*/
-				elapsedLock = 0;
-				isLocked = 0;
-				if (ignore_penalty == 0) {		// UM Elusive card. Ignore time penalty once per stage
+				if (ignore_penalty == 0 && isLocked == 1) {		// UM Elusive card. Ignore time penalty once per stage
 					duration -= time_lost;
 					duration_lost += time_lost;
 					times_distracted++;
 				}
-				else if (ignore_penalty == 1)
-					ignore_penalty = 0;		// Disables flag after getting distracted once
+				else if(ignore_penalty == 1 && isLocked == 1) 
+					ignore_penalty = 0;							// Disables flag after getting distracted once
+				elapsedLock = 0;
+				isLocked = 0;									// requires to be after the if condition for infection status conflicts
 			}
 		}
 
@@ -285,17 +283,17 @@ void base_Update(void) {
 
 			/* Set direction that the player is facing */
 			switch (dir) {
-			case 1:																// FACE UP
-				face = 1;
+			case SOKOBAN_UP:
+				face = SOKOBAN_UP;
 				break;
-			case 2:																// FACE LEFT
-				face = 2;
+			case SOKOBAN_LEFT:
+				face = SOKOBAN_LEFT;
 				break;
-			case 3:																// FACE DOWN
-				face = 3;
+			case SOKOBAN_DOWN:
+				face = SOKOBAN_DOWN;
 				break;
-			case 4:																// FACE RIGHT
-				face = 4;
+			case SOKOBAN_RIGHT:
+				face = SOKOBAN_RIGHT;
 				break;
 			}
 
@@ -412,10 +410,10 @@ void base_Update(void) {
 
 	for (int i = 0; i < CUSTOMER_MAX; i++) {
 		if (grid[customer[i].cusRow][customer[i].cusCol].customer)
-			draw_customer(cellSize, cellAlign, customer[i].cusRow, customer[i].cusCol, customer[i].direction, i, cameratoggle);
+			draw_customer(cellSize,cellAlign,customer[i].cusRow, customer[i].cusCol, customer[i].direction, i, cameratoggle, game_pause);
 	}
 
-	isAnimating = draw_player(cellSize, cellAlign, playerRow, playerCol, face, cameratoggle);
+	isAnimating = draw_player(cellSize, cellAlign, playerRow, playerCol, face, cameratoggle, game_pause);
 
 	/* Draw Arrow Indicator if no key triggered*/
 	if (!keyTriggered) {
@@ -442,7 +440,7 @@ void base_Update(void) {
 				drawGIF(&speechSprite, &gifElasped, 0.1f, YES, NO);
 			}
 		}
-		if (!flip) {
+		if (!flip && isLocked == 1) {
 			if (customer[stunner].direction == 2 || customer[stunner].direction == 3) {
 				speechSprite.position = CP_Vector_Set(cellSize * (float)(customer[stunner].cusCol + 1) + cellAlign, cellSize * (float)(customer[stunner].cusRow - 1) + cellSize * 0.85f);
 				drawGIF(&speechSprite, &gifElasped, 0.1f, NO, NO);
@@ -512,7 +510,6 @@ void base_Update(void) {
 }
 
 void base_Exit(void) {
-
 	/* Free Assets */
 	CP_Image_Free(&speechSprite.spritesheet);
 	CP_Sound_Free(&fail);													// Free fail SFX
@@ -526,5 +523,4 @@ void base_Exit(void) {
 	CP_Settings_StrokeWeight(3.0f);
 	freeControls();
 	freeArrow();
-	//CP_Image_Free(&speechSprite);
 }
