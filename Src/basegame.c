@@ -88,8 +88,8 @@ void base_Init(void) {
 	time_lost = 45;													// default time lost if distracted
 	keyTriggered = NO;
 
-	initControls();
-	initArrow();
+	initControls();													// Initialise Controls
+	initArrow();													// Initialise Arrow Indicator
 
 	load_spritesheet(&cellSize, cameratoggle);
 	cellAlign = (float)((config.settings.resolutionWidth - (int)cellSize * SOKOBAN_GRID_COLS) / 2);
@@ -100,7 +100,7 @@ void base_Init(void) {
 		for (int col = 0; col < SOKOBAN_GRID_COLS; col++) {
 			moves[0][row][col].player = 0;							//Initialise to 0 for rendering purposes
 			if (grid[row][col].player) {
-				arrowPosY = row - 1;								// Initialise arrow indictor posY to 1 cell above player
+				arrowPosY = row - 1;								// Initialise Arrow Indicator posY to 1 cell above Player
 			}
 		}
 	}
