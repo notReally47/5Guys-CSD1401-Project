@@ -1,3 +1,10 @@
+/*
+Author  : Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+File    : level_generate_CSV.c
+Purpose : To automate CSV Files for Level Generation using Input Files through Console/WSL
+*/
+
+
 #define SOKOBAN_ROWS 31
 #define SOKOBAN_COLS 41
 #include <stdio.h>          // Needed for file I/O, r/w and printf/scanf
