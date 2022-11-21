@@ -1,3 +1,12 @@
+/*
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
+Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
+            - Clicking SFX
+            - Level Complete SFX
+File	: mechanics.c
+Purpose	: 
+*/
+
 #include "cprocessing.h"
 #include "structs.h"        // rect
 #include "defines.h"        // colours, rows/cols

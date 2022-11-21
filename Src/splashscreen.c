@@ -1,3 +1,10 @@
+/*
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
+Authors	:
+File	:
+Purpose	:
+*/
+
 #include "cprocessing.h"
 #include "mainmenu.h"
 #include "structs.h"

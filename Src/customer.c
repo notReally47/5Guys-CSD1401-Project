@@ -1,3 +1,18 @@
+/*
+All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
+Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
+			- customerLogic()
+			- customerMovement()
+			- customerIdle()
+			- customerMoveToPlayer()
+		  Guo Yi Ming 
+		    - randomCustomerMovement()
+		  Ian Chua Rong Bin 
+		    - customerLock()
+File	: customer.c
+Purpose	: Customer AI logics
+*/
+
 #include "CProcessing.h"
 #include "defines.h"
 #include "structs.h"
@@ -28,22 +43,23 @@ void customerLogic(int cusNum, int cusRow, int cusCol, int prevCusRow, int prevC
 			/*Limit customer random movement within 5x5 grid*/
 			if ((customer[cusNum].ogCusCol - 2 <= cusCol && cusCol <= customer[cusNum].ogCusCol + 2) &&
 				(customer[cusNum].ogCusRow - 2 <= cusRow && cusRow <= customer[cusNum].ogCusRow + 2)) {
-				grid[cusRow][cusCol].customer = 1;
-				grid[prevCusRow][prevCusCol].customer = 0;
 
-				customer[cusNum].cusRow = cusRow;
-				customer[cusNum].cusCol = cusCol;
-				customer[cusNum].direction = direction;
+				grid[cusRow][cusCol].customer = 1;				// Set Current grid cell to inhibit the customer flag
+				grid[prevCusRow][prevCusCol].customer = 0;		// Remove previous grid cell customer flag
+
+				customer[cusNum].cusRow = cusRow;				// Update the customer struct with the new row
+				customer[cusNum].cusCol = cusCol;				// Update the customer struct with the new col
+				customer[cusNum].direction = direction;			// Update the customer struct with the new direction
 			}
 		}
 
 		else {
-			grid[cusRow][cusCol].customer = 1;
-			grid[prevCusRow][prevCusCol].customer = 0;
+			grid[cusRow][cusCol].customer = 1;				// Set Current grid cell to inhibit the customer flag
+			grid[prevCusRow][prevCusCol].customer = 0;		// Remove previous grid cell customer flag
 
-			customer[cusNum].cusRow = cusRow;
-			customer[cusNum].cusCol = cusCol;
-			customer[cusNum].direction = direction;
+			customer[cusNum].cusRow = cusRow;				// Update the customer struct with the new row
+			customer[cusNum].cusCol = cusCol;				// Update the customer struct with the new col
+			customer[cusNum].direction = direction;			// Update the customer struct with the new direction
 		}
 	}
 }
@@ -55,40 +71,37 @@ void customerLogic(int cusNum, int cusRow, int cusCol, int prevCusRow, int prevC
 * Customer customer: Customer stats.
 */
 void customerMovement(int cusNum, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], int path[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
-	// Customers moving in a fixed path are those who are active, not idle and not random
-	if (customer[cusNum].isActive && !customer[cusNum].isIdle && !customer[cusNum].isRandom) {
-		int cusRow = customer[cusNum].cusRow;
-		int cusCol = customer[cusNum].cusCol;
-		int curr = path[cusRow][cusCol];
-				
-		// If there if no path detected by the customer, it will continue to move in the direction it is facing
-		if (!curr) {
-			curr = customer[cusNum].direction;
-		}
-		else {
-			customer[cusNum].direction = curr;
-		}
+	int cusRow = customer[cusNum].cusRow;
+	int cusCol = customer[cusNum].cusCol;
+	int curr = path[cusRow][cusCol];
 
-		switch (curr) {
-		case SOKOBAN_UP:		// Customer Moves Up
-			cusRow--;
-			customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, curr, grid, customer);
-			break;
-		case SOKOBAN_LEFT:		// Customer Moves Left
-			cusCol--;
-			customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, curr, grid, customer);
-			break;
-		case SOKOBAN_DOWN:		// Customer Moves Down
-			cusRow++;
-			customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, curr, grid, customer);
-			break;
-		case SOKOBAN_RIGHT:		// Customer Moves Right
-			cusCol++;
-			customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, curr, grid, customer);
-			break;
-		default:
-			break;
-		}
+	// If there if no path detected by the customer, it will continue to move in the direction it is facing
+	if (!curr) {
+		curr = customer[cusNum].direction;
+	}
+	else {
+		customer[cusNum].direction = curr;
+	}
+
+	switch (curr) {
+	case SOKOBAN_UP:		// Customer Moves Up
+		cusRow--;
+		customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, curr, grid, customer);
+		break;
+	case SOKOBAN_LEFT:		// Customer Moves Left
+		cusCol--;
+		customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, curr, grid, customer);
+		break;
+	case SOKOBAN_DOWN:		// Customer Moves Down
+		cusRow++;
+		customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, curr, grid, customer);
+		break;
+	case SOKOBAN_RIGHT:		// Customer Moves Right
+		cusCol++;
+		customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, curr, grid, customer);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -98,44 +111,44 @@ void customerMovement(int cusNum, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS
 * Customer customer: Customer stats.
 */
 void randomCustomerMovement(int cusNum, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[CUSTOMER_MAX]) {
-	if (customer[cusNum].isActive && customer[cusNum].isRandom) {
-		int cusRow = customer[cusNum].cusRow, cusCol = customer[cusNum].cusCol;
-		int state = CP_Random_RangeInt(SOKOBAN_UP, SOKOBAN_FACE_RIGHT);
 
-		switch (state) {
-		case SOKOBAN_UP:			// Customer Moves Up
-			cusRow--;
-			customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, SOKOBAN_UP, grid, customer);
-			break;
-		case SOKOBAN_LEFT:			// Customer Moves Left
-			cusCol--;
-			customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, SOKOBAN_LEFT, grid, customer);
-			break;
-		case SOKOBAN_DOWN:			// Customer Moves Down
-			cusRow++;
-			customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, SOKOBAN_DOWN, grid, customer);
-			break;
-		case SOKOBAN_RIGHT:			// Customer Moves Right
-			cusCol++;
-			customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, SOKOBAN_RIGHT, grid, customer);
-			break;
-		case SOKOBAN_FACE_UP:		// Customer Turns Up
-			customer[cusNum].direction = SOKOBAN_UP;
-			break;
-		case SOKOBAN_FACE_LEFT:		// Customer Turns Left
-			customer[cusNum].direction = SOKOBAN_LEFT;
-			break;
-		case SOKOBAN_FACE_DOWN:		// Customer Turns Down
-			customer[cusNum].direction = SOKOBAN_DOWN;
-			break;
-		case SOKOBAN_FACE_RIGHT:	// Customer Turns Right
-			customer[cusNum].direction = SOKOBAN_RIGHT;
-			break;
-		default:
-			customer[cusNum].direction = SOKOBAN_DOWN;
-			break;
-		}
+	int cusRow = customer[cusNum].cusRow, cusCol = customer[cusNum].cusCol;
+	int state = CP_Random_RangeInt(SOKOBAN_UP, SOKOBAN_FACE_RIGHT);
+
+	switch (state) {
+	case SOKOBAN_UP:			// Customer Moves Up
+		cusRow--;
+		customerLogic(cusNum, cusRow, cusCol, cusRow + 1, cusCol, SOKOBAN_UP, grid, customer);
+		break;
+	case SOKOBAN_LEFT:			// Customer Moves Left
+		cusCol--;
+		customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol + 1, SOKOBAN_LEFT, grid, customer);
+		break;
+	case SOKOBAN_DOWN:			// Customer Moves Down
+		cusRow++;
+		customerLogic(cusNum, cusRow, cusCol, cusRow - 1, cusCol, SOKOBAN_DOWN, grid, customer);
+		break;
+	case SOKOBAN_RIGHT:			// Customer Moves Right
+		cusCol++;
+		customerLogic(cusNum, cusRow, cusCol, cusRow, cusCol - 1, SOKOBAN_RIGHT, grid, customer);
+		break;
+	case SOKOBAN_FACE_UP:		// Customer Turns Up
+		customer[cusNum].direction = SOKOBAN_UP;
+		break;
+	case SOKOBAN_FACE_LEFT:		// Customer Turns Left
+		customer[cusNum].direction = SOKOBAN_LEFT;
+		break;
+	case SOKOBAN_FACE_DOWN:		// Customer Turns Down
+		customer[cusNum].direction = SOKOBAN_DOWN;
+		break;
+	case SOKOBAN_FACE_RIGHT:	// Customer Turns Right
+		customer[cusNum].direction = SOKOBAN_RIGHT;
+		break;
+	default:
+		customer[cusNum].direction = SOKOBAN_DOWN;
+		break;
 	}
+
 }
 
 /*
@@ -144,12 +157,15 @@ void randomCustomerMovement(int cusNum, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRI
 * Customer customer: customer stats.
 */
 void customerIdle(int cusNum, Customer customer[CUSTOMER_MAX]) {
-	// Rotates the customer anti-clockwise
+	// isIdle == 1 : Customer rotates anti-clockwise
+	// isIdle == 2 : Customer rotates clockwise
+	// isIdle == 3 : Customer stands idles but active
+
+
 	if (customer[cusNum].isIdle == 1) {
 		customer[cusNum].direction = (customer[cusNum].direction % 4) + 1;
 	}
 
-	// Rotates the customer clockwise
 	if (customer[cusNum].isIdle == 2) {
 		customer[cusNum].direction == 1 ? customer[cusNum].direction = 4 : customer[cusNum].direction--;
 	}
@@ -182,7 +198,6 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 
 					if (grid[cusRow - x][cusCol].player) {
 						isLocked = i + 1;
-						printf("Customer %d Stun Player...\n", isLocked);
 						customer[i].isActive = 0;
 						if (infected[i] == 1) // from mechanics.h
 							infected[10] = 1; // status (if true, player is infected)
@@ -206,7 +221,6 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 
 					if (grid[cusRow][cusCol - x].player) {
 						isLocked = i + 1;
-						printf("Customer %d Stun Player...\n", isLocked);
 						customer[i].isActive = 0;
 						if (infected[i] == 1) // from mechanics.h
 							infected[10] = 1; // status (if true, player is infected)
@@ -229,7 +243,6 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 
 					if (grid[cusRow + x][cusCol].player) {
 						isLocked = i + 1;
-						printf("Customer %d Stun Player...\n", isLocked);
 						customer[i].isActive = 0;
 						if (infected[i] == 1) // from mechanics.h
 							infected[10] = 1; // status (if true, player is infected)
@@ -252,7 +265,6 @@ int customerLock(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer custo
 
 					if (grid[cusRow][cusCol + x].player) {
 						isLocked = i + 1;
-						printf("Customer %d Stun Player...\n", isLocked);
 						customer[i].isActive = 0;
 						if (infected[i] == 1) // from mechanics.h
 							infected[10] = 1; // status (if true, player is infected)
