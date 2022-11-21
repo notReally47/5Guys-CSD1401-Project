@@ -21,7 +21,6 @@ R - Reset Map
 U - Undo Move
 
 Missing Features:
- - Level 8 - 10 are still WIP
  - VFX for Infected player & customer
 
 Bugs:
