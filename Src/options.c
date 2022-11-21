@@ -1,6 +1,11 @@
 /*
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
-Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
+Authors	: Guo Yiming (yiming.guo@digipen.edu)
+			- Design
+			- Drawing
+			- Logic for resolution/volume changes
+			- Write resolution/volume changes to config.dat
+		  Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Clicking SFX
 File	: options.c
 Purpose	: Setting page for player to change their settings

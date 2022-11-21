@@ -5,7 +5,7 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- customerMovement()
 			- customerIdle()
 			- customerMoveToPlayer()
-		  Guo Yi Ming 
+		  Guo Yiming 
 		    - randomCustomerMovement()
 		  Ian Chua Rong Bin 
 		    - customerLock()

@@ -3,6 +3,10 @@ All content © 2022 DigiPen Institute of Technology Singapore, all rights reserve
 Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- teleport SFX
 			- Timer VFX when time left 30s
+		  Guo Yiming (yiming.guo@digipen.edu)
+			- IsTaskbarWndVisible()
+			- getTaskBarHeight()
+			- getTitleBarHeight()
 File	: utils.c
 Purpose	: 
 */
@@ -287,7 +291,7 @@ void show_stats(float cellSize, char* stat, int value, int cameratoggle, float i
 	}
 }
 
-/*Check if Taskbar is visible or not*/
+/*Check if Taskbar is visible or not */
 BOOL IsTaskbarWndVisible(void) {
 	HWND hTaskbarWnd = FindWindow("Shell_TrayWnd", NULL);
 	HMONITOR hMonitor = MonitorFromWindow(hTaskbarWnd, MONITOR_DEFAULTTONEAREST);
@@ -306,6 +310,7 @@ BOOL IsTaskbarWndVisible(void) {
 	}
 }
 
+/* Get Height of Taskbar */
 int getTaskBarHeight(void)
 {
 	RECT rect;
@@ -315,6 +320,7 @@ int getTaskBarHeight(void)
 	}
 }
 
+/* Get Height of Titlebar */
 int getTitleBarHeight(void) {
 	HWND gameWindow = GetActiveWindow();
 	RECT wrect;

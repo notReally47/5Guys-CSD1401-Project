@@ -1,8 +1,12 @@
 /*
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
-Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu
+Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 		    - Customer Logics
 			- SFXs & BGMs
+		  Guo Yiming (yiming.guo@digipen.edu)
+			- Random Customer Logic
+			- Display Controls
+			- Player indicator
 File	: basegame.c
 Purpose	: Main state for game level.
 */

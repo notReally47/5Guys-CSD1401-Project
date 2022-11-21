@@ -3,6 +3,9 @@ All content © 2022 DigiPen Institute of Technology Singapore, all rights reserve
 Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Clicking SFX
 			- Main Menu BGM
+		  Guo Yiming (yiming.guo@digipen.edu)
+			- UI Design
+			- Tinted Buttons
 File	: mainmenu.c
 Purpose	: Main Menu Page
 */

@@ -3,6 +3,9 @@ All content © 2022 DigiPen Institute of Technology Singapore, all rights reserve
 Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
             - Clicking SFX
             - Level Complete SFX
+          Guo Yiming (yiming.guo@digipen.edu)
+            - Tinted Buttons
+            - Card selection confirmation flag
 File	: mechanics.c
 Purpose	: 
 */

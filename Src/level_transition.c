@@ -4,6 +4,8 @@ Authors	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
 		  Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Clicking SFX
 			- Level Complete SFX
+		  Guo Yiming (yiming.guo@digipen.edu)
+			- Tinted Buttons
 File	: level_transition.c
 Purpose	: State for level complete and transiting to next level & choosing of Buff/Debuff
 */

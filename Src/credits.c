@@ -2,6 +2,9 @@
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
 Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Clicking SFX
+          Guo Yiming (yiming.guo@digipen.edu)
+			- Design
+			- Scrolling animation
 File	: credits.c
 Purpose	: Credits Page
 */

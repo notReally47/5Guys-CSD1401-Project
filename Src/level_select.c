@@ -3,6 +3,8 @@ All content © 2022 DigiPen Institute of Technology Singapore, all rights reserve
 Authors	: Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
 		  Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Clicking SFX
+		  Guo Yiming (yiming.guo@digipen.edu)
+			- Tinted Buttons
 File	: level_select.c
 Purpose	: State to select level
 */

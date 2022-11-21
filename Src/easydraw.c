@@ -1,8 +1,11 @@
 /*
 All content © 2022 DigiPen Institute of Technology Singapore, all rights reserved.
-Authors	: 
-File	: 
-Purpose	:
+Authors	: Guo Yiming (yiming.guo@digipen.edu)
+			- All functions/variables
+File	: easydraw.c
+Purpose	: Initialise structs Button, DropDownList and GIF
+		  A collection of definitions for functions that makes drawing easier
+		  Initialise, draw and free controls and arrow
 */
 
 #include "cprocessing.h"

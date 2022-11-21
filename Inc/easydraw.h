@@ -102,6 +102,17 @@ void drawControls();
 /* freeControls - Free control button images from memory */
 void freeControls();
 
+/* initArrow - Initialise arrow indicator */
 void initArrow();
+
+/*
+* drawArrow - Draw arrow indicator
+* float cellSize: Size of each cell in grid
+* float cellAlign: Alignment of cell in grid
+* int playerPosX: X-coordinate of Player
+* int playerPosY: Y-coordinate of Player
+*/
 void drawArrow(float cellSize, float cellAlign, int playerPosX, int playerPosY);
+
+/* freeArrow - Free arrow indictaor from memory */
 void freeArrow();
