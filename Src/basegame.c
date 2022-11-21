@@ -7,6 +7,10 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- Random Customer Logic
 			- Display Controls
 			- Player indicator
+		   Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+			- Level Generation Logic
+			- Leveling Logics
+			- Overlay Logics
 File	: basegame.c
 Purpose	: Main state for game level.
 */

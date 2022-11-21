@@ -7,6 +7,10 @@ Authors	: Jerell Tan Jian Yu (jerelljianyu.tan@digipen.edu)
 			- IsTaskbarWndVisible()
 			- getTaskBarHeight()
 			- getTitleBarHeight()
+		  Muhammad Faliq Bin Al-Hakim (muhammadfaliq.b@digipen.edu)
+			- Revised Teleport Logic
+			- Started Basic show_stats()
+			- Started Basic gameLogic()
 File	: utils.c
 Purpose	: 
 */
