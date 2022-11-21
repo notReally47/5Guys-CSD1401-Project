@@ -172,9 +172,11 @@ int gameLogic(int* posX, int* posY, int nextPosX, int nextPosY, int prevPosX, in
 		grid[*posX][*posY].player = 1;
 		global_move++;
 		//move_limit--;
-		return 0;
 		printf("Current Moves: %d\n", global_move - 1);
+
+		return 0;
 	}
+	else return -1;
 }
 
 int getCell(int* posX, int* posY, int direction, Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Teleporter teleporters[TELEPORTER_NUMBER]) {
@@ -314,6 +316,7 @@ BOOL IsTaskbarWndVisible(void) {
 
 		return TRUE;
 	}
+	else return FALSE;
 }
 
 /* Get Height of Taskbar */
@@ -324,6 +327,7 @@ int getTaskBarHeight(void)
 	if (taskBar && GetWindowRect(taskBar, &rect)) {
 		return rect.bottom - rect.top;
 	}
+	else return -1;
 }
 
 /* Get Height of Titlebar */

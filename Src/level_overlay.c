@@ -15,6 +15,7 @@ Purpose	: Render Different OVerlay & implement function/purpose of overlay
 #include "level_logic.h"	// Needed for global extern variable 'global_level'
 #include "mainmenu.h"		// Needed to transition back to Main Menu
 #include "easydraw.h"		// Needed for Customised Buttons & Texts
+#include "settings.h"		// Needed to write latest level played to file
 
 extern Config config;		// For Resolution Settings
 CP_Sound click;				// Clicking SFX
