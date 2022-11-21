@@ -96,7 +96,7 @@ void Credits_Update(void) {
 }
 
 void Credits_Exit(void) {
-	CP_Sound_Free(&click);
+	//CP_Sound_Free(&click);
 	CP_Image_Free(&back.img);
 	free_background();
 }

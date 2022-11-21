@@ -110,6 +110,6 @@ void Level_Transition_Exit(void)
 {
 	free_buttons();
 	free_background();
-	CP_Sound_Free(&nextLvl);
-	CP_Sound_Free(&click);
+	//CP_Sound_Free(&nextLvl);
+	//CP_Sound_Free(&click);
 }

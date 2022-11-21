@@ -113,7 +113,7 @@ void Level_Select_Update(void)
 
 void Level_Select_Exit(void)
 {
-	CP_Sound_Free(&click);
+	//CP_Sound_Free(&click);
 	CP_Image_Free(&back.img);																									// Free Back Button Image
 	free_background();																											// Free Background Image
 }

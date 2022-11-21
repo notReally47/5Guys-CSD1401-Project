@@ -320,6 +320,6 @@ void Options_Update(void) {
 void Options_Exit(void) {
 	freeButtonImg(btns, 14);
 	CP_Image_Free(&gameplay.spritesheet);
-	CP_Sound_Free(&click);
+	//CP_Sound_Free(&click);
 	free_background();
 }
