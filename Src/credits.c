@@ -16,7 +16,7 @@ Purpose	: Credits Page
 #include "spritesheet.h"
 #include "easydraw.h"
 
-float textSize, btnWidth, btnHeight, staticX, dynamicY[12];
+float textSize, btnWidth, btnHeight, staticXleft, staticXright, dynamicYleft[10], dynamicYright[9];
 CP_Sound click;
 Button back;
 
@@ -30,25 +30,22 @@ void Credits_Init() {
 	btnHeight = (float)config.settings.resolutionHeight * 1.f / 12.f;
 	click = CP_Sound_Load("./Assets/Sound/SFX/Click.wav");
 	setButton(&back, "./Assets/UI/Back.png", imgSize / 2.0f + PADDING, imgSize / 2.0f + PADDING, imgSize, imgSize, YES);
-	staticX = (float)config.settings.resolutionWidth / 2;
-	float yPos = .75f * textSize;
-	float temp = textSize;
-	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++, temp += textSize) {
-		dynamicY[i] = yPos + temp;
+	staticXleft = (float)config.settings.resolutionWidth / 4;
+	staticXright = (float)config.settings.resolutionWidth - config.settings.resolutionWidth / 4;
+	float yPos = CP_System_GetWindowHeight() / 4;
+	float temp = 0.f;
+	for (int i = 0; i < sizeof(dynamicYleft) / sizeof(dynamicYleft[0]); i++, temp += textSize - textSize / 3) {
+		dynamicYleft[i] = yPos + temp;
+	}
+	temp = 0.f;
+	for (int i = 0; i < sizeof(dynamicYright) / sizeof(dynamicYright[0]); i++, temp += textSize - textSize / 3) {
+		dynamicYright[i] = yPos + temp;
 	}
 	load_background();
 	CP_Settings_ImageMode(CP_POSITION_CORNER);
 }
 void Credits_Update() {
 	/*INITIALISE VARIABLES*/
-	float speed = 100.f * CP_System_GetDt();
-	for (int i = 0; i < sizeof(dynamicY) / sizeof(dynamicY[0]); i++) {
-		dynamicY[i] -= speed;
-		if (dynamicY[i] <= 0) {
-			dynamicY[i] = (float)config.settings.resolutionHeight;
-		}
-	}
-
 	CP_Vector mousePos = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
 	/*INPUTS*/
@@ -70,22 +67,30 @@ void Credits_Update() {
 	
 	/*Credits*/
 	CP_Settings_TextSize(.5f * textSize);
-	drawAlignedText(FADERBLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticX, dynamicY[1]);
-	drawAlignedText(FADERBLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticX, dynamicY[2]);
-	drawAlignedText(FADERBLACK, CENTER, "Jerell Tan Jian Yu", staticX, dynamicY[3]);
-	drawAlignedText(FADERBLACK, CENTER, "Ian Chua Rong Bin", staticX, dynamicY[4]);
-	drawAlignedText(FADERBLACK, CENTER, "Guo Yiming", staticX, dynamicY[5]);
-	drawAlignedText(FADERBLACK, CENTER, "Cheng Ding Xiang", staticX, dynamicY[7]);
-	drawAlignedText(FADERBLACK, CENTER, "Gerald Wong", staticX, dynamicY[8]);
-	drawAlignedText(FADERBLACK, CENTER, "Claude Comair", staticX, dynamicY[10]);
-	drawAlignedText(FADEBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX, dynamicY[11]);
-	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", staticX + .035f * textSize, dynamicY[11]);
+	drawAlignedText(FADERBLACK, CENTER, "Shafiq Mirza Bin Mohamed Zahid", staticXleft, dynamicYleft[1]);
+	drawAlignedText(FADERBLACK, CENTER, "Muhammad Faliq Bin Al-Hakim", staticXleft, dynamicYleft[2]);
+	drawAlignedText(FADERBLACK, CENTER, "Jerell Tan Jian Yu", staticXleft, dynamicYleft[3]);
+	drawAlignedText(FADERBLACK, CENTER, "Ian Chua Rong Bin", staticXleft, dynamicYleft[4]);
+	drawAlignedText(FADERBLACK, CENTER, "Guo Yiming", staticXleft, dynamicYleft[5]);
+	drawAlignedText(FADERBLACK, CENTER, "Cheng Ding Xiang", staticXleft, dynamicYleft[8]);
+	drawAlignedText(FADERBLACK, CENTER, "Gerald Wong", staticXleft, dynamicYleft[9]);
+	drawAlignedText(FADERBLACK, CENTER, "Claude Comair", staticXright, dynamicYright[1]);
+	drawAlignedText(FADERBLACK, CENTER, "Jason Chu   Christopher Comair   Michael Gats", staticXright, dynamicYright[4]);
+	drawAlignedText(FADERBLACK, CENTER, "Michele Comair   Raymond Yan	Samir   Abou Samra", staticXright, dynamicYright[5]);
+	drawAlignedText(FADERBLACK, CENTER, "Prasanna Ghali   John Bauer	Dr. Erik Mohrmann", staticXright, dynamicYright[6]);
+	drawAlignedText(FADERBLACK, CENTER, "Melvin Gonsalvez   Angela Kugler   Dr. Charles Duba", staticXright, dynamicYright[7]);
+	drawAlignedText(FADERBLACK, CENTER, "Ben Ellinger   Johnny Deek", staticXright, dynamicYright[8]);
+	drawAlignedText(BLACK, CENTER, "Created at", CP_System_GetWindowWidth() / 2, CP_System_GetWindowHeight() - 2.f * textSize);
+	drawAlignedText(FADERBLACK, CENTER, "DigiPen Institute of Technology Singapore", CP_System_GetWindowWidth() / 2, CP_System_GetWindowHeight() - 1.5f * textSize);
+	drawAlignedText(FADEBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", CP_System_GetWindowWidth() / 2, CP_System_GetWindowHeight() - textSize / 2);
+	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", CP_System_GetWindowWidth() / 2 + .035f * textSize, CP_System_GetWindowHeight() - textSize / 2);
 
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);
-	drawAlignedText(BLACK, CENTER, "TEAM MEMBERS", staticX, dynamicY[0]);
-	drawAlignedText(BLACK, CENTER, "INSTRUCTORS", staticX, dynamicY[6]);
-	drawAlignedText(BLACK, CENTER, "PRESIDENT", staticX, dynamicY[9]);
+	drawAlignedText(BLACK, CENTER, "TEAM MEMBERS", staticXleft, dynamicYleft[0]);
+	drawAlignedText(BLACK, CENTER, "INSTRUCTORS", staticXleft, dynamicYleft[7]);
+	drawAlignedText(BLACK, CENTER, "PRESIDENT", staticXright, dynamicYright[0]);
+	drawAlignedText(BLACK, CENTER, "EXECUTIVES", staticXright, dynamicYright[3]);
 
 	/*Draw Back Button*/
 	drawButton(back);
