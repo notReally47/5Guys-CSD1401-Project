@@ -27,7 +27,7 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 	original_box_count = 0;
 
 	errno_t err = 0;
-
+	
 	/* For-Loop to clear out the Map First (Prevent carry-over from previous levels) */
 	for (int i = 0; i < SOKOBAN_GRID_ROWS; i++) {
 		for (int j = 0; j < SOKOBAN_GRID_COLS; j++) {
