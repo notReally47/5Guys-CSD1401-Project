@@ -75,15 +75,15 @@ void Credits_Update(void) {
 	drawAlignedText(FADERBLACK, CENTER, "Gerald Wong", staticXleft, dynamicYleft[9]);
 	drawAlignedText(FADERBLACK, CENTER, "Claude Comair", staticXright, dynamicYright[1]);
 	drawAlignedText(FADERBLACK, CENTER, "Jason Chu   Christopher Comair   Michael Gats", staticXright, dynamicYright[4]);
-	drawAlignedText(FADERBLACK, CENTER, "Michele Comair   Raymond Yan	Samir   Abou Samra", staticXright, dynamicYright[5]);
-	drawAlignedText(FADERBLACK, CENTER, "Prasanna Ghali   John Bauer	Dr. Erik Mohrmann", staticXright, dynamicYright[6]);
+	drawAlignedText(FADERBLACK, CENTER, "Michele Comair   Raymond Yan   Samir Abou Samra", staticXright, dynamicYright[5]);
+	drawAlignedText(FADERBLACK, CENTER, "Prasanna Ghali   John Bauer   Dr. Erik Mohrmann", staticXright, dynamicYright[6]);
 	drawAlignedText(FADERBLACK, CENTER, "Melvin Gonsalvez   Angela Kugler   Dr. Charles Duba", staticXright, dynamicYright[7]);
 	drawAlignedText(FADERBLACK, CENTER, "Ben Ellinger   Johnny Deek", staticXright, dynamicYright[8]);
 	drawAlignedText(BLACK, CENTER, "Created at", (float)CP_System_GetWindowWidth() / 2.f, (float)CP_System_GetWindowHeight() - 2.f * textSize);
 	drawAlignedText(FADERBLACK, CENTER, "DigiPen Institute of Technology Singapore", (float)CP_System_GetWindowWidth() / 2.f, (float)CP_System_GetWindowHeight() - 1.5f * textSize);
-	drawAlignedText(FADEBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", (float)CP_System_GetWindowWidth() / 2.f, (float)CP_System_GetWindowHeight() - textSize / 2);
+	drawAlignedText(FADERBLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", (float)CP_System_GetWindowWidth() / 2.f, (float)CP_System_GetWindowHeight() - textSize / 2);
 	drawAlignedText(BLACK, CENTER, "All content (c) 2022 DigiPen Institute of Technology Singapore, all rights reserved.", (float)CP_System_GetWindowWidth() / 2.f + .035f * textSize, (float)CP_System_GetWindowHeight() - textSize / 2);
-
+	
 	/*Credit Headers*/
 	CP_Settings_TextSize(textSize);
 	drawAlignedText(BLACK, CENTER, "TEAM MEMBERS", staticXleft, dynamicYleft[0]);

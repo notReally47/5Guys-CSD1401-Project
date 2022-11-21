@@ -45,8 +45,8 @@ void splash_screen_init(void)
         CP_System_Fullscreen();
     }
     fade = 0;
-    x = CP_System_GetWindowWidth()>>1;
-    y = CP_System_GetWindowHeight()>>1;
+    x = (float)(CP_System_GetWindowWidth() >> 1);
+    y = (float)(CP_System_GetWindowHeight() >> 1);
     width = (float)CP_System_GetWindowWidth()*0.8f;
     height = (float)CP_System_GetWindowHeight()*0.4f;
     card_init();        // initialise card mechanic at the start of the program to set or reset flags

@@ -269,8 +269,8 @@ void draw_teleporter(float cellX,float cellY,float cellSize) {
 void world_camera(float cellSize,float cellAlign,int playerRow,int playerCol,int face,int cameratoggle) {
 	float cellx = cellSize*(float)playerCol+cellAlign;
 	float celly = cellSize*(float)playerRow+cellSize*0.85f;
-	int xoffset = playerCol-Offset[2].x;		// offset to center the camera to have the player to be in the middle of the screen
-	int yoffset = playerRow-Offset[2].y;
+	int xoffset = playerCol-(int)Offset[2].x;		// offset to center the camera to have the player to be in the middle of the screen
+	int yoffset = playerRow-(int)Offset[2].y;
 	if (cameratoggle==(toggled+1))
 		Camera = CP_Vector_Set((float)xoffset*cellSize,(float)yoffset*cellSize);
 	switch (face) {								// camera calculation is the opposite of the player sprite animation when moving

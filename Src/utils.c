@@ -314,6 +314,7 @@ BOOL IsTaskbarWndVisible(void) {
 
 		return TRUE;
 	}
+	else return FALSE;
 }
 
 /* Get Height of Taskbar */
@@ -324,6 +325,7 @@ int getTaskBarHeight(void)
 	if (taskBar && GetWindowRect(taskBar, &rect)) {
 		return rect.bottom - rect.top;
 	}
+	else return 0;
 }
 
 /* Get Height of Titlebar */

@@ -25,7 +25,7 @@ Purpose	: State for level complete and transiting to next level & choosing of Bu
 
 extern Config config;				// To use resolution settings scaling
 rect buttons;						// Button size
-Flag applied;						// For Card Check
+int applied;						// For Card Check
 CP_Sound nextLvl = NULL, click;		// SFX for Next Level & CLick
 
 void Level_Transition_Init(void)
