@@ -65,7 +65,7 @@ int arrowPosY;
 int total_objectives,																// Objectives to Meet
 isLocked, activatedCusX, activatedCusY, stunner,									// Stunner/Customer Logic Variables/Flags
 face, isAnimating, flip, cameratoggle,												// Drawing/Animation Logic Variables/Flags
-game_pause, overlay_function, is_welcome, reset_confirmed, gameover, game_end,		// Pause/Overlays Logic Variables/Flags
+game_pause, overlay_function, is_welcome, reset_confirmed, gameover,				// Pause/Overlays Logic Variables/Flags
 clock, times_distracted, duration_lost,												// Stats Variables
 time_lost, ignore_penalty,															// Unique Mechanic Variables
 play30;																				// SFX Flag
@@ -103,7 +103,6 @@ void base_Init(void) {
 	times_distracted = 0;											// Stat for Number of Times Distracted, 0 at Level Load
 	duration_lost = 0;												// Stat for Duration Lost getting distracted, 0 at Level Load
 	is_welcome = 1;													// Set to 1 To start off Level 1 with a Welcome Message
-	game_end = 0;
 	overlay_function = 0;											// 1 for Welcome Message, 2 for Reset, 3 for Pause, 4 for Game Over, 5 for Game End
 	gameover = 0;													// 1 for Time Limit, 2 for Customer, 3 for Move Limit
 	stat[0] = "Time Left: ";										// Text Stat to Print for Time Left

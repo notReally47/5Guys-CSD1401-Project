@@ -9,7 +9,6 @@ File	: level_select.c
 Purpose	: State to select level
 */
 
-#define _CRT_SECURE_NO_DEPRECATE	// Needed to use sprintf() instead of sprintf_s()
 #include "cprocessing.h"			// Needed for C Processing Functions
 #include "utils.h"					// Needed for Mouse Click Logic
 #include "defines.h"				// Needed for define Values
@@ -63,7 +62,7 @@ void Level_Select_Update(void)
 			drawTintedButton(btnColor, buttons.center_x * column, buttons.center_y + buttons.height * height,					// Draw Customised Buttons		
 				buttons.width, buttons.height, mousePos.x, mousePos.y, NO);
 
-			sprintf(level_char, "%d", (row + 1));																				// To be set as Text for Level Number
+			sprintf_s(level_char, 3, "%d", (row + 1));																				// To be set as Text for Level Number
 			CP_Settings_TextSize(CP_System_GetWindowWidth() * 0.019f);															// Set Text Size scaling to Window Height
 			drawAlignedText(WHITE, CENTER, level_char,																			// Draw Level Number Aligned to the middle of the button
 				buttons.center_x * column, buttons.center_y + buttons.height * height);

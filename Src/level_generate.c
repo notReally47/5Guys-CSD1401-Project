@@ -87,7 +87,7 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 				if (read == 1) line++;																// Increment line so that function will not read for duration again
 			}
 			else if (line == 1) {																	// Second Line of the CSV file is the Level Duration
-				read = fscanf_s(csv_file, "%d", &move_limit);											// Scan and store to global variable 'move_limit'
+				read = fscanf_s(csv_file, "%d", &move_limit);										// Scan and store to global variable 'move_limit'
 				if (read == 1) line++;																// Increment line so that function will not read for duration again
 			}
 			else {
@@ -122,7 +122,7 @@ void set_map(Cell grid[SOKOBAN_GRID_ROWS][SOKOBAN_GRID_COLS], Customer customer[
 				}
 
 				if (grid[row][col].box)
-					original_box_count++;															// COunts original number of boxes set for each level
+					original_box_count++;															// Counts original number of boxes set for each level
 
 				// Increments 'col' & 'line' when the correct number of values were scanned
 				if (read == 17) {
